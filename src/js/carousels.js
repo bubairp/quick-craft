@@ -7,7 +7,9 @@
  *   </div>
  *
  * Variants:
- *   data-carousel          testimonials row (templates/_blocks/testimonials.twig, carousel layout)
+ *   data-carousel          plain row with prev/next
+ *   data-carousel="loop"   testimonials row (templates/_blocks/testimonials.twig, carousel layout):
+ *                          endless loop, auto-advances every 3.5s (paused on hover; off for reduced motion)
  *   data-carousel="press"  press strip: centred, looping, click a logo to activate it,
  *                          auto-advances every 5s (paused on hover; off for reduced motion)
  *
@@ -59,6 +61,23 @@ export async function initCarousels() {
           swiper.slideToLoop(Number(slide.dataset.swiperSlideIndex));
         }
       }, true);
+      return;
+    }
+
+    if (variant === 'loop') {
+      // Testimonials row (reference: partiful.com "social life runs on…"): endless loop that
+      // advances one card about every 4s; arrows never run out. Pauses on hover, after which
+      // it carries on; no auto-advance for reduced motion.
+      new Swiper(el, {
+        ...base,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: reduceMotion ? false : { delay: 3500, pauseOnMouseEnter: true, disableOnInteraction: false },
+        navigation: {
+          prevEl: root.querySelector('[data-carousel-prev]'),
+          nextEl: root.querySelector('[data-carousel-next]'),
+        },
+      });
       return;
     }
 

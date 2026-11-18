@@ -207,3 +207,12 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
 - Code: `src/js/carousels.js`, `src/css/app.css` and `templates/_blocks/imageGallery.twig` were restored to commit `25c2a2b`. Only the two Swiper gallery commits had touched them since.
 - **For future reference:** the Swiper attempt (commits `46eac93` and `978a6b6`, and the log entries above) shows how to tilt a Swiper row and drive a seamless loop with `loopFix`. It's useful if a Swiper-based diagonal slider is ever needed.
 - Checked: on Home the fan runs (`is-wave`, 20 cards), the press Swiper still starts, and `/gallery-slider-demo` returns 404.
+
+### 2026-11-18: "Social life runs on quick craft" carousel loops
+- Reference (partiful.com, measured): an endless loop, the 6 cards rendered 3× (18 slides), auto-advances one card (340px + gap) about every 4s, and Previous/Next never disable.
+- `_blocks/testimonials.twig` (carousel layout):
+  - Markup is now `data-carousel="loop"`.
+  - Items are rendered 3× when there's more than one. Copies are `aria-hidden="true"` with decorative images. With only 6 slides, Swiper's loop can't fill a wide screen.
+- `src/js/carousels.js`, variant `loop`: `loop: true`, `autoplay { delay: 3500, pauseOnMouseEnter, disableOnInteraction: false }`, and prev/next navigation. No autoplay with reduced motion.
+- The plain `data-carousel` (no loop) variant is kept for other rows.
+- Checked at 1440px: 18 slides, auto-advance after about 4s, Previous wraps, 20× Next always shows 5 cards, arrows never disabled, no console warnings.

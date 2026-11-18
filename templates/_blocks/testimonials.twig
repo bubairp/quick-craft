@@ -51,15 +51,20 @@
     } only %}
 
     {% if layout == 'carousel' %}
-        {# Swiper (src/js/carousels.js): slide widths come from the classes on each slide #}
-        <div class="mt-12 md:mt-16" data-carousel>
+        {# Swiper (src/js/carousels.js): endless loop + auto-advance like the reference.
+           Slide widths come from the classes on each slide. The set is rendered 3× (as the
+           reference does) because Swiper's loop needs more slides than fit on a wide screen;
+           the copies are hidden from screen readers. #}
+        {% set passes = items|length > 1 ? 3 : 1 %}
+        <div class="mt-12 md:mt-16" data-carousel="loop">
             <div class="swiper px-4! md:px-gutter!" aria-label="{{ block.heading ?: 'Testimonials'|t }}">
               <ul class="swiper-wrapper">
+                {% for pass in 1..passes %}
                 {% for item in items %}
                     {% set image = item.image.one() %}
-                    <li class="swiper-slide relative flex! aspect-square w-72! overflow-hidden rounded-md md:w-85! {{ item.type.handle == 'stat' and not image ? 'bg-ink' : 'bg-surface' }}">
+                    <li class="swiper-slide relative flex! aspect-square w-72! overflow-hidden rounded-md md:w-85! {{ item.type.handle == 'stat' and not image ? 'bg-ink' : 'bg-surface' }}" {% if pass > 1 %}aria-hidden="true"{% endif %}>
                         {% if image %}
-                            {% include '_components/image.twig' with { image: image, width: 340, ratio: 1, sizes: '340px', class: 'absolute inset-0 size-full object-cover' } only %}
+                            {% include '_components/image.twig' with { image: image, width: 340, ratio: 1, sizes: '340px', decorative: pass > 1, class: 'absolute inset-0 size-full object-cover' } only %}
                         {% endif %}
 
                         {% if item.type.handle == 'stat' %}
@@ -83,6 +88,7 @@
                             </figure>
                         {% endif %}
                     </li>
+                {% endfor %}
                 {% endfor %}
               </ul>
             </div>
