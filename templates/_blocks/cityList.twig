@@ -38,7 +38,8 @@
 
                 {% if link and link.url %}
                     <a {{ attr(link.attributes|merge({ class: 'group relative flex flex-col items-center gap-2 text-center' })) }}>
-                        <{{ tag }} class="text-4xl md:text-6xl lg:text-display">{{ city.heading }}</{{ tag }}>
+                        {# hover lift (reference site: city name moves up ~7px) #}
+                        <{{ tag }} class="text-4xl transition-transform duration-300 ease-out group-hover:-translate-y-2 group-focus-visible:-translate-y-2 motion-reduce:translate-none md:text-6xl lg:text-display">{{ city.heading }}</{{ tag }}>
                         {% if link.label %}
                             <span class="inline-flex items-center gap-2 text-xl text-subtle transition-opacity"
                                   :class="active === {{ i }} ? 'opacity-100' : 'opacity-0 group-focus-visible:opacity-100'">

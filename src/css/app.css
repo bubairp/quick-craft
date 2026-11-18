@@ -91,6 +91,7 @@
   /* Aspect ratios */
   --aspect-card: 472 / 502;    /* feature card media (Home 6-1320) */
   --aspect-tile: 347 / 339;    /* compact card media (Home 6-1719) */
+  --aspect-phone: 342 / 704;   /* phone screen (Home 6-1499) */
 
   /* Radii — rounded-full for pills */
   --radius-sm: 0.25rem;        /* 4  buttons, nav items */
@@ -107,6 +108,10 @@
     0 20px 60px -2.5px rgb(0 0 0 / 0.05);
   --shadow-soft: 0 1px 14px 2px rgb(0 0 0 / 0.1);
   --shadow-nav: 1px 3px 16px 4px rgb(0 0 0 / 0.04);
+  --shadow-lift: 0 6px 12px 0 rgb(0 0 0 / 0.16); /* button hover (reference site) */
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -146,6 +151,19 @@
   }
   .gallery-fan__item:hover {
     transform: rotateY(-20deg) translateY(calc(var(--spacing) * -4));
+  }
+
+  /* Reveal on scroll: elements with data-reveal fade up when they enter the viewport.
+     Only active when JS added .js-reveal to <html> (no-JS and reduced motion: always visible). */
+  .js-reveal [data-reveal] {
+    opacity: 0;
+    translate: 0 calc(var(--spacing) * 6);
+    transition: opacity 700ms var(--ease-out-soft), translate 700ms var(--ease-out-soft);
+    transition-delay: calc(var(--reveal-index, 0) * 90ms);
+  }
+  .js-reveal [data-reveal].is-revealed {
+    opacity: 1;
+    translate: 0 0;
   }
 
   /* Horizontal scrollers (carousels) without a visible scrollbar */

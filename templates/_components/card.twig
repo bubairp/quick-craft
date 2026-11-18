@@ -7,6 +7,7 @@
  #   level    heading level (3)
  #   dark     bool
  #   sizes    sizes attribute for the image
+ #   revealIndex  position in its grid, for the staggered reveal-on-scroll (0, 1, 2 …)
  #}
 {% set dark = dark ?? false %}
 {% set compact = (variant ?? 'feature') == 'compact' %}
@@ -15,7 +16,7 @@
 {% set link = card.primaryButton ?? null %}
 {% set aspect = compact ? 'aspect-tile' : 'aspect-card' %}
 
-<article class="flex flex-col {{ compact ? 'gap-4' : 'gap-6 md:gap-8' }}">
+<article class="group flex flex-col {{ compact ? 'gap-4' : 'gap-6 md:gap-8' }}" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
     <div class="overflow-hidden rounded-md {{ dark ? 'bg-night' : (compact ? 'bg-line' : 'bg-surface') }}">
         {% if image %}
             {% include '_components/image.twig' with {

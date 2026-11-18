@@ -7,6 +7,7 @@
  #   variant  'dark' | 'darkOnDark' | 'light' | 'outlineLight'   (default 'dark')
  #   shape    'pill' | 'rounded'                   (default 'pill')
  #   class    extra classes
+ # Hover (reference site): lifts 2px, scales to 1.01, soft shadow. Off for reduced motion.
  #}
 {% set link = link ?? null %}
 {% if link and link.url %}
@@ -17,7 +18,8 @@
         outlineLight: 'bg-transparent text-paper border-paper/30 hover:bg-paper/10',
     } %}
     {% set classes = [
-        'inline-flex items-center justify-center gap-2 whitespace-nowrap border px-6 py-4 text-base font-semibold leading-tight tracking-normal transition-colors',
+        'inline-flex items-center justify-center gap-2 whitespace-nowrap border px-6 py-4 text-base font-semibold leading-tight tracking-normal',
+        'transition duration-200 ease-out hover:-translate-y-0.5 hover:scale-101 hover:shadow-lift motion-reduce:translate-none motion-reduce:scale-none',
         (shape ?? 'pill') == 'pill' ? 'rounded-full' : 'rounded-sm',
         variants[variant ?? 'dark'] ?? variants.dark,
         class ?? '',

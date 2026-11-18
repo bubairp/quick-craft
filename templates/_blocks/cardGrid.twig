@@ -43,7 +43,7 @@
         {% if count %}
             <div class="grid w-full grid-cols-1 {{ compact ? 'gap-x-7 gap-y-10' : 'gap-x-7 gap-y-12' }} {{ cols }}">
                 {% for card in cards %}
-                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: compact ? 'compact' : 'feature' } only %}
+                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: compact ? 'compact' : 'feature', revealIndex: loop.index0 } only %}
                 {% endfor %}
             </div>
         {% endif %}

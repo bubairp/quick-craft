@@ -1,7 +1,8 @@
 {#
  # Feature rows block.
- #   stickyPhone: Figma Home 6-1499 — dark; each row = heading | phone image | text + button
- #   (rows without an image collapse to heading | text)
+ #   stickyPhone: Figma Home 6-1499 — dark scroll slider (reference: partiful.com).
+ #                Desktop: sticky full-screen panel; text slides up/out per step, phone screens
+ #                stack (src/js/scroll-slider.js). Mobile / reduced motion / no JS: stacked rows.
  #   alternating: Figma Organizers 17-640 — text beside a wide image, sides alternate
  # Receives: block, headingLevel
  # Fields: featureLayout, theme, heading, cards (card: heading, text, image, primaryButton)
@@ -11,48 +12,94 @@
 {% set rows = block.cards.eagerly().with(['image']).all() %}
 {% set level = headingLevel ?? 2 %}
 {% set rowLevel = block.heading ? level + 1 : level %}
+{% set tag = 'h' ~ rowLevel %}
+{% set textClass = dark ? 'text-line' : 'text-black/60' %}
 
 {% if rows|length %}
-<section class="{{ dark ? 'bg-ink text-white' : 'text-ink' }} px-4 py-20 md:px-gutter md:py-32">
+<section class="{{ dark ? 'bg-ink text-white' : 'text-ink' }}">
     {% if block.heading %}
-        {% include '_components/section-heading.twig' with { heading: block.heading, level: level, dark: dark, class: 'mb-16' } only %}
+        {% include '_components/section-heading.twig' with { heading: block.heading, level: level, dark: dark, class: 'px-4 pt-20 md:px-gutter md:pt-32' } only %}
     {% endif %}
 
-    <div class="mx-auto flex max-w-site flex-col {{ layout == 'stickyPhone' ? 'gap-24 lg:gap-50' : 'max-w-content gap-16 md:gap-24' }}">
-        {% for row in rows %}
-            {% set image = row.image.one() %}
-            {% set tag = 'h' ~ rowLevel %}
+    {% if layout == 'stickyPhone' %}
+        <div data-scroll-slider="{{ rows|length }}">
 
-            {% if layout == 'stickyPhone' %}
-                <article class="grid items-center gap-8 lg:gap-24 {{ image ? 'lg:grid-cols-3' : 'lg:grid-cols-2' }}">
-                    {% if row.heading %}
-                        <{{ tag }} class="text-balance text-4xl uppercase md:text-5xl">{{ row.heading }}</{{ tag }}>
-                    {% endif %}
-                    {% if image %}
-                        <div class="flex justify-center">
-                            {% include '_components/image.twig' with {
-                                image: image, width: 342, sizes: '(min-width: 1024px) 342px, 80vw',
-                                class: 'h-auto w-full max-w-xs',
-                            } only %}
+            {# Desktop scroll slider (shown by JS) #}
+            <div data-scroll-slider-track hidden class="relative">
+                <div class="sticky top-0 h-screen overflow-hidden">
+                    {% for row in rows %}
+                        <article data-slide="{{ loop.index0 }}"
+                                 class="absolute inset-0 mx-auto grid max-w-site grid-cols-3 items-center gap-24 px-gutter will-change-transform">
+                            {% if row.heading %}
+                                <{{ tag }} class="text-balance text-5xl uppercase">{{ row.heading }}</{{ tag }}>
+                            {% else %}
+                                <span></span>
+                            {% endif %}
+                            <span aria-hidden="true"></span>
+                            <div class="flex flex-col items-start gap-6">
+                                {% if row.text %}<p class="max-w-xs text-lg {{ textClass }}">{{ row.text|nl2br }}</p>{% endif %}
+                                {% include '_components/button.twig' with { link: row.primaryButton, variant: dark ? 'light' : 'dark' } only %}
+                            </div>
+                        </article>
+                    {% endfor %}
+
+                    {# Phone screens stack in the centre column #}
+                    <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+                        <div class="relative aspect-phone h-4/5 max-h-175">
+                            {% for row in rows %}
+                                {% set image = row.image.one() %}
+                                {% if image %}
+                                    <div data-slide-media="{{ loop.index0 }}" class="absolute inset-0 will-change-transform">
+                                        {% include '_components/image.twig' with {
+                                            image: image, width: 342, sizes: '342px',
+                                            eager: loop.first, decorative: not loop.first,
+                                            class: 'size-full object-contain',
+                                        } only %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                    {% endif %}
-                    <div class="flex flex-col items-start gap-6">
-                        {% if row.text %}
-                            <p class="max-w-xs text-lg {{ dark ? 'text-line' : 'text-black/60' }}">{{ row.text|nl2br }}</p>
-                        {% endif %}
-                        {% include '_components/button.twig' with { link: row.primaryButton, variant: dark ? 'light' : 'dark' } only %}
                     </div>
-                </article>
+                </div>
+            </div>
 
-            {% else %}
+            {# Stacked rows: mobile, reduced motion, no JS #}
+            <div data-scroll-slider-fallback class="mx-auto flex max-w-site flex-col gap-24 px-4 py-20 md:px-gutter md:py-32">
+                {% for row in rows %}
+                    {% set image = row.image.one() %}
+                    <article class="grid items-center gap-8 lg:gap-24 {{ image ? 'lg:grid-cols-3' : 'lg:grid-cols-2' }}">
+                        {% if row.heading %}
+                            <{{ tag }} class="text-balance text-4xl uppercase md:text-5xl">{{ row.heading }}</{{ tag }}>
+                        {% endif %}
+                        {% if image %}
+                            <div class="flex justify-center">
+                                {% include '_components/image.twig' with {
+                                    image: image, width: 342, sizes: '(min-width: 1024px) 342px, 80vw',
+                                    class: 'h-auto w-full max-w-xs',
+                                } only %}
+                            </div>
+                        {% endif %}
+                        <div class="flex flex-col items-start gap-6">
+                            {% if row.text %}<p class="max-w-xs text-lg {{ textClass }}">{{ row.text|nl2br }}</p>{% endif %}
+                            {% include '_components/button.twig' with { link: row.primaryButton, variant: dark ? 'light' : 'dark' } only %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% else %}
+        <div class="mx-auto flex max-w-content flex-col gap-16 px-4 py-20 md:gap-24 md:px-gutter md:py-32">
+            {% for row in rows %}
+                {% set image = row.image.one() %}
                 {% set flip = loop.index is even %}
-                <article class="grid items-center gap-8 md:grid-cols-2 md:gap-16">
+                <article class="grid items-center gap-8 md:grid-cols-2 md:gap-16" data-reveal>
                     <div class="flex flex-col items-start gap-4 {{ flip ? 'md:order-2' }}">
                         {% if row.heading %}
                             <{{ tag }} class="text-balance text-3xl md:text-4xl">{{ row.heading }}</{{ tag }}>
                         {% endif %}
                         {% if row.text %}
-                            <p class="text-lg {{ dark ? 'text-line' : 'text-black/60' }}">{{ row.text|nl2br }}</p>
+                            <p class="text-lg {{ textClass }}">{{ row.text|nl2br }}</p>
                         {% endif %}
                         {% include '_components/button.twig' with { link: row.primaryButton, variant: dark ? 'light' : 'dark', shape: 'rounded', class: 'mt-2' } only %}
                     </div>
@@ -65,8 +112,8 @@
                         </div>
                     {% endif %}
                 </article>
-            {% endif %}
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 </section>
 {% endif %}

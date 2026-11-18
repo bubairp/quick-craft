@@ -5,7 +5,7 @@
 {% set align = align ?? 'center' %}
 {% set dark = dark ?? false %}
 {% if (eyebrow ?? null) or (heading ?? null) or (text ?? null) %}
-    <div class="flex flex-col gap-2 {{ align == 'center' ? 'items-center text-center' : 'items-start text-left' }} {{ class ?? '' }}">
+    <div class="flex flex-col gap-2 {{ align == 'center' ? 'items-center text-center' : 'items-start text-left' }} {{ class ?? '' }}" data-reveal>
         {% if eyebrow ?? null %}
             <p class="text-xl font-medium text-accent">{{ eyebrow }}</p>
         {% endif %}
