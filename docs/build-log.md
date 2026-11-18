@@ -152,3 +152,26 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
 - Fix: `_components/button.twig` takes a `size` prop: `md` (default, `px-6 py-4 text-base`) or `sm` (`h-11 px-4 text-sm`, 44px, matching the menu button). The header uses `size: 'sm'`. The menu button gets `shrink-0` and a hover background.
 - **Rule:** use the `class` prop of components for layout and margins only. Never use it to override padding or font size; add a prop for that instead.
 - Checked: at 375px and 768px both buttons are 44px with centres aligned and no overflow. Desktop is unchanged (170×54 and 96×54, ending at x=1184).
+
+### 2026-11-18: Swiper version of the gallery (demo, to compare with the fan)
+- Request: keep the custom diagonal fan on Home, but build a Swiper version to see how it looks.
+- Backup: `ddev snapshot --name=before-gallery-slider`.
+- Migration `m261118_220000_gallery_slider_demo`:
+  - Adds the `slider` option to `galleryLayout`.
+  - Creates the landing page **/gallery-slider-demo** with a copy of Home's fan gallery (same heading, text and images), set to the `slider` layout.
+  - **DEMO ONLY:** delete the page, and the option if it ends up unused, once a layout is chosen. To use Swiper on Home instead, set the Home gallery's layout to "Slider" in the CP.
+- `_blocks/imageGallery.twig`, layout `slider`: `data-carousel="gallery"` with `.swiper` and `swiper-slide w-48! md:w-64!`.
+- `src/js/carousels.js`, variant `gallery`:
+  - Modules: EffectCoverflow, FreeMode, Autoplay, Keyboard, A11y.
+  - `loop`, `centeredSlides`, `slidesPerView: 'auto'`, `spaceBetween: -64` (cards overlap).
+  - Continuous glide: `autoplay.delay: 0` with `speed: 3500`. The wrapper gets the class `is-gliding` (linear easing) on the `autoplay` event, and loses it on `touchStart` so the drag release keeps Swiper's easing.
+  - Pauses when off screen (IntersectionObserver). No autoplay with reduced motion.
+- **Gotchas (read in `node_modules/swiper/modules/effect-coverflow.mjs`):**
+  - Coverflow multiplies `rotate`, `depth` and `stretch` by each card's distance from the centre with no limit, so on a wide screen the far cards rotated up to 245° and flipped around. Fix: `modifier` can be a function, so `(o) => clamp(o, -1, 1)` caps it.
+  - Once clamped, coverflow's own z-index is flat. A `setTranslate` handler registered after construction sets `zIndex` from `slide.progress`, so cards nearer the centre sit on top.
+  - Positive `stretch` pulls side cards toward the centre. A negative `spaceBetween` gives a more even overlap.
+- Checked:
+  - At 1440px: 10 cards visible, maximum angle 38°, correct stacking.
+  - A synthetic 300px drag moves the cards 280px, and the glide resumes afterwards.
+  - At 375px there is no horizontal overflow.
+  - The page has one `<h1>` and no console errors.

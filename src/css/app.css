@@ -181,6 +181,19 @@
     margin-left: 0;
   }
 
+  /* imageGallery "slider" (Swiper coverflow, src/js/carousels.js variant "gallery") */
+  .gallery-slider .swiper:not(.swiper-initialized) .swiper-wrapper {
+    gap: calc(var(--spacing) * 3);
+    overflow-x: auto;
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .gallery-slider .swiper-wrapper.is-gliding {
+    transition-timing-function: linear;
+  }
+  .gallery-slider img {
+    -webkit-user-drag: none;
+  }
+
   /* Header pill → mega menu (reference site: the pill itself grows into the dropdown panel) */
   .site-nav-pill {
     max-width: var(--container-nav);

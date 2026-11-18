@@ -1,6 +1,6 @@
 {#
  # Image gallery block. Figma: Home 6-1384 (fan). Also grid (17-1088), row (17-1931),
- # marquee (17-3649).
+ # marquee (17-3649), and slider (Swiper coverflow alternative to the fan, demo).
  # Receives: block, headingLevel
  # Fields: galleryLayout, eyebrow, heading, text, images, primaryButton
  # Captions use each asset's title (grid/row layouts only).
@@ -37,6 +37,21 @@
                         </li>
                     {% endfor %}
                 </ul>
+            </div>
+
+        {% elseif layout == 'slider' %}
+            {# Swiper coverflow (src/js/carousels.js, variant "gallery"): loops, drags with momentum,
+               glides continuously. Without JS: a horizontally scrollable row. #}
+            <div class="gallery-slider mt-10 md:mt-16" data-carousel="gallery">
+                <div class="swiper overflow-visible!">
+                    <ul class="swiper-wrapper"aria-label="{{ block.heading ?: 'Gallery'|t }}">
+                        {% for image in images %}
+                            <li class="swiper-slide w-48! flex-none md:w-64!">
+                                {% include '_components/image.twig' with { image: image, width: 256, ratio: 1, sizes: '(min-width: 768px) 256px, 192px', class: 'aspect-square w-full rounded-md object-cover shadow-card' } only %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
 
         {% elseif layout == 'marquee' %}

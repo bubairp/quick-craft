@@ -50,6 +50,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Slider (Swiper coverflow)'
+        -
+          - value
+          - slider
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none
