@@ -8,18 +8,98 @@
  *
  * Variants:
  *   data-carousel          testimonials row (templates/_blocks/testimonials.twig, carousel layout)
- *   data-carousel="gallery" imageGallery "slider" layout: coverflow, loop, free drag, continuous glide
+ *   data-carousel="gallery" imageGallery "slider" layout: diagonal fan, loop, free drag, continuous glide
  *   data-carousel="press"  press strip: centred, looping, click a logo to activate it,
  *                          auto-advances every 5s (paused on hover; off for reduced motion)
  *
  * Slide widths come from Tailwind classes on each slide (slidesPerView: 'auto').
  * Swiper is only downloaded on pages that contain a carousel.
  */
+/**
+ * Swiper version of the diagonal fan, same look and motion as gallery-wave.js / the reference
+ * (partiful.com "A million reasons to hang"):
+ *  - Swiper moves a straight row; CSS tilts the whole .swiper to the fan's slope (md+) and
+ *    turns each card back upright with the same rotateY (see .gallery-slider in app.css).
+ *  - Cards drift slowly down-left and move faster while the page scrolls (driven per frame,
+ *    not by Swiper autoplay, because autoplay can't speed up mid-transition).
+ *  - Drag / swipe with momentum (Swiper freeMode); the drift pauses while touched or gliding.
+ *  - Endless: when the row nears its end, Swiper's own loopFix moves the first slides to the
+ *    end (the same call Swiper makes during a drag), so the movement never jumps.
+ */
+const FAN_ANGLE = Math.atan(0.3);                  // slope of the fan line (gallery-wave SLOPE)
+const DRIFT = 28 / Math.cos(FAN_ANGLE);            // px/s along the tilted row (28 px/s on screen)
+const SCROLL_FACTOR = 1.2 / Math.cos(FAN_ANGLE);   // extra px per scrolled px
+
+function initGallerySwiper(Swiper, modules, el, reduceMotion) {
+  const swiper = new Swiper(el, {
+    modules,
+    slidesPerView: 'auto',
+    loop: true,
+    loopAdditionalSlides: 4,
+    grabCursor: true,
+    spaceBetween: 12,
+    // md+: cards overlap like the fan (step ≈ 100px along the line, card 256px)
+    breakpoints: { 768: { spaceBetween: -156 } },
+    freeMode: { enabled: true, momentum: true, momentumRatio: 0.6 },
+    keyboard: { enabled: true, onlyInViewport: true },
+    a11y: { enabled: true },
+  });
+
+  // Stacking like the fan: cards further left sit on top (DOM order = left → right)
+  const stack = () => swiper.slides.forEach((s, i) => { s.style.zIndex = String(swiper.slides.length - i); });
+  swiper.on('loopFix', stack);
+  stack();
+
+  if (reduceMotion) return;
+
+  // Move the row by `dx` px to the left, looping like a drag does
+  const advance = (dx) => {
+    const last = swiper.slidesSizesGrid[swiper.slidesSizesGrid.length - 1] ?? 0;
+    if (swiper.getTranslate() - dx < swiper.maxTranslate() + last + swiper.params.spaceBetween) {
+      swiper.loopFix({
+        direction: 'next',
+        setTranslate: true,
+        activeSlideIndex: swiper.slides.length - swiper.slidesPerViewDynamic(),
+      });
+    }
+    swiper.setTranslate(swiper.getTranslate() - dx);
+    swiper.updateActiveIndex();
+    swiper.updateSlidesClasses();
+  };
+
+  let visible = false;
+  let running = false;
+  let lastT = 0;
+  let lastY = window.scrollY;
+  const tick = (t) => {
+    const dt = Math.min(0.05, (t - lastT) / 1000);
+    lastT = t;
+    const y = window.scrollY;
+    const scrolled = Math.abs(y - lastY);
+    lastY = y;
+    // let Swiper own the row while it is being dragged or gliding after a release
+    if (!swiper.touchEventsData.isTouched && !swiper.animating && !swiper.destroyed) {
+      advance(DRIFT * dt + scrolled * SCROLL_FACTOR);
+    }
+    if (visible) requestAnimationFrame(tick);
+    else running = false;
+  };
+  new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    if (visible && !running) {
+      running = true;
+      lastT = performance.now();
+      lastY = window.scrollY;
+      requestAnimationFrame(tick);
+    }
+  }).observe(el);
+}
+
 export async function initCarousels() {
   const roots = document.querySelectorAll('[data-carousel]');
   if (!roots.length) return;
 
-  const [{ default: Swiper }, { Navigation, Keyboard, A11y, Autoplay, EffectCoverflow, FreeMode }] = await Promise.all([
+  const [{ default: Swiper }, { Navigation, Keyboard, A11y, Autoplay, FreeMode }] = await Promise.all([
     import('swiper'),
     import('swiper/modules'),
     import('swiper/css'),
@@ -43,49 +123,7 @@ export async function initCarousels() {
     };
 
     if (variant === 'gallery') {
-      // Swiper alternative to the diagonal fan (gallery-wave.js): 3D coverflow with
-      // overlapping cards, endless loop, free drag with momentum, continuous glide.
-      const wrapper = el.querySelector('.swiper-wrapper');
-      const swiper = new Swiper(el, {
-        modules: [EffectCoverflow, FreeMode, Autoplay, Keyboard, A11y],
-        slidesPerView: 'auto',
-        centeredSlides: true,
-        loop: true,
-        grabCursor: true,
-        // negative gap: cards overlap like the fan
-        spaceBetween: -64,
-        effect: 'coverflow',
-        // modifier is clamped to ±1: cards beyond the neighbours keep the same angle/depth
-        // instead of rotating further (unclamped, far cards flip round on wide screens)
-        coverflowEffect: {
-          rotate: 38, stretch: 0, depth: 160, slideShadows: false,
-          modifier: (offset) => Math.max(-1, Math.min(1, offset)),
-        },
-        freeMode: { enabled: true, momentum: true, momentumRatio: 0.6 },
-        // autoplay with delay 0 + a long linear transition = a continuous glide
-        speed: reduceMotion ? 0 : 3500,
-        autoplay: reduceMotion ? false : { delay: 0, disableOnInteraction: false },
-        keyboard: { enabled: true, onlyInViewport: true },
-        a11y: { enabled: true },
-        on: {
-          // linear easing only while gliding; drag release keeps Swiper's own easing
-          autoplay: () => wrapper.classList.add('is-gliding'),
-          touchStart: () => wrapper.classList.remove('is-gliding'),
-        },
-      });
-      // stacking: cards nearer the centre on top (coverflow's own z-index is flat once clamped).
-      // Registered after construction so it runs after the effect's handler.
-      const stack = () => swiper.slides.forEach((s) => {
-        s.style.zIndex = String(100 - Math.round(Math.abs(s.progress ?? 0) * 10));
-      });
-      swiper.on('setTranslate', stack);
-      stack();
-      // pause while off screen
-      if (!reduceMotion) {
-        new IntersectionObserver(([entry]) => {
-          if (entry.isIntersecting) swiper.autoplay.resume(); else swiper.autoplay.pause();
-        }).observe(el);
-      }
+      initGallerySwiper(Swiper, [FreeMode, Keyboard, A11y], el, reduceMotion);
       return;
     }
 

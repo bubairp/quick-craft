@@ -54,7 +54,7 @@ settings:
       __assoc__:
         -
           - label
-          - 'Slider (Swiper coverflow)'
+          - 'Fan slider (Swiper)'
         -
           - value
           - slider

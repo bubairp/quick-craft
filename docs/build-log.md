@@ -175,3 +175,25 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - A synthetic 300px drag moves the cards 280px, and the glide resumes afterwards.
   - At 375px there is no horizontal overflow.
   - The page has one `<h1>` and no console errors.
+
+### 2026-11-18: Swiper gallery reworked to the fan's style and effect
+- Request: the Swiper version should look and move exactly like the fan (and partiful.com), not like a coverflow.
+- **How (Swiper only moves a straight row):**
+  - CSS (md+) tilts the whole `.swiper` by −16.7° (= atan 0.3, the fan's slope) and turns each card back upright: `.gallery-slider__card { transform: rotate(16.7deg) rotateY(-38deg) }`, with perspective 1200px on the slide. Hover is the same as the fan (rotateY −20°, lift 16px).
+  - `spaceBetween: -156` at 768px and up: a 100px step along the tilted row, which is 96px across the screen, the fan's `STEP_X`.
+  - The strip is wider than the screen (`calc(105vw + 640px)`) and starts off-screen left, so the loop reshuffles cards out of sight. Its `bottom` (−104 × spacing) was measured so the card line sits exactly where the fan's does.
+  - `.gallery-slider` uses `box-sizing: content-box`, so `pt-24 lg:pt-40` is added to the 520px height as on the fan. With border-box the area was 160px shorter.
+  - Cards further left sit on top: `zIndex` is set from DOM order on `loopFix`.
+- **Motion (`initGallerySwiper` in `src/js/carousels.js`):**
+  - Not Swiper autoplay, because it can't speed up in the middle of a transition. Instead a requestAnimationFrame drive moves the row by `DRIFT` (28px/s on screen) plus the scrolled px × 1.2, as in `gallery-wave.js`.
+  - Each frame: `setTranslate`, `updateActiveIndex`, `updateSlidesClasses`. Near the end of the row it calls `swiper.loopFix({ direction: 'next', setTranslate: true, activeSlideIndex: slides.length - slidesPerViewDynamic() })`, the same call Swiper makes in its own drag handler (`onTouchMove` in `swiper-core.mjs`).
+  - The drift pauses while touched (`touchEventsData.isTouched`) or gliding after release (`swiper.animating`). Swiper freeMode provides the drag momentum.
+  - It only runs while on screen. Reduced motion: no drift.
+- **Gotcha:** the cards are rendered twice (copies `aria-hidden`, decorative `alt`). With one set of 20 the row was shorter than the tilted strip, so `maxTranslate()` was 0, the loop couldn't work, and gaps appeared.
+- Migration `m261118_230000_gallery_slider_label` renames the option to "Fan slider (Swiper)".
+- **Checked (Home fan vs demo):**
+  - At 1440px: same step (95.7 / −28.8px), same card size (203px wide), same line position (400px below the top of the area), and 17 cards visible on both.
+  - Loop: 150 frames with fast scrolling and 75 reshuffles, the worst per-card deviation was 0px (no jumps).
+  - A drag of 300px moves the cards 280px, then 224px of momentum, then the drift resumes.
+  - 768px: diagonal, no overlap with the heading. 375px: straight swipeable row. No horizontal overflow and no console warnings.
+- **Still demo-only** (`/gallery-slider-demo`). To use it on Home, set the Home gallery's layout to "Fan slider (Swiper)".
