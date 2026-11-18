@@ -1,4 +1,4 @@
-dateModified: 1794999132
+dateModified: 1795002250
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -49,6 +49,7 @@ meta:
     234d2e9f-2f97-4a91-8a5e-b1f93eeece59: Testimonials # Testimonials
     289cd371-3ba2-4745-ae22-a370d9990f91: 'Hero layout' # Hero layout
     387e6ecc-0194-4b56-87a9-d9f42fbe983b: 'Page builder' # Page builder
+    509a88e4-38a6-4ebd-adba-6af6222be685: 'Chat messages' # Chat messages
     761f1f27-3b7d-4327-833c-e38b716c0d2b: Comparison # Comparison
     864d7fef-094c-434b-ad76-e9e3b15430e6: Home # Home
     4932a68c-f70c-480b-9e34-b4350301228d: 'Promo bar' # Promo bar

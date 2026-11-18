@@ -1,0 +1,130 @@
+columnSuffix: null
+handle: chatMessages
+instructions: 'Optional animated chat over the hero photo. Images: 1st = background photo, 2nd = invite card art. Avatars: upload an image whose title equals the sender name.'
+name: 'Chat messages'
+searchable: false
+settings:
+  addRowLabel: 'Add message'
+  columns:
+    __assoc__:
+      -
+        - col1
+        -
+          __assoc__:
+            -
+              - heading
+              - Sender
+            -
+              - handle
+              - sender
+            -
+              - type
+              - singleline
+      -
+        - col2
+        -
+          __assoc__:
+            -
+              - heading
+              - Message
+            -
+              - handle
+              - message
+            -
+              - type
+              - singleline
+      -
+        - col3
+        -
+          __assoc__:
+            -
+              - heading
+              - Side
+            -
+              - handle
+              - side
+            -
+              - type
+              - select
+            -
+              - options
+              -
+                -
+                  __assoc__:
+                    -
+                      - label
+                      - 'Left (friend)'
+                    -
+                      - value
+                      - left
+                    -
+                      - default
+                      - true
+                -
+                  __assoc__:
+                    -
+                      - label
+                      - 'Right (host)'
+                    -
+                      - value
+                      - right
+                    -
+                      - default
+                      - false
+      -
+        - col4
+        -
+          __assoc__:
+            -
+              - heading
+              - Kind
+            -
+              - handle
+              - kind
+            -
+              - type
+              - select
+            -
+              - options
+              -
+                -
+                  __assoc__:
+                    -
+                      - label
+                      - Message
+                    -
+                      - value
+                      - message
+                    -
+                      - default
+                      - true
+                -
+                  __assoc__:
+                    -
+                      - label
+                      - 'Invite card'
+                    -
+                      - value
+                      - invite
+                    -
+                      - default
+                      - false
+                -
+                  __assoc__:
+                    -
+                      - label
+                      - Typing…
+                    -
+                      - value
+                      - typing
+                    -
+                      - default
+                      - false
+  maxRows: null
+  minRows: null
+  staticRows: false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Table
+warning: null

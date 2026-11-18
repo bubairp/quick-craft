@@ -1,0 +1,69 @@
+{#
+ # Animated chat over a photo (hero media). Reference: partiful.com hero; Figma 6-2238.
+ # Props:
+ #   messages  Table rows: sender, message, side (left|right), kind (message|invite|typing)
+ #   images    Assets: [0] background photo, [1] invite art; avatars = assets titled like a sender
+ #   dark      bool
+ # Animation: src/js/hero-chat.js (messages appear one by one, stack slides up, loops).
+ # Reduced motion / no JS: a static conversation.
+ #}
+{% set photo = images[0] ?? null %}
+{% set inviteArt = images[1] ?? null %}
+{% set avatars = {} %}
+{% for img in images|slice(2) %}
+    {% set avatars = avatars|merge({ (img.title): img }) %}
+{% endfor %}
+{% set initials = siteName|split(' ')|map(w => w|first)|join|lower %}
+
+<div class="relative mx-auto aspect-hero-chat w-full max-w-lg" data-hero-chat>
+    {% if photo %}
+        <div class="absolute inset-y-0 left-1/2 w-4/5 -translate-x-1/2 overflow-hidden rounded-2xl bg-white/5">
+            {% include '_components/image.twig' with {
+                image: photo, width: 420, ratio: 420 / 565, sizes: '420px', eager: true,
+                class: 'size-full object-cover',
+            } only %}
+        </div>
+    {% endif %}
+
+    <div class="absolute inset-0 overflow-hidden" data-chat-window>
+        <ol class="flex flex-col gap-9 pt-3 transition-transform duration-700 ease-out-soft" data-chat-track aria-label="{{ 'Example chat'|t }}">
+            {% for row in messages %}
+                {% set right = row.side == 'right' %}
+                {% set avatar = avatars[row.sender] ?? null %}
+                <li class="flex items-end gap-3.5 transition duration-500 ease-out-soft {{ right ? 'flex-row-reverse' : '' }}" data-chat-msg>
+                    {% if avatar %}
+                        {% include '_components/image.twig' with { image: avatar, width: 56, ratio: 1, sizes: '56px', decorative: true, class: 'size-14 flex-none rounded-full object-cover' } only %}
+                    {% else %}
+                        <span class="size-14 flex-none" aria-hidden="true"></span>
+                    {% endif %}
+
+                    {% if row.kind == 'invite' %}
+                        <div class="w-48 overflow-hidden rounded-xl bg-white shadow-card">
+                            {% if inviteArt %}
+                                <div class="bg-linear-to-br from-glow-pink to-glow-blue">
+                                    {% include '_components/image.twig' with { image: inviteArt, width: 192, ratio: 191 / 116, sizes: '192px', class: 'h-29 w-full object-contain' } only %}
+                                </div>
+                            {% endif %}
+                            <div class="flex items-center gap-1.5 bg-surface px-2 py-2.5">
+                                <span class="flex size-8 flex-none items-center justify-center rounded-md bg-ink text-xs font-extrabold text-white" aria-hidden="true">{{ initials }}</span>
+                                <span class="min-w-0 flex-1 leading-tight">
+                                    <span class="block truncate text-xs font-semibold text-ink">{{ row.message }}</span>
+                                    <span class="block text-xs text-subtle">{{ siteName }}</span>
+                                </span>
+                                <span class="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">{{ 'View'|t }}</span>
+                            </div>
+                        </div>
+                    {% elseif row.kind == 'typing' %}
+                        <span class="flex items-center gap-1.5 rounded-full bg-line px-6 py-4" aria-label="{{ '{name} is typing'|t(params={ name: row.sender }) }}">
+                            {% for i in 1..3 %}<span class="size-2 rounded-full bg-subtle/60 motion-safe:animate-pulse"></span>{% endfor %}
+                        </span>
+                    {% else %}
+                        <p class="rounded-full px-6 py-3.5 text-xl {{ right ? 'bg-accent text-white' : 'bg-line text-black' }}">
+                            <span class="sr-only">{{ row.sender }}: </span>{{ row.message }}
+                        </p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>

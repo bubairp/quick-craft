@@ -1,7 +1,8 @@
 {#
  # Hero block. Figma: Home 6-2210 (split, dark). Other layouts are used by landing pages.
  # Receives: block, headingLevel
- # Fields: heroLayout, theme, eyebrow, heading, rotatingWords, text, primaryButton, secondaryButton, images
+ # Fields: heroLayout, theme, eyebrow, heading, rotatingWords, text, primaryButton, secondaryButton, images,
+ #         chatMessages (split layout: animated chat over images[0], see _components/hero-chat.twig)
  #}
 {% set layout = block.heroLayout.value ?? 'split' %}
 {% set dark = (block.theme.value ?? 'light') == 'dark' %}
@@ -40,7 +41,10 @@
                 {% if hasButtons %}{{ _self.buttons(block, dark) }}{% endif %}
             </div>
 
-            {% if media|length %}
+            {% set chat = (block.chatMessages ?? [])|filter(r => r.message or r.kind == 'typing') %}
+            {% if chat|length and media|length %}
+                {% include '_components/hero-chat.twig' with { messages: chat, images: media, dark: dark } only %}
+            {% elseif media|length %}
                 <div class="flex justify-center">
                     {% include '_components/image.twig' with {
                         image: media|first,
