@@ -1,0 +1,11 @@
+{# Star rating. Props: rating (number 0-5), class (size/colour classes for each star) #}
+{% set rating = rating ?? 0 %}
+{% if rating > 0 %}
+    <span class="inline-flex gap-0.5" role="img" aria-label="{{ 'Rated {n} out of 5'|t(params={ n: rating }) }}">
+        {% for i in 1..5 %}
+            <svg class="{{ class ?? 'size-3' }} {{ i <= rating|round ? '' : 'opacity-30' }}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z"/>
+            </svg>
+        {% endfor %}
+    </span>
+{% endif %}

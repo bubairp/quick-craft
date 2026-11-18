@@ -31,6 +31,7 @@
   --color-line: #ececec;       /* borders; light text on dark */
   --color-accent: #7b41d9;     /* purple eyebrow labels */
   --color-success: #31c431;    /* comparison ticks */
+  --color-star: #fe8207;       /* review stars */
   --color-glow-pink: #ffc4fe;  /* blurred background blobs */
   --color-glow-blue: #5fd8ff;
 
@@ -145,6 +146,14 @@
   }
   .gallery-fan__item:hover {
     transform: rotateY(-20deg) translateY(calc(var(--spacing) * -4));
+  }
+
+  /* Horizontal scrollers (carousels) without a visible scrollbar */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
   /* imageGallery "marquee": continuous horizontal scroll (paused for reduced motion) */

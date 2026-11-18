@@ -1,0 +1,113 @@
+{#
+ # Testimonials block.
+ #   carousel: Figma Home 6-2347 — scroll-snap row of square tiles (reviews + stats), prev/next
+ #   quotes:   Figma Organizers 17-591 — 3 centered quotes with avatar image
+ #   reviews:  Figma Invitation Maker 17-2211 — grid of review cards
+ # Receives: block, headingLevel
+ # Fields: testimonialLayout, eyebrow, heading, text,
+ #         testimonials (testimonial: text=quote, heading, personName, personDetail, image, rating;
+ #                       stat: heading=value, text=label, image=background)
+ #}
+{% set layout = block.testimonialLayout.value ?? 'carousel' %}
+{% set items = block.testimonials.eagerly().with(['image']).all() %}
+{% set level = headingLevel ?? 2 %}
+{% set itemTag = 'h' ~ (level + 1) %}
+
+{% if items|length %}
+<section class="bg-linear-to-b from-paper to-surface py-16 md:py-24">
+    {% include '_components/section-heading.twig' with {
+        eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level,
+        align: layout == 'reviews' ? 'left' : 'center',
+        class: 'mx-auto max-w-site px-4 md:px-gutter',
+    } only %}
+
+    {% if layout == 'carousel' %}
+        <div class="mt-12 md:mt-16"
+             x-data="{
+                 scroll(dir) {
+                     const t = this.$refs.track;
+                     const step = t.firstElementChild ? t.firstElementChild.offsetWidth + 16 : t.clientWidth;
+                     t.scrollBy({ left: dir * step, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+                 }
+             }">
+            <ul x-ref="track" class="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 no-scrollbar md:px-gutter" tabindex="0" aria-label="{{ block.heading ?: 'Testimonials'|t }}">
+                {% for item in items %}
+                    {% set image = item.image.one() %}
+                    <li class="relative flex aspect-square w-72 flex-none snap-start overflow-hidden rounded-md md:w-85 {{ item.type.handle == 'stat' and not image ? 'bg-ink' : 'bg-surface' }}">
+                        {% if image %}
+                            {% include '_components/image.twig' with { image: image, width: 340, ratio: 1, sizes: '340px', class: 'absolute inset-0 size-full object-cover' } only %}
+                        {% endif %}
+
+                        {% if item.type.handle == 'stat' %}
+                            <div class="relative flex size-full flex-col p-6 uppercase text-white {{ image ? 'justify-between' : 'items-center justify-center gap-6 text-center' }}">
+                                {% if item.heading %}<p class="{{ image ? 'text-6xl md:text-7xl' : 'text-xl' }}">{{ item.heading }}</p>{% endif %}
+                                {% if item.text %}<p class="{{ image ? 'text-2xl' : 'text-xl' }}">{{ item.text }}</p>{% endif %}
+                            </div>
+                        {% else %}
+                            <figure class="relative m-auto w-full p-5">
+                                <div class="rounded-md bg-white/80 p-4 shadow-soft backdrop-blur-md">
+                                    {% if item.heading %}<{{ itemTag }} class="text-sm font-bold">{{ item.heading }}</{{ itemTag }}>{% endif %}
+                                    <figcaption class="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-muted">
+                                        {% include '_components/stars.twig' with { rating: item.rating, class: 'size-3 text-star' } only %}
+                                        {% if item.personDetail %}<span>{{ item.personDetail }}</span>{% endif %}
+                                        {% if item.personName %}<span>{{ item.personName }}</span>{% endif %}
+                                    </figcaption>
+                                    {% if item.text %}
+                                        <blockquote class="mt-2 text-xs text-night">{{ item.text|nl2br }}</blockquote>
+                                    {% endif %}
+                                </div>
+                            </figure>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {% if items|length > 1 %}
+                <div class="mt-4 flex justify-center gap-2">
+                    <button type="button" @click="scroll(-1)" class="flex size-11 items-center justify-center rounded-full bg-line text-ink hover:bg-surface">
+                        <span class="sr-only">{{ 'Previous'|t }}</span>
+                        <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+                    </button>
+                    <button type="button" @click="scroll(1)" class="flex size-11 items-center justify-center rounded-full bg-line text-ink hover:bg-surface">
+                        <span class="sr-only">{{ 'Next'|t }}</span>
+                        <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+
+    {% else %}
+        <ul class="mx-auto mt-12 grid max-w-content gap-6 px-4 md:px-gutter {{ layout == 'quotes' ? 'md:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-3' }}">
+            {% for item in items %}
+                {% set image = item.image.one() %}
+                <li>
+                    <figure class="flex h-full flex-col gap-4 {{ layout == 'quotes' ? 'items-center text-center' : 'rounded-md border border-line bg-white p-5 shadow-card' }}">
+                        {% if layout == 'quotes' and image %}
+                            {% include '_components/image.twig' with { image: image, width: 140, ratio: 1, sizes: '140px', class: 'size-28 rounded-full object-cover' } only %}
+                        {% endif %}
+                        {% if layout == 'reviews' %}
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    {% if item.heading %}<{{ itemTag }} class="text-sm font-bold">{{ item.heading }}</{{ itemTag }}>{% endif %}
+                                    {% include '_components/stars.twig' with { rating: item.rating, class: 'size-3 text-star' } only %}
+                                </div>
+                                {% if item.personDetail %}<span class="text-xs text-muted">{{ item.personDetail }}</span>{% endif %}
+                            </div>
+                        {% endif %}
+                        {% if item.text %}
+                            <blockquote class="{{ layout == 'quotes' ? 'text-xl md:text-2xl' : 'text-sm' }}">
+                                {% if layout == 'quotes' %}“{{ item.text }}”{% else %}{{ item.text|nl2br }}{% endif %}
+                            </blockquote>
+                        {% endif %}
+                        {% if item.personName or (layout == 'quotes' and item.personDetail) %}
+                            <figcaption class="text-sm text-muted">
+                                {{ item.personName }}{% if layout == 'quotes' and item.personDetail %} · {{ item.personDetail }}{% endif %}
+                            </figcaption>
+                        {% endif %}
+                    </figure>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</section>
+{% endif %}
