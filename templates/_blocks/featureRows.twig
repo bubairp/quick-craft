@@ -1,0 +1,72 @@
+{#
+ # Feature rows block.
+ #   stickyPhone: Figma Home 6-1499 — dark; each row = heading | phone image | text + button
+ #   (rows without an image collapse to heading | text)
+ #   alternating: Figma Organizers 17-640 — text beside a wide image, sides alternate
+ # Receives: block, headingLevel
+ # Fields: featureLayout, theme, heading, cards (card: heading, text, image, primaryButton)
+ #}
+{% set layout = block.featureLayout.value ?? 'alternating' %}
+{% set dark = (block.theme.value ?? 'light') == 'dark' %}
+{% set rows = block.cards.eagerly().with(['image']).all() %}
+{% set level = headingLevel ?? 2 %}
+{% set rowLevel = block.heading ? level + 1 : level %}
+
+{% if rows|length %}
+<section class="{{ dark ? 'bg-ink text-white' : 'text-ink' }} px-4 py-20 md:px-gutter md:py-32">
+    {% if block.heading %}
+        {% include '_components/section-heading.twig' with { heading: block.heading, level: level, dark: dark, class: 'mb-16' } only %}
+    {% endif %}
+
+    <div class="mx-auto flex max-w-site flex-col {{ layout == 'stickyPhone' ? 'gap-24 lg:gap-50' : 'max-w-content gap-16 md:gap-24' }}">
+        {% for row in rows %}
+            {% set image = row.image.one() %}
+            {% set tag = 'h' ~ rowLevel %}
+
+            {% if layout == 'stickyPhone' %}
+                <article class="grid items-center gap-8 lg:gap-24 {{ image ? 'lg:grid-cols-3' : 'lg:grid-cols-2' }}">
+                    {% if row.heading %}
+                        <{{ tag }} class="text-balance text-4xl uppercase md:text-5xl">{{ row.heading }}</{{ tag }}>
+                    {% endif %}
+                    {% if image %}
+                        <div class="flex justify-center">
+                            {% include '_components/image.twig' with {
+                                image: image, width: 342, sizes: '(min-width: 1024px) 342px, 80vw',
+                                class: 'h-auto w-full max-w-xs',
+                            } only %}
+                        </div>
+                    {% endif %}
+                    <div class="flex flex-col items-start gap-6">
+                        {% if row.text %}
+                            <p class="max-w-xs text-lg {{ dark ? 'text-line' : 'text-black/60' }}">{{ row.text|nl2br }}</p>
+                        {% endif %}
+                        {% include '_components/button.twig' with { link: row.primaryButton, variant: dark ? 'light' : 'dark' } only %}
+                    </div>
+                </article>
+
+            {% else %}
+                {% set flip = loop.index is even %}
+                <article class="grid items-center gap-8 md:grid-cols-2 md:gap-16">
+                    <div class="flex flex-col items-start gap-4 {{ flip ? 'md:order-2' }}">
+                        {% if row.heading %}
+                            <{{ tag }} class="text-balance text-3xl md:text-4xl">{{ row.heading }}</{{ tag }}>
+                        {% endif %}
+                        {% if row.text %}
+                            <p class="text-lg {{ dark ? 'text-line' : 'text-black/60' }}">{{ row.text|nl2br }}</p>
+                        {% endif %}
+                        {% include '_components/button.twig' with { link: row.primaryButton, variant: dark ? 'light' : 'dark', shape: 'rounded', class: 'mt-2' } only %}
+                    </div>
+                    {% if image %}
+                        <div class="overflow-hidden rounded-lg {{ flip ? 'md:order-1' }}">
+                            {% include '_components/image.twig' with {
+                                image: image, width: 640, ratio: 16 / 11, sizes: '(min-width: 768px) 50vw, 100vw',
+                                class: 'h-auto w-full object-cover',
+                            } only %}
+                        </div>
+                    {% endif %}
+                </article>
+            {% endif %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
