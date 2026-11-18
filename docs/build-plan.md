@@ -10,28 +10,31 @@ Status: ☐ to do · ◐ in progress · ☑ done
 |---|---|---|
 | ☑ | DDEV, Craft 5, plugins, Vite + Tailwind v4 | commit `1889b68` |
 | ☑ | Design tokens + content model migration | commit `0e5eaa4` |
-| ☐ | Menus (Simple RP Menu): `headerMenu`, `footerCompany`, `footerProduct`, `footerSocials`, `footerLegal`, `footerSupport` | items from 6-2902 / 6-2058 |
-| ☐ | Site settings global: logo, header buttons, app store links | |
-| ☐ | Placeholder images from Figma → `images` volume, folder `placeholders/` | test content only |
+| ☑ | Menus (Simple RP Menu): `headerMenu`, `footerCompany`, `footerProduct`, `footerSocials`, `footerLegal`, `footerSupport` | seeded by migration; some placeholder URLs |
+| ◐ | Site settings global: logo, header buttons, app store links | buttons + store links done; logo waits for image export |
+| ☐ | Placeholder images from Figma → `images` volume, folder `placeholders/` | on hold until WSL moves off C: |
+| ☐ | Visual QA with Playwright at 375/768/1440 | blocked on Windows; redo inside WSL after the move |
 
 ## 1. Site chrome
 | | Partial | Figma node | Notes |
 |---|---|---|---|
-| ☐ | `_partials/header.twig` | 6-2902 (in 6-2901) | floating pill nav: logo tile, menu, 2 CTA buttons; mobile menu (Alpine) |
-| ☐ | `_partials/footer.twig` | 6-2058 (inner 6-2060) | dark rounded panel: 5 menu columns, Google Play badge, giant "quick craft" wordmark (`siteName`) |
+| ☑ | `_partials/header.twig` | 6-2902 (in 6-2901) | floating pill nav: logo tile, menu, 2 CTA buttons; mobile menu (Alpine) |
+| ☑ | `_partials/footer.twig` | 6-2058 (inner 6-2060) | dark rounded panel: 5 menu columns, store links (text until badges exported), giant wordmark (`siteName`) |
 
 ## 2. Home (6-1252), Single `home`
 | | Block (entry type) | Layout options | Figma node | Content |
 |---|---|---|---|---|
-| ☐ | `hero` | split, dark | 6-2210 | "Parties are back", 2 buttons, chat-bubble collage |
+| ☑ | `hero` | split, dark | 6-2210 | "Parties are back", 2 buttons, chat-bubble collage (image) |
 | — | press logo strip | n/a | 6-1259 | **skipped** |
-| ☐ | `cardGrid` | grid, light | 6-1320 | "One link. Everyone's in.", 3 step cards + button |
-| ☐ | `imageGallery` | fan | 6-1384 | "A million reasons to hang", 20 invite images |
-| ☐ | `cityList` | n/a | 6-4774 | "The best events in your city", 5 cities with hover images |
-| ☐ | `featureRows` | stickyPhone, dark | 6-1499 | Text blast / Collect info / Build hype |
-| ☐ | `cardGrid` | grid, light | 6-1719 | "More than an invite", 4 cards + 2 buttons |
-| ☐ | `testimonials` | carousel | 6-2347 | "Social life runs on quick craft", stats + quotes |
-| ☐ | `ctaBanner` | dark + images | 6-1787 / 6-1792 | "Get the app", image ring |
+| ☑ | `cardGrid` | grid, light | 6-1320 | "One link. Everyone's in.", 3 step cards + button ("Takes 30 seconds" note has no field) |
+| ☑ | `imageGallery` | fan | 6-1384 | "A million reasons to hang", 20 invite images |
+| ☑ | `cityList` | n/a | 6-4774 | "The best events in your city", 5 cities with hover thumbnails (`card.images`) |
+| ☑ | `featureRows` | stickyPhone, dark | 6-1499 | Text blast / Collect info / Build hype |
+| ☑ | `cardGrid` | compact, light | 6-1719 | "More than an invite", 4 tiles + 2 buttons |
+| ☑ | `testimonials` | carousel | 6-2347 | "Social life runs on quick craft", stats + reviews |
+| ☑ | `ctaBanner` | light + image rings | 6-1787 / 6-1792 | "Get the app" pill, store links |
+
+All Home blocks were checked from rendered HTML only (structure, headings, empty fields). Visual QA is still pending.
 
 ## 3. Landing pages (Structure `landingPages`)
 ### Organizers (17-267)

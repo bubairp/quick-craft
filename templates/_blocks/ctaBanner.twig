@@ -1,0 +1,51 @@
+{#
+ # CTA banner block. Figma: Home 6-1787 ("Get the app").
+ # Big pill heading (links to primaryButton if set), subtitle, optional buttons and
+ # store links; images (if any) orbit the heading in rings on md+.
+ # Receives: block, headingLevel
+ # Fields: theme, heading, text, primaryButton, secondaryButton, images, showAppBadges
+ #}
+{% set dark = (block.theme.value ?? 'light') == 'dark' %}
+{% set images = block.images.eagerly().all() %}
+{% set level = headingLevel ?? 2 %}
+{% set tag = 'h' ~ level %}
+{% set headingLink = block.primaryButton.url ?? null %}
+
+{% if block.heading or block.text %}
+<section class="relative overflow-hidden {{ dark ? 'bg-black text-white' : 'bg-paper text-ink' }} px-4 py-24 md:min-h-175 md:py-36">
+
+    {% if images|length %}
+        {# Rings: positions are computed from each item's index (geometry, not design values) #}
+        <ul class="pointer-events-none absolute inset-0 hidden md:block" aria-hidden="true"
+            x-data="{ ring(i) { const per = [16, 28, 40]; let r = 0, n = i; while (r < per.length - 1 && n >= per[r]) { n -= per[r]; r++; } const count = per[r]; const radius = 200 + r * 160; const a = (n / count) * Math.PI * 2 + r * 0.3; return `translate(-50%, -50%) translate(${Math.cos(a) * radius * 1.35}px, ${Math.sin(a) * radius}px) rotate(${(a * 57.3 + 90) % 360}deg)`; } }">
+            {% for image in images|slice(0, 84) %}
+                <li class="absolute top-1/2 left-1/2 w-16 lg:w-20" :style="{ transform: ring({{ loop.index0 }}) }">
+                    {% include '_components/image.twig' with { image: image, width: 80, ratio: 1, sizes: '80px', decorative: true, class: 'aspect-square w-full rounded-sm object-cover shadow-card' } only %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="relative mx-auto flex max-w-content flex-col items-center gap-4 text-center">
+        {% if block.heading %}
+            {% set pill = 'inline-flex items-center justify-center rounded-full px-10 py-6 text-4xl uppercase md:px-14 md:py-8 md:text-5xl ' ~ (dark ? 'bg-paper text-ink' : 'bg-ink text-white') %}
+            <{{ tag }}>
+                {% if headingLink %}
+                    <a {{ attr(block.primaryButton.attributes|merge({ class: pill ~ ' transition-transform hover:scale-105' })) }}>{{ block.heading }}</a>
+                {% else %}
+                    <span class="{{ pill }}">{{ block.heading }}</span>
+                {% endif %}
+            </{{ tag }}>
+        {% endif %}
+        {% if block.text %}
+            <p class="max-w-60 rounded-sm px-3 py-3 text-lg font-light {{ dark ? 'bg-night text-line' : 'bg-surface text-graphite' }}">{{ block.text|nl2br }}</p>
+        {% endif %}
+
+        {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'light' : 'dark', class: 'mt-4' } only %}
+
+        {% if block.showAppBadges %}
+            {% include '_components/store-links.twig' with { dark: dark, class: 'mt-4 justify-center' } %}
+        {% endif %}
+    </div>
+</section>
+{% endif %}

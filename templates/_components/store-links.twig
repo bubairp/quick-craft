@@ -1,0 +1,25 @@
+{#
+ # App store links from the siteSettings global. Renders nothing if both are empty.
+ # Text buttons until the official badge SVGs are added.
+ # Props: dark (bool), direction ('row'|'responsive'), class
+ #}
+{% set googlePlay = siteSettings.googlePlayLink ?? null %}
+{% set appStore = siteSettings.appStoreLink ?? null %}
+{% set dark = dark ?? false %}
+{% set links = [
+    { link: appStore, label: 'Download on the App Store'|t },
+    { link: googlePlay, label: 'Get it on Google Play'|t },
+]|filter(l => l.link and l.link.url) %}
+
+{% if links|length %}
+    <ul class="flex flex-wrap gap-2 {{ (direction ?? 'row') == 'responsive' ? 'lg:flex-col' : '' }} {{ class ?? '' }}" aria-label="{{ 'Download the app'|t }}">
+        {% for item in links %}
+            <li>
+                <a href="{{ item.link.url }}" target="_blank" rel="noopener"
+                   class="inline-flex h-10 items-center rounded-md border px-4 text-sm font-semibold {{ dark ? 'border-paper/30 text-paper hover:bg-paper/10' : 'border-ink bg-ink text-paper hover:bg-night' }}">
+                    {{ item.label }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
