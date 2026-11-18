@@ -93,11 +93,11 @@
                 {% include '_components/button.twig' with { link: secondary, variant: 'light' } only %}
             </div>
 
-            <div class="flex items-center gap-2 lg:hidden">
-                {% include '_components/button.twig' with { link: primary, variant: 'dark', class: 'px-4 py-3 text-sm' } only %}
+            <div class="flex min-w-0 items-center gap-2 lg:hidden">
+                {% include '_components/button.twig' with { link: primary, variant: 'dark', size: 'sm' } only %}
                 {% if navItems|length or secondary %}
                     <button type="button"
-                            class="flex size-11 items-center justify-center rounded-full border border-line bg-paper text-ink"
+                            class="flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-paper text-ink transition-colors duration-200 hover:bg-surface"
                             aria-controls="mobile-menu"
                             aria-expanded="false" :aria-expanded="open.toString()"
                             @click="toggle()">

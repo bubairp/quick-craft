@@ -6,7 +6,9 @@
  #   link     LinkData|null   required
  #   variant  'dark' | 'darkOnDark' | 'light' | 'outlineLight'   (default 'dark')
  #   shape    'pill' | 'rounded'                   (default 'pill')
- #   class    extra classes
+ #   size     'md' | 'sm'   (default 'md'; 'sm' = 44px tall, e.g. next to the mobile menu button)
+ #   class    extra classes (layout/margins only; padding and font size come from size,
+ #            because a padding class passed here would not reliably override them)
  # Hover (reference site): lifts 2px, scales to 1.01, soft shadow. Off for reduced motion.
  #}
 {% set link = link ?? null %}
@@ -17,8 +19,13 @@
         light: 'bg-paper text-black border-line hover:bg-surface',
         outlineLight: 'bg-transparent text-paper border-paper/30 hover:bg-paper/10',
     } %}
+    {% set sizes = {
+        md: 'px-6 py-4 text-base',
+        sm: 'h-11 px-4 text-sm',
+    } %}
     {% set classes = [
-        'inline-flex items-center justify-center gap-2 whitespace-nowrap border px-6 py-4 text-base font-semibold leading-tight tracking-normal',
+        'inline-flex items-center justify-center gap-2 whitespace-nowrap border font-semibold leading-tight tracking-normal',
+        sizes[size ?? 'md'] ?? sizes.md,
         'transition duration-200 ease-out hover:-translate-y-0.5 hover:scale-101 hover:shadow-lift motion-reduce:translate-none motion-reduce:scale-none',
         (shape ?? 'pill') == 'pill' ? 'rounded-full' : 'rounded-sm',
         variants[variant ?? 'dark'] ?? variants.dark,
