@@ -226,3 +226,15 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - `mousewheel { forceToAxis: true, sensitivity: 0.6 }`: a sideways trackpad swipe or shift+wheel moves the row. The vertical wheel still scrolls the page through Lenis.
   - `speed: 700` for arrows and autoplay.
 - Checked: a sideways wheel moves it 356px, a vertical wheel 0px; a drag of 250px is followed by 487px of glide and lands exactly on a card; no console warnings.
+
+### 2026-11-18: Testimonials loop showed empty space after mouse scrolling
+- Symptom (user screenshot, about 1590px wide): after scrolling with the mouse, "200K+" was the last card and the right side of the row was empty.
+- Cause: Swiper `freeMode` combined with `loop`. The momentum glide after a drag or wheel can run to the last slide, and Swiper only calls `loopFix` when a touch starts or moves, not during the glide. Stopping there leaves nothing to the right of the centred slide. My synthetic tests hadn't caught it.
+- Fix (`carousels.js`, variant `loop`):
+  - **No freeMode.** Moving slide by slide (drag that settles on a card, one card per wheel gesture with `thresholdDelta: 10`, arrows, autoplay) always runs `loopFix`.
+  - **Rule:** don't combine Swiper `loop` with `freeMode`.
+  - Smoothness comes from a soft ease-out (`--ease-out-soft`) at `speed: 700`.
+- **Gotcha:** `[data-carousel="loop"] .swiper-wrapper { transition-timing-function }` inside `@layer components` had no effect, because `swiper/css` is unlayered and unlayered CSS beats layered CSS. Use Swiper's variable instead: `--swiper-wrapper-transition-timing-function` on the carousel root.
+- Also added `preloadImages(root)`: within one screen of the carousel, its lazy images switch to eager and are decoded, so a fast scroll never reaches an undrawn photo. The loop copies reuse the same 5 files.
+- Checked at 1585px: 925 frames covering 24 fast drags each way and 160 wheel steps, with 0 frames of empty space. Easing is `cubic-bezier(0.22, 1, 0.36, 1)`. No warnings.
+- Noticed: `/favicon.ico` returns 404, because no favicon is set up yet. Unrelated.

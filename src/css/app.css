@@ -246,6 +246,12 @@
     opacity: 0.6;
   }
 
+  /* Looping testimonials row: soft ease-out for drag release, wheel, arrows and autoplay.
+     Set through Swiper's own variable: swiper.css is unlayered, so it beats a rule in this layer. */
+  [data-carousel="loop"] {
+    --swiper-wrapper-transition-timing-function: var(--ease-out-soft);
+  }
+
   /* Horizontal scrollers (carousels) without a visible scrollbar */
   .no-scrollbar {
     scrollbar-width: none;
