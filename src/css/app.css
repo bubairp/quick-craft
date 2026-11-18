@@ -88,6 +88,7 @@
   --container-narrow: 62.5rem; /* 1000 */
   --container-prose: 43.75rem; /* 700 — blog post */
   --container-nav: 61rem;      /* 976 — floating header pill */
+  --container-nav-open: 80.5rem; /* 1288 — pill grown into the mega menu (reference site) */
 
   /* Aspect ratios */
   --aspect-card: 472 / 502;    /* feature card media (Home 6-1320) */
@@ -165,6 +166,38 @@
     left: 0;
     bottom: calc(var(--spacing) * 6);
     margin-left: 0;
+  }
+
+  /* Header pill → mega menu (reference site: the pill itself grows into the dropdown panel) */
+  .site-nav-pill {
+    max-width: var(--container-nav);
+  }
+  @media (min-width: 64rem) {
+    .site-nav-pill {
+      border-radius: calc(var(--spacing) * 11);
+      transition: max-width 450ms var(--ease-out-soft), border-radius 450ms var(--ease-out-soft);
+    }
+    .site-nav-pill.is-open {
+      max-width: var(--container-nav-open);
+      border-radius: var(--radius-2xl);
+    }
+  }
+  .site-nav-panel {
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 450ms var(--ease-out-soft);
+  }
+  .site-nav-panel > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+  .site-nav-pill.is-open .site-nav-panel {
+    grid-template-rows: 1fr;
+  }
+  .site-nav-mobile {
+    max-height: calc(100dvh - var(--spacing) * 28);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-nav-pill, .site-nav-panel { transition: none; }
   }
 
   /* Reveal on scroll: elements with data-reveal fade up when they enter the viewport.

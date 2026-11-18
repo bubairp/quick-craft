@@ -1,63 +1,105 @@
 {#
- # Site header — Figma 6-2902 (floating pill nav).
- # Content: siteSettings global (logo, primaryButton, secondaryButton) + Simple RP Menu 'headerMenu'.
- # Fixed over the page; hero blocks reserve top space for it.
- # Behaviour (src/main.js → Alpine 'siteHeader'): hides on scroll down, returns on scroll up
- # or when anything inside it gets focus. Nav items: ink/5 pill on hover (reference site).
+ # Site header — Figma 6-2902 (floating pill nav) + mega-menu dropdowns (reference: partiful.com).
+ #
+ # Content
+ #   siteSettings global: logo (image), primaryButton, secondaryButton
+ #   Simple RP Menu 'headerMenu', read as a tree via the plugin service getResolvedMenuItems():
+ #     level 1  nav item — gets a dropdown when it has children
+ #     level 2  column (noLink, name = column heading) → level 3 links (data_json "icon: 🎂")
+ #     level 2  class "menu-featured" → featured card: name = title, customShortContent = text,
+ #              data_json "label: …" and "image: /path.png"
+ #
+ # Behaviour (Alpine 'siteHeader' in src/main.js)
+ #   Desktop: hover or click a nav item → the pill grows into a panel (CSS .site-nav-pill.is-open).
+ #            Esc, leaving the header or moving focus out closes it.
+ #   Mobile:  menu button opens a panel; dropdown items become accordions.
+ #   Hides on scroll down, returns on scroll up / focus (not while a menu is open).
  #}
 {% set logo = siteSettings.image.one() ?? null %}
 {% set primary = siteSettings.primaryButton ?? null %}
 {% set secondary = siteSettings.secondaryButton ?? null %}
-{% set hasMenu = craft.simplerpmenu.getMenu('headerMenu') is not null %}
+{% set menuRecord = craft.simplerpmenu.getMenu('headerMenu') %}
+{% set navItems = menuRecord ? craft.app.plugins.getPlugin('simple-rp-menu').simplerpmenuItems.getResolvedMenuItems(menuRecord.id) : [] %}
 {% set initials = siteName|split(' ')|map(w => w|first)|join|lower %}
+
+{# "key: value" lines from Simple RP Menu's data_json #}
+{% macro data(item) %}
+    {%- set out = {} -%}
+    {%- for line in (item.data_json ?? '')|split("\n") -%}
+        {%- set kv = line|split(':', 2) -%}
+        {%- if kv|length == 2 -%}{%- set out = out|merge({ (kv[0]|trim): kv[1]|trim }) -%}{%- endif -%}
+    {%- endfor -%}
+    {{- out|json_encode|raw -}}
+{% endmacro %}
+
+{% macro link(item, class) %}
+    {%- set url = item.custom_url ?? '' -%}
+    {%- set data = _self.data(item)|json_decode -%}
+    {%- if url and not item.noLink -%}
+        <a href="{{ url }}" class="{{ class }}"
+           {%- if item.target %} target="{{ item.target }}" rel="noopener"{% endif %}
+           {%- if url == craft.app.request.absoluteUrl|split('?')|first %} aria-current="page"{% endif %}>
+            {%- if data.icon ?? false %}<span class="text-base leading-none" aria-hidden="true">{{ data.icon }}</span>{% endif -%}
+            <span>{{ item.name }}</span>
+        </a>
+    {%- endif -%}
+{% endmacro %}
 
 <header class="fixed inset-x-0 top-0 z-50 px-4 pt-4 transition-transform duration-300 ease-out md:px-gutter md:pt-8"
         x-data="siteHeader"
         :class="hidden ? '-translate-y-full' : 'translate-y-0'"
         @focusin="hidden = false"
-        @keydown.escape.window="open = false">
-    <div class="relative mx-auto max-w-nav rounded-xl border border-paper/30 bg-paper/80 shadow-nav backdrop-blur-xl lg:rounded-full">
-        <div class="flex items-center justify-between gap-4 py-3 pl-4 pr-3 lg:gap-8 lg:py-4 lg:pl-8 lg:pr-4 xl:gap-16">
+        @focusout="if (!$el.contains($event.relatedTarget)) menu = null"
+        @keydown.escape.window="open = false; menu = null">
+    <div class="site-nav-pill relative mx-auto border border-paper/30 bg-paper/80 shadow-nav backdrop-blur-xl max-lg:rounded-xl"
+         :class="menu !== null && 'is-open'"
+         @mouseleave="closeMenu()">
 
-            {# Logo #}
+        {# ── Bar ─────────────────────────────────────────────────────────── #}
+        <div class="flex items-center justify-between gap-4 py-3 pl-4 pr-3 lg:gap-8 lg:py-4 lg:pl-8 lg:pr-4 xl:gap-16">
             <a href="{{ siteUrl }}" class="shrink-0 rounded-lg" aria-label="{{ '{site} home'|t(params={ site: siteName }) }}">
                 {% if logo %}
-                    <img src="{{ logo.getUrl({ width: 80, height: 80, mode: 'fit' }) }}"
-                         width="40" height="40"
-                         alt="" class="size-10 rounded-lg">
+                    <img src="{{ logo.getUrl({ width: 80, height: 80, mode: 'fit' }) }}" width="40" height="40" alt="" class="size-10 rounded-lg">
                 {% else %}
-                    <span class="flex size-10 items-center justify-center rounded-lg bg-ink text-lg font-extrabold leading-none text-white" aria-hidden="true">{{ initials }}</span>
+                    <span class="flex size-10 items-center justify-center rounded-lg bg-ink text-lg font-extrabold leading-none tracking-tight text-white" aria-hidden="true">{{ initials }}</span>
                 {% endif %}
             </a>
 
-            {# Desktop navigation #}
-            {% if hasMenu %}
+            {% if navItems|length %}
                 <nav class="hidden lg:block" aria-label="{{ 'Main navigation'|t }}">
-                    {{ craft.simplerpmenu.getRpMenuHTML('headerMenu', {
-                        'menu-id': 'headerMenuDesktop',
-                        'menu-class': '',
-                        'ul-class': 'flex items-center',
-                        'li-class': 'p-1 xl:p-2',
-                        'link-class': 'block whitespace-nowrap rounded-sm px-2 py-1.5 text-base font-medium text-ink transition-colors duration-200 hover:bg-ink/5 focus-visible:bg-ink/5',
-                    }) }}
+                    <ul class="flex items-center">
+                        {% for item in navItems %}
+                            {% set i = loop.index0 %}
+                            {% set itemClass = 'block whitespace-nowrap rounded-sm px-2 py-1.5 text-base font-medium text-ink transition-colors duration-200 hover:bg-ink/5 focus-visible:bg-ink/5' %}
+                            <li class="p-1 xl:p-2">
+                                {% if (item.children ?? [])|length %}
+                                    <button type="button" class="{{ itemClass }}"
+                                            :class="menu === {{ i }} && 'bg-ink/5'"
+                                            aria-controls="nav-panel-{{ i }}"
+                                            aria-expanded="false" :aria-expanded="(menu === {{ i }}).toString()"
+                                            @mouseenter="openMenu({{ i }})"
+                                            @click="toggleMenu({{ i }})">{{ item.name }}</button>
+                                {% else %}
+                                    {{ _self.link(item, itemClass) }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </nav>
             {% endif %}
 
-            {# Desktop buttons #}
             <div class="hidden items-center gap-3 lg:flex">
                 {% include '_components/button.twig' with { link: primary, variant: 'dark' } only %}
                 {% include '_components/button.twig' with { link: secondary, variant: 'light' } only %}
             </div>
 
-            {# Mobile: primary CTA + menu toggle #}
             <div class="flex items-center gap-2 lg:hidden">
                 {% include '_components/button.twig' with { link: primary, variant: 'dark', class: 'px-4 py-3 text-sm' } only %}
-                {% if hasMenu or secondary %}
+                {% if navItems|length or secondary %}
                     <button type="button"
                             class="flex size-11 items-center justify-center rounded-full border border-line bg-paper text-ink"
                             aria-controls="mobile-menu"
-                            :aria-expanded="open.toString()"
-                            aria-expanded="false"
+                            aria-expanded="false" :aria-expanded="open.toString()"
                             @click="toggle()">
                         <span class="sr-only" x-text="open ? '{{ 'Close menu'|t|e('js') }}' : '{{ 'Open menu'|t|e('js') }}'">{{ 'Open menu'|t }}</span>
                         <svg x-show="!open" class="size-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14"/></svg>
@@ -67,20 +109,99 @@
             </div>
         </div>
 
-        {# Mobile menu panel #}
+        {# ── Desktop dropdown panels (inside the growing pill) ─────────────── #}
+        <div class="site-nav-panel hidden lg:grid">
+            <div>
+                {% for item in navItems %}
+                    {% set kids = item.children ?? [] %}
+                    {% if kids|length %}
+                        {% set columns = kids|filter(k => 'menu-featured' not in (k.class ?? '')) %}
+                        {% set featured = kids|filter(k => 'menu-featured' in (k.class ?? ''))|first %}
+                        <div id="nav-panel-{{ loop.index0 }}" class="flex gap-12 px-8 pb-8 pt-6 xl:gap-16"
+                             x-show="menu === {{ loop.index0 }}" x-cloak
+                             x-transition:enter="transition duration-300 delay-100 ease-out"
+                             x-transition:enter-start="opacity-0 translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0">
+                            <div class="flex flex-1 gap-12 xl:gap-16">
+                                {% for col in columns %}
+                                    {% set links = col.children ?? [] %}
+                                    <div class="min-w-36">
+                                        <p class="mb-5 text-xs font-light tracking-wide text-subtle">{{ col.name }}</p>
+                                        {% if links|length %}
+                                            <ul class="{{ links|length > 6 ? 'columns-2 gap-x-12' : '' }}">
+                                                {% for link in links %}
+                                                    <li class="mb-3 break-inside-avoid">
+                                                        {{ _self.link(link, '-mx-2 inline-flex items-center gap-2 rounded-sm px-2 py-1.5 text-base font-medium text-ink transition-colors hover:bg-ink/5') }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            {{ _self.link(col, 'text-base font-medium text-ink hover:underline') }}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {% if featured %}
+                                {% set fdata = _self.data(featured)|json_decode %}
+                                {% set furl = featured.custom_url ?? '' %}
+                                {% set cardInner %}
+                                    {% if fdata.image ?? false %}
+                                        <img src="{{ fdata.image }}" alt="" width="228" height="228" loading="lazy" class="mb-4 size-40 object-contain transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-3">
+                                    {% endif %}
+                                    {% if fdata.label ?? false %}<span class="text-xs font-medium uppercase tracking-wide text-subtle">{{ fdata.label }}</span>{% endif %}
+                                    <span class="mt-1 text-3xl font-medium text-ink">{{ featured.name }}</span>
+                                    {% if featured.customShortContent %}<span class="mt-2 text-base text-subtle">{{ featured.customShortContent }}</span>{% endif %}
+                                {% endset %}
+                                {% set cardClass = 'group flex w-80 flex-none flex-col justify-end rounded-lg p-3 transition-colors hover:bg-ink/5' %}
+                                {% if furl %}
+                                    <a href="{{ furl }}" class="{{ cardClass }}">{{ cardInner }}</a>
+                                {% else %}
+                                    <div class="{{ cardClass }}">{{ cardInner }}</div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        {# ── Mobile panel ─────────────────────────────────────────────────── #}
         <div id="mobile-menu"
-             class="border-t border-line px-4 pb-4 pt-2 lg:hidden"
+             class="site-nav-mobile overflow-y-auto border-t border-line px-4 pb-4 pt-2 lg:hidden"
+             data-lenis-prevent
              x-show="open" x-cloak x-transition.opacity
              @click.outside="open = false">
-            {% if hasMenu %}
-                <nav aria-label="{{ 'Main navigation'|t }}">
-                    {{ craft.simplerpmenu.getRpMenuHTML('headerMenu', {
-                        'menu-id': 'headerMenuMobile',
-                        'menu-class': '',
-                        'ul-class': 'flex flex-col',
-                        'li-class': 'border-b border-line last:border-b-0',
-                        'link-class': 'block py-3 text-lg font-medium text-ink',
-                    }) }}
+            {% if navItems|length %}
+                <nav aria-label="{{ 'Main navigation'|t }}" x-data="{ section: null }">
+                    <ul class="flex flex-col">
+                        {% for item in navItems %}
+                            {% set kids = item.children ?? [] %}
+                            <li class="border-b border-line last:border-b-0">
+                                {% if kids|length %}
+                                    <button type="button" class="flex w-full items-center justify-between py-3 text-lg font-medium text-ink"
+                                            aria-controls="mobile-section-{{ loop.index0 }}"
+                                            aria-expanded="false" :aria-expanded="(section === {{ loop.index0 }}).toString()"
+                                            @click="section = section === {{ loop.index0 }} ? null : {{ loop.index0 }}">
+                                        {{ item.name }}
+                                        <svg class="size-4 transition-transform" :class="section === {{ loop.index0 }} && 'rotate-180'" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 6l5 5 5-5"/></svg>
+                                    </button>
+                                    <div id="mobile-section-{{ loop.index0 }}" x-show="section === {{ loop.index0 }}" x-cloak x-transition.opacity.duration.200ms class="pb-3">
+                                        {% for col in kids|filter(k => 'menu-featured' not in (k.class ?? '')) %}
+                                            <p class="mt-2 text-xs text-subtle">{{ col.name }}</p>
+                                            <ul class="mt-1 grid grid-cols-2 gap-x-4">
+                                                {% for link in col.children ?? [] %}
+                                                    <li>{{ _self.link(link, 'flex items-center gap-2 py-2 text-base text-ink') }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ _self.link(item, 'block py-3 text-lg font-medium text-ink') }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </nav>
             {% endif %}
             {% if secondary %}

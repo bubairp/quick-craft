@@ -12,14 +12,16 @@ import { initHeroChat } from './js/hero-chat.js';
  * (behaviour of the reference site). Used by templates/_partials/header.twig.
  */
 Alpine.data('siteHeader', () => ({
-  open: false,
-  hidden: false,
+  open: false,      // mobile menu
+  menu: null,       // index of the open desktop dropdown (mega menu), or null
+  hidden: false,    // auto-hide on scroll down
   lastY: 0,
+  closeTimer: 0,
   init() {
     this.lastY = window.scrollY;
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
-      if (!this.open && Math.abs(y - this.lastY) > 4) {
+      if (!this.open && this.menu === null && Math.abs(y - this.lastY) > 4) {
         this.hidden = y > this.lastY && y > 160;
         this.lastY = y;
       }
@@ -28,6 +30,20 @@ Alpine.data('siteHeader', () => ({
   toggle() {
     this.open = !this.open;
     this.hidden = false;
+  },
+  openMenu(i) {
+    clearTimeout(this.closeTimer);
+    this.menu = i;
+    this.hidden = false;
+  },
+  toggleMenu(i) {
+    clearTimeout(this.closeTimer);
+    this.menu = this.menu === i ? null : i;
+  },
+  // small delay so moving the pointer from the bar into the panel doesn't flicker
+  closeMenu() {
+    clearTimeout(this.closeTimer);
+    this.closeTimer = setTimeout(() => { this.menu = null; }, 150);
   },
 }));
 

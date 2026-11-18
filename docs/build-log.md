@@ -106,3 +106,24 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - Swiper stops click propagation, so listen in the capture phase.
   - Tailwind must `@source "../js"` for classes that scripts toggle.
 - **PLACEHOLDER content:** the press quotes and logos are real publications' (from the reference design). They must be replaced with Quick Craft's real press before launch.
+
+### 2026-11-18: Header redesign + mega-menu dropdowns (reference: partiful.com)
+- **Reference measurements:**
+  - The dropdown is not a separate panel: the header pill grows from 976×83 (radius ≈ 44px) to 1287×467 with a 16px radius, keeping the paper/80 background, 20px blur and nav shadow.
+  - Columns have small 12px grey headings and 16px medium links with icons (row 24px, gap 24px). A featured card sits on the right: label, 28px title, grey text, optional image.
+- **Content: Simple RP Menu `headerMenu` as a tree.** Seeded by `m261118_210000_header_dropdowns`.
+  - Level 2 with no link is a column heading; level 3 items are its links.
+  - `data_json` lines: `icon: 🎂` on a link; `label: …` and `image: /path` on the featured card.
+  - The featured card is a level-2 item with class `menu-featured`. Its `customShortContent` is the description.
+- **Template: `_partials/header.twig`.**
+  - The tree comes from `craft.app.plugins.getPlugin('simple-rp-menu').simplerpmenuItems.getResolvedMenuItems(menu.id)`, which returns items with `name`, `custom_url`, `target`, `noLink`, `class`, `customShortContent`, `data_json` and `children`. This is the plugin's own service, read in vendor.
+  - Nav items that have children render as disclosure buttons (`aria-expanded`, `aria-controls`). Mobile shows them as accordions.
+- **CSS:** `.site-nav-pill` / `.is-open` in app.css: max-width and radius transitions, plus a panel height transition using `grid-template-rows` from 0fr to 1fr. Token `--container-nav-open: 80.5rem`.
+  - Gotcha: Tailwind utilities beat the components layer, so a pill that also had `max-w-nav` / `rounded-xl` never changed shape. Those values now live in the component CSS.
+- **JS:** Alpine `siteHeader` gains `menu`, `openMenu`, `toggleMenu` and `closeMenu` (150ms close delay so moving into the panel doesn't flicker). Escape or focus leaving the header closes it, and the header won't auto-hide while a menu is open.
+- **Checked:**
+  - Invites opens the pill to 1288×448 with a 16px radius, close to the reference's 1287×467.
+  - Company: 4 columns and the card fit with no overflow.
+  - Escape closes the menu.
+  - At 375px the accordion works with no horizontal overflow.
+- **Placeholder:** the Invites card image (`placeholders/menu-invites.png`) comes from the reference site. Replace it.
