@@ -161,6 +161,19 @@
     height: calc(var(--spacing) * 130);
     transform: none;
   }
+  /* draggable (reference site): grab cursor, no text/image selection, vertical page scroll on touch */
+  .gallery-fan.is-wave {
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+  }
+  .gallery-fan.is-wave.is-dragging {
+    cursor: grabbing;
+  }
+  .gallery-fan.is-wave img {
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
   .gallery-fan.is-wave .gallery-fan__item {
     position: absolute;
     left: 0;

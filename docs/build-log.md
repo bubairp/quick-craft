@@ -127,3 +127,16 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - Escape closes the menu.
   - At 375px the accordion works with no horizontal overflow.
 - **Placeholder:** the Invites card image (`placeholders/menu-invites.png`) comes from the reference site. Replace it.
+
+### 2026-11-18: Gallery cards draggable ("A million reasons to hang")
+- As on the reference site, the drifting cards can be grabbed and dragged with the mouse, or swiped sideways on touch.
+- `src/js/gallery-wave.js`:
+  - Pointer movement is projected onto the diagonal: `(dx + SLOPE·dy) / (1 + SLOPE²)`.
+  - Release keeps the last movement as momentum (decaying ×0.94 per frame), then the idle drift resumes.
+  - A 4px threshold separates a click from a drag. A finished drag swallows the click, and `dragstart` is blocked.
+  - The drag ends on `pointerup`, `pointercancel` or window `blur`, so it can't get stuck.
+- CSS: `cursor: grab` / `grabbing` (`.is-dragging`), `user-select: none`, `touch-action: pan-y` (vertical page scroll still works on touch), and images are not draggable.
+- **Testing notes:**
+  - Playwright's `browser_drag` can't grab moving elements ("element is not stable"), so the test dispatches PointerEvents instead. Result: a 300px drag left moves the cards about 303px, with about 50px more from momentum.
+  - The Playwright window throttles `requestAnimationFrame` to about 2 fps when it isn't in front, which makes the drift look stuck in tests.
+  - `setPointerCapture` throws for synthetic pointers, so it's wrapped in try/catch.
