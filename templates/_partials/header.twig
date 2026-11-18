@@ -1,0 +1,89 @@
+{#
+ # Site header — Figma 6-2902 (floating pill nav).
+ # Content: siteSettings global (logo, primaryButton, secondaryButton) + Simple RP Menu 'headerMenu'.
+ # Fixed over the page; hero blocks reserve top space for it.
+ #}
+{% set logo = siteSettings.image.one() ?? null %}
+{% set primary = siteSettings.primaryButton ?? null %}
+{% set secondary = siteSettings.secondaryButton ?? null %}
+{% set hasMenu = craft.simplerpmenu.getMenu('headerMenu') is not null %}
+{% set initials = siteName|split(' ')|map(w => w|first)|join|lower %}
+
+<header class="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-gutter md:pt-8"
+        x-data="{ open: false }"
+        @keydown.escape.window="open = false">
+    <div class="relative mx-auto max-w-nav rounded-xl border border-paper/30 bg-paper/80 shadow-nav backdrop-blur-xl lg:rounded-full">
+        <div class="flex items-center justify-between gap-4 py-3 pl-4 pr-3 lg:gap-16 lg:py-4 lg:pl-8 lg:pr-4">
+
+            {# Logo #}
+            <a href="{{ siteUrl }}" class="shrink-0 rounded-lg" aria-label="{{ '{site} home'|t(params={ site: siteName }) }}">
+                {% if logo %}
+                    <img src="{{ logo.getUrl({ width: 80, height: 80, mode: 'fit' }) }}"
+                         width="40" height="40"
+                         alt="" class="size-10 rounded-lg">
+                {% else %}
+                    <span class="flex size-10 items-center justify-center rounded-lg bg-ink text-lg font-extrabold leading-none text-white" aria-hidden="true">{{ initials }}</span>
+                {% endif %}
+            </a>
+
+            {# Desktop navigation #}
+            {% if hasMenu %}
+                <nav class="hidden lg:block" aria-label="{{ 'Main navigation'|t }}">
+                    {{ craft.simplerpmenu.getRpMenuHTML('headerMenu', {
+                        'menu-id': 'headerMenuDesktop',
+                        'menu-class': '',
+                        'ul-class': 'flex items-center',
+                        'li-class': 'p-2',
+                        'link-class': 'block rounded-sm px-2 py-1.5 text-base font-medium text-ink transition-colors hover:bg-surface',
+                    }) }}
+                </nav>
+            {% endif %}
+
+            {# Desktop buttons #}
+            <div class="hidden items-center gap-3 lg:flex">
+                {% include '_components/button.twig' with { link: primary, variant: 'dark' } only %}
+                {% include '_components/button.twig' with { link: secondary, variant: 'light' } only %}
+            </div>
+
+            {# Mobile: primary CTA + menu toggle #}
+            <div class="flex items-center gap-2 lg:hidden">
+                {% include '_components/button.twig' with { link: primary, variant: 'dark', class: 'px-4 py-3 text-sm' } only %}
+                {% if hasMenu or secondary %}
+                    <button type="button"
+                            class="flex size-11 items-center justify-center rounded-full border border-line bg-paper text-ink"
+                            aria-controls="mobile-menu"
+                            :aria-expanded="open.toString()"
+                            aria-expanded="false"
+                            @click="open = !open">
+                        <span class="sr-only" x-text="open ? '{{ 'Close menu'|t|e('js') }}' : '{{ 'Open menu'|t|e('js') }}'">{{ 'Open menu'|t }}</span>
+                        <svg x-show="!open" class="size-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14"/></svg>
+                        <svg x-show="open" x-cloak class="size-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Mobile menu panel #}
+        <div id="mobile-menu"
+             class="border-t border-line px-4 pb-4 pt-2 lg:hidden"
+             x-show="open" x-cloak x-transition.opacity
+             @click.outside="open = false">
+            {% if hasMenu %}
+                <nav aria-label="{{ 'Main navigation'|t }}">
+                    {{ craft.simplerpmenu.getRpMenuHTML('headerMenu', {
+                        'menu-id': 'headerMenuMobile',
+                        'menu-class': '',
+                        'ul-class': 'flex flex-col',
+                        'li-class': 'border-b border-line last:border-b-0',
+                        'link-class': 'block py-3 text-lg font-medium text-ink',
+                    }) }}
+                </nav>
+            {% endif %}
+            {% if secondary %}
+                <div class="mt-3">
+                    {% include '_components/button.twig' with { link: secondary, variant: 'light', class: 'w-full' } only %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</header>

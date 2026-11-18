@@ -1,0 +1,25 @@
+{#
+ # Button rendered from a Craft Link field value (LinkData).
+ # Renders nothing when the link is empty.
+ #
+ # Props:
+ #   link     LinkData|null   required
+ #   variant  'dark' | 'light' | 'outlineLight'   (default 'dark')
+ #   shape    'pill' | 'rounded'                   (default 'pill')
+ #   class    extra classes
+ #}
+{% set link = link ?? null %}
+{% if link and link.url %}
+    {% set variants = {
+        dark: 'bg-ink text-paper border-night hover:bg-night',
+        light: 'bg-paper text-black border-line hover:bg-surface',
+        outlineLight: 'bg-transparent text-paper border-paper/30 hover:bg-paper/10',
+    } %}
+    {% set classes = [
+        'inline-flex items-center justify-center gap-2 whitespace-nowrap border px-6 py-4 text-base font-semibold leading-tight tracking-normal transition-colors',
+        (shape ?? 'pill') == 'pill' ? 'rounded-full' : 'rounded-sm',
+        variants[variant ?? 'dark'] ?? variants.dark,
+        class ?? '',
+    ]|join(' ') %}
+    <a {{ attr(link.attributes|merge({ class: classes })) }}>{{ link.label ?: link.url }}</a>
+{% endif %}

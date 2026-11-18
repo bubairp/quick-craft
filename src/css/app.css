@@ -67,7 +67,7 @@
   --text-7xl: 6.75rem;
   --text-7xl--line-height: 1;
   --text-7xl--letter-spacing: 0em;
-  --text-wordmark: 18.25rem;
+  --text-wordmark: clamp(3rem, 15.5vw, 18.25rem); /* 292px at 1600, fluid below */
   --text-wordmark--line-height: 1;
   --text-wordmark--letter-spacing: -0.05em;
 
@@ -81,12 +81,14 @@
   --container-content: 75rem;  /* 1200 */
   --container-narrow: 62.5rem; /* 1000 */
   --container-prose: 43.75rem; /* 700 — blog post */
+  --container-nav: 61rem;      /* 976 — floating header pill */
 
   /* Radii — rounded-full for pills */
   --radius-sm: 0.25rem;        /* 4  buttons, nav items */
   --radius-md: 0.5rem;         /* 8  cards */
   --radius-lg: 0.75rem;        /* 12 logo tile, larger cards */
   --radius-xl: 1.25rem;        /* 20 */
+  --radius-2xl: 1rem;          /* 16 footer panel */
 
   /* Shadows */
   --shadow-card:
@@ -95,6 +97,7 @@
     0 6.4px 19.1px -1.9px rgb(0 0 0 / 0.05),
     0 20px 60px -2.5px rgb(0 0 0 / 0.05);
   --shadow-soft: 0 1px 14px 2px rgb(0 0 0 / 0.1);
+  --shadow-nav: 1px 3px 16px 4px rgb(0 0 0 / 0.04);
 }
 
 @layer base {
@@ -104,5 +107,16 @@
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  [x-cloak] {
+    display: none !important;
+  }
+}
+
+/* Simple RP Menu marks the current page's link with .active (no aria-current) */
+@layer components {
+  .menu-link.active {
+    @apply underline decoration-2 underline-offset-4;
   }
 }

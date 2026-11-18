@@ -1,0 +1,56 @@
+{#
+ # Site footer — Figma 6-2058 (dark rounded panel).
+ # Columns: Simple RP Menu menus; column heading = menu name.
+ # Store links: siteSettings global. Wordmark: siteName.
+ #}
+{% set footerMenus = ['footerCompany', 'footerProduct', 'footerSocials', 'footerLegal', 'footerSupport'] %}
+{% set googlePlay = siteSettings.googlePlayLink ?? null %}
+{% set appStore = siteSettings.appStoreLink ?? null %}
+
+<footer class="px-4 pb-4 md:px-8 md:pb-8">
+    <div class="overflow-hidden rounded-2xl bg-ink px-6 pb-4 pt-12 text-paper md:px-gutter md:pt-16">
+        <div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
+
+            <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:flex lg:gap-12">
+                {% for handle in footerMenus %}
+                    {% set menu = craft.simplerpmenu.getMenu(handle) %}
+                    {% if menu %}
+                        <nav class="lg:min-w-45" aria-labelledby="footer-{{ handle }}">
+                            <h2 id="footer-{{ handle }}" class="mb-3.5 text-xl font-bold text-paper">{{ menu.name }}</h2>
+                            {{ craft.simplerpmenu.getRpMenuHTML(handle, {
+                                'menu-id': handle,
+                                'menu-class': '',
+                                'ul-class': 'flex flex-col gap-3.5',
+                                'li-class': '',
+                                'link-class': 'text-xl font-light text-paper hover:underline underline-offset-4',
+                            }) }}
+                        </nav>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if (googlePlay and googlePlay.url) or (appStore and appStore.url) %}
+                <ul class="flex flex-row gap-2 lg:flex-col" aria-label="{{ 'Download the app'|t }}">
+                    {% if googlePlay and googlePlay.url %}
+                        <li>
+                            <a href="{{ googlePlay.url }}" target="_blank" rel="noopener"
+                               class="inline-flex h-10 items-center rounded-md border border-paper/30 px-4 text-sm font-semibold text-paper hover:bg-paper/10">
+                                {{ 'Get it on Google Play'|t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if appStore and appStore.url %}
+                        <li>
+                            <a href="{{ appStore.url }}" target="_blank" rel="noopener"
+                               class="inline-flex h-10 items-center rounded-md border border-paper/30 px-4 text-sm font-semibold text-paper hover:bg-paper/10">
+                                {{ 'Download on the App Store'|t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <p class="mt-20 select-none whitespace-nowrap text-center text-wordmark font-extrabold leading-none text-white lg:mt-40" aria-hidden="true">{{ siteName|lower }}</p>
+    </div>
+</footer>

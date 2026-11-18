@@ -25,12 +25,12 @@
         {{ 'Skip to content'|t }}
     </a>
 
-    {% block header %}{% endblock %}
+    {% block header %}{% include '_partials/header.twig' %}{% endblock %}
 
     <main id="main" class="flex-1">
         {% block content %}{% endblock %}
     </main>
 
-    {% block footer %}{% endblock %}
+    {% block footer %}{% include '_partials/footer.twig' %}{% endblock %}
 </body>
 </html>
