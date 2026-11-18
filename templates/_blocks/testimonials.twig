@@ -1,6 +1,6 @@
 {#
  # Testimonials block.
- #   carousel: Figma Home 6-2347 — scroll-snap row of square tiles (reviews + stats), prev/next
+ #   carousel: Figma Home 6-2347 — Swiper row of square tiles (reviews + stats), prev/next
  #   quotes:   Figma Organizers 17-591 — 3 centered quotes with avatar image
  #   reviews:  Figma Invitation Maker 17-2211 — grid of review cards
  # Receives: block, headingLevel
@@ -22,18 +22,13 @@
     } only %}
 
     {% if layout == 'carousel' %}
-        <div class="mt-12 md:mt-16"
-             x-data="{
-                 scroll(dir) {
-                     const t = this.$refs.track;
-                     const step = t.firstElementChild ? t.firstElementChild.offsetWidth + 16 : t.clientWidth;
-                     t.scrollBy({ left: dir * step, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-                 }
-             }">
-            <ul x-ref="track" class="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 no-scrollbar md:px-gutter" tabindex="0" aria-label="{{ block.heading ?: 'Testimonials'|t }}">
+        {# Swiper (src/js/carousels.js): slide widths come from the classes on each slide #}
+        <div class="mt-12 md:mt-16" data-carousel>
+            <div class="swiper px-4! md:px-gutter!" aria-label="{{ block.heading ?: 'Testimonials'|t }}">
+              <ul class="swiper-wrapper">
                 {% for item in items %}
                     {% set image = item.image.one() %}
-                    <li class="relative flex aspect-square w-72 flex-none snap-start overflow-hidden rounded-md md:w-85 {{ item.type.handle == 'stat' and not image ? 'bg-ink' : 'bg-surface' }}">
+                    <li class="swiper-slide relative flex! aspect-square w-72! overflow-hidden rounded-md md:w-85! {{ item.type.handle == 'stat' and not image ? 'bg-ink' : 'bg-surface' }}">
                         {% if image %}
                             {% include '_components/image.twig' with { image: image, width: 340, ratio: 1, sizes: '340px', class: 'absolute inset-0 size-full object-cover' } only %}
                         {% endif %}
@@ -60,15 +55,16 @@
                         {% endif %}
                     </li>
                 {% endfor %}
-            </ul>
+              </ul>
+            </div>
 
             {% if items|length > 1 %}
-                <div class="mt-4 flex justify-center gap-2">
-                    <button type="button" @click="scroll(-1)" class="flex size-11 items-center justify-center rounded-full bg-line text-ink hover:bg-surface">
+                <div class="mt-6 flex justify-center gap-2">
+                    <button type="button" data-carousel-prev class="flex size-11 items-center justify-center rounded-full bg-line text-ink transition-opacity hover:bg-surface">
                         <span class="sr-only">{{ 'Previous'|t }}</span>
                         <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
                     </button>
-                    <button type="button" @click="scroll(1)" class="flex size-11 items-center justify-center rounded-full bg-line text-ink hover:bg-surface">
+                    <button type="button" data-carousel-next class="flex size-11 items-center justify-center rounded-full bg-line text-ink transition-opacity hover:bg-surface">
                         <span class="sr-only">{{ 'Next'|t }}</span>
                         <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
                     </button>
