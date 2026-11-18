@@ -1,6 +1,6 @@
 {#
  # Image gallery block. Figma: Home 6-1384 (fan). Also grid (17-1088), row (17-1931),
- # marquee (17-3649), and slider (Swiper coverflow alternative to the fan, demo).
+ # marquee (17-3649).
  # Receives: block, headingLevel
  # Fields: galleryLayout, eyebrow, heading, text, images, primaryButton
  # Captions use each asset's title (grid/row layouts only).
@@ -37,28 +37,6 @@
                         </li>
                     {% endfor %}
                 </ul>
-            </div>
-
-        {% elseif layout == 'slider' %}
-            {# Swiper version of the fan (src/js/carousels.js, variant "gallery"; tilt in app.css):
-               drifts down the diagonal, faster while scrolling, drags with momentum, loops.
-               Without JS: a horizontally scrollable row. #}
-            <div class="gallery-slider mt-8 md:mt-0 md:pt-24 lg:pt-40" data-carousel="gallery">
-                <div class="swiper">
-                    <ul class="swiper-wrapper" aria-label="{{ block.heading ?: 'Gallery'|t }}">
-                        {# Rendered twice: the tilted strip is longer than one set, and Swiper's loop
-                           needs more slides than fit in view. The copies are hidden from screen readers. #}
-                        {% for pass in 1..2 %}
-                            {% for image in images %}
-                                <li class="swiper-slide w-48! flex-none md:w-64!" {% if pass == 2 %}aria-hidden="true"{% endif %}>
-                                    <div class="gallery-slider__card">
-                                        {% include '_components/image.twig' with { image: image, width: 256, ratio: 1, sizes: '(min-width: 768px) 256px, 192px', decorative: pass == 2, class: 'aspect-square w-full rounded-md object-cover shadow-card' } only %}
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        {% endfor %}
-                    </ul>
-                </div>
             </div>
 
         {% elseif layout == 'marquee' %}

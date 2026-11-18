@@ -197,3 +197,13 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - A drag of 300px moves the cards 280px, then 224px of momentum, then the drift resumes.
   - 768px: diagonal, no overlap with the heading. 375px: straight swipeable row. No horizontal overflow and no console warnings.
 - **Still demo-only** (`/gallery-slider-demo`). To use it on Home, set the Home gallery's layout to "Fan slider (Swiper)".
+
+### 2026-11-18: Decision: keep the custom fan, remove the Swiper gallery
+- After comparing the two, the custom diagonal fan (`src/js/gallery-wave.js`) stays on Home and the Swiper version is removed.
+- Backup: `ddev snapshot --name=before-remove-gallery-slider`.
+- Migration `m261118_240000_remove_gallery_slider_demo`:
+  - Hard-deletes the `/gallery-slider-demo` page, including its nested block.
+  - Removes the `slider` option from `galleryLayout`, but only if no block still uses it.
+- Code: `src/js/carousels.js`, `src/css/app.css` and `templates/_blocks/imageGallery.twig` were restored to commit `25c2a2b`. Only the two Swiper gallery commits had touched them since.
+- **For future reference:** the Swiper attempt (commits `46eac93` and `978a6b6`, and the log entries above) shows how to tilt a Swiper row and drive a seamless loop with `loopFix`. It's useful if a Swiper-based diagonal slider is ever needed.
+- Checked: on Home the fan runs (`is-wave`, 20 cards), the press Swiper still starts, and `/gallery-slider-demo` returns 404.

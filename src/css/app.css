@@ -181,50 +181,6 @@
     margin-left: 0;
   }
 
-  /* imageGallery "slider": Swiper version of the fan (src/js/carousels.js, variant "gallery").
-     Mobile: a straight swipeable row. md+: the row is tilted to the fan's slope (0.3 → 16.7°)
-     and each card is turned back upright with the fan's rotateY, so it looks like .gallery-fan. */
-  .gallery-slider .swiper:not(.swiper-initialized) .swiper-wrapper {
-    gap: calc(var(--spacing) * 3);
-    overflow-x: auto;
-    padding-inline: calc(var(--spacing) * 4);
-  }
-  .gallery-slider img {
-    -webkit-user-drag: none;
-  }
-  .gallery-slider .swiper {
-    padding-inline: calc(var(--spacing) * 4);
-  }
-  @media (min-width: 48rem) {
-    .gallery-slider {
-      position: relative;
-      box-sizing: content-box;              /* padding-top is added on top, like .gallery-fan */
-      height: calc(var(--spacing) * 130);   /* same row height as the fan */
-    }
-    /* Long tilted strip: starts off-screen left on the fan line, ends off-screen right,
-       so Swiper's loop reshuffles slides out of sight. Padding keeps the 3D card edges unclipped. */
-    .gallery-slider .swiper {
-      position: absolute;
-      left: calc(var(--spacing) * -96);
-      bottom: calc(var(--spacing) * -104);  /* puts the card line exactly where the fan's is (measured) */
-      width: calc(105vw + var(--spacing) * 160);  /* reaches past the right edge at every width */
-      padding-block: calc(var(--spacing) * 8);
-      padding-inline: 0;
-      rotate: -16.7deg;
-      transform-origin: left bottom;
-    }
-    .gallery-slider .swiper-slide {
-      perspective: 1200px;
-    }
-    .gallery-slider .gallery-slider__card {
-      transform: rotate(16.7deg) rotateY(-38deg);
-      transition: transform 200ms ease;
-    }
-    .gallery-slider .swiper-slide:hover .gallery-slider__card {
-      transform: rotate(16.7deg) rotateY(-20deg) translateY(calc(var(--spacing) * -4));
-    }
-  }
-
   /* Header pill → mega menu (reference site: the pill itself grows into the dropdown panel) */
   .site-nav-pill {
     max-width: var(--container-nav);

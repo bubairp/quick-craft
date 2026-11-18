@@ -50,17 +50,6 @@ settings:
         -
           - default
           - false
-    -
-      __assoc__:
-        -
-          - label
-          - 'Fan slider (Swiper)'
-        -
-          - value
-          - slider
-        -
-          - default
-          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none
