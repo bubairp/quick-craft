@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Tell Tailwind where class names live */
+@source "../../templates";
+
+/*
+ * Design tokens — the ONLY source for colours, fonts and spacing.
+ * Brand values are placeholders until extracted from the Figma file
+ * (WdjEJ9NeK2FTVsJcGF6lby). Update here, never hard-code values in templates.
+ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand: oklch(0.55 0.2 260);
+  --color-brand-dark: oklch(0.42 0.18 260);
+  --color-ink: oklch(0.21 0.02 260);
+  --color-muted: oklch(0.55 0.02 260);
+  --color-surface: oklch(0.98 0.005 260);
+
+  --container-site: 80rem;
+}
+
+@layer base {
+  html {
+    @apply font-sans text-ink antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand;
+  }
+}

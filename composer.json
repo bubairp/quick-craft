@@ -1,0 +1,43 @@
+{
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "craftcms/ckeditor": "^5.9",
+    "craftcms/cms": "^5.12.1",
+    "ether/seo": "^5.0",
+    "nystudio107/craft-vite": "^5.0",
+    "remoteprogrammer/simple-rp-menu": "^1.1",
+    "spicyweb/craft-embedded-assets": "^5.4",
+    "verbb/expanded-singles": "^3.0",
+    "vlucas/phpdotenv": "^5.4.0",
+    "xpertbot/craft-wheelform": "^4.0"
+  },
+  "require-dev": {
+    "craftcms/generator": "^2.0.0",
+    "yiisoft/yii2-shell": "^2.0.3"
+  },
+  "config": {
+    "allow-plugins": {
+      "craftcms/plugin-installer": true,
+      "php-http/discovery": true,
+      "yiisoft/yii2-composer": true
+    },
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "platform": {
+      "php": "8.3"
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/rpqa99/craft5-simple-menu.git",
+      "no-api": true
+    }
+  ],
+  "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example.dev', '.env');\""
+    ]
+  }
+}

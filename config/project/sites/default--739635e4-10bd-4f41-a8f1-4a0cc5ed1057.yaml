@@ -1,0 +1,8 @@
+baseUrl: $PRIMARY_SITE_URL
+handle: default
+hasUrls: true
+language: en-GB
+name: 'Quick Craft'
+primary: true
+siteGroup: 2b0cb8a9-792e-430c-aab8-e6b9c3045101 # Quick Craft
+sortOrder: 1

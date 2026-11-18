@@ -1,0 +1,36 @@
+{#
+ # Base layout — every page template extends this.
+ # Blocks: bodyClass, header, content, footer
+ #}
+<!DOCTYPE html>
+<html lang="{{ currentSite.language }}" class="scroll-smooth">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="origin-when-cross-origin">
+
+    {# Ether SEO: outputs <title>, meta description, OG/Twitter, canonical (vendor/ether/seo/src/templates/_seo/meta.twig) #}
+    {% hook 'seo' %}
+
+    {# Inter — Google Fonts #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
+
+    {# Vite: dev server (HMR) in dev, hashed build from web/dist otherwise #}
+    {{ craft.vite.script('src/main.js', false) }}
+</head>
+<body class="min-h-dvh flex flex-col bg-white {% block bodyClass %}{% endblock %}">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2">
+        {{ 'Skip to content'|t }}
+    </a>
+
+    {% block header %}{% endblock %}
+
+    <main id="main" class="flex-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}{% endblock %}
+</body>
+</html>
