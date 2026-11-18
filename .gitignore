@@ -16,6 +16,9 @@
 # User uploads (Images volume) — content, not code
 /web/uploads
 
+# Playwright MCP output (screenshots, snapshots)
+/.playwright-mcp
+
 # Claude Code local-only settings
 /.claude/settings.local.json
 
