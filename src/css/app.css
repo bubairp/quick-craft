@@ -120,6 +120,45 @@
 
 /* Simple RP Menu marks the current page's link with .active (no aria-current) */
 @layer components {
+  /* imageGallery "fan" (Home 6-1384): overlapping cards climbing to the right */
+  .gallery-fan {
+    perspective: 1200px;
+  }
+  .gallery-fan__row {
+    display: flex;
+    align-items: flex-end;
+    transform: rotate(-9deg);
+    transform-origin: left bottom;
+  }
+  .gallery-fan__item {
+    flex: none;
+    width: calc(var(--spacing) * 64);
+    transform: rotateY(-38deg);
+    transition: transform 200ms ease;
+  }
+  .gallery-fan__item + .gallery-fan__item {
+    margin-left: calc(var(--spacing) * -38);
+  }
+  .gallery-fan__item:hover {
+    transform: rotateY(-20deg) translateY(calc(var(--spacing) * -4));
+  }
+
+  /* imageGallery "marquee": continuous horizontal scroll (paused for reduced motion) */
+  .gallery-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 60s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-marquee__track { animation: none; }
+  }
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+@layer components {
   .menu-link.active {
     @apply underline decoration-2 underline-offset-4;
   }
