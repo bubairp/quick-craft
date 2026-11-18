@@ -56,7 +56,7 @@
          @mouseleave="closeMenu()">
 
         {# ── Bar ─────────────────────────────────────────────────────────── #}
-        <div class="flex items-center justify-between gap-4 py-3 pl-4 pr-3 lg:gap-8 lg:py-4 lg:pl-8 lg:pr-4 xl:gap-16">
+        <div class="flex items-center justify-between gap-4 py-3 pl-4 pr-3 lg:gap-6 lg:py-4 lg:pl-8 lg:pr-4 xl:gap-8">
             <a href="{{ siteUrl }}" class="shrink-0 rounded-lg" aria-label="{{ '{site} home'|t(params={ site: siteName }) }}">
                 {% if logo %}
                     <img src="{{ logo.getUrl({ width: 80, height: 80, mode: 'fit' }) }}" width="40" height="40" alt="" class="size-10 rounded-lg">
@@ -66,12 +66,12 @@
             </a>
 
             {% if navItems|length %}
-                <nav class="hidden lg:block" aria-label="{{ 'Main navigation'|t }}">
+                <nav class="hidden min-w-0 lg:block" aria-label="{{ 'Main navigation'|t }}">
                     <ul class="flex items-center">
                         {% for item in navItems %}
                             {% set i = loop.index0 %}
                             {% set itemClass = 'block whitespace-nowrap rounded-sm px-2 py-1.5 text-base font-medium text-ink transition-colors duration-200 hover:bg-ink/5 focus-visible:bg-ink/5' %}
-                            <li class="p-1 xl:p-2">
+                            <li class="p-0.5 xl:p-1">
                                 {% if (item.children ?? [])|length %}
                                     <button type="button" class="{{ itemClass }}"
                                             :class="menu === {{ i }} && 'bg-ink/5'"
@@ -88,7 +88,7 @@
                 </nav>
             {% endif %}
 
-            <div class="hidden items-center gap-3 lg:flex">
+            <div class="hidden shrink-0 items-center gap-3 lg:flex">
                 {% include '_components/button.twig' with { link: primary, variant: 'dark' } only %}
                 {% include '_components/button.twig' with { link: secondary, variant: 'light' } only %}
             </div>
