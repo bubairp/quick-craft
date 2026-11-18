@@ -216,3 +216,13 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
 - `src/js/carousels.js`, variant `loop`: `loop: true`, `autoplay { delay: 3500, pauseOnMouseEnter, disableOnInteraction: false }`, and prev/next navigation. No autoplay with reduced motion.
 - The plain `data-carousel` (no loop) variant is kept for other rows.
 - Checked at 1440px: 18 slides, auto-advance after about 4s, Previous wraps, 20× Next always shows 5 cards, arrows never disabled, no console warnings.
+
+### 2026-11-18: Testimonials carousel: even sides + smooth mouse
+- Problem: the row started at the gutter, so at 1440px only 48px of a card showed on the left against 308px on the right.
+- Fix: `centeredSlides: true`, and the `px-4! md:px-gutter!` padding was removed from `.swiper`, because padding shifts the centre. Now 171px shows on each side at 1440px and 20px at 375px.
+  - Measurement gotcha: use `document.documentElement.clientWidth`, not `innerWidth`, which includes the vertical scrollbar (15px).
+- Smooth mouse (`carousels.js`, variant `loop`, modules `FreeMode` and `Mousewheel`, option names read in `node_modules/swiper/modules/*.mjs`):
+  - `freeMode { sticky: true, momentumRatio: 0.5, momentumVelocityRatio: 0.8 }`: a drag glides with momentum, then settles on a card.
+  - `mousewheel { forceToAxis: true, sensitivity: 0.6 }`: a sideways trackpad swipe or shift+wheel moves the row. The vertical wheel still scrolls the page through Lenis.
+  - `speed: 700` for arrows and autoplay.
+- Checked: a sideways wheel moves it 356px, a vertical wheel 0px; a drag of 250px is followed by 487px of glide and lands exactly on a card; no console warnings.

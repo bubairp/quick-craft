@@ -20,7 +20,7 @@ export async function initCarousels() {
   const roots = document.querySelectorAll('[data-carousel]');
   if (!roots.length) return;
 
-  const [{ default: Swiper }, { Navigation, Keyboard, A11y, Autoplay }] = await Promise.all([
+  const [{ default: Swiper }, { Navigation, Keyboard, A11y, Autoplay, FreeMode, Mousewheel }] = await Promise.all([
     import('swiper'),
     import('swiper/modules'),
     import('swiper/css'),
@@ -68,10 +68,18 @@ export async function initCarousels() {
       // Testimonials row (reference: partiful.com "social life runs on…"): endless loop that
       // advances one card about every 4s; arrows never run out. Pauses on hover, after which
       // it carries on; no auto-advance for reduced motion.
+      // centeredSlides: the cut-off cards on the left and right are the same width.
+      // Smooth mouse: drag glides with momentum, then settles on a card (freeMode sticky);
+      // a sideways trackpad swipe / shift+wheel moves it (vertical wheel still scrolls the page).
       new Swiper(el, {
         ...base,
+        modules: [...base.modules, FreeMode, Mousewheel],
         spaceBetween: 16,
         loop: true,
+        centeredSlides: true,
+        speed: reduceMotion ? 0 : 700,
+        freeMode: { enabled: true, sticky: true, momentumRatio: 0.5, momentumVelocityRatio: 0.8 },
+        mousewheel: { enabled: true, forceToAxis: true, sensitivity: 0.6 },
         autoplay: reduceMotion ? false : { delay: 3500, pauseOnMouseEnter: true, disableOnInteraction: false },
         navigation: {
           prevEl: root.querySelector('[data-carousel-prev]'),
