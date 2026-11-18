@@ -1,0 +1,35 @@
+{#
+ # Responsive image/video from a Craft asset. Renders nothing for an empty asset.
+ #
+ # Props:
+ #   image     Asset|null   required
+ #   width     int          largest rendered width in CSS px (default 800)
+ #   ratio     float|null   width/height crop ratio (e.g. 1, 16/9); null keeps the original ratio
+ #   sizes     string       sizes attribute (default '100vw')
+ #   eager     bool         above the fold: no lazy loading, fetchpriority=high
+ #   class     string       classes for the <img>/<video>
+ #   decorative bool        force alt=""
+ #}
+{% set image = image ?? null %}
+{% if image %}
+    {% set width = width ?? 800 %}
+    {% set ratio = ratio ?? null %}
+    {% set class = class ?? '' %}
+
+    {% if image.kind == 'video' %}
+        <video src="{{ image.url }}" class="{{ class }}" autoplay muted loop playsinline preload="metadata"
+               {% if image.alt %}aria-label="{{ image.alt }}"{% else %}aria-hidden="true"{% endif %}></video>
+    {% elseif image.kind == 'image' %}
+        {% set transform = ratio
+            ? { width: width * 2, height: (width * 2 / ratio)|round, mode: 'crop', format: 'webp' }
+            : { width: width * 2, mode: 'fit', format: 'webp' } %}
+        {% set srcset = image.extension == 'svg' ? false : image.getSrcset(['0.25x', '0.5x', '0.75x', '1x'], transform) %}
+        <img src="{{ image.getUrl(transform) }}"
+             {% if srcset %}srcset="{{ srcset }}" sizes="{{ sizes ?? '100vw' }}"{% endif %}
+             width="{{ image.getWidth(transform) }}"
+             height="{{ image.getHeight(transform) }}"
+             alt="{{ (decorative ?? false) ? '' : (image.alt ?? '') }}"
+             {% if eager ?? false %}fetchpriority="high"{% else %}loading="lazy" decoding="async"{% endif %}
+             class="{{ class }}">
+    {% endif %}
+{% endif %}

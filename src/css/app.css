@@ -23,6 +23,7 @@
   --color-ink: #111111;        /* primary text, dark buttons, logo tile */
   --color-ink-soft: #30302f;   /* quote text */
   --color-night: #1c1c1a;      /* dark surfaces, footer */
+  --color-graphite: #4b4b49;   /* borders on black (hero buttons) */
   --color-muted: #5f5f5b;      /* secondary text */
   --color-subtle: #777772;     /* tertiary text */
   --color-paper: #fdfdfb;      /* off-white page background, light buttons */

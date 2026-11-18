@@ -1,0 +1,97 @@
+{#
+ # Hero block. Figma: Home 6-2210 (split, dark). Other layouts are used by landing pages.
+ # Receives: block, headingLevel
+ # Fields: heroLayout, theme, eyebrow, heading, rotatingWords, text, primaryButton, secondaryButton, images
+ #}
+{% set layout = block.heroLayout.value ?? 'split' %}
+{% set dark = (block.theme.value ?? 'light') == 'dark' %}
+{% set media = block.images.eagerly().all() %}
+{% set tag = 'h' ~ (headingLevel ?? 1) %}
+{% set hasButtons = (block.primaryButton.url ?? false) or (block.secondaryButton.url ?? false) %}
+
+{% set sectionClass = [
+    'relative overflow-hidden',
+    dark ? 'bg-black text-white' : 'bg-paper text-ink',
+    layout == 'fullBleed' ? 'min-h-svh' : 'pt-32 pb-16 md:pt-44 lg:pb-24',
+]|join(' ') %}
+
+{% macro buttons(block, dark) %}
+    <div class="flex flex-wrap gap-3">
+        {% include '_components/button.twig' with { link: block.primaryButton, variant: dark ? 'light' : 'dark', shape: 'rounded' } only %}
+        {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'darkOnDark' : 'light', shape: 'rounded' } only %}
+    </div>
+{% endmacro %}
+
+<section class="{{ sectionClass }}">
+    {% if layout == 'split' %}
+        <div class="mx-auto grid max-w-content items-center gap-12 px-4 md:px-gutter lg:grid-cols-2 lg:gap-12">
+            <div class="flex flex-col gap-10 lg:gap-12">
+                <div class="flex flex-col gap-4">
+                    {% if block.eyebrow %}
+                        <p class="w-fit rounded-full border {{ dark ? 'border-graphite' : 'border-line bg-white' }} px-3 py-1 text-sm font-medium">{{ block.eyebrow }}</p>
+                    {% endif %}
+                    {% if block.heading %}
+                        <{{ tag }} class="text-balance text-5xl uppercase md:text-6xl lg:text-7xl">{{ block.heading }}</{{ tag }}>
+                    {% endif %}
+                    {% if block.text %}
+                        <p class="max-w-md text-xl md:text-2xl {{ dark ? 'text-line' : 'text-black/60' }}">{{ block.text|nl2br }}</p>
+                    {% endif %}
+                </div>
+                {% if hasButtons %}{{ _self.buttons(block, dark) }}{% endif %}
+            </div>
+
+            {% if media|length %}
+                <div class="flex justify-center">
+                    {% include '_components/image.twig' with {
+                        image: media|first,
+                        width: 560,
+                        sizes: '(min-width: 1024px) 560px, 100vw',
+                        eager: true,
+                        class: 'h-auto w-full max-w-lg rounded-2xl object-cover',
+                    } only %}
+                </div>
+            {% endif %}
+        </div>
+
+    {% elseif layout == 'fullBleed' %}
+        {% if media|length %}
+            {% include '_components/image.twig' with {
+                image: media|first, width: 1600, sizes: '100vw', eager: true,
+                class: 'absolute inset-0 size-full object-cover',
+            } only %}
+            <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
+        {% endif %}
+        <div class="relative mx-auto flex min-h-svh max-w-content flex-col items-center justify-center gap-6 px-4 pt-32 pb-16 text-center md:px-gutter {{ media|length ? 'text-white' }}">
+            {% if block.heading %}<{{ tag }} class="text-balance text-5xl md:text-6xl">{{ block.heading }}</{{ tag }}>{% endif %}
+            {% if block.text %}<p class="max-w-xl text-xl md:text-2xl">{{ block.text|nl2br }}</p>{% endif %}
+            {% if hasButtons %}{{ _self.buttons(block, true) }}{% endif %}
+        </div>
+
+    {% else %}
+        {# centered + simple #}
+        <div class="mx-auto flex max-w-content flex-col items-center gap-6 px-4 text-center md:px-gutter">
+            {% if block.eyebrow %}<p class="text-2xl font-medium">{{ block.eyebrow }}</p>{% endif %}
+            {% if block.heading %}
+                <{{ tag }} class="text-balance text-4xl font-medium md:text-6xl">
+                    {{ block.heading }}
+                    {% set words = block.rotatingWords ?? [] %}
+                    {% if words|length %}
+                        <span class="block text-accent"
+                              x-data="{ words: {{ words|map(r => r.word)|filter|json_encode }}, i: 0 }"
+                              x-init="if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => i = (i + 1) % words.length, 2000)"
+                              x-text="words[i]">{{ (words|first).word }}</span>
+                    {% endif %}
+                </{{ tag }}>
+            {% endif %}
+            {% if block.text and layout != 'simple' %}<p class="max-w-xl text-xl text-black/60 md:text-2xl">{{ block.text|nl2br }}</p>{% endif %}
+            {% if hasButtons %}{{ _self.buttons(block, dark) }}{% endif %}
+            {% if media|length and layout != 'simple' %}
+                <div class="mt-6 grid w-full grid-cols-2 gap-4 md:grid-cols-4">
+                    {% for image in media %}
+                        {% include '_components/image.twig' with { image: image, width: 260, ratio: 1, sizes: '(min-width: 768px) 25vw, 50vw', class: 'aspect-square w-full rounded-lg object-cover' } only %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</section>

@@ -4,7 +4,7 @@
  #
  # Props:
  #   link     LinkData|null   required
- #   variant  'dark' | 'light' | 'outlineLight'   (default 'dark')
+ #   variant  'dark' | 'darkOnDark' | 'light' | 'outlineLight'   (default 'dark')
  #   shape    'pill' | 'rounded'                   (default 'pill')
  #   class    extra classes
  #}
@@ -12,6 +12,7 @@
 {% if link and link.url %}
     {% set variants = {
         dark: 'bg-ink text-paper border-night hover:bg-night',
+        darkOnDark: 'bg-ink text-paper border-graphite hover:bg-night',
         light: 'bg-paper text-black border-line hover:bg-surface',
         outlineLight: 'bg-transparent text-paper border-paper/30 hover:bg-paper/10',
     } %}
