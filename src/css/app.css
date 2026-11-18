@@ -65,6 +65,9 @@
   --text-6xl: 3.5rem;
   --text-6xl--line-height: 1.2;
   --text-6xl--letter-spacing: -0.04em;
+  --text-display: 4.375rem;    /* 70 — cityList names */
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.02em;
   --text-7xl: 6.75rem;
   --text-7xl--line-height: 1;
   --text-7xl--letter-spacing: 0em;

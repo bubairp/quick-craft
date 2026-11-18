@@ -30,6 +30,23 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
+            fieldUid: 7deac560-7fee-4591-b9b3-f8e899dc2df8 # Images
+            handle: null
+            instructions: 'Extra images, e.g. event thumbnails shown beside a city.'
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ec7fda2d-3b65-43fd-ae7c-36d4b16587fc
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
             fieldUid: ebd87830-6bd4-40fb-acf2-8b1b3ce02fb4 # Emoji icon
             handle: null
             instructions: null
