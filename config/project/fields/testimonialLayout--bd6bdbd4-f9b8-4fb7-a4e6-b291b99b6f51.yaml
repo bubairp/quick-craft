@@ -39,6 +39,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Press logos (strip)'
+        -
+          - value
+          - press
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

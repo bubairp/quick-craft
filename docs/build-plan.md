@@ -25,7 +25,7 @@ Status: ☐ to do · ◐ in progress · ☑ done
 | | Block (entry type) | Layout options | Figma node | Content |
 |---|---|---|---|---|
 | ☑ | `hero` | split, dark | 6-2210 | "Parties are back", 2 buttons, chat-bubble collage (image) |
-| — | press logo strip | n/a | 6-1259 | **skipped** |
+| ☑ | `testimonials` | press | 6-1259 | press logo strip (added after all): Swiper, active logo shows its quote |
 | ☑ | `cardGrid` | grid, light | 6-1320 | "One link. Everyone's in.", 3 step cards + button ("Takes 30 seconds" note has no field) |
 | ☑ | `imageGallery` | fan | 6-1384 | "A million reasons to hang", 20 invite images |
 | ☑ | `cityList` | n/a | 6-4774 | "The best events in your city", 5 cities with hover thumbnails (`card.images`) |

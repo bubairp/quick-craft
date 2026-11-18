@@ -180,6 +180,26 @@
     translate: 0 0;
   }
 
+  /* Press strip (testimonials layout "press"): the active logo moves up, its quote fades in */
+  .press-slide__logo {
+    transition: translate 500ms var(--ease-out-soft), opacity 300ms ease;
+  }
+  .press-slide__quote {
+    opacity: 0;
+    translate: 0 calc(var(--spacing) * 3);
+    transition: opacity 400ms ease, translate 500ms var(--ease-out-soft);
+  }
+  .press-slide.swiper-slide-active .press-slide__quote {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .press-slide.swiper-slide-active:has(.press-slide__quote) .press-slide__logo {
+    translate: 0 calc(var(--spacing) * -22);
+  }
+  .press-slide:not(.swiper-slide-active) .press-slide__btn:hover .press-slide__logo {
+    opacity: 0.6;
+  }
+
   /* Horizontal scrollers (carousels) without a visible scrollbar */
   .no-scrollbar {
     scrollbar-width: none;

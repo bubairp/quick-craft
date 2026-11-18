@@ -81,3 +81,28 @@ For the list of what's still to build, see [build-plan.md](build-plan.md). For t
 - **Swiper** (v14) runs the testimonials carousel: `src/js/carousels.js`, using the `data-carousel`, `.swiper`, `data-carousel-prev` and `data-carousel-next` markup. It's loaded only on pages that have a carousel. Slide widths come from Tailwind classes with the `!` suffix, because Swiper's CSS sets `width: 100%`.
 - Removed `scroll-smooth` from `<html>`, because it conflicts with Lenis.
 - Not built yet: the reference site's **mega menu dropdowns** (opened on nav hover). Figma has no design or content for them.
+
+### 2026-11-18: Animations matched to partiful.com, scroll slider, hero chat, press strip
+How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; screenshots were blocked):
+- `document.getAnimations()` and inline `style.transform`, sampled over time and at several scroll positions, to find motion.
+- Hover: snapshot each element's computed styles, hover it, then diff.
+
+| Effect | Reference measurement | Ours |
+|---|---|---|
+| Button hover | scale 1.01, −2px, shadow `0 6px 12px rgba(0,0,0,.16)` | `_components/button.twig` (`hover:scale-101 hover:-translate-y-0.5 hover:shadow-lift`) |
+| City name hover | lifts about 7px | `cityList.twig` `group-hover:-translate-y-2` |
+| Reveal on scroll | sections and cards fade in | `src/js/reveal.js` + `data-reveal` / `data-reveal-index` (stagger 90ms) |
+| Feature rows | sticky 900px panel; parent ≈ 4.5 screens for 3 slides; text slides up and out, phones stack | `src/js/scroll-slider.js` (`data-scroll-slider`); stacked fallback on mobile, with reduced motion, or without JS |
+| Gallery fan | cards drift down-left along the diagonal (~30px/s), faster while scrolling, wrap around | `src/js/gallery-wave.js` (`data-gallery-wave`) |
+| Hero | chat messages appear every ~3s, stack slides up, loops | `src/js/hero-chat.js` + `_components/hero-chat.twig`; new field `chatMessages` |
+| Press strip (missing section, Figma 6-1259) | logo buttons, active one shows its quote | testimonials layout `press`: Swiper centred + loop + autoplay 5s; logo buttons activate their slide |
+
+- Migrations: `m261118_190000_hero_chat` and `m261118_200000_press_strip`. The latter inserts the block after the hero by shifting `elements_owners.sortOrder`.
+- Placeholder images: hero chat (photo, invite art, 3 avatars) and 9 press logos, from Figma `download_assets` (`rawImages`). Avatars are matched by **asset title = sender name**.
+- **Gotchas:**
+  - A Twig `{# #}` comment inside an array expression is a syntax error.
+  - Tailwind v4 translate/scale utilities set the `translate`/`scale` properties, not `transform`.
+  - The radius scale is reset, so only `sm`, `md`, `lg`, `xl`, `2xl` and `full` exist.
+  - Swiper stops click propagation, so listen in the capture phase.
+  - Tailwind must `@source "../js"` for classes that scripts toggle.
+- **PLACEHOLDER content:** the press quotes and logos are real publications' (from the reference design). They must be replaced with Quick Craft's real press before launch.
