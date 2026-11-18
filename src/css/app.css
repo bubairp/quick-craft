@@ -152,6 +152,18 @@
   .gallery-fan__item:hover {
     transform: rotateY(-20deg) translateY(calc(var(--spacing) * -4));
   }
+  /* JS wave mode (src/js/gallery-wave.js): cards are placed along the diagonal by JS */
+  .gallery-fan.is-wave .gallery-fan__row {
+    position: relative;
+    height: calc(var(--spacing) * 130);
+    transform: none;
+  }
+  .gallery-fan.is-wave .gallery-fan__item {
+    position: absolute;
+    left: 0;
+    bottom: calc(var(--spacing) * 6);
+    margin-left: 0;
+  }
 
   /* Reveal on scroll: elements with data-reveal fade up when they enter the viewport.
      Only active when JS added .js-reveal to <html> (no-JS and reduced motion: always visible). */

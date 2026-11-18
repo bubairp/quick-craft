@@ -4,6 +4,7 @@ import { initSmoothScroll } from './js/smooth-scroll.js';
 import { initCarousels } from './js/carousels.js';
 import { initReveal } from './js/reveal.js';
 import { initScrollSliders } from './js/scroll-slider.js';
+import { initGalleryWave } from './js/gallery-wave.js';
 
 /**
  * Header that hides while scrolling down and slides back in when scrolling up
@@ -36,3 +37,4 @@ initSmoothScroll();
 initCarousels();
 initReveal();
 initScrollSliders();
+initGalleryWave();
