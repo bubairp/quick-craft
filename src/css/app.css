@@ -84,6 +84,9 @@
   --container-prose: 43.75rem; /* 700 — blog post */
   --container-nav: 61rem;      /* 976 — floating header pill */
 
+  /* Aspect ratios */
+  --aspect-card: 472 / 502;    /* feature card media (Home 6-1320) */
+
   /* Radii — rounded-full for pills */
   --radius-sm: 0.25rem;        /* 4  buttons, nav items */
   --radius-md: 0.5rem;         /* 8  cards */

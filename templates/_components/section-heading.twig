@@ -1,0 +1,20 @@
+{#
+ # Section heading group: eyebrow, display heading, subtitle.
+ # Props: eyebrow, heading, text, level (2), align ('center'|'left'), dark (bool), class
+ #}
+{% set align = align ?? 'center' %}
+{% set dark = dark ?? false %}
+{% if (eyebrow ?? null) or (heading ?? null) or (text ?? null) %}
+    <div class="flex flex-col gap-2 {{ align == 'center' ? 'items-center text-center' : 'items-start text-left' }} {{ class ?? '' }}">
+        {% if eyebrow ?? null %}
+            <p class="text-xl font-medium text-accent">{{ eyebrow }}</p>
+        {% endif %}
+        {% if heading ?? null %}
+            {% set tag = 'h' ~ (level ?? 2) %}
+            <{{ tag }} class="text-balance text-4xl uppercase md:text-5xl">{{ heading }}</{{ tag }}>
+        {% endif %}
+        {% if text ?? null %}
+            <p class="text-balance text-lg font-light {{ dark ? 'text-line' : 'text-muted' }}">{{ text|nl2br }}</p>
+        {% endif %}
+    </div>
+{% endif %}

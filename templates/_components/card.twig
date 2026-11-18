@@ -1,0 +1,33 @@
+{#
+ # Feature card: media panel, emoji, heading, text, text link.
+ # Props: card (Entry of type 'card'), level (3), dark (bool), sizes, ratio (472/502)
+ #}
+{% set dark = dark ?? false %}
+{% set image = card.image.one() ?? null %}
+{% set tag = 'h' ~ (level ?? 3) %}
+<article class="flex flex-col gap-6 md:gap-8">
+    <div class="overflow-hidden rounded-md {{ dark ? 'bg-night' : 'bg-surface' }}">
+        {% if image %}
+            {% include '_components/image.twig' with {
+                image: image, width: 480, ratio: ratio ?? (472 / 502),
+                sizes: sizes ?? '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
+                class: 'aspect-card h-auto w-full object-cover',
+            } only %}
+        {% else %}
+            <div class="aspect-card w-full" aria-hidden="true"></div>
+        {% endif %}
+    </div>
+    <div class="flex flex-col items-center gap-2 text-center">
+        {% if card.emoji %}<span class="text-3xl" aria-hidden="true">{{ card.emoji }}</span>{% endif %}
+        {% if card.heading %}
+            <{{ tag }} class="text-balance text-2xl font-bold md:text-3xl">{{ card.heading }}</{{ tag }}>
+        {% endif %}
+        {% if card.text %}
+            <p class="text-balance text-lg font-light md:text-xl {{ dark ? 'text-line' : 'text-subtle' }}">{{ card.text|nl2br }}</p>
+        {% endif %}
+        {% set link = card.primaryButton ?? null %}
+        {% if link and link.url %}
+            <a {{ attr(link.attributes|merge({ class: 'text-lg font-medium underline underline-offset-4 hover:no-underline' })) }}>{{ link.label ?: link.url }}</a>
+        {% endif %}
+    </div>
+</article>

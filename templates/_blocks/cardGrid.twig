@@ -1,0 +1,35 @@
+{#
+ # Card grid block. Figma: Home 6-1320 (3 cards, centered heading, button below).
+ # Receives: block, headingLevel
+ # Fields: cardLayout, theme, eyebrow, heading, text, cards, primaryButton
+ #}
+{% set dark = (block.theme.value ?? 'light') == 'dark' %}
+{% set cards = block.cards.eagerly().with(['image']).all() %}
+{% set level = headingLevel ?? 2 %}
+{% set cols = {
+    1: 'max-w-md',
+    2: 'sm:grid-cols-2',
+    3: 'sm:grid-cols-2 lg:grid-cols-3',
+}[cards|length] ?? 'sm:grid-cols-2 lg:grid-cols-4' %}
+
+{% if block.heading or cards|length %}
+<section class="{{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 pt-16 pb-20 md:px-gutter md:pt-24 md:pb-section">
+    <div class="mx-auto flex max-w-site flex-col items-center gap-10 md:gap-14">
+        {% include '_components/section-heading.twig' with {
+            eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level, dark: dark,
+        } only %}
+
+        {% if cards|length %}
+            <div class="grid w-full grid-cols-1 gap-x-7 gap-y-12 {{ cols }}">
+                {% for card in cards %}
+                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark } only %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% include '_components/button.twig' with {
+            link: block.primaryButton, variant: dark ? 'light' : 'darkOnDark', shape: 'rounded',
+        } only %}
+    </div>
+</section>
+{% endif %}
