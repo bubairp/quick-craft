@@ -89,6 +89,7 @@
 
   /* Aspect ratios */
   --aspect-card: 472 / 502;    /* feature card media (Home 6-1320) */
+  --aspect-tile: 347 / 339;    /* compact card media (Home 6-1719) */
 
   /* Radii — rounded-full for pills */
   --radius-sm: 0.25rem;        /* 4  buttons, nav items */

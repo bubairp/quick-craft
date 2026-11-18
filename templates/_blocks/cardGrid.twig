@@ -1,35 +1,59 @@
 {#
- # Card grid block. Figma: Home 6-1320 (3 cards, centered heading, button below).
+ # Card grid block.
+ #   grid (default): Figma Home 6-1320 — centered heading, big cards, button below
+ #   compact:        Figma Home 6-1719 — heading left + buttons right, small square tiles
  # Receives: block, headingLevel
- # Fields: cardLayout, theme, eyebrow, heading, text, cards, primaryButton
+ # Fields: cardLayout, theme, eyebrow, heading, text, cards, primaryButton, secondaryButton
  #}
+{% set layout = block.cardLayout.value ?? 'grid' %}
+{% set compact = layout == 'compact' %}
 {% set dark = (block.theme.value ?? 'light') == 'dark' %}
 {% set cards = block.cards.eagerly().with(['image']).all() %}
 {% set level = headingLevel ?? 2 %}
-{% set cols = {
-    1: 'max-w-md',
-    2: 'sm:grid-cols-2',
-    3: 'sm:grid-cols-2 lg:grid-cols-3',
-}[cards|length] ?? 'sm:grid-cols-2 lg:grid-cols-4' %}
+{% set count = cards|length %}
+{% set cols = count == 1 ? 'max-w-md'
+    : (count == 2 ? 'sm:grid-cols-2'
+    : (count == 3 ? 'sm:grid-cols-2 lg:grid-cols-3'
+    : 'sm:grid-cols-2 lg:grid-cols-4')) %}
+{% set hasSecondary = block.secondaryButton.url ?? false %}
+{% set hasButtons = (block.primaryButton.url ?? false) or hasSecondary %}
 
-{% if block.heading or cards|length %}
-<section class="{{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 pt-16 pb-20 md:px-gutter md:pt-24 md:pb-section">
-    <div class="mx-auto flex max-w-site flex-col items-center gap-10 md:gap-14">
-        {% include '_components/section-heading.twig' with {
-            eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level, dark: dark,
-        } only %}
+{% if block.heading or count %}
+<section class="{{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 md:px-gutter {{ compact ? 'py-16 md:py-28' : 'pt-16 pb-20 md:pt-24 md:pb-section' }}">
+    <div class="mx-auto flex max-w-site flex-col gap-10 md:gap-14 {{ compact ? 'items-stretch' : 'items-center' }}">
 
-        {% if cards|length %}
-            <div class="grid w-full grid-cols-1 gap-x-7 gap-y-12 {{ cols }}">
+        {% if compact %}
+            <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                {% include '_components/section-heading.twig' with {
+                    eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level, dark: dark, align: 'left',
+                } only %}
+                {% if hasButtons %}
+                    <div class="flex flex-wrap gap-2">
+                        {% include '_components/button.twig' with { link: block.primaryButton, variant: dark ? 'outlineLight' : 'light' } only %}
+                        {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'light' : 'dark' } only %}
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            {% include '_components/section-heading.twig' with {
+                eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level, dark: dark,
+            } only %}
+        {% endif %}
+
+        {% if count %}
+            <div class="grid w-full grid-cols-1 {{ compact ? 'gap-x-7 gap-y-10' : 'gap-x-7 gap-y-12' }} {{ cols }}">
                 {% for card in cards %}
-                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark } only %}
+                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: compact ? 'compact' : 'feature' } only %}
                 {% endfor %}
             </div>
         {% endif %}
 
-        {% include '_components/button.twig' with {
-            link: block.primaryButton, variant: dark ? 'light' : 'darkOnDark', shape: 'rounded',
-        } only %}
+        {% if not compact and hasButtons %}
+            <div class="flex flex-wrap justify-center gap-3">
+                {% include '_components/button.twig' with { link: block.primaryButton, variant: dark ? 'light' : 'darkOnDark', shape: 'rounded' } only %}
+                {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'outlineLight' : 'light', shape: 'rounded' } only %}
+            </div>
+        {% endif %}
     </div>
 </section>
 {% endif %}

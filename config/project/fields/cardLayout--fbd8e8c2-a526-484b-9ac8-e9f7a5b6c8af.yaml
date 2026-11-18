@@ -39,6 +39,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Compact (heading left, small tiles)'
+        -
+          - value
+          - compact
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none
