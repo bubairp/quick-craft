@@ -1,0 +1,43 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  4958df42-fd4d-4755-bc19-832961c98f17:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 93b8c88f-4f95-4f0c-aa18-c76579b15c92
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 4eeedaee-f623-4899-ad94-11b261875b15
+        userCondition: null
+    thumbFieldKey: null
+handle: pressList
+hasTitleField: false
+icon: null
+name: 'Press list'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{heading}'

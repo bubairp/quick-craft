@@ -1,0 +1,60 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  8140f503-5889-4976-a268-76abde102f33:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 75ead31b-a638-4dfd-aa07-a81a5f8e6192
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Primary button
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ec6ae45d-f3e1-4057-8086-4df560518d7d
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: fc5beec8-eb89-4cce-b5ca-2c8eeeef9a7e
+        userCondition: null
+    thumbFieldKey: null
+handle: promoBar
+hasTitleField: false
+icon: null
+name: 'Promo bar'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{text}'

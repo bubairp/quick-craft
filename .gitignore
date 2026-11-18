@@ -13,6 +13,9 @@
 # Vite build output (built on deploy)
 /web/dist
 
+# User uploads (Images volume) — content, not code
+/web/uploads
+
 # Claude Code local-only settings
 /.claude/settings.local.json
 

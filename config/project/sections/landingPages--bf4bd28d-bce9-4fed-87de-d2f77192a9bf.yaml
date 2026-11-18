@@ -1,0 +1,24 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: aed18a78-dac9-49e8-ac86-a6cfbf7516f5 # Landing page
+handle: landingPages
+maxAuthors: 1
+minAuthors: 1
+name: 'Landing pages'
+previewTargets:
+  -
+    label: 'Primary entry page'
+    urlFormat: '{url}'
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: true
+    template: _entries/page
+    uriFormat: '{slug}'
+structure:
+  maxLevels: 1
+  uid: b03b0b2d-585b-4305-be35-901a90c12253
+type: structure

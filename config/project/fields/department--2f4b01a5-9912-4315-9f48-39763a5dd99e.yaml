@@ -1,0 +1,24 @@
+columnSuffix: null
+handle: department
+instructions: null
+name: Department
+searchable: false
+settings:
+  allowSelfRelations: false
+  branchLimit: null
+  defaultPlacement: end
+  maintainHierarchy: false
+  maxRelations: null
+  minRelations: null
+  selectionLabel: null
+  showSearchInput: true
+  showSiteMenu: false
+  source: 'group:e589e391-55af-4c14-9d53-d3eb8bbea7cb' # Departments
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: list
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Categories
+warning: null

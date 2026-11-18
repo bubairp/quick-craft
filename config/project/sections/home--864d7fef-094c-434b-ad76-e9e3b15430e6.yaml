@@ -1,0 +1,21 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: 57b7bd4f-a6bd-42d5-aed6-89b354c589b9 # Home
+handle: home
+maxAuthors: 1
+minAuthors: 1
+name: Home
+previewTargets:
+  -
+    label: 'Primary entry page'
+    urlFormat: '{url}'
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: true
+    template: _entries/page
+    uriFormat: __home__
+type: single

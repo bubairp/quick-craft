@@ -4,28 +4,105 @@
 @source "../../templates";
 
 /*
- * Design tokens — the ONLY source for colours, fonts and spacing.
- * Brand values are placeholders until extracted from the Figma file
- * (WdjEJ9NeK2FTVsJcGF6lby). Update here, never hard-code values in templates.
+ * Design tokens — the ONLY source for colours, fonts, spacing, radii and shadows.
+ * Extracted from Figma file WdjEJ9NeK2FTVsJcGF6lby (most-used values across all page frames).
+ * Defaults are reset so only these tokens exist; add a token here before using a new value.
  */
 @theme {
+  --color-*: initial;
+  --font-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+
+  /* Fonts — design uses TWK Lausanne + a display face; both mapped to Inter */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --color-brand: oklch(0.55 0.2 260);
-  --color-brand-dark: oklch(0.42 0.18 260);
-  --color-ink: oklch(0.21 0.02 260);
-  --color-muted: oklch(0.55 0.02 260);
-  --color-surface: oklch(0.98 0.005 260);
+  /* Colours */
+  --color-white: #ffffff;
+  --color-black: #000000;      /* landing headings; use /60 (body) and /40 (meta) */
+  --color-ink: #111111;        /* primary text, dark buttons, logo tile */
+  --color-ink-soft: #30302f;   /* quote text */
+  --color-night: #1c1c1a;      /* dark surfaces, footer */
+  --color-muted: #5f5f5b;      /* secondary text */
+  --color-subtle: #777772;     /* tertiary text */
+  --color-paper: #fdfdfb;      /* off-white page background, light buttons */
+  --color-surface: #f7f7f7;    /* cards, panels */
+  --color-line: #ececec;       /* borders; light text on dark */
+  --color-accent: #7b41d9;     /* purple eyebrow labels */
+  --color-success: #31c431;    /* comparison ticks */
+  --color-glow-pink: #ffc4fe;  /* blurred background blobs */
+  --color-glow-blue: #5fd8ff;
 
-  --container-site: 80rem;
+  /* Type scale: size / line-height / tracking */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.4;
+  --text-xs--letter-spacing: -0.02em;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.2;
+  --text-sm--letter-spacing: -0.04em;
+  --text-base: 1rem;
+  --text-base--line-height: 1.4;
+  --text-base--letter-spacing: -0.02em;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.4;
+  --text-lg--letter-spacing: -0.02em;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.4;
+  --text-xl--letter-spacing: -0.02em;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.4;
+  --text-2xl--letter-spacing: -0.02em;
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 1.1;
+  --text-3xl--letter-spacing: -0.02em;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 1.2;
+  --text-4xl--letter-spacing: -0.04em;
+  --text-5xl: 3.125rem;
+  --text-5xl--line-height: 1;
+  --text-5xl--letter-spacing: 0em;
+  --text-6xl: 3.5rem;
+  --text-6xl--line-height: 1.2;
+  --text-6xl--letter-spacing: -0.04em;
+  --text-7xl: 6.75rem;
+  --text-7xl--line-height: 1;
+  --text-7xl--letter-spacing: 0em;
+  --text-wordmark: 18.25rem;
+  --text-wordmark--line-height: 1;
+  --text-wordmark--letter-spacing: -0.05em;
+
+  /* Spacing — design is on a 4px grid */
+  --spacing: 0.25rem;
+  --spacing-gutter: 4rem;      /* 64px page side padding at desktop */
+  --spacing-section: 8rem;     /* 128px vertical section padding */
+
+  /* Content widths */
+  --container-site: 92rem;     /* 1472 */
+  --container-content: 75rem;  /* 1200 */
+  --container-narrow: 62.5rem; /* 1000 */
+  --container-prose: 43.75rem; /* 700 — blog post */
+
+  /* Radii — rounded-full for pills */
+  --radius-sm: 0.25rem;        /* 4  buttons, nav items */
+  --radius-md: 0.5rem;         /* 8  cards */
+  --radius-lg: 0.75rem;        /* 12 logo tile, larger cards */
+  --radius-xl: 1.25rem;        /* 20 */
+
+  /* Shadows */
+  --shadow-card:
+    0 0.8px 2.4px -0.6px rgb(0 0 0 / 0.05),
+    0 2.4px 7.2px -1.25px rgb(0 0 0 / 0.05),
+    0 6.4px 19.1px -1.9px rgb(0 0 0 / 0.05),
+    0 20px 60px -2.5px rgb(0 0 0 / 0.05);
+  --shadow-soft: 0 1px 14px 2px rgb(0 0 0 / 0.1);
 }
 
 @layer base {
   html {
-    @apply font-sans text-ink antialiased;
+    @apply bg-paper font-sans text-ink antialiased;
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-brand;
+    @apply outline-2 outline-offset-2 outline-accent;
   }
 }

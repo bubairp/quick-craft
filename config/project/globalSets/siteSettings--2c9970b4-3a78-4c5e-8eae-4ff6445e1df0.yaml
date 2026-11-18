@@ -1,0 +1,99 @@
+fieldLayouts:
+  d8cf3398-fe4f-487d-a143-55c62efc80fd:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 14091199-6132-4c42-922f-b1b61358f694 # Image
+            handle: null
+            instructions: null
+            label: Logo
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: c443abd9-7f8c-4bb7-a68f-b15320dede0a
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Primary button
+            handle: null
+            instructions: null
+            label: 'Header primary button'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 1b39b1e9-6271-426e-8228-964070fd9c12
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5eb1e556-9b7b-4d71-a114-baee0a3f751d # Secondary button
+            handle: null
+            instructions: null
+            label: 'Header secondary button'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 5af5dc9a-3d89-4d28-b6c1-e7c95926b1d4
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 94877b10-33d0-4265-940d-2e085b80ebd7 # App Store link
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 9b12920b-f9c9-49b1-8183-489d798b55e7
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 31de628c-a882-4903-9026-b953ce3f2a37 # Google Play link
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 25b9a0ad-0445-41c1-b93e-4f84133aa196
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: eefe0291-b26a-40cf-aae5-440d38c9549c
+        userCondition: null
+    thumbFieldKey: null
+handle: siteSettings
+name: 'Site settings'
+sortOrder: 1

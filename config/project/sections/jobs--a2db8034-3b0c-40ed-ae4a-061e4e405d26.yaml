@@ -1,0 +1,21 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: a37f9f39-a0f3-4153-bdb9-dfee1421a593 # Job
+handle: jobs
+maxAuthors: 1
+minAuthors: 1
+name: Jobs
+previewTargets:
+  -
+    label: 'Primary entry page'
+    urlFormat: '{url}'
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+type: channel

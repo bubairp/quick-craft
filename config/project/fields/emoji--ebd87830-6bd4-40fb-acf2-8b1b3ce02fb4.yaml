@@ -1,0 +1,18 @@
+columnSuffix: null
+handle: emoji
+instructions: 'A single emoji, e.g. 🛠️'
+name: 'Emoji icon'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: 8
+  code: false
+  initialRows: 4
+  multiline: false
+  placeholder: null
+  uiMode: normal
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText
+warning: null

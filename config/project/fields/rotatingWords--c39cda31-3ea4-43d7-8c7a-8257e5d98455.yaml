@@ -1,0 +1,30 @@
+columnSuffix: null
+handle: rotatingWords
+instructions: 'Optional words that cycle at the end of the heading.'
+name: 'Rotating words'
+searchable: false
+settings:
+  addRowLabel: 'Add a word'
+  columns:
+    __assoc__:
+      -
+        - col1
+        -
+          __assoc__:
+            -
+              - heading
+              - Word
+            -
+              - handle
+              - word
+            -
+              - type
+              - singleline
+  maxRows: null
+  minRows: null
+  staticRows: false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Table
+warning: null

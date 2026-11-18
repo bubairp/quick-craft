@@ -1,0 +1,15 @@
+columnSuffix: null
+handle: showAppBadges
+instructions: null
+name: 'Show app store badges'
+searchable: false
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+  showLabelsInCards: false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch
+warning: null

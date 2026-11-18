@@ -20,7 +20,7 @@
     {# Vite: dev server (HMR) in dev, hashed build from web/dist otherwise #}
     {{ craft.vite.script('src/main.js', false) }}
 </head>
-<body class="min-h-dvh flex flex-col bg-white {% block bodyClass %}{% endblock %}">
+<body class="min-h-dvh flex flex-col bg-paper {% block bodyClass %}{% endblock %}">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2">
         {{ 'Skip to content'|t }}
     </a>

@@ -1,0 +1,79 @@
+columnSuffix: null
+handle: comparisonUs
+instructions: null
+name: 'Comparison: us'
+searchable: false
+settings:
+  addRowLabel: 'Add row'
+  columns:
+    __assoc__:
+      -
+        - col1
+        -
+          __assoc__:
+            -
+              - heading
+              - Label
+            -
+              - handle
+              - label
+            -
+              - type
+              - singleline
+      -
+        - col2
+        -
+          __assoc__:
+            -
+              - heading
+              - Status
+            -
+              - handle
+              - status
+            -
+              - type
+              - select
+            -
+              - options
+              -
+                -
+                  __assoc__:
+                    -
+                      - label
+                      - 'Yes'
+                    -
+                      - value
+                      - 'yes'
+                    -
+                      - default
+                      - true
+                -
+                  __assoc__:
+                    -
+                      - label
+                      - 'No'
+                    -
+                      - value
+                      - 'no'
+                    -
+                      - default
+                      - false
+                -
+                  __assoc__:
+                    -
+                      - label
+                      - Warning
+                    -
+                      - value
+                      - warning
+                    -
+                      - default
+                      - false
+  maxRows: null
+  minRows: null
+  staticRows: false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Table
+warning: null

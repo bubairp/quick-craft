@@ -1,0 +1,46 @@
+columnSuffix: null
+handle: testimonialLayout
+instructions: null
+name: 'Testimonial layout'
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - Carousel
+        -
+          - value
+          - carousel
+        -
+          - default
+          - true
+    -
+      __assoc__:
+        -
+          - label
+          - Quotes
+        -
+          - value
+          - quotes
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Review cards'
+        -
+          - value
+          - reviews
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

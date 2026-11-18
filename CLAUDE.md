@@ -53,6 +53,32 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   ```
 - **Content model changes (fields, entry types, sections) go in content migrations** (`ddev craft migrate/create`), committed to Git together with the resulting `config/project/*.yaml`. Don't rely on clicking through the CP alone.
 
+### Current content model (migration `m261118_120000_content_model`)
+| Section | Type | URI → template | Entry type: fields |
+|---|---|---|---|
+| Home | Single | `__home__` → `_entries/page` | `home`: pageBuilder, seo |
+| Landing pages | Structure (1 level) | `{slug}` → `_entries/page` | `landingPage`: pageBuilder, seo |
+| Blog | Channel | `blog/{slug}` → `blog/_entry` | `blogPost`: image, text (summary), blogCategories, featured, body, seo; author = Craft user |
+| Careers | Single | `careers` → `_entries/page` | `careers`: pageBuilder, seo |
+| Jobs | Channel | no URLs | `job`: department, location, employmentType, workplace, externalLink |
+| Press | Single | `press` → `_entries/page` | `press`: pageBuilder, seo |
+| Press mentions | Channel | no URLs | `pressMention`: publication, externalLink (title = headline, postDate = date) |
+
+- **Blog listing** is `templates/blog/index.twig`. It isn't a section.
+- **Globals:**
+  - `siteSettings`: image (logo), primaryButton and secondaryButton (header CTAs), appStoreLink, googlePlayLink
+  - `newsletter`: image (blog title image), heading, text, newsletterForm (Wheel Form)
+- **Categories:** `blogCategories`, `departments`
+- **Volume:** `images` (`web/uploads/images`, gitignored). Alt text uses the native alt field.
+- **pageBuilder blocks** (each one is `_blocks/{handle}.twig`, receives `block` and `headingLevel`):
+  - hero, cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList
+- **Nested Matrix fields:**
+  - `cards`: `card` (image, emoji, heading, text, primaryButton)
+  - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`
+  - `faqItems`: `faqItem` (title = question, body)
+- **Option fields:** `theme` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`).
+- Field handles must avoid `craft\base\Field::RESERVED_HANDLES`. For example, `icon` is reserved, which is why the field is called `emoji`.
+
 ### Content & data
 - **No hard-coded copy.** All text and images come from Craft fields (or `siteName`/globals). UI microcopy (e.g. "Skip to content", "Read more") must use `|t` for translation.
 - **Always handle empty fields**: wrap optional output in `{% if %}`, skip wrapper elements when content is empty, never emit empty `<img>`, `<a href="">`, or empty headings.
@@ -104,4 +130,6 @@ Read `vendor/remoteprogrammer/simple-rp-menu/src/` (the variable, plus `services
 6. Commit the section by itself.
 
 ## Git
-Commit `composer.lock`, `package-lock.json`, `config/project/` and `migrations/`. These stay ignored: `.env`, `vendor/`, `node_modules/`, `storage/`, `web/cpresources/`, `web/dist/` (build on deploy).
+Commit `composer.lock`, `package-lock.json`, `config/project/` and `migrations/`. These stay ignored: `.env`, `vendor/`, `node_modules/`, `storage/`, `web/cpresources/`, `web/dist/` (build on deploy) and `web/uploads/` (user uploads).
+
+Before running a content migration, back up the database with `ddev export-db --file=/tmp/<name>.sql.gz`. If a migration fails, restore with `ddev import-db --file=…`, fix it, then run `ddev craft up` again.

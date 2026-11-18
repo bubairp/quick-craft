@@ -1,0 +1,10 @@
+columnSuffix: null
+handle: newsletterForm
+instructions: null
+name: 'Newsletter form'
+searchable: false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: wheelform\fields\FormField
+warning: null

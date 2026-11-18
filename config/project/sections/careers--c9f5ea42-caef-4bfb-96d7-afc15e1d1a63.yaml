@@ -1,0 +1,21 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: bbf1a91a-829d-4d7c-b672-be5ef363ac43 # Careers
+handle: careers
+maxAuthors: 1
+minAuthors: 1
+name: Careers
+previewTargets:
+  -
+    label: 'Primary entry page'
+    urlFormat: '{url}'
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: true
+    template: _entries/page
+    uriFormat: careers
+type: single

@@ -1,0 +1,77 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  7110ca62-cee9-453b-bdc7-d13135f623e2:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 3aa695a8-a712-4a94-b060-639e1a06c544
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 207ff927-651f-4ced-9686-eb2af5546e6d
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 14091199-6132-4c42-922f-b1b61358f694 # Image
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 47397bca-b9ef-42f8-97a5-c1367f37f6e3
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 580321a7-38da-4192-a652-1bbee1ba9898
+        userCondition: null
+    thumbFieldKey: null
+handle: stat
+hasTitleField: false
+icon: null
+name: Stat
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{heading}'

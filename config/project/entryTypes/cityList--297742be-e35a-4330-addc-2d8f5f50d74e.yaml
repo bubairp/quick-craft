@@ -1,0 +1,77 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  0f52957a-3573-4a88-80ec-730bc74513bb:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 4feb2696-006b-4911-a6de-010e3cc62004
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: c54d0d0e-3cf8-4dac-876f-557951f050d4
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: ed4e759a-5624-44da-8530-6257893100bd # Cards
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: fbde356a-f02f-43e6-80e9-0d3c1a42855a
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: b43622c7-eafe-4dba-84cc-b46a946c37fa
+        userCondition: null
+    thumbFieldKey: null
+handle: cityList
+hasTitleField: false
+icon: null
+name: 'City list'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{heading}'

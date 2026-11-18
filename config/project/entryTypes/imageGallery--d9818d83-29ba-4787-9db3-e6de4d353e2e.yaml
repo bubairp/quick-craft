@@ -1,0 +1,128 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  0efa66db-4f5d-49ef-9e9d-d01e7c571109:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 76de1f40-ea54-4a05-a0bc-66b4accf2173 # Gallery layout
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 1f459508-aac1-4d3a-af2d-7ae4987fa465
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Eyebrow
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: d8b88aff-6693-4c49-aa0c-0082e87c46be
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 03fb9264-17b0-447b-bef4-03ebfe58fc96
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 40367583-d5c9-4bbc-bd7f-8633adcdf230
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 7deac560-7fee-4591-b9b3-f8e899dc2df8 # Images
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 351a68c4-96c7-439a-b029-c44bf3fa18c1
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Primary button
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 17821789-2ed7-4227-b2c9-93e04b79b379
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 81d00f9f-14e3-4e9e-8e2c-cf03123e8952
+        userCondition: null
+    thumbFieldKey: null
+handle: imageGallery
+hasTitleField: false
+icon: null
+name: 'Image gallery'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{heading}'

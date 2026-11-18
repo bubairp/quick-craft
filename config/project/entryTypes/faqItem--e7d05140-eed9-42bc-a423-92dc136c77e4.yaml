@@ -1,0 +1,71 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  006a6cf5-af32-4887-8419-758c8e02a132:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: null
+            disabled: false
+            elementCondition: null
+            id: null
+            inputType: null
+            instructions: null
+            label: Question
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            required: true
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 70d45652-424c-4293-9bb6-43261dc68990
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 2e99dba1-8244-4b6e-9805-b8df8dfaaee2 # Body
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ad4f493a-8152-45ea-92e4-d310b9da4087
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 999d9bc8-5826-4749-8dee-7ad4ef94a213
+        userCondition: null
+    thumbFieldKey: null
+handle: faqItem
+hasTitleField: true
+icon: null
+name: 'FAQ item'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

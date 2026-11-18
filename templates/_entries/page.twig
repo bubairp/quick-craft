@@ -1,0 +1,23 @@
+{#
+ # Generic page template — Home, Landing pages, Careers, Press.
+ # Each pageBuilder block renders from _blocks/{entryTypeHandle}.twig.
+ # The first block (normally a hero) is told to render its heading as <h1>.
+ #}
+{% extends '_layouts/base.twig' %}
+
+{% block content %}
+    {% set blocks = entry.pageBuilder.eagerly().all() %}
+
+    {% if blocks|length %}
+        {% for block in blocks %}
+            {% include '_blocks/' ~ block.type.handle ~ '.twig' ignore missing with {
+                block: block,
+                headingLevel: loop.first ? 1 : 2,
+            } only %}
+        {% endfor %}
+    {% else %}
+        <div class="mx-auto max-w-site px-4 py-section md:px-gutter">
+            <h1 class="text-4xl font-bold">{{ entry.title }}</h1>
+        </div>
+    {% endif %}
+{% endblock %}

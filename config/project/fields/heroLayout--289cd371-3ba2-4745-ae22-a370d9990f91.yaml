@@ -1,0 +1,57 @@
+columnSuffix: null
+handle: heroLayout
+instructions: null
+name: 'Hero layout'
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Split (text + media)'
+        -
+          - value
+          - split
+        -
+          - default
+          - true
+    -
+      __assoc__:
+        -
+          - label
+          - Centered
+        -
+          - value
+          - centered
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Full-bleed image'
+        -
+          - value
+          - fullBleed
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Simple heading'
+        -
+          - value
+          - simple
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

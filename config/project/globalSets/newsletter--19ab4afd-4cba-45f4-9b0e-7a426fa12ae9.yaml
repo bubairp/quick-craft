@@ -1,0 +1,82 @@
+fieldLayouts:
+  805cddd9-5d09-4192-b342-6be1ca2f46e3:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 14091199-6132-4c42-922f-b1b61358f694 # Image
+            handle: null
+            instructions: null
+            label: 'Blog title image'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 86841f15-c6c5-4b7e-aed1-9f4bc6a51aa2
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ed0daa7f-2808-4561-a59e-9f317dc7d3d0
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: f2aa5902-b157-40ce-a6ed-adbad61e63e7
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5760d1f6-e54e-4545-831d-3b138cb0b946 # Newsletter form
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 1206aa4d-0ba2-41f7-8c4c-0cf58af12f33
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 49bdc25b-ab02-4dea-b87f-00a01adc0d83
+        userCondition: null
+    thumbFieldKey: null
+handle: newsletter
+name: Newsletter
+sortOrder: 2

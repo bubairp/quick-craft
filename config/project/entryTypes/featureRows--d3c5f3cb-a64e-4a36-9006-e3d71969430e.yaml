@@ -1,0 +1,94 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  a8ae3df7-5409-497f-bf37-06e903f3d080:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 7f8b1407-c8ef-4bdb-be9b-9f17cf1ee52f # Feature layout
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 9d994b72-a8b5-4a7c-a793-8c95bff2ed58
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 1afd5b95-7bb4-4303-a773-66fabce3b25b # Theme
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 9d4bd823-a310-4f22-87f4-c4b3a33a8f94
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e5b8b8d3-33cf-4133-bf87-fb80a4e99322
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: ed4e759a-5624-44da-8530-6257893100bd # Cards
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8d3a7fe2-b555-4231-b876-2a01f66e11a6
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: e28251e4-4e73-4b39-b26b-5211a9a6d327
+        userCondition: null
+    thumbFieldKey: null
+handle: featureRows
+hasTitleField: false
+icon: null
+name: 'Feature rows'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{heading}'

@@ -1,0 +1,11 @@
+{# Blog post — placeholder until the Blog post frame (18-5645) is built #}
+{% extends '_layouts/base.twig' %}
+
+{% block content %}
+    <article class="mx-auto max-w-prose px-4 py-section">
+        <h1 class="text-4xl font-bold">{{ entry.title }}</h1>
+        {% if entry.body|length %}
+            <div class="mt-8">{{ entry.body }}</div>
+        {% endif %}
+    </article>
+{% endblock %}

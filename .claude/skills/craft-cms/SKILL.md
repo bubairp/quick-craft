@@ -17,7 +17,7 @@ Read `CLAUDE.md` first. It defines the stack and the rules. This skill gives the
    - Read the Craft source in `vendor/craftcms/cms/src/` for the exact APIs and don't guess.
    - Run `ddev craft up`, then commit the migration together with `config/project/`.
 4. **Template** `templates/_blocks/{entryTypeHandle}.twig`:
-   - It receives only `block`.
+   - It receives only `block` and `headingLevel` (1 for the first block on the page, otherwise 2). Use `<h{{ headingLevel }}>` for the block's main heading.
    - Put shared pieces in `templates/_components/` and include them with `with {...} only`.
 5. **Verify.** Run `ddev npm run dev` and add test content in the control panel. Then use Playwright at **375, 768 and 1440 px**:
    - screenshot each width and compare it with the Figma frame

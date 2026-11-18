@@ -25,8 +25,9 @@ return GeneralConfig::create()
     ->loginPath(false)
     // Enable the Twig sandbox for system messages, etc.
     ->enableTwigSandbox()
-    // Set the @webroot alias so the clear-caches command knows where to find CP resources
+    // @webroot for clear-caches; @web so asset/transform URLs also resolve in console + queue
     ->aliases([
         '@webroot' => dirname(__DIR__) . '/web',
+        '@web' => rtrim((string) App::env('PRIMARY_SITE_URL'), '/'),
     ])
 ;

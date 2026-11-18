@@ -1,0 +1,18 @@
+columnSuffix: null
+handle: primaryButton
+instructions: null
+name: 'Primary button'
+searchable: false
+settings:
+  fullGraphqlData: true
+  maxLength: 255
+  showLabelField: true
+  types:
+    - entry
+    - url
+    - email
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Link
+warning: null

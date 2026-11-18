@@ -1,0 +1,50 @@
+defaultPlacement: end
+fieldLayouts:
+  e0101a17-8bba-4d07-be2f-ca616213be98:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: null
+            disabled: false
+            elementCondition: null
+            id: null
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            uid: 543bf6f1-c115-45e4-b8f8-e9b7efc53c26
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: aec6003b-7c0b-4d90-8ce9-1f46bdcf8f7e
+        userCondition: null
+    thumbFieldKey: null
+handle: departments
+name: Departments
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    hasUrls: false
+    template: null
+    uriFormat: null
+structure:
+  maxLevels: 1
+  uid: e3c92ac9-0bb1-4f70-9933-7bdb7b333327

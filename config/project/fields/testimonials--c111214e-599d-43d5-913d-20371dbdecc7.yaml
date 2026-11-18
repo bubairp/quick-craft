@@ -1,0 +1,33 @@
+columnSuffix: null
+handle: testimonials
+instructions: null
+name: Testimonials
+searchable: false
+settings:
+  createButtonLabel: 'Add item'
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 18cf8c50-519d-43d3-8d63-6bafe1e82252 # Testimonial
+    -
+      __assoc__:
+        -
+          - uid
+          - 4b43103e-a137-4e60-8356-f1cbcb85cb30 # Stat
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: cards
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix
+warning: null

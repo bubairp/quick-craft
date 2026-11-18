@@ -1,0 +1,60 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  ad446b13-a3dd-45bf-8474-b8c1d254e728:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 931417a0-c6f8-48a3-b092-553d2cd66e64
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 8539c76c-6153-4b8c-9ccc-29ed3c3d7d0a # FAQ items
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 633d2db0-2899-4df3-91c4-2a432e45b5d7
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 8191b360-10e7-497f-aa13-f2ceebcea945
+        userCondition: null
+    thumbFieldKey: null
+handle: faq
+hasTitleField: false
+icon: null
+name: FAQ
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{heading}'
