@@ -1,0 +1,71 @@
+allowLineBreaksInTitles: false
+color: cyan
+description: null
+fieldLayouts:
+  79c10a99-d2bc-4434-bdf3-c85b2aa03842:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: null
+            disabled: false
+            elementCondition: null
+            id: null
+            inputType: null
+            instructions: 'For editors only, e.g. “Get the app”.'
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            required: true
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 147921e9-e2f6-4ea1-8670-bd0c96a73298
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 387e6ecc-0194-4b56-87a9-d9f42fbe983b # Page builder
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: dfb4a591-b3c8-4bf5-a5d5-b51cf92addfc
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: be2743bf-232e-4f2d-895a-49b6a1bc225d
+        userCondition: null
+    thumbFieldKey: null
+handle: reusableContent
+hasTitleField: true
+icon: recycle
+name: 'Reusable section'
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

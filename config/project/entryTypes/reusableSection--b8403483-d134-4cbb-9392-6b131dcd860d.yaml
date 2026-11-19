@@ -1,0 +1,43 @@
+allowLineBreaksInTitles: false
+color: cyan
+description: null
+fieldLayouts:
+  ace1e973-0861-4c17-931e-bd78d9233a02:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5549b48c-8193-4e6e-97a6-c001c2285e12 # Reusable section
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 07510395-d11e-47af-ac2d-8e3a57592feb
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 72541ac4-7c25-405b-8fc7-a9ab6cca1a1d
+        userCondition: null
+    thumbFieldKey: null
+handle: reusableSection
+hasTitleField: false
+icon: clone
+name: 'Reusable section'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: 'Reusable section'

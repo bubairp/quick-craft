@@ -1,4 +1,4 @@
-dateModified: 1795093287
+dateModified: 1795093660
 elementSources:
   craft\elements\Entry:
     -
@@ -11,6 +11,10 @@ elementSources:
       type: native
     -
       key: 'section:bf4bd28d-bce9-4fed-87de-d2f77192a9bf' # Pages
+      page: Pages
+      type: native
+    -
+      key: 'section:b6718f02-34e5-4e8d-a385-b1c560b36e9c' # Reusable sections
       page: Pages
       type: native
     -
@@ -140,6 +144,7 @@ meta:
     949bbee0-db0d-4930-b297-ed2a5d2f2052: Platform # Platform
     2146e9e7-c0d5-425d-a683-54f4a965043c: 'Simple RP Menu' # Simple RP Menu
     4932a68c-f70c-480b-9e34-b4350301228d: 'Promo bar' # Promo bar
+    5549b48c-8193-4e6e-97a6-c001c2285e12: 'Reusable section' # Reusable section
     5651b63e-6cc9-4b10-b28c-5d35a917f978: Style # Style
     5760d1f6-e54e-4545-831d-3b138cb0b946: 'Newsletter form' # Newsletter form
     7155c277-1fd2-45d5-b1d3-feb2829f8696: Video # Video
@@ -163,6 +168,8 @@ meta:
     aed18a78-dac9-49e8-ac86-a6cfbf7516f5: Page # Page
     b05e12d5-6328-4e65-a451-c6d26ff75e9f: 'Color Code' # Color Code
     b7e2c4a1-6d3f-4a8e-9b5c-2f1e7d0a4c93: 'Page background' # Page background
+    b6718f02-34e5-4e8d-a385-b1c560b36e9c: 'Reusable sections' # Reusable sections
+    b8403483-d134-4cbb-9392-6b131dcd860d: 'Reusable section' # Reusable section
     bcaffb4a-ef69-4bf9-93b7-7dffd6af1f1a: Newsletter # Newsletter
     bd6bdbd4-f9b8-4fb7-a4e6-b291b99b6f51: 'Testimonial layout' # Testimonial layout
     bebe7a90-318e-4e6e-9eb3-b4c04cfc5b91: 'Rich text' # Rich text
@@ -173,9 +180,11 @@ meta:
     c39cda31-3ea4-43d7-8c7a-8257e5d98455: 'Rotating words' # Rotating words
     c724e92f-54e6-49fa-88e4-1be0f8868984: 'CTA banner' # CTA banner
     c3833a80-0361-44d0-a6e4-f5b973719a87: 'URL link' # URL link
+    c9914bd7-4fa3-40b5-9362-bb0cb6c7dc56: 'Reusable section' # Reusable section
     c111214e-599d-43d5-913d-20371dbdecc7: Testimonials # Testimonials
     cbc81cae-5356-4e94-a54e-e20f8c3cf62a: 'Plain text' # Plain text
     d3c5f3cb-a64e-4a36-9006-e3d71969430e: 'Feature rows' # Feature rows
+    d870d553-037a-4aad-adec-e3c518642b9b: 'Public Schema' # Public Schema
     d9818d83-29ba-4787-9db3-e6de4d353e2e: 'Image gallery' # Image gallery
     e4dbf038-0b21-4638-b6b0-d750cc7e4718: 'Media position' # Media position
     e7d05140-eed9-42bc-a423-92dc136c77e4: 'FAQ item' # FAQ item

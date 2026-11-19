@@ -35,6 +35,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
    - **Fields come from the base field library** (CLAUDE.md › Base field library): `plainText` (the only Plain Text field), `richText`, `richTextFull`, `image`, `images`, `imageVideo`, `video`, `colorcode`, `simpleRpMenu`, `linkWithLabel`, `urlLink`, `lightswitchOff`, `lightswitchOn`, `number`, `money`, `date`, `email`.
      - Add each one as an instance with the block's own handle and label: `new CustomField($fields->getFieldByHandle('plainText'), ['handle' => 'personDetail', 'label' => 'Person detail', 'uid' => <stable uid>])`.
      - Repeating groups come from the common Matrix fields (`buttons`, `socialLinks`, `contactDetails`, `cards`, `faqItems`…).
+     - A section that repeats on several pages is a **reusable section** (an entry in `reusableSections`, placed with the `reusableSection` block), never a copied block.
      - Create a new field only for a purpose-specific setting (a Dropdown's options, a Table's columns, a character limit), and add it to the CLAUDE.md table.
      - Templates use the instance handle (`block.personDetail`), never the base handle.
    - Give the new entry type an `icon` and a `color` from CLAUDE.md › Entry type icons and colours (CP only; Craft's icon names, e.g. `grid-2`).

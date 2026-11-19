@@ -1,0 +1,19 @@
+{#
+ # Reusable section block (Shopify-style step 4; CLAUDE.md › Reusable sections).
+ # Shows an entry from the `reusableSections` Channel: its pageBuilder blocks, rendered exactly as
+ # they would be on the page (same heading level). Edit the entry once to update every page.
+ # A reusableSection block inside a reusable entry is skipped, so they can never loop.
+ # Receives: block, headingLevel
+ # Fields: reusableEntry (Entries: reusableSections, max 1)
+ #}
+{% set source = block.reusableEntry.eagerly().one() %}
+{% if source %}
+    {% for inner in source.pageBuilder.eagerly().all() %}
+        {% if inner.type.handle != 'reusableSection' %}
+            {% include '_blocks/' ~ inner.type.handle ~ '.twig' ignore missing with {
+                block: inner,
+                headingLevel: headingLevel ?? 2,
+            } only %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

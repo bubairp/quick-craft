@@ -1,0 +1,27 @@
+columnSuffix: null
+handle: reusableEntry
+instructions: 'Choose a section from Entries › Reusable sections. Edit it there to update every page that shows it.'
+name: 'Reusable section'
+searchable: false
+settings:
+  allowSelfRelations: false
+  branchLimit: null
+  defaultPlacement: end
+  maintainHierarchy: false
+  maxRelations: 1
+  minRelations: null
+  selectionLabel: null
+  showSearchInput: true
+  showSiteMenu: false
+  showUnpermittedEntries: false
+  showUnpermittedSections: false
+  sources:
+    - 'section:b6718f02-34e5-4e8d-a385-b1c560b36e9c' # Reusable sections
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: list
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Entries
+warning: null

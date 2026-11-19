@@ -848,3 +848,18 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - The user's wording. Rule text updated first (CLAUDE.md, skill).
 - **Migration** `m261120_231000_cp_page_site_setup_case`: renames the page (from "Settings" or "Site setup") in the stored source list and the page settings (icon `sliders`).
 - **Checked:** 8 sources on 'Site Setup'; no project-config diff.
+
+### 2026-11-20: Shopify-style step 4: reusable sections
+- **Rule first:** CLAUDE.md › "Reusable sections" + content-model row + colour table (cyan = reusable) + "Add block" group "Reusable" + the CP sidebar's current layout; skill step 3 ("a section repeated on several pages is a reusable section, never a copied block").
+- **Migration** `m261120_240000_reusable_sections` (backup: `/tmp/before-reusable.sql.gz`):
+  - **Channel `reusableSections`** (no URLs), entry type `reusableContent` "Reusable section" (title + `pageBuilder`; icon recycle, cyan).
+  - **Field `reusableEntry`** (Entries: that section only, max 1) and **block `reusableSection`** (icon clone, cyan) in pageBuilder, group "Reusable". The other groups are kept: `$t->group` is read from the field's entry types.
+  - **CP sidebar:** the section goes after `pages` on the "Pages" page.
+  - **First use:** Home's "Get the app" CTA banner block was **moved** (`elements_owners.ownerId` + `entries.primaryOwnerId`, so it keeps its ID, content, images and buttons) into the new reusable entry "Get the app". A `reusableSection` block now sits in its place on Home (same sortOrder).
+- **Template** `_blocks/reusableSection.twig`: renders the entry's pageBuilder blocks with the page's heading level; skips a nested reusableSection, so there are no loops.
+- **Checked:**
+  - Home's HTML is identical (ignoring whitespace) before and after: the CTA renders exactly the same through the reusable section.
+  - The other 7 pages are byte-identical.
+  - `/blocks` lists "Reusable section".
+  - Both orders tested (restore + `craft up` with the project config first): same result, no project-config diff.
+- **For editors:** Entries › Pages › Reusable sections → edit "Get the app" once. To show it on another page: Add block › Reusable › Reusable section → choose it.

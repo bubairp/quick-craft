@@ -1,0 +1,17 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: c9914bd7-4fa3-40b5-9362-bb0cb6c7dc56 # Reusable section
+handle: reusableSections
+maxAuthors: 1
+minAuthors: 1
+name: 'Reusable sections'
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+type: channel

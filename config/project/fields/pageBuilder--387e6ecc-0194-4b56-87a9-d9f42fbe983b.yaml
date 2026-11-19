@@ -120,6 +120,14 @@ settings:
         -
           - group
           - 'Cards & lists'
+    -
+      __assoc__:
+        -
+          - uid
+          - b8403483-d134-4cbb-9392-6b131dcd860d # Reusable section
+        -
+          - group
+          - Reusable
   includeTableView: false
   maxEntries: null
   minEntries: null
