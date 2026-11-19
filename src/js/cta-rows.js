@@ -7,23 +7,19 @@
  * Each row gets a random speed (SPEED range, px/s) and direction on every page load; the speed
  * drifts gently (±SWAY over a random period) and eases in when the section comes into view;
  * slides sideways forever: the row holds its set twice, so moving it by exactly one set's
- * width brings it back to the same picture (seamless loop). Images get a small random tilt.
- * Rows only move while the section is on screen. Reduced motion: still (tilt kept).
+ * width brings it back to the same picture (seamless loop). Images keep their shape (straight
+ * squares — no tilt, on request). Rows only move while the section is on screen.
+ * Reduced motion: still.
  */
 const SPEED = [10, 26];       // px per second, random per row (calm, so it reads as smooth)
 const SWAY = 0.25;            // each row's speed drifts ± this fraction …
 const SWAY_PERIOD = [8, 14];  // … over a random period (s), so the motion feels organic
 const RAMP = 1.2;             // s: rows ease in when the section comes into view
-const TILT = 6;               // max ± degrees per image
 
 function setup(root) {
   const rows = [...root.querySelectorAll('.cta-rows__row')];
   if (!rows.length) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  root.querySelectorAll('.cta-rows__item').forEach((el) => {
-    el.style.rotate = `${(Math.random() * 2 - 1) * TILT}deg`;
-  });
 
   const state = rows.map((el) => ({
     el,

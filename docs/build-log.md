@@ -482,3 +482,4 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Rows ease in over 1.2s (smoothstep) each time the section comes into view.
   - The per-frame step cap went from 0.05s to 0.1s, so a briefly slow frame doesn't visibly stall the rows.
   - Checked: about 10–21px in the first 1.5s (ramp), then 15–32px/s; directions still random; no errors.
+- **Follow-up (user): don't change the items' shape.** The random ±6° tilt per image was removed from `cta-rows.js`, so the images stay straight squares. Checked: 168 items, 0 rotated, 107×107, all 6 rows moving, no errors.

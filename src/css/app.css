@@ -276,7 +276,7 @@
     border-radius: var(--radius-xs);
   }
 
-  /* "Get the app" collage rows (src/js/cta-rows.js moves each row and tilts each image).
+  /* "Get the app" collage rows (src/js/cta-rows.js moves each row; images stay straight).
      6 rows share the section height; images are square, as tall as their row. */
   .cta-rows__row {
     flex: 1 1 0;
