@@ -729,3 +729,9 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Same result for the other-environment path (restore + `craft up`, project config applied first).
   - `project-config/diff`: no changes.
 - **Testing tip:** for refactors that must not change output, snapshot the pages (`curl` → file, strip CSRF tokens) before and after, then `cmp`.
+
+### 2026-11-20: Two Lightswitch base fields (default off / default on)
+- **User's request.** Rule first (CLAUDE.md table, skill field list).
+- **Migration** `m261120_140000_lightswitch_on_off` (backup: `/tmp/before-lightswitch.sql.gz`): `lightswitch` → `lightswitchOff` "Lightswitch (default off)" (its instances featured / showAppBadges keep their handles), plus a new `lightswitchOn` "Lightswitch (default on)".
+- **Checked:** 8-page HTML snapshot identical; no project-config diff.
+- **Note:** the previous push (`1577afc`) failed with "/dev/tty: No such device or address" (git asked for credentials). It's pushed together with this commit.

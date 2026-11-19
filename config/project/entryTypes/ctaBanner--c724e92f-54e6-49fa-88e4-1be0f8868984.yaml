@@ -149,7 +149,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a # Lightswitch
+            fieldUid: 1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a # Lightswitch (default off)
             handle: showAppBadges
             instructions: null
             label: 'Show app store badges'

@@ -1,10 +1,10 @@
 columnSuffix: null
-handle: lightswitch
+handle: lightswitchOn
 instructions: null
-name: Lightswitch
+name: 'Lightswitch (default on)'
 searchable: false
 settings:
-  default: false
+  default: true
   offLabel: null
   onLabel: null
   showLabelsInCards: false

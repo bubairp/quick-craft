@@ -1,4 +1,4 @@
-dateModified: 1795089862
+dateModified: 1795090092
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -17,7 +17,7 @@ meta:
     0ed6a8a3-8f74-4e22-81eb-7850257a4bd2: 'Background layout' # Background layout
     0fa4c80e-670a-453c-8b6c-d430775fc6fc: 'Social links' # Social links
     1afd5b95-7bb4-4303-a773-66fabce3b25b: 'Colour scheme' # Colour scheme
-    1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a: Lightswitch # Lightswitch
+    1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a: 'Lightswitch (default off)' # Lightswitch (default off)
     2b0cb8a9-792e-430c-aab8-e6b9c3045101: 'Quick Craft' # Quick Craft
     2de22aae-55dd-43ca-84cb-499365bc077d: Newsletter # Newsletter
     2e99dba1-8244-4b6e-9805-b8df8dfaaee2: 'Rich text' # Rich text
@@ -82,6 +82,7 @@ meta:
     bd6bdbd4-f9b8-4fb7-a4e6-b291b99b6f51: 'Testimonial layout' # Testimonial layout
     bf4bd28d-bce9-4fed-87de-d2f77192a9bf: 'Landing pages' # Landing pages
     c1ab53a3-753c-4acd-bdb3-5684c9e853ac: Images # Images
+    c1cfe04a-e151-4b5e-bd6d-3e8ab6bf76d9: 'Lightswitch (default on)' # Lightswitch (default on)
     c9f5ea42-caef-4bfb-96d7-afc15e1d1a63: Careers # Careers
     c39cda31-3ea4-43d7-8c7a-8257e5d98455: 'Rotating words' # Rotating words
     c724e92f-54e6-49fa-88e4-1be0f8868984: 'CTA banner' # CTA banner

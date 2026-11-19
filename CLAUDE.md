@@ -112,7 +112,8 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   | `image` / `images` "Image" / "Images" | Assets (1 / many) | image, logo, images |
   | `linkWithLabel` "Link (with label)" | Link: entry / URL / email, label | buttonLink, primaryButton (a card's link, ctaBanner's "Heading link") |
   | `urlLink` "URL link" | Link: URL only, optional new tab | externalLink, appStoreLink, googlePlayLink |
-  | `lightswitch` "Lightswitch" | Lightswitch | featured, showAppBadges |
+  | `lightswitchOff` "Lightswitch (default off)" | Lightswitch, off by default | featured, showAppBadges |
+  | `lightswitchOn` "Lightswitch (default on)" | Lightswitch, on by default | (ready) |
   | `number` "Number" | Number | (ready) |
   | `date` "Date" | Date | (ready) |
   | `email` "Email" | Email | (ready) |
