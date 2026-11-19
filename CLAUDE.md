@@ -141,6 +141,27 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - Content is keyed by the layout element's UID, not the field.
     - So every existing instance first gets its current handle and label as an explicit override; then the field is renamed. Or, when merging, the element is pointed at the base field (`oldFieldUid` + `setField()`, Craft's own `fields/merge` steps) and the old field is deleted.
     - Layouts outside entry types (e.g. the `images` volume) are included, via `Fields::findFieldUsages()` and the project config paths that hold those layouts.
+- **Icons on the site are Tabler only** (the user's decision, 2026-11-20).
+  - An icon input is a `plainText` instance (e.g. `iconName`) holding a Tabler name from https://tabler.io/icons, rendered with `_components/icon.twig`.
+  - Craft's Icon field (Font Awesome) is **not used**.
+  - When the icon follows from data (social platform, contact type), the template picks it; editors don't type it.
+- **Entry type icons and colours in the CP** (migration `m261120_190000_entry_type_icons`). These are only for editors: Craft's own CP icon set (`vendor/craftcms/cms/src/icons/solid/*.svg`), separate from the site's Tabler icons. Colour = what kind of block it is:
+
+  | Colour | Kind | Entry types (icon) |
+  |---|---|---|
+  | fuchsia | call to action | ctaBanner (bullhorn), promoBar (rectangle-ad) |
+  | blue | text content | richText (paragraph), faq (circle-question), textMedia (columns-3), comparison (scale-balanced) |
+  | emerald | cards and lists | cardGrid (grid-2), featureRows (list), cityList (city), jobList (briefcase), pressList (newspaper) |
+  | amber | media | imageGallery (images), image (image) |
+  | violet | social proof | testimonials (quote-left) |
+  | gray | items inside a block | card (id-card), faqItem (circle-question), testimonial (comments), stat (chart-simple), button (hand-pointer), socialLink (share-nodes), contactDetail (address-card) |
+  | none | pages and settings | home (house), landingPage (file-lines), careers (briefcase), press (newspaper), blogPost (rss), job (briefcase), pressMention (link), siteSettings (gear), newsletter (envelope), blogCategory (hashtag), department (layer-group) |
+
+  **A new entry type gets an icon and a colour from this table in its migration.**
+- **Block library page `/blocks`** (`templates/blocks.twig`; login required, except in devMode so it can be checked locally; not indexed):
+  - Shows every pageBuilder block in use on the site, grouped by type: one example per layout × scheme, with the page it comes from. Also every page Banner, and the block types that have no template or no example yet.
+  - `?scheme=light|white|soft|dark` re-renders every scheme-aware block in that scheme, in memory only (`setFieldValue`, never saved).
+  - **Check it after any template or CSS change** (as Site7's `/blocks`). New block types appear automatically.
 - **Option fields:** `scheme`, `spacing` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`).
 - **Section options (Shopify-style), migration `m261119_230000_scheme_and_spacing`:**
   - **`scheme`** (Colour scheme): `light` (page background, none of its own), `white`, `soft` (surface grey), `dark`.

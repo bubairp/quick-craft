@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: emerald
 description: null
 fieldLayouts:
   5ffbb600-74c7-41f3-a447-07e34edb0869:
@@ -150,7 +150,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: cardGrid
 hasTitleField: false
-icon: null
+icon: grid-2
 name: 'Card grid'
 showSlugField: false
 showStatusField: true

@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: fuchsia
 description: null
 fieldLayouts:
   8140f503-5889-4976-a268-76abde102f33:
@@ -48,7 +48,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: promoBar
 hasTitleField: false
-icon: null
+icon: rectangle-ad
 name: 'Promo bar'
 showSlugField: false
 showStatusField: true

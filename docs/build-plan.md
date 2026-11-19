@@ -109,7 +109,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 - ☑ Colour schemes (`scheme`: light / white / soft / dark) + spacing presets (`spacing`: default / noTop / noBottom / none)
 - ☑ Page tabs (Page · Banner · Content · SEO) + fixed banner (added 2026-11-20, as in Site7 Engine)
 - ☑ Live Preview check and fixes (Swiper, Lenis, animations inside the preview) + siteSettings preview target
-- ☐ Entry type icons and colours + `/blocks` library page (every block, every variant)
+- ☑ Entry type icons and colours + `/blocks` library page (every block, every variant)
 - ☐ Reusable sections (a channel + a `reusableSection` block)
 - ☐ Page presets (a new page starts with a chosen set of blocks)
 - ☐ (Optional, later) Click a section in Live Preview to edit it

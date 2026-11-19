@@ -1,0 +1,107 @@
+{#
+ # Block library — /blocks (Shopify-style step 3; CLAUDE.md › Block library page).
+ # Every pageBuilder block in use on the site, grouped by block type: one example per layout ×
+ # colour scheme, labelled with the page it comes from. Then every page Banner, and the block types
+ # that have no template or no example yet. New block types appear automatically.
+ #
+ # ?scheme=light|white|soft|dark re-renders every block that has a colour scheme in that scheme.
+ # This only changes the value in memory (setFieldValue); nothing is saved.
+ #
+ # Logged-in users only (editors), except in devMode so it can be checked locally; never indexed.
+ #}
+{% if not craft.app.config.general.devMode %}{% requireLogin %}{% endif %}
+{% extends '_layouts/base.twig' %}
+
+{% block headExtra %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% set schemes = ['light', 'white', 'soft', 'dark'] %}
+{% set override = craft.app.request.getQueryParam('scheme') %}
+{% set override = override in schemes ? override : null %}
+{% set layoutFields = ['cardLayout', 'featureLayout', 'galleryLayout', 'testimonialLayout', 'ctaLayout', 'mediaPosition'] %}
+
+{# No .with(['images']): banner.twig calls page.images.eagerly(), which needs a query, not a collection #}
+{% set pages = craft.entries.section(['home', 'landingPages', 'careers', 'press']).all() %}
+{% set pageBuilder = craft.app.fields.getFieldByHandle('pageBuilder') %}
+{% set blocks = pageBuilder ? craft.entries.field(pageBuilder).ownerId(pages|map(p => p.id)).with(['owner']).all() : [] %}
+
+{# One example per type × layout × scheme (× page title for the label) #}
+{% set groups = {} %}
+{% for block in blocks %}
+    {% set type = block.type.handle %}
+    {% set variant = [] %}
+    {% for h in layoutFields %}
+        {% if block.fieldLayout.getFieldByHandle(h) %}{% set variant = variant|merge([block.getFieldValue(h).value ?? '']) %}{% endif %}
+    {% endfor %}
+    {% if not override and block.fieldLayout.getFieldByHandle('scheme') %}
+        {% set variant = variant|merge([block.getFieldValue('scheme').value ?? 'light']) %}
+    {% endif %}
+    {% set key = variant|join(' · ') ?: 'default' %}
+    {% set list = groups[type] ?? {} %}
+    {% if list[key] is not defined %}
+        {% set groups = groups|merge({ (type): list|merge({ (key): block }) }) %}
+    {% endif %}
+{% endfor %}
+
+{% set types = pageBuilder ? pageBuilder.getEntryTypes() : [] %}
+{% set label = 'flex flex-wrap items-center gap-x-3 gap-y-1 bg-ink px-4 py-2 text-sm text-paper md:px-gutter' %}
+
+{% block content %}
+    <div class="px-4 pt-32 pb-10 md:px-gutter md:pt-44">
+        <div class="mx-auto flex max-w-site flex-col gap-4">
+            <h1 class="text-4xl font-medium md:text-5xl">{{ 'Block library'|t }}</h1>
+            <p class="text-lg text-muted">{{ 'Every block in use on the site, one example per layout and colour scheme.'|t }}</p>
+            <nav aria-label="{{ 'Colour scheme preview'|t }}" class="flex flex-wrap items-center gap-2 text-sm">
+                <span class="text-muted">{{ 'Colour scheme:'|t }}</span>
+                {% for s in [null]|merge(schemes) %}
+                    <a href="{{ url('blocks', s ? { scheme: s } : {}) }}"
+                       class="rounded-full border px-3 py-1 {{ s == override ? 'border-ink bg-ink text-paper' : 'border-line hover:bg-surface' }}"
+                       {% if s == override %}aria-current="page"{% endif %}>{{ s ? s : 'As saved'|t }}</a>
+                {% endfor %}
+            </nav>
+            <p class="text-sm text-muted">
+                {% for type in types %}<a href="#block-{{ type.handle }}" class="mr-3 underline underline-offset-4 hover:no-underline">{{ type.name }}</a>{% endfor %}
+            </p>
+        </div>
+    </div>
+
+    {% for type in types %}
+        {% set examples = groups[type.handle] ?? {} %}
+        {% set hasTemplate = craft.app.view.doesTemplateExist('_blocks/' ~ type.handle) %}
+        <section id="block-{{ type.handle }}" aria-labelledby="block-title-{{ type.handle }}" class="border-t-8 border-surface">
+            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 px-4 py-6 md:px-gutter">
+                <h2 id="block-title-{{ type.handle }}" class="text-2xl font-medium">{{ type.name }}</h2>
+                <code class="text-sm text-muted">_blocks/{{ type.handle }}.twig</code>
+                {% if not hasTemplate %}
+                    <span class="rounded-full bg-surface px-3 py-1 text-sm text-muted">{{ 'No template yet'|t }}</span>
+                {% elseif not examples|length %}
+                    <span class="rounded-full bg-surface px-3 py-1 text-sm text-muted">{{ 'Not used on any page yet'|t }}</span>
+                {% endif %}
+            </div>
+            {% if hasTemplate %}
+                {% for variant, block in examples %}
+                    {% if override and block.fieldLayout.getFieldByHandle('scheme') %}
+                        {% do block.setFieldValue('scheme', override) %}
+                    {% endif %}
+                    <p class="{{ label }}">
+                        <strong>{{ variant }}</strong>
+                        <span>{{ 'from'|t }} <a href="{{ block.owner.url }}" class="underline underline-offset-4">{{ block.owner.title }}</a></span>
+                    </p>
+                    {% include '_blocks/' ~ type.handle ~ '.twig' with { block: block, headingLevel: 3 } only %}
+                {% endfor %}
+            {% endif %}
+        </section>
+    {% endfor %}
+
+    <section aria-labelledby="block-title-banners" class="border-t-8 border-surface">
+        <div class="px-4 py-6 md:px-gutter">
+            <h2 id="block-title-banners" class="text-2xl font-medium">{{ 'Page banners'|t }}</h2>
+        </div>
+        {% for page in pages|filter(p => p.heading or p.images|length) %}
+            {% if override %}{% do page.setFieldValue('scheme', override) %}{% endif %}
+            <p class="{{ label }}"><strong>{{ page.heroLayout.value ?? 'split' }}</strong> <span>{{ 'from'|t }} <a href="{{ page.url }}" class="underline underline-offset-4">{{ page.title }}</a></span></p>
+            {% include '_partials/banner.twig' with { page: page, headingLevel: 3 } only %}
+        {% else %}
+            <p class="px-4 pb-8 text-muted md:px-gutter">{{ 'No page has a banner yet.'|t }}</p>
+        {% endfor %}
+    </section>
+{% endblock %}

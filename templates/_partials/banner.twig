@@ -11,7 +11,8 @@
 {% set scheme = page.scheme.value ?? 'light' %}
 {% set dark = scheme == 'dark' %}
 {% set media = page.images.eagerly().all() %}
-{% set tag = 'h1' %}
+{# h1 on its page; the /blocks library passes headingLevel 3 so it keeps one h1 #}
+{% set tag = 'h' ~ (headingLevel ?? 1) %}
 {% set buttons = page.buttons.eagerly().all() %}
 {% set hasButtons = buttons|filter(b => b.buttonLink.url ?? false)|length > 0 %}
 

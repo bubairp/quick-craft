@@ -76,7 +76,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: pressMention
 hasTitleField: true
-icon: null
+icon: link
 name: 'Press mention'
 showSlugField: true
 showStatusField: true

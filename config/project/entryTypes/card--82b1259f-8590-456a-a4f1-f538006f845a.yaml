@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: gray
 description: null
 fieldLayouts:
   d7995ee1-07d7-4446-a66a-ae9e6bbe8c4a:
@@ -116,7 +116,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: card
 hasTitleField: false
-icon: null
+icon: id-card
 name: Card
 showSlugField: false
 showStatusField: true

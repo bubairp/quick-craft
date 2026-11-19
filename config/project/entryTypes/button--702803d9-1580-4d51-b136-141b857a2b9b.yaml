@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: gray
 description: null
 fieldLayouts:
   24bd1505-1de7-4ae1-afed-ba559ac4dff0:
@@ -65,7 +65,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: button
 hasTitleField: false
-icon: null
+icon: hand-pointer
 name: Button
 showSlugField: false
 showStatusField: true

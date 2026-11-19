@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: emerald
 description: null
 fieldLayouts:
   0f52957a-3573-4a88-80ec-730bc74513bb:
@@ -82,7 +82,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: cityList
 hasTitleField: false
-icon: null
+icon: city
 name: 'City list'
 showSlugField: false
 showStatusField: true

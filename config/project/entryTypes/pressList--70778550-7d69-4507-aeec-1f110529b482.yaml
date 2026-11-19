@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: emerald
 description: null
 fieldLayouts:
   4958df42-fd4d-4755-bc19-832961c98f17:
@@ -31,7 +31,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: pressList
 hasTitleField: false
-icon: null
+icon: newspaper
 name: 'Press list'
 showSlugField: false
 showStatusField: true

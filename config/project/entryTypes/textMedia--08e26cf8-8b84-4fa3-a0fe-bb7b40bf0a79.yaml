@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: blue
 description: null
 fieldLayouts:
   d3fecd6c-17cd-42e5-b2c0-fef24676b756:
@@ -82,7 +82,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: textMedia
 hasTitleField: false
-icon: null
+icon: columns-3
 name: 'Text + media'
 showSlugField: false
 showStatusField: true

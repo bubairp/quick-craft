@@ -82,7 +82,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: newsletter
 hasTitleField: false
-icon: null
+icon: envelope
 name: Newsletter
 showSlugField: true
 showStatusField: false

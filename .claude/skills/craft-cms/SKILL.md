@@ -37,6 +37,7 @@ Every page entry type (home, landingPage, careers, press, and new ones) uses fou
      - Repeating groups come from the common Matrix fields (`buttons`, `socialLinks`, `contactDetails`, `cards`, `faqItems`…).
      - Create a new field only for a purpose-specific setting (a Dropdown's options, a Table's columns, a character limit), and add it to the CLAUDE.md table.
      - Templates use the instance handle (`block.personDetail`), never the base handle.
+   - Give the new entry type an `icon` and a `color` from CLAUDE.md › Entry type icons and colours (CP only; Craft's icon names, e.g. `grid-2`).
    - Read the Craft source in `vendor/craftcms/cms/src/` for the exact APIs and don't guess.
    - Run `ddev craft up`, then commit the migration together with `config/project/`.
 4. **Template** `templates/_blocks/{entryTypeHandle}.twig`:
@@ -44,6 +45,7 @@ Every page entry type (home, landingPage, careers, press, and new ones) uses fou
    - Put shared pieces in `templates/_components/` and include them with `with {...} only`.
 5. **Verify.** Run `ddev npm run dev` and add test content in the control panel. Then use Playwright at **375, 768 and 1440 px**:
    - screenshot each width and compare it with the Figma frame
+   - open `/blocks` (logged in) and check the block in every scheme (`?scheme=dark` …) next to the others
    - tab through the page and check the focus states
    - empty one optional field at a time and confirm nothing breaks
 6. **Commit** the section by itself, e.g. `feat(blocks): add hero block`.

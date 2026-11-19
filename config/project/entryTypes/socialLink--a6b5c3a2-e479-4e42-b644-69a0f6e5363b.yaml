@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: gray
 description: null
 fieldLayouts:
   5355ce60-c64e-4bbc-9cee-5c4603ffce44:
@@ -48,7 +48,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: socialLink
 hasTitleField: false
-icon: null
+icon: share-nodes
 name: 'Social link'
 showSlugField: false
 showStatusField: true

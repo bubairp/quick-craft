@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: gray
 description: null
 fieldLayouts:
   603f12df-4de9-4cac-a268-44447c4fb668:
@@ -48,7 +48,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: contactDetail
 hasTitleField: false
-icon: null
+icon: address-card
 name: 'Contact detail'
 showSlugField: false
 showStatusField: true

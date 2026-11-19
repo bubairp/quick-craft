@@ -773,3 +773,17 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `textarea` (text and the volume's "Subtitle") and `emoji` were merged into it with Craft's fields/merge steps; their handles, labels and content are kept.
   - **Trade-off:** emoji's 8-character limit and the separate tall textarea are gone, because those settings can't be per instance.
 - **Checked:** only one PlainText field in config/project. The 8-page snapshot is identical on both paths (migration first; restore + `craft up` with the project config first). No project-config diff.
+
+### 2026-11-20: Shopify-style step 3: entry type icons and colours + `/blocks` library
+- **Icon decision (user):** the site uses Tabler only. An icon input is a `plainText` instance holding a Tabler name; Craft's Icon field (Font Awesome) isn't used.
+- **Rule first:** CLAUDE.md › Icons, Entry type icons and colours (table), Block library page; skill step 3 (icon + colour for new entry types) and step 5 (check `/blocks`).
+- **Migration** `m261120_190000_entry_type_icons` (backup: `/tmp/before-icons.sql.gz`): 32 entry types got a CP icon (Craft's icon set, `vendor/craftcms/cms/src/icons/solid`) and a colour by kind:
+  - fuchsia = CTA, blue = text, emerald = cards/lists, amber = media, violet = social proof;
+  - gray = items inside blocks; no colour = pages and settings.
+- **`templates/blocks.twig` → `/blocks`:**
+  - Every pageBuilder block in use, grouped by type, one example per layout × scheme, with a link to its page. Then all page banners, plus "No template yet" / "Not used on any page yet" badges.
+  - `?scheme=light|white|soft|dark` re-renders scheme-aware blocks via `setFieldValue` (in memory only; Twig's sandbox is off outside `{% sandbox %}`).
+  - Login required except in devMode (so it can be checked locally); `noindex` via a new `headExtra` block in base.twig.
+  - banner.twig takes an optional `headingLevel` (library = 3), so the page has one `<h1>`.
+- **Gotcha:** don't `.with(['images'])` on entries passed to banner.twig. It calls `page.images.eagerly()`, which needs a query, not a collection (500: "ElementCollection::eagerly does not exist").
+- **Checked:** `/blocks`, `?scheme=dark` and `?scheme=soft` return 200. One h1, an h2 per type, blocks at h3. 13 examples; 8 types correctly flagged "No template yet". No horizontal overflow at 1440.

@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: blue
 description: null
 fieldLayouts:
   e57ee250-46a9-41fc-bace-e8b336a0f3fe:
@@ -116,7 +116,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: comparison
 hasTitleField: false
-icon: null
+icon: scale-balanced
 name: Comparison
 showSlugField: false
 showStatusField: true

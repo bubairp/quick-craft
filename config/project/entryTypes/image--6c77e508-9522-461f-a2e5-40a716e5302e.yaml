@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: amber
 description: null
 fieldLayouts:
   481ffa98-1925-4d66-98e9-b372383e1e48:
@@ -48,7 +48,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: image
 hasTitleField: false
-icon: null
+icon: image
 name: Image
 showSlugField: false
 showStatusField: true

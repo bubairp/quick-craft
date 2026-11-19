@@ -127,7 +127,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: job
 hasTitleField: true
-icon: null
+icon: briefcase
 name: Job
 showSlugField: true
 showStatusField: true

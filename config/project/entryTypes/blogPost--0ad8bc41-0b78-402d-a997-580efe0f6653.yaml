@@ -156,7 +156,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: blogPost
 hasTitleField: true
-icon: null
+icon: rss
 name: 'Blog post'
 showSlugField: true
 showStatusField: true

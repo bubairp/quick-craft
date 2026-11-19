@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: amber
 description: null
 fieldLayouts:
   0efa66db-4f5d-49ef-9e9d-d01e7c571109:
@@ -116,7 +116,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: imageGallery
 hasTitleField: false
-icon: null
+icon: images
 name: 'Image gallery'
 showSlugField: false
 showStatusField: true

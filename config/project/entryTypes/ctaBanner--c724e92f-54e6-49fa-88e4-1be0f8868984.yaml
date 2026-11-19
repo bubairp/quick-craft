@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: fuchsia
 description: null
 fieldLayouts:
   e62738d6-d543-4f12-8f03-a74c36c7d9d5:
@@ -167,7 +167,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: ctaBanner
 hasTitleField: false
-icon: null
+icon: bullhorn
 name: 'CTA banner'
 showSlugField: false
 showStatusField: true

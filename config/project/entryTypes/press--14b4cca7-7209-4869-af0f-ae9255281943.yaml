@@ -264,7 +264,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: press
 hasTitleField: true
-icon: null
+icon: newspaper
 name: Press
 showSlugField: false
 showStatusField: true

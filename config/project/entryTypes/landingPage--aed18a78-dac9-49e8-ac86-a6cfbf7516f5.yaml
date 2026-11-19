@@ -264,7 +264,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: landingPage
 hasTitleField: true
-icon: null
+icon: file-lines
 name: 'Landing page'
 showSlugField: true
 showStatusField: true

@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: emerald
 description: null
 fieldLayouts:
   fb72b9b4-9a1e-4f7c-99eb-0ebe79711e47:
@@ -48,7 +48,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: jobList
 hasTitleField: false
-icon: null
+icon: briefcase
 name: 'Job list'
 showSlugField: false
 showStatusField: true

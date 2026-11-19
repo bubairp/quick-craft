@@ -264,7 +264,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: careers
 hasTitleField: true
-icon: null
+icon: briefcase
 name: Careers
 showSlugField: false
 showStatusField: true

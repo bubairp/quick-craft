@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: blue
 description: null
 fieldLayouts:
   bf0ef6c4-9ae5-465d-9cf6-5f5524795e34:
@@ -48,7 +48,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: richText
 hasTitleField: false
-icon: null
+icon: paragraph
 name: 'Rich text'
 showSlugField: false
 showStatusField: true

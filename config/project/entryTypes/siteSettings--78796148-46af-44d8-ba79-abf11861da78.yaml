@@ -116,7 +116,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: siteSettings
 hasTitleField: false
-icon: null
+icon: gear
 name: 'Site settings'
 showSlugField: true
 showStatusField: false

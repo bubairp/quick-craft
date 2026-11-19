@@ -42,7 +42,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: blogCategory
 hasTitleField: true
-icon: null
+icon: hashtag
 name: 'Blog category'
 showSlugField: true
 showStatusField: true

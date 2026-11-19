@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: gray
 description: null
 fieldLayouts:
   e51f6741-13f6-42bc-823c-0c11c4ec856a:
@@ -116,7 +116,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: testimonial
 hasTitleField: false
-icon: null
+icon: comments
 name: Testimonial
 showSlugField: false
 showStatusField: true

@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: violet
 description: null
 fieldLayouts:
   fdab80b2-ea75-49e8-a635-10818af56591:
@@ -116,7 +116,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: testimonials
 hasTitleField: false
-icon: null
+icon: quote-left
 name: Testimonials
 showSlugField: false
 showStatusField: true

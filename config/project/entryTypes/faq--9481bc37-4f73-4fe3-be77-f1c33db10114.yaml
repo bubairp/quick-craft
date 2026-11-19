@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: blue
 description: null
 fieldLayouts:
   ad446b13-a3dd-45bf-8474-b8c1d254e728:
@@ -48,7 +48,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: faq
 hasTitleField: false
-icon: null
+icon: circle-question
 name: FAQ
 showSlugField: false
 showStatusField: true

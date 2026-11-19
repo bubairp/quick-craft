@@ -264,7 +264,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: home
 hasTitleField: true
-icon: null
+icon: house
 name: Home
 showSlugField: false
 showStatusField: true

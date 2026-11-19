@@ -1,5 +1,5 @@
 allowLineBreaksInTitles: false
-color: null
+color: gray
 description: null
 fieldLayouts:
   7110ca62-cee9-453b-bdc7-d13135f623e2:
@@ -65,7 +65,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: stat
 hasTitleField: false
-icon: null
+icon: chart-simple
 name: Stat
 showSlugField: false
 showStatusField: true

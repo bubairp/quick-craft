@@ -42,7 +42,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: department
 hasTitleField: true
-icon: null
+icon: layer-group
 name: Department
 showSlugField: true
 showStatusField: true
