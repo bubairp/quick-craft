@@ -3,6 +3,7 @@
  #   stickyPhone: Figma Home 6-1499 — dark scroll slider (reference: partiful.com).
  #                Desktop: sticky full-screen panel; text slides up/out per step, phone screens
  #                stack (src/js/scroll-slider.js). Mobile / reduced motion / no JS: stacked rows.
+ #   stickySwiper: DEMO — the same effect driven through Swiper (src/js/scroll-swiper.js)
  #   alternating: Figma Organizers 17-640 — text beside a wide image, sides alternate
  # Receives: block, headingLevel
  # Fields: featureLayout, theme, heading, cards (card: heading, text, image, primaryButton)
@@ -85,6 +86,83 @@
                         </div>
                     </article>
                 {% endfor %}
+            </div>
+        </div>
+
+    {% elseif layout == 'stickySwiper' %}
+        {# DEMO — Swiper version of stickyPhone (src/js/scroll-swiper.js).
+           Desktop: the same sticky panel, but page scroll drives two Swipers through setProgress():
+           a vertical text Swiper (slides move up/out) and a phone Swiper (creative effect: the next
+           screen slides up over the previous one). Mobile / reduced motion: the rows become a
+           swipeable horizontal Swiper. No JS: stacked rows. #}
+        <div data-scroll-swiper="{{ rows|length }}">
+
+            <div data-scroll-swiper-track hidden class="relative">
+                <div class="sticky top-0 h-screen overflow-hidden">
+                    <div class="swiper h-full" data-scroll-swiper-text>
+                        <div class="swiper-wrapper">
+                            {% for row in rows %}
+                                <article class="swiper-slide">
+                                    <div class="mx-auto grid h-full max-w-site grid-cols-3 items-center gap-24 px-gutter">
+                                        {% if row.heading %}
+                                            <{{ tag }} class="text-balance text-5xl uppercase">{{ row.heading }}</{{ tag }}>
+                                        {% else %}
+                                            <span></span>
+                                        {% endif %}
+                                        <span aria-hidden="true"></span>
+                                        <div class="flex flex-col items-start gap-6">
+                                            {% if row.text %}<p class="max-w-xs text-lg {{ textClass }}">{{ row.text|nl2br }}</p>{% endif %}
+                                            {% include '_components/button.twig' with { link: row.primaryButton, variant: dark ? 'light' : 'dark' } only %}
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+                        {# The aspect-ratio box sizes the phone; the Swiper fills it (an aspect-ratio
+                           Swiper sizing its own slides grows without limit) #}
+                        <div class="relative aspect-phone h-4/5 max-h-175">
+                        <div class="swiper absolute! inset-0 overflow-visible!" data-scroll-swiper-media aria-hidden="true">
+                            <div class="swiper-wrapper">
+                                {% for row in rows %}
+                                    {% set image = row.image.one() %}
+                                    <div class="swiper-slide">
+                                        {% if image %}
+                                            {% include '_components/image.twig' with {
+                                                image: image, width: 342, sizes: '342px', decorative: true,
+                                                class: 'size-full object-contain',
+                                            } only %}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper py-20 md:py-32" data-scroll-swiper-mobile>
+                <div class="swiper-wrapper">
+                    {% for row in rows %}
+                        {% set image = row.image.one() %}
+                        <article class="swiper-slide flex! w-80! flex-col gap-6 md:w-96!">
+                            {% if image %}
+                                {% include '_components/image.twig' with {
+                                    image: image, width: 342, sizes: '(min-width: 768px) 384px, 320px',
+                                    class: 'h-auto w-full max-w-xs self-center',
+                                } only %}
+                            {% endif %}
+                            {% if row.heading %}
+                                <{{ tag }} class="text-balance text-3xl uppercase">{{ row.heading }}</{{ tag }}>
+                            {% endif %}
+                            {% if row.text %}<p class="text-lg {{ textClass }}">{{ row.text|nl2br }}</p>{% endif %}
+                            {% include '_components/button.twig' with { link: row.primaryButton, variant: dark ? 'light' : 'dark', class: 'self-start' } only %}
+                        </article>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 

@@ -320,3 +320,26 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - Each city shows its 8 images on hover.
   - Hovered tile: card 130×177, image 8,8,114×114, text at 132, title 14/21 `#111`, step 146px, 252px from the centre. All equal to the reference.
   - Entrance: opacity 0→1 and scale 0.87→1 in about 280ms while the old tiles fade out.
+
+### 2026-11-19: Swiper version of the scroll slider (demo, option 2 "hybrid")
+- Question: the "Text blast / Collect info / Build hype" scroll slider is custom (`src/js/scroll-slider.js`); could it be Swiper? The user chose **option 2**: keep the scroll maths, let Swiper render. Home keeps the custom one; the demo is at **/feature-slider-demo**.
+- Backup: `ddev snapshot --name=before-feature-swiper`.
+- Migration `m261119_120000_feature_swiper_demo`:
+  - Adds the `stickySwiper` option to `featureLayout` ("Sticky phone — Swiper (demo)").
+  - Creates the demo landing page with a copy of Home's stickyPhone block. The cards are copied field by field with `$field->serializeValue()`, which round-trips text, assets and links.
+  - The demo block gets a heading ("Swiper version (demo)"). Home's has none, so on a page where it's the first block its rows would become three `<h1>`s.
+- `src/js/scroll-swiper.js` (imported in main.js):
+  - **Desktop (≥1024px, no reduced motion):** the same scroll maths as scroll-slider.js (1.35 screens per slide, move during 25–75% of each step, eased).
+    - The position is handed to two Swipers with `setProgress(p, 0)`, read in swiper-core: it calls `translateTo(…, 0)` and updates the classes.
+    - One is a vertical text Swiper; the other is a phone Swiper with `EffectCreative` (`next` = translate `110%` up from below, `prev` = stays).
+    - `allowTouchMove: false`, because the scroll drives it.
+  - **Mobile / reduced motion:** the rows become a horizontal swipeable Swiper (Keyboard, A11y).
+  - **No JS:** stacked rows.
+- **Gotchas:**
+  - A `.swiper` that sizes itself with `aspect-ratio` grows without limit (width 33,554,432px), because Swiper sizes the slides from it and the two feed each other. Put the aspect ratio on a wrapper and make the swiper `absolute inset-0`.
+  - The creative effect sets `zIndex` from rounded progress, so the incoming phone sat **under** the current one for the first half of each move. After `setProgress`, set `zIndex = i + 1` (later screens on top).
+  - The phone Swiper needs `overflow-visible!`, otherwise the incoming screen is clipped to the phone box.
+- **Checked:**
+  - Desktop (real wheel in Chrome): over 105 settled frames through all 3 rows, text and phone positions are within 0.0001px of the custom version.
+  - 375px (Playwright): the scroll panel is hidden, swipeable cards show, a touch swipe moves to card 2, no overflow, one h1, no console errors.
+- **DEMO ONLY:** once a version is chosen, delete the page and the option, and delete scroll-swiper.js (or scroll-slider.js).

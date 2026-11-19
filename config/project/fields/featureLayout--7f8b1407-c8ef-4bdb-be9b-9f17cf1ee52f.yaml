@@ -28,6 +28,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Sticky phone — Swiper (demo)'
+        -
+          - value
+          - stickySwiper
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none
