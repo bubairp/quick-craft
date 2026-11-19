@@ -111,7 +111,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 - ☑ Live Preview check and fixes (Swiper, Lenis, animations inside the preview) + siteSettings preview target
 - ☑ Entry type icons and colours + `/blocks` library page (every block, every variant)
 - ☑ Reusable sections (a channel + a `reusableSection` block); Home's "Get the app" is the first one
-- ☐ Page presets (a new page starts with a chosen set of blocks)
+- ☑ Page presets (a new page starts with a chosen set of blocks): `pagePresets` + module `modules/PagePresets.php`
 - ☐ (Optional, later) Click a section in Live Preview to edit it
 
 ## 7. Finish

@@ -863,3 +863,23 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `/blocks` lists "Reusable section".
   - Both orders tested (restore + `craft up` with the project config first): same result, no project-config diff.
 - **For editors:** Entries › Pages › Reusable sections → edit "Get the app" once. To show it on another page: Add block › Reusable › Reusable section → choose it.
+
+### 2026-11-20: Shopify-style step 5: page presets
+- **Rule first:** CLAUDE.md › "Page presets" + content-model row + `modules/` in the front-end layout list + Page tab (`pagePreset`) + colour table + CP sidebar's current layout; skill step 3.
+- **Module (new):**
+  - `modules/Module.php` (registered in `config/app.php` `modules` + `bootstrap`; autoload `"modules\\": "modules/"` in composer.json, then `ddev composer dump-autoload -o`).
+  - `modules/PagePresets.php`: on `Elements::EVENT_AFTER_SAVE_ELEMENT`, for a `pages` entry saved **not as a draft/revision** with a `pagePreset` and an empty pageBuilder, each preset block is copied with `Elements::duplicateElement(['ownerId','primaryOwnerId','siteId','sortOrder'])`. Nested items are copied too (NestedElementManager duplicates them because the copy has `duplicateOf`). A static guard prevents re-entry.
+  - **Drafts are skipped on purpose:** the CP's draft autosave posts the form's pageBuilder value, which would delete server-added blocks.
+- **Migration** `m261120_250000_page_presets` (backup: `/tmp/before-presets.sql.gz`):
+  - Channel `pagePresets` (no URLs), entry type `pagePreset` (title + pageBuilder; object-group, cyan).
+  - Field `pagePreset` (Entries, max 1) on `page` › Page tab after the title.
+  - CP sidebar: after Reusable sections.
+  - Starter preset **"Landing page"**: a card grid ("Section heading", 3 placeholder cards) + the "Get the app" reusable section.
+- **Checked** (throwaway script in `storage/runtime/`, deleted):
+  1. A new page saved with the preset gets cardGrid (3 cards) + reusableSection → Get the app, and renders them.
+  2. Saving it again doesn't copy twice.
+  3. An unpublished draft gets nothing.
+  - The test pages are deleted (`/preset-test` → 404).
+  - The 8-page snapshot is byte-identical.
+  - Other-environment path (restore + `craft up` with the project config first) creates the preset; no project-config diff.
+- **For editors:** Entries › Pages › Page presets: build or change presets there. New page → Page tab → "Page preset" → choose one → **Create**: the blocks appear in Content, ready to edit. Not checked in the CP here (no login).

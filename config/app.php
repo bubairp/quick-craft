@@ -24,4 +24,9 @@ use craft\helpers\App;
 
 return [
     'id' => App::env('CRAFT_APP_ID') ?: 'CraftCMS',
+    // Quick Craft module (modules/Module.php): page presets (CLAUDE.md › Page presets)
+    'modules' => [
+        'quick-craft' => \modules\Module::class,
+    ],
+    'bootstrap' => ['quick-craft'],
 ];

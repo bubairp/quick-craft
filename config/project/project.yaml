@@ -1,4 +1,4 @@
-dateModified: 1795093660
+dateModified: 1795094095
 elementSources:
   craft\elements\Entry:
     -
@@ -15,6 +15,10 @@ elementSources:
       type: native
     -
       key: 'section:b6718f02-34e5-4e8d-a385-b1c560b36e9c' # Reusable sections
+      page: Pages
+      type: native
+    -
+      key: 'section:e66dbff2-22f8-44fe-b827-173790a3268a' # Page presets
       page: Pages
       type: native
     -
@@ -125,6 +129,7 @@ meta:
     18cf8c50-519d-43d3-8d63-6bafe1e82252: Testimonial # Testimonial
     30a1f63f-64b9-40be-b8b0-cbfc88088d9f: 'Employment type' # Employment type
     57b7bd4f-a6bd-42d5-aed6-89b354c589b9: Home # Home
+    65b5bb06-9806-4f4c-9e1e-0a8d7caf8f10: 'Page preset' # Page preset
     67efb085-6691-40da-8653-a076dfebd256: Number # Number
     76de1f40-ea54-4a05-a0bc-66b4accf2173: 'Gallery layout' # Gallery layout
     82b1259f-8590-456a-a4f1-f538006f845a: Card # Card
@@ -186,8 +191,10 @@ meta:
     d3c5f3cb-a64e-4a36-9006-e3d71969430e: 'Feature rows' # Feature rows
     d870d553-037a-4aad-adec-e3c518642b9b: 'Public Schema' # Public Schema
     d9818d83-29ba-4787-9db3-e6de4d353e2e: 'Image gallery' # Image gallery
+    da765e73-af37-4700-82d8-4ad3b68b2e1a: 'Page preset' # Page preset
     e4dbf038-0b21-4638-b6b0-d750cc7e4718: 'Media position' # Media position
     e7d05140-eed9-42bc-a423-92dc136c77e4: 'FAQ item' # FAQ item
+    e66dbff2-22f8-44fe-b827-173790a3268a: 'Page presets' # Page presets
     eb55722c-ef4f-4086-8ded-7058f8a14efe: Departments # Departments
     ed4e759a-5624-44da-8530-6257893100bd: Cards # Cards
     f031b096-7a3c-4312-b8e7-91a68217c230: 'Press mentions' # Press mentions

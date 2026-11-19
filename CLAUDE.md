@@ -41,6 +41,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - `templates/_blocks/`: one file per pageBuilder block.
 - `templates/_components/`: reusable UI pieces (button, image, card…), included with `{% include %}` and explicit `with {...} only`.
 - `templates/_partials/`: site chrome (header, footer, nav).
+- `modules/`: the Craft module (`Module.php` registers the event handlers; `PagePresets.php` copies preset blocks into new pages).
 
 ## Rules
 
@@ -60,6 +61,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 | **Pages** | **Channel** (the user's choice, as Site7's standard pages) | `{slug}` → `_entries/page` | `page`: page tabs. **Every standard page:** landing pages, Careers, Press, About… |
 | Blog | Channel | `blog/{slug}` → `blog/_entry` | `blogPost`: tabs **Post** (title, image, text = summary, blogCategories, featured) · **Content** (body) · **SEO** (seo); author = Craft user |
 | Reusable sections | Channel | no URLs (shown through the `reusableSection` block) | `reusableContent`: title, pageBuilder |
+| Page presets | Channel | no URLs (copied into new pages by `modules/PagePresets.php`) | `pagePreset`: title, pageBuilder |
 | Jobs | Channel | no URLs | `job`: department, location, employmentType, workplace, externalLink |
 | Page not found | Single | no URL → `404.twig` | `page`: page tabs |
 | Page error | Single | no URL → `500.twig` | `page`: page tabs |
@@ -79,7 +81,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - system pages: `pageNotFound`, `pageError`, `pageMaintenance`. They use the `page` entry type and are rendered by `templates/404.twig`, `500.twig` and `503.twig` via `_partials/system-page.twig`, with `|t` fallback copy if the entry is missing.
   - Careers (ID 4) and Press (ID 6) were moved into `pages` with their IDs, so menu links by entry ID still work. Menu order, not the section, controls navigation order.
 - **Page tabs (as in Site7 Engine), every page entry type** (`home`, `page`, and any new page type). Migration `m261120_100000_page_tabs`:
-  1. **Page:** title, `pageBackground` (paper / surface: the page's background colour).
+  1. **Page:** title, `pageBackground` (paper / surface: the page's background colour), and on `page` only `pagePreset` (step 5).
   2. **Banner:** the page's fixed banner (hero). Fields: `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `buttons`, `images` (the banner/featured image), `chatMessages`.
   3. **Content:** `pageBuilder`.
   4. **SEO:** `seo`.
@@ -97,6 +99,12 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`
+- **Page presets (Shopify-style step 5; migration `m261120_250000_page_presets`, module `modules/`).** A new page can start from a ready set of blocks:
+  - Presets are entries in the **`pagePresets` Channel** (no URLs; entry type `pagePreset`: title + `pageBuilder`), built like a page.
+  - The `page` entry type has a **`pagePreset`** field on its Page tab (Entries: that section, max 1).
+  - **The Craft module `modules/PagePresets.php` copies the preset's blocks into the page once**: when the page is saved (not as a draft) with a preset chosen and an empty Content tab. Each block is copied with `Elements::duplicateElement()`, nested items included. Editors then change the copy freely, and later preset changes don't touch existing pages. Use a reusable section for anything that must stay in sync.
+  - **Drafts are skipped on purpose:** the CP's draft autosave would send the page without the copied blocks and delete them.
+  - The module is registered in `config/app.php` (`modules` + `bootstrap`), autoloaded via `composer.json` `"modules\\": "modules/"`. Keep it small, with one class per feature.
   - `faqItems`: `faqItem` (title = question, body)
 - **Reusable sections (Shopify-style step 4; migration `m261120_240000_reusable_sections`).** For a section that appears the same on several pages ("Get the app", newsletter, contact CTA):
   - Build it **once** as an entry in the **`reusableSections` Channel** (no URLs; entry type `reusableContent`: title + `pageBuilder`). Then place it on any page with the **`reusableSection` block** (field `reusableEntry`: Entries, that section only, max 1).
@@ -169,7 +177,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   | emerald | cards and lists | cardGrid (grid-2), featureRows (list), cityList (city), jobList (briefcase), pressList (newspaper) |
   | amber | media | imageGallery (images), image (image) |
   | violet | social proof | testimonials (quote-left) |
-  | cyan | reusable | reusableSection block (clone); the `reusableContent` entries (recycle) |
+  | cyan | reusable | reusableSection block (clone); the `reusableContent` entries (recycle); the `pagePreset` entries (object-group) |
   | gray | items inside a block | card (id-card), faqItem (circle-question), testimonial (comments), stat (chart-simple), button (hand-pointer), socialLink (share-nodes), contactDetail (address-card) |
   | none | pages and settings | home (house), page (file-lines), blogPost (rss), job (briefcase), pressMention (link), siteSettings (gear), newsletter (envelope), googleStructureData (code), llmsText (robot), blogCategory (hashtag), department (layer-group) |
 
@@ -181,7 +189,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   4. **Never name a page after one of Craft's own CP items** (Settings, Entries, Assets, Users, Utilities, Dashboard, Plugin Store, GraphQL). A page called "Settings" appeared twice next to Craft's Settings; that's why it's "Site Setup" (icon `sliders`).
   5. **A new section or Single:** add it to the matching page in its migration, or create a new page for a new content area (Craft CP icon from `vendor/craftcms/cms/src/icons/solid`). A source with no config lands on the first page.
   - **How it's stored:** `elementSources.craft\elements\Entry` (each source has a `page`) and `elementSourcesPages` (icons) in the project config. Sections use the source key `section:<uid>`; Singles use the Expanded Singles plugin's `single:<section uid>`. To change it, re-save the whole list with `ElementSources::saveSources()` + `savePageSettings()` (see migrations `m261120_220000…` and `m261120_230000…`).
-  - **Current layout (2026-11-20):** Pages (All entries, Home, Pages, Reusable sections) · Blog (Blog, Blog categories) · Careers (Jobs, Departments) · Press (Press mentions) · Site Setup (Site settings, Newsletter, Google Structured Data, LLMs Text, Page not found / error / maintenance).
+  - **Current layout (2026-11-20):** Pages (All entries, Home, Pages, Reusable sections, Page presets) · Blog (Blog, Blog categories) · Careers (Jobs, Departments) · Press (Press mentions) · Site Setup (Site settings, Newsletter, Google Structured Data, LLMs Text, Page not found / error / maintenance).
 - **Page builder "Add block" menu groups** (Craft 5.9+, same migration). The groups match the colours above:
   - **Call to action:** ctaBanner, promoBar
   - **Text:** richText, faq, textMedia, comparison
