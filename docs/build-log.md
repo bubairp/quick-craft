@@ -557,3 +557,11 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - Checked:
   - Chrome: Invites panel heading "OCCASIONS" uppercase, box `rgb(255,255,255)` with no shadow, 9 Tabler link icons in `rgb(17,17,17)`, 60 stars and 2 carousel arrows rendered.
   - 375px: menu-2 ↔ x toggles, 5 accordion chevrons, uppercase headings, no errors.
+
+### 2026-11-19: Footer store links with icons
+- `_components/store-links.twig` (used in the footer, and by banners with showAppBadges): badge-style buttons.
+  - Tabler `brand-apple` / `brand-google-play` (size-6).
+  - Two lines: small "Download on the" / "Get it on" (text-xs, 80% opacity) and bold "App Store" / "Google Play" (text-base semibold). Each string uses `|t`.
+  - The full phrase is the link's `aria-label`; the visual text is aria-hidden.
+  - 48px tall, same border and colours as before.
+- Checked in Chrome: footer badges 160×48 and 156×48, correct icons, labels "Download on the App Store" and "Get it on Google Play".
