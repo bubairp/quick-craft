@@ -343,3 +343,23 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - Desktop (real wheel in Chrome): over 105 settled frames through all 3 rows, text and phone positions are within 0.0001px of the custom version.
   - 375px (Playwright): the scroll panel is hidden, swipeable cards show, a touch swipe moves to card 2, no overflow, one h1, no console errors.
 - **DEMO ONLY:** once a version is chosen, delete the page and the option, and delete scroll-swiper.js (or scroll-slider.js).
+
+### 2026-11-19: Decision: keep the custom scroll slider; mobile swipe added; Swiper demo removed
+- Comparison:
+  - Custom version: 59 lines of JS and 67 of template.
+  - Swiper version: 96 lines of JS and 77 of template, plus 2 workarounds.
+  - They look identical on desktop. Swiper has no "progress follows page scroll" mode, so the Swiper version needed the same scroll maths **plus** Swiper setup.
+  - **Rule:** use Swiper for swipe/drag/arrow/autoplay sliders, where it replaces our code, not for scroll-driven ones.
+- Migration `m261119_130000_remove_feature_swiper_demo` hard-deletes `/feature-slider-demo` and removes the `stickySwiper` option (only if no block still uses it).
+- Code:
+  - `src/js/scroll-swiper.js` deleted (`git rm`).
+  - `featureRows.twig` and `main.js` restored to before commit `b2ec14f`; only that commit had touched them.
+- **Mobile swipe on the custom slider:**
+  - The stickyPhone fallback (shown on mobile, with reduced motion, or without JS) is now a Swiper card row using the **plain `data-carousel` variant** in carousels.js, the same as the other carousels. No new JS.
+  - Cards are `w-80!` / `md:w-96!`: image, heading, text, button.
+  - Without JS the cards stack (`.feature-cards .swiper:not(.swiper-initialized) .swiper-wrapper`, flex column with gap 64px).
+- Checked (Playwright):
+  - 375px: cards, and a touch swipe puts card 2 at the left edge, no overflow.
+  - 768px (after resizing from desktop): the Swiper that was initialised while hidden lays out correctly (its resize observer picks it up), cards 384px.
+  - 1440px: the custom scroll slider is unchanged (track 405vh, cards hidden).
+  - `/feature-slider-demo` returns 404.

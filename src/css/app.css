@@ -305,6 +305,14 @@
     --swiper-wrapper-transition-timing-function: var(--ease-out-soft);
   }
 
+  /* featureRows stickyPhone fallback cards: a Swiper row; without JS (no swiper.css) they stack */
+  .feature-cards .swiper:not(.swiper-initialized) .swiper-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--spacing) * 16);
+  }
+
   /* Horizontal scrollers (carousels) without a visible scrollbar */
   .no-scrollbar {
     scrollbar-width: none;

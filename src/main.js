@@ -6,7 +6,6 @@ import { initReveal } from './js/reveal.js';
 import { initScrollSliders } from './js/scroll-slider.js';
 import { initGalleryWave } from './js/gallery-wave.js';
 import { initHeroChat } from './js/hero-chat.js';
-import { initScrollSwipers } from './js/scroll-swiper.js';
 
 /**
  * Header that hides while scrolling down and slides back in when scrolling up
@@ -57,4 +56,3 @@ initReveal();
 initScrollSliders();
 initGalleryWave();
 initHeroChat();
-initScrollSwipers();   // DEMO (featureRows "stickySwiper")
