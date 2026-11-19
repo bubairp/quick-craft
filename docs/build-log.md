@@ -290,3 +290,33 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
 - User request. Checked with a screenshot of Figma frame 6-4774: its background is `#ffffff`. The earlier Body (6-1255) sampling showed grey there, because that section is a separate frame in the file.
 - `_blocks/cityList.twig`: `bg-white` on the section. This is an exception to "light blocks are transparent": the design gives this block its own white background.
 - **Lesson:** sample each section's own frame, not only the page body.
+
+### 2026-11-19: City list: event tiles, hover card, animations (reference: partiful.com)
+- **Measured on the reference in real Chrome** (real hovers plus an in-page recorder):
+  - The active city (the first by default, then the last hovered) lifts its name 16px, and "Explore … ↗" fades in below. The rows don't move.
+  - **Tiles:** 8 per city, 130×130 with a 2px radius and a `rgba(0,0,0,.04)` background, 146px apart, starting about 253px from the centre (4 per side), vertically centred on the row. They don't move.
+  - **Entrance:** each tile grows from about 0.87 and fades in over about 250ms. The previous city's tiles fade out.
+  - **Tile hover:**
+    - A white card (radius 8, `0 8px 24px rgba(149,157,165,.2)`) grows from 130 to 177px tall.
+    - The image scales to 0.877 (114px with an 8px inset).
+    - Title (14/21, `#111`) and subtitle (12px, black/55) fade up 6px at top 132.
+  - The reference shows the same 8 event titles ("Gals run NYC" / "34 going", …) for every city; only the images differ.
+- **Content:**
+  - Migration `m261119_110000_city_event_tiles`:
+    - Adds the plain-text `text` field (label "Subtitle") to the **images volume** layout. Tile text = asset title + Subtitle.
+    - LA, SF, Chicago and Everywhere get the reference's 8 images each (`placeholders/city-{la,sf,chi,everywhere}-1…8`), with titles and subtitles.
+  - Migration `m261119_111000_city_nyc_tiles` replaces NYC's Figma set, which repeated Stage Break and Point Break, with the reference's 8 (`city-nyc-1…8`). It only acts while the Figma set is still there.
+  - Images were downloaded from `framerusercontent.com/images/<file>` with no query string. **Gotcha:** some `.webp` URLs return PNG data, so check with `file` and fix the extension before `index-assets`, because Craft goes by the extension.
+  - **PLACEHOLDER:** images and event names are the reference's. Replace them before launch.
+- **Template** `_blocks/cityList.twig`:
+  - The row `li.city-row` gets `.is-active` from Alpine (`active`).
+  - Tiles are `li.city-tile` (`size-32.5`) containing `.city-tile__card` (white, `shadow-tile`), `.city-tile__media` (`rounded-xs bg-black/4`) and `.city-tile__text`.
+  - Sides use `right-1/2 mr-63` and `left-1/2 ml-63`, from lg up.
+  - The label is absolutely positioned under the name, so rows keep their height. Row gap `lg:gap-18` (about 142px between names, reference 141).
+- **CSS** (app.css components): `.city-tile` opacity/scale entrance, plus the hover card, media and text transitions. Reduced motion turns transitions off. New tokens: `--radius-xs` (2px) and `--shadow-tile`.
+- **Gotcha:** Tailwind spacing utilities only exist in steps of 0.25, so `leading-3.6` (14.4px) was never generated. Use `leading-3.5`.
+- **Testing gotcha:** `window.scrollTo`/`scrollBy` gets undone by Lenis on the next input, so the page jumps back under the pointer. Scroll with real wheel input (Claude in Chrome `scroll`) before hovering.
+- **Checked in Chrome:**
+  - Each city shows its 8 images on hover.
+  - Hovered tile: card 130×177, image 8,8,114×114, text at 132, title 14/21 `#111`, step 146px, 252px from the centre. All equal to the reference.
+  - Entrance: opacity 0→1 and scale 0.87→1 in about 280ms while the old tiles fade out.

@@ -1,9 +1,12 @@
 {#
- # City list block. Figma: Home 6-4774.
- # Big centered city names; the active city (first by default, or hovered/focused)
- # shows its link label and, on lg+, its event thumbnails on both sides.
+ # City list block. Figma: Home 6-4774. Behaviour measured on the reference site (partiful.com).
+ # Big centred city names. The active city (the first by default, then the last one hovered or
+ # focused) lifts 16px, shows its link label underneath and, on lg+, its event tiles on both
+ # sides (130px, 16px apart, starting 252px from the centre).
+ # Hovering a tile shows a white card with the event title and subtitle under the image.
  # Receives: block, headingLevel
- # Fields: heading, text, cards (card: heading = city, primaryButton = link, images = thumbnails)
+ # Fields: heading, text, cards (card: heading = city, primaryButton = link,
+ #         images = event tiles; tile text = asset title + asset "Subtitle" field)
  #}
 {% set cities = block.cards.eagerly().with(['images']).all() %}
 {% set level = headingLevel ?? 2 %}
@@ -15,42 +18,53 @@
         heading: block.heading, text: block.text, level: level, class: 'px-4 md:px-gutter',
     } only %}
 
-    <ul class="mt-12 flex flex-col items-center gap-6 md:mt-18 md:gap-10">
+    <ul class="mt-12 flex flex-col items-center gap-12 md:mt-18 lg:gap-18">
         {% for city in cities %}
             {% set i = loop.index0 %}
             {% set link = city.primaryButton ?? null %}
-            {% set thumbs = city.images.all() %}
+            {% set tiles = city.images.all() %}
             {% set tag = 'h' ~ (level + 1) %}
-            <li class="relative flex w-full justify-center px-4"
+            {% set nameClass = 'text-4xl transition-transform duration-500 ease-out-soft motion-reduce:transition-none md:text-6xl lg:text-display' %}
+            <li class="city-row relative flex w-full justify-center px-4"
+                :class="active === {{ i }} && 'is-active'"
                 @mouseenter="active = {{ i }}" @focusin="active = {{ i }}">
 
-                {% if thumbs|length %}
-                    {% set half = (thumbs|length / 2)|round(0, 'ceil') %}
-                    {% for side in [thumbs|slice(0, half), thumbs|slice(half)] %}
-                        <div class="pointer-events-none absolute top-1/2 hidden -translate-y-1/2 gap-4 transition-opacity lg:flex {{ loop.first ? 'right-1/2 mr-72 flex-row-reverse' : 'left-1/2 ml-72' }}"
-                             :class="active === {{ i }} ? 'opacity-100' : 'opacity-0'"
-                             {% if i != 0 %}x-cloak{% endif %} aria-hidden="true">
+                {% if tiles|length %}
+                    {% set half = (tiles|length / 2)|round(0, 'ceil') %}
+                    {% for side in [tiles|slice(0, half), tiles|slice(half)] %}
+                        <ul class="absolute top-1/2 hidden -translate-y-1/2 gap-4 lg:flex {{ loop.first ? 'right-1/2 mr-63 flex-row-reverse' : 'left-1/2 ml-63' }}" aria-hidden="true">
                             {% for image in side %}
-                                {% include '_components/image.twig' with { image: image, width: 130, ratio: 1, sizes: '130px', decorative: true, class: 'size-32 flex-none rounded-sm object-cover' } only %}
+                                <li class="city-tile relative size-32.5 flex-none">
+                                    <span class="city-tile__card absolute inset-x-0 top-0 rounded-md bg-white shadow-tile"></span>
+                                    <span class="city-tile__media relative block size-32.5 overflow-hidden rounded-xs bg-black/4">
+                                        {% include '_components/image.twig' with { image: image, width: 130, ratio: 1, sizes: '130px', decorative: true, class: 'size-full object-cover' } only %}
+                                    </span>
+                                    {% if image.title or image.text %}
+                                        <span class="city-tile__text absolute inset-x-2 top-33 flex flex-col">
+                                            {% if image.title %}<span class="truncate text-sm leading-5.25 tracking-normal text-ink">{{ image.title }}</span>{% endif %}
+                                            {% if image.text %}<span class="truncate text-xs leading-3.5 tracking-normal text-black/55">{{ image.text }}</span>{% endif %}
+                                        </span>
+                                    {% endif %}
+                                </li>
                             {% endfor %}
-                        </div>
+                        </ul>
                     {% endfor %}
                 {% endif %}
 
                 {% if link and link.url %}
-                    <a {{ attr(link.attributes|merge({ class: 'group relative flex flex-col items-center gap-2 text-center' })) }}>
-                        {# hover lift (reference site: city name moves up ~7px) #}
-                        <{{ tag }} class="text-4xl transition-transform duration-300 ease-out group-hover:-translate-y-2 group-focus-visible:-translate-y-2 motion-reduce:translate-none md:text-6xl lg:text-display">{{ city.heading }}</{{ tag }}>
+                    <a {{ attr(link.attributes|merge({ class: 'relative flex flex-col items-center text-center' })) }}>
+                        {# active: the name lifts 16px and the link label fades in below (reference site) #}
+                        <{{ tag }} class="{{ nameClass }}" :class="active === {{ i }} && '-translate-y-4'">{{ city.heading }}</{{ tag }}>
                         {% if link.label %}
-                            <span class="inline-flex items-center gap-2 text-xl text-subtle transition-opacity"
-                                  :class="active === {{ i }} ? 'opacity-100' : 'opacity-0 group-focus-visible:opacity-100'">
+                            <span class="absolute inset-x-0 top-full flex items-center justify-center gap-2 text-xl text-subtle transition duration-300 ease-out-soft motion-reduce:transition-none"
+                                  :class="active === {{ i }} ? 'opacity-100 -translate-y-3' : 'opacity-0 translate-y-0'">
                                 {{ link.label }}
                                 <svg class="size-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg>
                             </span>
                         {% endif %}
                     </a>
                 {% elseif city.heading %}
-                    <{{ tag }} class="text-4xl md:text-6xl lg:text-display">{{ city.heading }}</{{ tag }}>
+                    <{{ tag }} class="{{ nameClass }}" :class="active === {{ i }} && '-translate-y-4'">{{ city.heading }}</{{ tag }}>
                 {% endif %}
             </li>
         {% endfor %}

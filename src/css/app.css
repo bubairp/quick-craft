@@ -97,6 +97,7 @@
   --aspect-hero-chat: 548 / 565; /* hero chat media (Home 6-2238) */
 
   /* Radii — rounded-full for pills */
+  --radius-xs: 0.125rem;       /* 2  city event tile images (reference site) */
   --radius-sm: 0.25rem;        /* 4  buttons, nav items */
   --radius-md: 0.5rem;         /* 8  cards */
   --radius-lg: 0.75rem;        /* 12 logo tile, larger cards */
@@ -112,6 +113,7 @@
   --shadow-soft: 0 1px 14px 2px rgb(0 0 0 / 0.1);
   --shadow-nav: 1px 3px 16px 4px rgb(0 0 0 / 0.04);
   --shadow-lift: 0 6px 12px 0 rgb(0 0 0 / 0.16); /* button hover (reference site) */
+  --shadow-tile: 0 8px 24px 0 rgb(149 157 165 / 0.2); /* city event tile hover card (reference site) */
 
   /* Letter spacing */
   --tracking-snug: -0.01em;    /* -0.2px at 20px — press quotes (Home 6-1283) */
@@ -182,6 +184,52 @@
     left: 0;
     bottom: calc(var(--spacing) * 6);
     margin-left: 0;
+  }
+
+  /* City list event tiles (reference: partiful.com, measured):
+     - the active city's tiles grow from 87% and fade in (each tile from its own centre)
+     - hovering a tile: a white card (radius 8, tile shadow) grows from 130 to 177px tall,
+       the image shrinks to 114px (8px inset) and the title/subtitle fade up 6px */
+  .city-tile {
+    opacity: 0;
+    scale: 0.87;
+    pointer-events: none;
+    transition: opacity 250ms ease, scale 350ms var(--ease-out-soft);
+  }
+  .city-row.is-active .city-tile {
+    opacity: 1;
+    scale: 1;
+    pointer-events: auto;
+  }
+  .city-tile:hover {
+    z-index: 10;
+  }
+  .city-tile__card {
+    height: 100%;
+    opacity: 0;
+    transition: opacity 200ms ease, height 300ms var(--ease-out-soft);
+  }
+  .city-tile:hover .city-tile__card {
+    height: calc(var(--spacing) * 44.25);
+    opacity: 1;
+  }
+  .city-tile__media {
+    transition: scale 300ms var(--ease-out-soft);
+  }
+  .city-tile:hover .city-tile__media {
+    scale: 0.877;
+  }
+  .city-tile__text {
+    opacity: 0;
+    translate: 0 calc(var(--spacing) * 1.5);
+    transition: opacity 200ms ease, translate 300ms var(--ease-out-soft);
+  }
+  .city-tile:hover .city-tile__text {
+    opacity: 1;
+    translate: 0 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .city-tile, .city-tile__card, .city-tile__media, .city-tile__text { transition: none; }
   }
 
   /* Header pill → mega menu (reference site: the pill itself grows into the dropdown panel) */
