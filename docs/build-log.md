@@ -363,3 +363,36 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - 768px (after resizing from desktop): the Swiper that was initialised while hidden lays out correctly (its resize observer picks it up), cards 384px.
   - 1440px: the custom scroll slider is unchanged (track 405vh, cards hidden).
   - `/feature-slider-demo` returns 404.
+
+### 2026-11-19: "A million reasons to hang" rebuilt from reference measurements
+Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwright at 1600×731, 1440×900, 1440×600, 1600×1100, 900×800 and 375×800).
+- **Structure:** 20 `<a>` cards, absolutely positioned at the centre of a container, moved with `translate`. Inside each: a wrapper (hover) and an `<img>` with `skewY` (tan 0.264, about 14.8°) and an 8px radius. Left cards have the higher z-index.
+- **Responsive (re-flows live on resize):**
+  - Container: viewport height from 1200px up, ~596px below.
+  - Card: 0.161 × width (0.322 below 810px).
+  - Spacing: 0.403 × card.
+  - Vertical limit: H/2 − 0.632·card − 12 (matches all sizes within 0.5px).
+  - **Slope = −limit / (9.5 × spacing)**: the path reaches the limit at the outermost cards, so taller galleries are steeper (measured −0.153 … −0.532).
+  - On top of that, a wave about 0.07 × card high, one wavelength per loop, travelling left at about 1.5 steps/s.
+- **Motion:**
+  - Drift about 0.175 steps/s to the left.
+  - Page scroll pushes the row **in the scroll direction** (down → left, up → right), about 0.3px per px. The old version always went forward.
+  - **Hover pauses the drift.**
+- **Drag:** the row eases after the pointer (smoothing about 0.6s), then a short capped glide. Reference: a 600px drag moves the row about 690px, peaking at about 710px/s.
+- **Hover:**
+  - The hovered card's wrapper gets `rotate(12deg) translateY(−0.705·card)` (−180px at a 255px card).
+  - The two cards on its left (which overlap it) slide away along the path by 0.286 and 0.044 × card.
+  - Cards to its right don't move. Spring-like timing (`--ease-spring`, 600ms).
+- **Implementation:**
+  - `src/js/gallery-wave.js` rewritten: layout() runs from a ResizeObserver, place() puts cards on the path, plus a hover handler, a drag handler and a rAF loop.
+  - `.gallery-fan*` CSS rewritten (the 3D rotateY fan is gone).
+  - `imageGallery.twig` fan branch: a full-height gallery with the heading on top (pointer-events: none). Mobile now gets the same gallery instead of a plain scroll row. Without JS: a horizontal scroll row.
+- **Gotchas:**
+  - Velocity from the last two pointer events made a synthetic 600px drag throw the row 5,189px, because events can arrive 1ms apart. Measure release speed over the last 100ms and cap the glide at 2.5 steps/s. Result: 703px, peaking at 713px/s (reference about 690 / 710).
+  - Hover is detected on the card `li` (whose box doesn't move), not the lifted image, as on the reference's `<a>`. So the lifted card stays hovered.
+  - Images are preloaded (eager plus decode) when the gallery is within a screen, and the media has a `line` background while loading. (A blank area in one screenshot was only paint timing; the images had loaded.)
+- **Checked against the reference:**
+  - Card size, spacing, vertical limit and container size match at all 6 sizes. Slope −0.159/−0.400/−0.378/−0.486 against −0.153/−0.392/−0.346/−0.532.
+  - Hover: 12° / −179.9px; neighbours −73/+14 and −11/+2.2 (reference −73/+15, −11/+2.35). Drift paused.
+  - Scroll direction is correct.
+  - 375px: touch swipe works, no overflow, no console errors.

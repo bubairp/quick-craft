@@ -1,6 +1,6 @@
 {#
- # Image gallery block. Figma: Home 6-1384 (fan). Also grid (17-1088), row (17-1931),
- # marquee (17-3649).
+ # Image gallery block. Figma: Home 6-1384 (fan; motion/hover/resize measured on the reference
+ # site, see src/js/gallery-wave.js). Also grid (17-1088), row (17-1931), marquee (17-3649).
  # Receives: block, headingLevel
  # Fields: galleryLayout, eyebrow, heading, text, images, primaryButton
  # Captions use each asset's title (grid/row layouts only).
@@ -9,37 +9,53 @@
 {% set images = block.images.eagerly().all() %}
 {% set level = headingLevel ?? 2 %}
 
-{% if block.heading or images|length %}
+{% if layout == 'fan' and images|length %}
+{# Fan (reference: partiful.com, measured): the gallery is one viewport tall (596px below
+   1200px wide) with the heading on top at the top left; cards drift along a wavy diagonal,
+   react to scroll, drag and hover (src/js/gallery-wave.js, .gallery-fan in app.css). #}
+<section class="relative overflow-hidden">
+    <div class="gallery-fan" data-gallery-wave>
+        <ul class="gallery-fan__row" aria-label="{{ block.heading ?: 'Gallery'|t }}">
+            {% for image in images %}
+                <li class="gallery-fan__item">
+                    <div class="gallery-fan__lift">
+                        <div class="gallery-fan__media">
+                            {% include '_components/image.twig' with { image: image, width: 260, ratio: 1, sizes: '(min-width: 810px) 17vw, 33vw', class: 'size-full object-cover' } only %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% if block.heading or block.text %}
+        {# above the cards; clicks/drags pass through to the gallery #}
+        <div class="pointer-events-none absolute inset-x-0 top-0 z-10">
+            <div class="mx-auto max-w-site px-4 pt-12 md:px-gutter md:pt-16">
+                {% include '_components/section-heading.twig' with {
+                    eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level,
+                    align: 'left', class: 'max-w-lg',
+                } only %}
+            </div>
+        </div>
+    {% endif %}
+    {% if block.primaryButton.url ?? false %}
+        <div class="flex justify-center px-4 pb-16">
+            {% include '_components/button.twig' with { link: block.primaryButton, variant: 'dark', shape: 'rounded' } only %}
+        </div>
+    {% endif %}
+</section>
+
+{% elseif block.heading or images|length %}
 <section class="overflow-hidden py-16 md:py-section">
-    <div class="mx-auto flex max-w-site flex-col gap-10 px-4 md:px-gutter {{ layout == 'fan' ? 'items-start' : 'items-center' }}">
+    <div class="mx-auto flex max-w-site flex-col items-center gap-10 px-4 md:px-gutter">
         {% include '_components/section-heading.twig' with {
             eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level,
-            align: layout == 'fan' ? 'left' : 'center',
-            class: layout == 'fan' ? 'max-w-lg md:relative md:z-10' : '',
+            align: 'center',
         } only %}
     </div>
 
     {% if images|length %}
-        {% if layout == 'fan' %}
-            {# Mobile: swipeable row. md+: perspective fan #}
-            <ul class="mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 md:hidden" aria-label="{{ block.heading ?: 'Gallery'|t }}">
-                {% for image in images %}
-                    <li class="w-48 flex-none snap-start">
-                        {% include '_components/image.twig' with { image: image, width: 192, ratio: 1, sizes: '192px', class: 'aspect-square w-full rounded-md object-cover shadow-card' } only %}
-                    </li>
-                {% endfor %}
-            </ul>
-            <div class="gallery-fan hidden pt-24 pl-8 md:block lg:pt-40" data-gallery-wave>
-                <ul class="gallery-fan__row" aria-label="{{ block.heading ?: 'Gallery'|t }}">
-                    {% for image in images %}
-                        <li class="gallery-fan__item">
-                            {% include '_components/image.twig' with { image: image, width: 256, ratio: 1, sizes: '256px', class: 'aspect-square w-full rounded-md object-cover shadow-card' } only %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-
-        {% elseif layout == 'marquee' %}
+        {% if layout == 'marquee' %}
             <div class="mt-10 overflow-hidden">
                 <ul class="gallery-marquee__track gap-4" aria-label="{{ block.heading ?: 'Gallery'|t }}">
                     {% for pass in 1..2 %}

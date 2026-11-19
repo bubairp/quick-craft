@@ -120,6 +120,7 @@
 
   /* Motion */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.36, 0.64, 1); /* slight overshoot, like the reference's springs */
 }
 
 @layer base {
@@ -138,52 +139,70 @@
 
 /* Simple RP Menu marks the current page's link with .active (no aria-current) */
 @layer components {
-  /* imageGallery "fan" (Home 6-1384): overlapping cards climbing to the right */
+  /* imageGallery "fan" (Home 6-1384) — values measured on the reference site (partiful.com),
+     motion in src/js/gallery-wave.js. The gallery is one viewport tall from 1200px (596px
+     below); cards are centred and moved along a wavy diagonal by JS; --card is set by JS. */
   .gallery-fan {
-    perspective: 1200px;
-  }
-  .gallery-fan__row {
-    display: flex;
-    align-items: flex-end;
-    transform: rotate(-9deg);
-    transform-origin: left bottom;
+    --card: calc(var(--spacing) * 40);
+    position: relative;
+    isolation: isolate;
   }
   .gallery-fan__item {
     flex: none;
-    width: calc(var(--spacing) * 64);
-    transform: rotateY(-38deg);
-    transition: transform 200ms ease;
+    width: var(--card);
+    height: var(--card);
   }
-  .gallery-fan__item + .gallery-fan__item {
-    margin-left: calc(var(--spacing) * -38);
+  .gallery-fan__lift {
+    height: 100%;
+    translate: var(--push-x, 0) var(--push-y, 0);
+    transition: translate 600ms var(--ease-spring), rotate 600ms var(--ease-spring);
   }
-  .gallery-fan__item:hover {
-    transform: rotateY(-20deg) translateY(calc(var(--spacing) * -4));
+  .gallery-fan__media {
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: var(--color-line);     /* placeholder while an image loads */
+    transform: skewY(14.8deg);         /* the reference's card skew (tan = 0.264) */
   }
-  /* JS wave mode (src/js/gallery-wave.js): cards are placed along the diagonal by JS */
-  .gallery-fan.is-wave .gallery-fan__row {
-    position: relative;
-    height: calc(var(--spacing) * 130);
-    transform: none;
+  .gallery-fan img {
+    -webkit-user-drag: none;
+    pointer-events: none;
   }
-  /* draggable (reference site): grab cursor, no text/image selection, vertical page scroll on touch */
+  /* Without JS: a plain horizontal scroll row */
+  .gallery-fan:not(.is-wave) .gallery-fan__row {
+    display: flex;
+    gap: calc(var(--spacing) * 4);
+    overflow-x: auto;
+    padding: calc(var(--spacing) * 40) calc(var(--spacing) * 4) calc(var(--spacing) * 12);
+  }
+  /* JS mode */
   .gallery-fan.is-wave {
+    height: calc(var(--spacing) * 149);
+    overflow: hidden;
     cursor: grab;
     user-select: none;
-    touch-action: pan-y;
+    touch-action: pan-y;               /* vertical page scroll still works on touch */
+  }
+  @media (width >= 75rem) {
+    .gallery-fan.is-wave { height: 100svh; }
   }
   .gallery-fan.is-wave.is-dragging {
     cursor: grabbing;
   }
-  .gallery-fan.is-wave img {
-    -webkit-user-drag: none;
-    pointer-events: none;
-  }
   .gallery-fan.is-wave .gallery-fan__item {
     position: absolute;
-    left: 0;
-    bottom: calc(var(--spacing) * 6);
-    margin-left: 0;
+    left: 50%;
+    top: 50%;
+    margin: calc(var(--card) / -2) 0 0 calc(var(--card) / -2);
+    will-change: transform;
+  }
+  /* hover: the card turns 12° and lifts 0.705 × card (its left neighbours are pushed by JS) */
+  .gallery-fan.is-wave .gallery-fan__item.is-hovered .gallery-fan__lift {
+    rotate: 12deg;
+    translate: 0 calc(var(--card) * -0.705);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-fan__lift { transition: none; }
   }
 
   /* City list event tiles (reference: partiful.com, measured):
