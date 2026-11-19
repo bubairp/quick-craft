@@ -7,6 +7,24 @@ description: Use this skill for any Craft CMS work in Quick Craft: building a pa
 
 Read `CLAUDE.md` first. It defines the stack and the rules. This skill gives the steps and the checklists.
 
+**Order of work for every request:** (1) write the rule or decision into this skill and/or CLAUDE.md, (2) build or fix it, (3) go on to the next step in `docs/build-plan.md`.
+
+## Page entry types: tabs and the fixed banner
+
+Every page entry type (home, landingPage, careers, press, and new ones) uses four tabs, as in Site7 Engine:
+
+| Tab | Fields |
+|---|---|
+| **Page** | title, `pageBackground` |
+| **Banner** | `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `primaryButton`, `secondaryButton`, `images` (banner / featured image), `chatMessages` |
+| **Content** | `pageBuilder` |
+| **SEO** | `seo` |
+
+- **The banner is part of the page, not a block.** `_entries/page.twig` includes `_partials/banner.twig` with `{ page: entry }`. It renders only when the banner has a heading or images.
+- **Heading levels:** banner heading = `<h1>`; every pageBuilder block gets `headingLevel: 2`. Without a banner heading, the page prints `<h1 class="sr-only">{{ entry.title }}</h1>`.
+- **A new page entry type** copies this layout. In a migration, move the existing elements (title, pageBuilder, seo) between tabs instead of recreating them. Their layout element UIDs key the stored content, so a new `CustomField` for an existing field would lose its values.
+- **Other entry types with a URL** follow the same idea: e.g. blogPost has Post / Content / SEO.
+
 ## Building a section from a Figma frame
 
 1. **Read the frame.** Get the Figma link (file `WdjEJ9NeK2FTVsJcGF6lby`). The file has no variables or components, so read colours, type sizes, spacing and radii directly from the frame. Screenshot it for comparison later.

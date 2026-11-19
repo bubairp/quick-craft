@@ -632,3 +632,23 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Existing sections compute the same colours and padding as before. Hero dark = #000, featureRows dark = #111.
   - Switching the attributes on a live section: page background = transparent, white = #fff, soft = #f7f7f7, dark = #000 with white text; noTop, noBottom and none remove the right padding.
   - Other-environment path (restore the backup, then `craft up`): no project-config diff, values kept.
+
+### 2026-11-20: Page tabs + the banner as a fixed part of every page (as in Site7 Engine)
+- **Rule first** (the user's new working order): CLAUDE.md › Workflow "every request" (record the rule, then build, then the next step) and the skill's "Page entry types" section were written before the code. Also saved as a memory.
+- **Migration** `m261120_100000_page_tabs` (backup: `/tmp/before-page-tabs.sql.gz`):
+  - **home, landingPage, careers, press** → tabs **Page** (title, new `pageBackground`) · **Banner** (heroLayout, scheme, eyebrow, heading, rotatingWords, text, primaryButton, secondaryButton, images, chatMessages) · **Content** (pageBuilder) · **SEO** (seo).
+  - **blogPost** → **Post** · **Content** (body) · **SEO**.
+  - **Home's hero block** (the only hero) was copied into Home's Banner fields. Then the `hero` block type was removed from pageBuilder and deleted.
+  - **Home `pageBackground` = surface.** This replaces the hard-coded `section.handle == 'home'` check in page.twig.
+- **Templates:**
+  - `_blocks/hero.twig` → `_partials/banner.twig` (`git mv`): it receives `page`, and its heading is always `<h1>`.
+  - `_entries/page.twig` renders the banner when it has a heading or images. Every block gets `headingLevel: 2`. Without a banner heading, it outputs `<h1 class="sr-only">{{ entry.title }}</h1>`.
+- **Gotchas:**
+  - A migration method named `uid()` clashes with `craft\db\Migration::uid()` (PHP fatal error). It's called `stableUid()`.
+  - Existing layout elements are moved between tabs, never recreated: their UIDs key the stored content (SEO values, for example).
+  - New tabs and elements get deterministic UIDs (an md5 of a key), so every environment builds the same layout.
+  - **Other-environment order:** `craft up` applies the project config *before* content migrations, which deletes the `hero` type and trashes its block first. The migration then falls back to the trashed block's raw `elements_sites.content` (keyed by the old hero layout's element UIDs) plus its `relations` rows for the images.
+- **Checked:**
+  - Home looks the same at 1440: one `<h1>` ("Parties are back"), blocks at h2/h3, chat bubbles and both buttons.
+  - Careers, Press and Organizers return 200 with a hidden `<h1>`.
+  - Both orders tested: migration first (local), and restore backup + `craft up` (project config first, fallback path). No project-config diff.

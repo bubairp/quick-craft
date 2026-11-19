@@ -41,6 +41,205 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
+            fieldUid: b7e2c4a1-6d3f-4a8e-9b5c-2f1e7d0a4c93 # Page background
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 3ef1fc55-eb36-4b24-9f03-280e3cd63527
+            userCondition: null
+            warning: null
+            width: 100
+        name: Page
+        uid: b4a693ae-c6df-436e-962b-7907eb1f8099
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 289cd371-3ba2-4745-ae22-a370d9990f91 # Hero layout
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8240f3c9-e8e8-4b56-ab9b-16c2ed4aa0d7
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 1afd5b95-7bb4-4303-a773-66fabce3b25b # Colour scheme
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8a44b52e-16ff-4b4c-8ec6-09b5ec242f7e
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Eyebrow
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: d3e25a68-6072-41d7-a9b2-96afa8badffc
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 42fd3ee3-83c8-4b4c-80d8-ee147f8059d4
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: c39cda31-3ea4-43d7-8c7a-8257e5d98455 # Rotating words
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ff1547d2-7f06-414c-a862-e5e0431254f7
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e0bc916f-31c4-4bbb-b5e4-1fde1934d8ad
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Primary button
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 29e5f640-047d-4f78-bdb8-c9e63d015288
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5eb1e556-9b7b-4d71-a114-baee0a3f751d # Secondary button
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 1781cb34-59f0-4e85-a353-e88a99e4fbaa
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 7deac560-7fee-4591-b9b3-f8e899dc2df8 # Images
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 13007b7e-4d00-4b37-9d20-ff21ff9b1294
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 509a88e4-38a6-4ebd-adba-6af6222be685 # Chat messages
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 49c559e1-127e-4790-b361-ae95301a3ce1
+            userCondition: null
+            warning: null
+            width: 100
+        name: Banner
+        uid: f381e4ec-f7e0-4d31-b816-bea76c832432
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
             fieldUid: 387e6ecc-0194-4b56-87a9-d9f42fbe983b # Page builder
             handle: null
             instructions: null
@@ -53,6 +252,12 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+        name: Content
+        uid: bd4c5529-9b80-4b1b-ba9e-97f46eca209f
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
           -
             dateAdded: null
             editCondition: null
@@ -70,8 +275,8 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
-        name: Content
-        uid: 191180f3-bd6c-4b5b-82b3-0565cfcf7041
+        name: SEO
+        uid: 2dcebd30-20d0-4f55-95b1-e7cb3fd74e2f
         userCondition: null
     thumbFieldKey: null
 handle: press

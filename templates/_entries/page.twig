@@ -1,27 +1,27 @@
 {#
  # Generic page template — Home, Landing pages, Careers, Press.
- # Each pageBuilder block renders from _blocks/{entryTypeHandle}.twig.
- # The first block (normally a hero) is told to render its heading as <h1>.
+ # Entry tabs (as in Site7 Engine): Page · Banner · Content · SEO.
+ #   Banner  → _partials/banner.twig (fixed per page; its heading is the page's <h1>)
+ #   Content → each pageBuilder block renders from _blocks/{entryTypeHandle}.twig with headingLevel 2
+ # A page without a banner heading still gets one <h1>: the entry title, visually hidden.
  #}
 {% extends '_layouts/base.twig' %}
 
-{# Home's page background is #f7f7f7 (surface) in Figma (6-1255, every light section);
-   other page designs (e.g. Careers 6-6167) use the default light background. #}
-{% block bodyBg %}{{ entry.section.handle == 'home' ? 'bg-surface' : 'bg-paper' }}{% endblock %}
+{# Page tab: pageBackground. Light sections have no background of their own, so they show this. #}
+{% block bodyBg %}{{ (entry.pageBackground.value ?? 'paper') == 'surface' ? 'bg-surface' : 'bg-paper' }}{% endblock %}
 
 {% block content %}
-    {% set blocks = entry.pageBuilder.eagerly().all() %}
-
-    {% if blocks|length %}
-        {% for block in blocks %}
-            {% include '_blocks/' ~ block.type.handle ~ '.twig' ignore missing with {
-                block: block,
-                headingLevel: loop.first ? 1 : 2,
-            } only %}
-        {% endfor %}
-    {% else %}
-        <div class="mx-auto max-w-site px-4 py-section md:px-gutter">
-            <h1 class="text-4xl font-bold">{{ entry.title }}</h1>
-        </div>
+    {% if entry.heading or entry.images.exists() %}
+        {% include '_partials/banner.twig' with { page: entry } only %}
     {% endif %}
+    {% if not entry.heading %}
+        <h1 class="sr-only">{{ entry.title }}</h1>
+    {% endif %}
+
+    {% for block in entry.pageBuilder.eagerly().all() %}
+        {% include '_blocks/' ~ block.type.handle ~ '.twig' ignore missing with {
+            block: block,
+            headingLevel: 2,
+        } only %}
+    {% endfor %}
 {% endblock %}

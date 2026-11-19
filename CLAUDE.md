@@ -56,24 +56,33 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 ### Current content model (migration `m261118_120000_content_model`)
 | Section | Type | URI → template | Entry type: fields |
 |---|---|---|---|
-| Home | Single | `__home__` → `_entries/page` | `home`: pageBuilder, seo |
-| Landing pages | Structure (1 level) | `{slug}` → `_entries/page` | `landingPage`: pageBuilder, seo |
-| Blog | Channel | `blog/{slug}` → `blog/_entry` | `blogPost`: image, text (summary), blogCategories, featured, body, seo; author = Craft user |
-| Careers | Single | `careers` → `_entries/page` | `careers`: pageBuilder, seo |
+| Home | Single | `__home__` → `_entries/page` | `home`: page tabs (below) |
+| Landing pages | Structure (1 level) | `{slug}` → `_entries/page` | `landingPage`: page tabs |
+| Blog | Channel | `blog/{slug}` → `blog/_entry` | `blogPost`: tabs **Post** (title, image, text = summary, blogCategories, featured) · **Content** (body) · **SEO** (seo); author = Craft user |
+| Careers | Single | `careers` → `_entries/page` | `careers`: page tabs |
 | Jobs | Channel | no URLs | `job`: department, location, employmentType, workplace, externalLink |
-| Press | Single | `press` → `_entries/page` | `press`: pageBuilder, seo |
+| Press | Single | `press` → `_entries/page` | `press`: page tabs |
 | Press mentions | Channel | no URLs | `pressMention`: publication, externalLink (title = headline, postDate = date) |
 | Site settings | Single | no URLs | `siteSettings`: image (logo), primaryButton and secondaryButton (header CTAs), appStoreLink, googlePlayLink |
 | Newsletter | Single | no URLs | `newsletter`: image (blog title image), heading, text, newsletterForm (Wheel Form) |
 | Blog categories | Structure | no URLs | `blogCategory`: title. Related via the Entries field `blogCategories` |
 | Departments | Structure | no URLs | `department`: title. Related via the Entries field `department` |
 
+- **Page tabs (as in Site7 Engine), every page entry type** (home, landingPage, careers, press, and any new page type). Migration `m261120_100000_page_tabs`:
+  1. **Page:** title, `pageBackground` (paper / surface: the page's background colour).
+  2. **Banner:** the page's fixed banner (hero). Fields: `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `primaryButton`, `secondaryButton`, `images` (the banner/featured image), `chatMessages`.
+  3. **Content:** `pageBuilder`.
+  4. **SEO:** `seo`.
+- **The banner is fixed per page, not a pageBuilder block** (there is no `hero` block any more).
+  - `_entries/page.twig` renders it with `_partials/banner.twig` from the entry's own Banner fields.
+  - The banner renders when it has a heading or images.
+  - **Headings:** the banner heading is the page's `<h1>`, and pageBuilder blocks start at `<h2>`. If the banner has no heading, the page outputs a visually hidden `<h1>` with the entry title, so every page still has exactly one `<h1>`.
 - **Blog listing** is `templates/blog/index.twig`. It isn't a section.
 - **Everything is an entry (as in Site7 Engine):** no global sets and no category groups. Migration `m261119_220000_entrify_globals_categories` converted them, keeping element IDs and content. Don't add global sets or category groups; use a Single (settings) or a Structure (taxonomies) instead.
 - **Settings Singles in templates:** `templates/_layouts/base.twig` loads `siteSettings` and `newsletter` **once per request** into Craft's front-end `_globals` collection. Read them anywhere, including `only` includes, with `{% set siteSettings = _globals.get('siteSettings') %}`. Never query these sections again in a partial or block. For a new settings Single, add it to that same block in base.twig.
 - **Volume:** `images` (`web/uploads/images`, gitignored). Alt text uses the native alt field.
 - **pageBuilder blocks** (each one is `_blocks/{handle}.twig`, receives `block` and `headingLevel`):
-  - hero, cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList
+  - cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`
@@ -135,6 +144,11 @@ Read `vendor/remoteprogrammer/simple-rp-menu/src/` (the variable, plus `services
 
 ### Plugin APIs
 - For **any** plugin or Craft API, read the `vendor/` source or the official docs first. **Never guess** method names, config keys or Twig variables.
+
+### Workflow: every request
+1. **Record the rule or decision first:** update `.claude/skills/craft-cms/SKILL.md` and/or this file before touching code.
+2. **Then build or fix it.**
+3. **Then continue with the next planned step** (`docs/build-plan.md`).
 
 ### Workflow: build one section at a time
 1. Get a **Figma frame link** for the section and read its layout, tokens and content.

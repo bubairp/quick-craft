@@ -12,11 +12,6 @@ settings:
       __assoc__:
         -
           - uid
-          - 14e19394-cd62-4567-a317-174323cfb79f # Hero
-    -
-      __assoc__:
-        -
-          - uid
           - fad12a2d-f499-4eba-b487-9b0f28be78be # Card grid
     -
       __assoc__:

@@ -1,4 +1,4 @@
-dateModified: 1795085813
+dateModified: 1795086638
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -37,7 +37,6 @@ meta:
     10e02438-ab95-4f31-9963-e4ab99849a1e: 'Person detail' # Person detail
     11e3d5af-5779-4d3a-861b-372205b6fd0c: 'Job list' # Job list
     14b4cca7-7209-4869-af0f-ae9255281943: Press # Press
-    14e19394-cd62-4567-a317-174323cfb79f: Hero # Hero
     18cf8c50-519d-43d3-8d63-6bafe1e82252: Testimonial # Testimonial
     30a1f63f-64b9-40be-b8b0-cbfc88088d9f: 'Employment type' # Employment type
     31de628c-a882-4903-9026-b953ce3f2a37: 'Google Play link' # Google Play link
@@ -75,6 +74,7 @@ meta:
     a44624b9-c2b7-48d3-a9a6-6b12900597ff: Department # Department
     aa6c33f4-a111-4e09-8f71-ed0bd93a53aa: Workplace # Workplace
     aed18a78-dac9-49e8-ac86-a6cfbf7516f5: 'Landing page' # Landing page
+    b7e2c4a1-6d3f-4a8e-9b5c-2f1e7d0a4c93: 'Page background' # Page background
     bbf1a91a-829d-4d7c-b672-be5ef363ac43: Careers # Careers
     bcaffb4a-ef69-4bf9-93b7-7dffd6af1f1a: Newsletter # Newsletter
     bd6bdbd4-f9b8-4fb7-a4e6-b291b99b6f51: 'Testimonial layout' # Testimonial layout

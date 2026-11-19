@@ -104,6 +104,12 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+        name: Post
+        uid: 45017273-37ca-4d23-be29-0bb75e8498c3
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
           -
             dateAdded: null
             editCondition: null
@@ -121,6 +127,12 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+        name: Content
+        uid: 4e054b8a-d96f-4ca8-ac63-f6777bd12476
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
           -
             dateAdded: null
             editCondition: null
@@ -138,8 +150,8 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
-        name: Content
-        uid: 3c746f77-cd0e-4f98-a8c4-6e98143a0d21
+        name: SEO
+        uid: d5bb7acb-4ca3-44ca-8fe6-d2b9aca7fee1
         userCondition: null
     thumbFieldKey: null
 handle: blogPost

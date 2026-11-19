@@ -107,6 +107,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 
 ## 6b. Shopify-style page builder (agreed 2026-11-19, in this order)
 - ☑ Colour schemes (`scheme`: light / white / soft / dark) + spacing presets (`spacing`: default / noTop / noBottom / none)
+- ☑ Page tabs (Page · Banner · Content · SEO) + fixed banner (added 2026-11-20, as in Site7 Engine)
 - ☐ Live Preview check and fixes (Swiper, Lenis, animations inside the preview)
 - ☐ Entry type icons and colours + `/blocks` library page (every block, every variant)
 - ☐ Reusable sections (a channel + a `reusableSection` block)
