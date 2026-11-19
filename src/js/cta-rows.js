@@ -10,19 +10,40 @@
  * width brings it back to the same picture (seamless loop). Images keep their shape (straight
  * squares — no tilt, on request). Rows only move while the section is on screen.
  * Reduced motion: still.
+ *
+ * Spotlight option (layout "rowsSpot", data-cta-spotlight): the rows are grayscale and a
+ * full-colour copy of them (cloned here, moved in step) shows only inside a soft circle around
+ * the cursor (CSS mask, --mx/--my/--spot-r). The circle eases after the pointer, grows in on
+ * enter and shrinks away on leave; touch works while dragging a finger. Works with reduced
+ * motion too (rows still, spotlight still follows).
  */
 const SPEED = [10, 26];       // px per second, random per row (calm, so it reads as smooth)
 const SWAY = 0.25;            // each row's speed drifts ± this fraction …
 const SWAY_PERIOD = [8, 14];  // … over a random period (s), so the motion feels organic
 const RAMP = 1.2;             // s: rows ease in when the section comes into view
+const SPOT_RADIUS = 160;      // px: colour circle around the cursor (spotlight option)
+const SPOT_FOLLOW = 0.12;     // s: how softly the circle follows the pointer
 
 function setup(root) {
   const rows = [...root.querySelectorAll('.cta-rows__row')];
   if (!rows.length) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const state = rows.map((el) => ({
+  // Spotlight: colour copy on top of the grayscale rows, moved together with them
+  let colour = null;
+  if (root.hasAttribute('data-cta-spotlight')) {
+    colour = root.cloneNode(true);
+    colour.removeAttribute('data-cta-rows');
+    colour.removeAttribute('data-cta-spotlight');
+    colour.classList.add('cta-rows--colour');
+    root.after(colour);
+    setupSpotlight(root.closest('section') || root.parentElement, colour);
+  }
+  const colourRows = colour ? [...colour.querySelectorAll('.cta-rows__row')] : [];
+
+  const state = rows.map((el, i) => ({
     el,
+    twin: colourRows[i] || null,
     speed: SPEED[0] + Math.random() * (SPEED[1] - SPEED[0]),
     dir: Math.random() < 0.5 ? -1 : 1,
     period: SWAY_PERIOD[0] + Math.random() * (SWAY_PERIOD[1] - SWAY_PERIOD[0]),
@@ -41,7 +62,9 @@ function setup(root) {
       if (!s.width) return;
       // offset is a fraction of one set; x runs from −width to 0 and wraps
       const frac = ((s.offset % 1) + 1) % 1;
-      s.el.style.transform = `translate3d(${-frac * s.width}px, 0, 0)`;
+      const tf = `translate3d(${-frac * s.width}px, 0, 0)`;
+      s.el.style.transform = tf;
+      if (s.twin) s.twin.style.transform = tf;
     });
   };
 
@@ -75,6 +98,46 @@ function setup(root) {
     }).observe(root);
   }
   measure();
+}
+
+/** Colour circle that follows the pointer over the section (mask on the colour copy). */
+function setupSpotlight(area, layer) {
+  let x = 0, y = 0, tx = 0, ty = 0, r = 0, tr = 0, lastT = 0, running = false, placed = false;
+
+  const apply = () => {
+    layer.style.setProperty('--mx', `${x}px`);
+    layer.style.setProperty('--my', `${y}px`);
+    layer.style.setProperty('--spot-r', `${r}px`);
+  };
+  const tick = (t) => {
+    const dt = Math.min(0.1, (t - lastT) / 1000);
+    lastT = t;
+    const k = 1 - Math.exp(-dt / SPOT_FOLLOW);
+    x += (tx - x) * k;
+    y += (ty - y) * k;
+    r += (tr - r) * k;
+    apply();
+    if (Math.abs(tx - x) > 0.3 || Math.abs(ty - y) > 0.3 || Math.abs(tr - r) > 0.3) requestAnimationFrame(tick);
+    else running = false;
+  };
+  const start = () => {
+    if (running) return;
+    running = true;
+    lastT = performance.now();
+    requestAnimationFrame(tick);
+  };
+
+  area.addEventListener('pointermove', (e) => {
+    const b = area.getBoundingClientRect();
+    tx = e.clientX - b.left;
+    ty = e.clientY - b.top;
+    if (!placed) { x = tx; y = ty; placed = true; }      // appear where the pointer is
+    tr = SPOT_RADIUS;
+    start();
+  });
+  area.addEventListener('pointerleave', () => { tr = 0; start(); });
+  area.addEventListener('pointercancel', () => { tr = 0; start(); });
+  apply();
 }
 
 export function initCtaRows() {

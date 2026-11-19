@@ -291,6 +291,14 @@
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-card);
   }
+  /* Spotlight option: grayscale rows; the colour copy (added by JS) only shows inside a soft
+     circle around the cursor. --mx/--my/--spot-r are set by JS (0 radius = no colour). */
+  [data-cta-spotlight] {
+    filter: grayscale(1);
+  }
+  .cta-rows--colour {
+    mask-image: radial-gradient(circle var(--spot-r, 0px) at var(--mx, 50%) var(--my, 50%), black 55%, transparent 100%);
+  }
 
   /* Header pill → mega menu (reference site: the pill itself grows into the dropdown panel) */
   .site-nav-pill {

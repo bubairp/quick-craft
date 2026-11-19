@@ -501,3 +501,20 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Dark versions checked by eye: white pill with ink text, `night` subtitle box, images on black.
   - The only console error is my own test fetch of the old URL (404).
 - **DEMO PAGE ONLY:** delete it before launch. Both layouts and both themes stay available in the CP ("Background layout", "Theme").
+
+### 2026-11-19: "Get the app": third option, grayscale rows with a colour spotlight
+- User request: the collage rows in grayscale, with the original colours showing in a circle around the mouse cursor, **as a separate option**.
+- Migration `m261119_170000_cta_rows_spotlight`:
+  - Adds the `rowsSpot` option to `ctaLayout` ("Collage rows — grayscale, colour spotlight").
+  - Appends rowsSpot·light and rowsSpot·dark to `/cta-options-demo`.
+- Migration `m261119_171000_cta_options_demo_order`: appending with a computed sortOrder had interleaved the blocks, so this sets `elements_owners.sortOrder` to light → dark, and within each spiral → rows → rowsSpot.
+- `ctaBanner.twig`: `rows` and `rowsSpot` share the rows markup; rowsSpot adds `data-cta-spotlight`.
+- `cta-rows.js`:
+  - With `data-cta-spotlight`, the rows container is **cloned** into `.cta-rows--colour`, inserted right after it and under the pill. Both copies get the same transform every frame.
+  - `setupSpotlight(section, colourLayer)`: pointermove on the section sets the target x/y and radius 160; pointerleave/pointercancel sets radius 0. The circle eases (0.12s time constant) and sets `--mx`/`--my`/`--spot-r` on the colour layer.
+  - Works with reduced motion and with touch while a finger drags.
+- CSS:
+  - `[data-cta-spotlight] { filter: grayscale(1) }`.
+  - `.cta-rows--colour { mask-image: radial-gradient(circle var(--spot-r) at var(--mx) var(--my), black 55%, transparent 100%) }`. A radius of 0 means no colour.
+- Checked in Chrome with real hovers: the whole section is grayscale, and the images around the cursor show in colour (light and dark). Demo order is correct, with 1 h1.
+- The demo page now shows all **6 combinations** (3 layouts × 2 themes). DEMO ONLY: delete it before launch.
