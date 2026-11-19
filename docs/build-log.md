@@ -476,3 +476,9 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Desktop 1585×700: rows 107px, images about 110px, every row covers the width, one h1, directions random (+ and −).
   - Phone 360×388: rows 58px, rows cover the width, no overflow, no console errors.
 - **Testing note:** both test browsers ran rAF at about 2fps when not in front. The 0.05s per-frame step cap then slows movement about 10× (measured 1.5–2.7px/s for the configured 14–42), so judge speed in a focused browser.
+- **Follow-up (user): smoother movement** (`cta-rows.js`):
+  - Calmer speeds (10–26px/s instead of 14–42).
+  - Each row's speed drifts ±25% on a random 8–14s sine, so it reads as organic rather than mechanical.
+  - Rows ease in over 1.2s (smoothstep) each time the section comes into view.
+  - The per-frame step cap went from 0.05s to 0.1s, so a briefly slow frame doesn't visibly stall the rows.
+  - Checked: about 10–21px in the first 1.5s (ramp), then 15–32px/s; directions still random; no errors.

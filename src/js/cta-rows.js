@@ -4,12 +4,16 @@
  * Markup: templates/_blocks/ctaBanner.twig —
  *   <div data-cta-rows><div class="cta-rows__row"> [set of images] [same set again] </div>…</div>
  *
- * Each row gets a random speed (SPEED range, px/s) and direction on every page load, and
+ * Each row gets a random speed (SPEED range, px/s) and direction on every page load; the speed
+ * drifts gently (±SWAY over a random period) and eases in when the section comes into view;
  * slides sideways forever: the row holds its set twice, so moving it by exactly one set's
  * width brings it back to the same picture (seamless loop). Images get a small random tilt.
  * Rows only move while the section is on screen. Reduced motion: still (tilt kept).
  */
-const SPEED = [14, 42];       // px per second, random per row
+const SPEED = [10, 26];       // px per second, random per row (calm, so it reads as smooth)
+const SWAY = 0.25;            // each row's speed drifts ± this fraction …
+const SWAY_PERIOD = [8, 14];  // … over a random period (s), so the motion feels organic
+const RAMP = 1.2;             // s: rows ease in when the section comes into view
 const TILT = 6;               // max ± degrees per image
 
 function setup(root) {
@@ -25,6 +29,8 @@ function setup(root) {
     el,
     speed: SPEED[0] + Math.random() * (SPEED[1] - SPEED[0]),
     dir: Math.random() < 0.5 ? -1 : 1,
+    period: SWAY_PERIOD[0] + Math.random() * (SWAY_PERIOD[1] - SWAY_PERIOD[0]),
+    phase: Math.random() * Math.PI * 2,
     offset: Math.random(),          // start at a random point of the loop (fraction of a set)
     width: 0,                       // width of one set, px
   }));
@@ -43,11 +49,18 @@ function setup(root) {
     });
   };
 
-  let visible = false, running = false, lastT = 0;
+  let visible = false, running = false, lastT = 0, clock = 0, ramp = 0;
   const tick = (t) => {
-    const dt = Math.min(0.05, (t - lastT) / 1000);
+    const dt = Math.min(0.1, (t - lastT) / 1000);
     lastT = t;
-    state.forEach((s) => { if (s.width) s.offset += (-s.dir * s.speed * dt) / s.width; });
+    clock += dt;
+    ramp = Math.min(1, ramp + dt / RAMP);
+    const ease = ramp * ramp * (3 - 2 * ramp);                  // smoothstep ease-in
+    state.forEach((s) => {
+      if (!s.width) return;
+      const v = s.speed * (1 + SWAY * Math.sin((2 * Math.PI * clock) / s.period + s.phase));
+      s.offset += (-s.dir * v * ease * dt) / s.width;
+    });
     place();
     if (visible) requestAnimationFrame(tick);
     else running = false;
@@ -59,6 +72,7 @@ function setup(root) {
       visible = entry.isIntersecting;
       if (visible && !running) {
         running = true;
+        ramp = 0;                    // ease in again each time the section comes into view
         lastT = performance.now();
         requestAnimationFrame(tick);
       }
