@@ -1,0 +1,10 @@
+columnSuffix: null
+handle: simpleRpMenu
+instructions: null
+name: 'Simple RP Menu'
+searchable: false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: remoteprogrammer\simplerpmenu\fields\RpMenuField
+warning: null

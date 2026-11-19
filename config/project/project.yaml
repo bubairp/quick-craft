@@ -1,4 +1,4 @@
-dateModified: 1795090368
+dateModified: 1795090717
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -17,6 +17,7 @@ meta:
     0ed6a8a3-8f74-4e22-81eb-7850257a4bd2: 'Background layout' # Background layout
     0fa4c80e-670a-453c-8b6c-d430775fc6fc: 'Social links' # Social links
     1afd5b95-7bb4-4303-a773-66fabce3b25b: 'Colour scheme' # Colour scheme
+    1daa38ef-b4f6-494b-aa88-6f60a08f6bcf: Image/Video # Image/Video
     1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a: 'Lightswitch (default off)' # Lightswitch (default off)
     2b0cb8a9-792e-430c-aab8-e6b9c3045101: 'Quick Craft' # Quick Craft
     2de22aae-55dd-43ca-84cb-499365bc077d: Newsletter # Newsletter
@@ -50,14 +51,17 @@ meta:
     234d2e9f-2f97-4a91-8a5e-b1f93eeece59: Testimonials # Testimonials
     289cd371-3ba2-4745-ae22-a370d9990f91: 'Hero layout' # Hero layout
     307d793e-57cd-4151-95be-1487af7be8be: Date # Date
+    372aa289-261e-479e-b1db-8dd44fd14f14: Money # Money
     387e6ecc-0194-4b56-87a9-d9f42fbe983b: 'Page builder' # Page builder
     509a88e4-38a6-4ebd-adba-6af6222be685: 'Chat messages' # Chat messages
     761f1f27-3b7d-4327-833c-e38b716c0d2b: Comparison # Comparison
     864d7fef-094c-434b-ad76-e9e3b15430e6: Home # Home
     949bbee0-db0d-4930-b297-ed2a5d2f2052: Platform # Platform
+    2146e9e7-c0d5-425d-a683-54f4a965043c: 'Simple RP Menu' # Simple RP Menu
     4932a68c-f70c-480b-9e34-b4350301228d: 'Promo bar' # Promo bar
     5651b63e-6cc9-4b10-b28c-5d35a917f978: Style # Style
     5760d1f6-e54e-4545-831d-3b138cb0b946: 'Newsletter form' # Newsletter form
+    7155c277-1fd2-45d5-b1d3-feb2829f8696: Video # Video
     8539c76c-6153-4b8c-9ccc-29ed3c3d7d0a: 'FAQ items' # FAQ items
     9481bc37-4f73-4fe3-be77-f1c33db10114: FAQ # FAQ
     70567a64-a80b-45dc-b262-2934bfa9d638: Blog # Blog
@@ -76,6 +80,7 @@ meta:
     a44624b9-c2b7-48d3-a9a6-6b12900597ff: Department # Department
     aa6c33f4-a111-4e09-8f71-ed0bd93a53aa: Workplace # Workplace
     aed18a78-dac9-49e8-ac86-a6cfbf7516f5: 'Landing page' # Landing page
+    b05e12d5-6328-4e65-a451-c6d26ff75e9f: 'Color Code' # Color Code
     b7e2c4a1-6d3f-4a8e-9b5c-2f1e7d0a4c93: 'Page background' # Page background
     bbf1a91a-829d-4d7c-b672-be5ef363ac43: Careers # Careers
     bcaffb4a-ef69-4bf9-93b7-7dffd6af1f1a: Newsletter # Newsletter

@@ -749,3 +749,19 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - **New `richText` "Rich text":** bold, italic, link | lists | removeFormat; no headings, no images, no source editing. For short formatted text in blocks.
   - Toolbar button names come from `vendor/craftcms/ckeditor/src/helpers/CkeditorConfig.php`.
 - **Checked:** 8-page snapshot identical; no project-config diff.
+
+### 2026-11-20: More base fields: Image/Video, Video, Color Code, Simple RP Menu, Money
+- **User's requests.** Rule first (CLAUDE.md table + the colorcode rule; skill field list).
+- **Migration** `m261120_160000_assets_and_color_fields` (backup: `/tmp/before-assets-color.sql.gz`):
+  - `images` restricted to images (it allowed image, video and JSON; all 380 existing relations were images).
+  - New `imageVideo` "Image/Video" (1 image or video) and `video` "Video" (1 video), with the same volume settings as `image`.
+  - New `colorcode` "Color Code":
+    - Color field with **palette = the 16 `@theme` colour tokens** (label = token name), custom colours off.
+    - Templates map the label to a full class string and never output the hex.
+    - Keep the palette in sync when tokens change.
+  - New `simpleRpMenu` "Simple RP Menu" (the plugin's RpMenuField; value = a menu handle; read `vendor/remoteprogrammer/simple-rp-menu/src/fields/RpMenuField.php`).
+- **Migration** `m261120_170000_money_field`: `money` "Money" (USD).
+- **Not created:**
+  - **Multi-select:** options belong to the field, so it's purpose-specific like Dropdown. Created with its options when a block needs it.
+  - **Icon:** Craft's Icon field uses Font Awesome, but the site uses Tabler (`_components/icon.twig`). Waiting for the user's decision.
+- **Checked:** 8-page snapshot identical; no project-config diff.

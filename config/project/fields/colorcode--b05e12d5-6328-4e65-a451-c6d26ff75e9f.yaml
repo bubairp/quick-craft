@@ -1,0 +1,191 @@
+columnSuffix: null
+handle: colorcode
+instructions: 'Only the site’s design colours can be chosen.'
+name: 'Color Code'
+searchable: false
+settings:
+  allowCustomAlpha: false
+  allowCustomColors: false
+  fullGraphqlData: true
+  palette:
+    -
+      __assoc__:
+        -
+          - color
+          - '#ffffff'
+        -
+          - label
+          - white
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#000000'
+        -
+          - label
+          - black
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#111111'
+        -
+          - label
+          - ink
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#30302f'
+        -
+          - label
+          - ink-soft
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#1c1c1a'
+        -
+          - label
+          - night
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#4b4b49'
+        -
+          - label
+          - graphite
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#5f5f5b'
+        -
+          - label
+          - muted
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#777772'
+        -
+          - label
+          - subtle
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#fdfdfb'
+        -
+          - label
+          - paper
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#f7f7f7'
+        -
+          - label
+          - surface
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#ececec'
+        -
+          - label
+          - line
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#7b41d9'
+        -
+          - label
+          - accent
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#31c431'
+        -
+          - label
+          - success
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#fe8207'
+        -
+          - label
+          - star
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#ffc4fe'
+        -
+          - label
+          - glow-pink
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#5fd8ff'
+        -
+          - label
+          - glow-blue
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Color
+warning: null

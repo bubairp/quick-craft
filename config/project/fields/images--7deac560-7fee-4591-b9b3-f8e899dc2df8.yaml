@@ -9,8 +9,6 @@ settings:
   allowUploads: true
   allowedKinds:
     - image
-    - video
-    - json
   branchLimit: null
   defaultPlacement: end
   defaultUploadLocationSource: 'volume:c1ab53a3-753c-4acd-bdb3-5684c9e853ac' # Images

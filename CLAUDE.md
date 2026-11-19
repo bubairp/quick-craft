@@ -110,22 +110,32 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   | `textarea` "Textarea" | PlainText, multi-line | text (summary/intro/quote), the image volume's "Subtitle" |
   | `richText` "Rich text" | CKEditor, simple: bold, italic, link, lists, remove formatting | short formatted text in blocks (intro, card text) |
   | `richTextFull` "Rich text (full)" | CKEditor, full: headings, text styles, link, lists, indent, quote, table, image, video embed, horizontal line, fullscreen, source (admins) | body (blog post) |
-  | `image` / `images` "Image" / "Images" | Assets (1 / many) | image, logo, images |
+  | `image` "Image" | Assets: 1 image | image, logo |
+  | `images` "Images" | Assets: many images | images |
+  | `imageVideo` "Image/Video" | Assets: 1 image or video | (ready) |
+  | `video` "Video" | Assets: 1 video | (ready) |
+  | `colorcode` "Color Code" | Color: **palette = the `--color-*` tokens only, custom colours off** | (ready) |
+  | `simpleRpMenu` "Simple RP Menu" | Simple RP Menu Selector (value = a menu handle) | (ready). Render: `{% set menu = craft.simplerpmenu.getMenu(block.<instance handle>) %}` and guard with `{% if menu %}` |
   | `linkWithLabel` "Link (with label)" | Link: entry / URL / email, label | buttonLink, primaryButton (a card's link, ctaBanner's "Heading link") |
   | `urlLink` "URL link" | Link: URL only, optional new tab | externalLink, appStoreLink, googlePlayLink |
   | `lightswitchOff` "Lightswitch (default off)" | Lightswitch, off by default | featured, showAppBadges |
   | `lightswitchOn` "Lightswitch (default on)" | Lightswitch, on by default | (ready) |
   | `number` "Number" | Number | (ready) |
+  | `money` "Money" | Money, USD | (ready; e.g. ticket prices) |
   | `date` "Date" | Date | (ready) |
   | `email` "Email" | Email | (ready) |
 
   - **Purpose-specific fields** stay their own field, because their settings can't be shared per instance:
-    - every Dropdown (options): scheme, spacing, the layout dropdowns, buttonStyle, platform, contactType, pageBackground, employmentType, workplace;
+    - every Dropdown and **Multi-select** (options belong to the field, so there's no generic one; create it with its options when a block needs it): scheme, spacing, the layout dropdowns, buttonStyle, platform, contactType, pageBackground, employmentType, workplace;
     - Tables (columns): comparisonUs (instances comparisonUs, comparisonThem), rotatingWords, chatMessages;
     - Matrix fields;
     - Entries fields (sources);
     - `emoji` (8-character limit), `rating` (0–5, one decimal), `seo`, `newsletterForm`.
   - **CKEditor toolbars never include font size, font colour or alignment:** they write inline styles, which breaks the tokens rule.
+  - **`colorcode` keeps the tokens rule:**
+    - Its palette is the `@theme` colour tokens (label = token name, e.g. `accent`), and editors can't enter custom colours.
+    - **Templates never output the hex** (no `style=""`). Map the chosen token to a full class string, e.g. `{ accent: 'bg-accent', ink: 'bg-ink' }[block.colorcode.label] ?? ''`, so Tailwind finds the class.
+    - **When a colour token is added or changed in `app.css`, update the palette** in a migration (`m261120_160000_assets_and_color_fields` shows how).
   - **A new field is created only when no base field has the needed settings.** Then add it to this table: as a base field if it's generic, or to the purpose-specific list.
   - **How existing fields became base fields (keeping content):**
     - Content is keyed by the layout element's UID, not the field.

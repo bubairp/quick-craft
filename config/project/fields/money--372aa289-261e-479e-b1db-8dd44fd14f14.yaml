@@ -1,0 +1,17 @@
+columnSuffix: null
+handle: money
+instructions: null
+name: Money
+searchable: false
+settings:
+  currency: USD
+  defaultValue: null
+  max: null
+  min: 0
+  showCurrency: true
+  size: null
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Money
+warning: null
