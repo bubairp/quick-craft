@@ -452,3 +452,8 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Desktop: section 1585×700, pill centre at 350 (reference 346), height 114, 50/50px, +1px. Subtitle 240×68, 8px below. Spiral turns at −2.5°/s exactly. No store links.
   - Phone: section 360×388, pill 64px tall, subtitle one line 218×35 (reference 229×35), no overflow, no console errors.
 - **Known difference:** the pill is wider (433 against 350 on desktop) because "GET THE APP" is set in Inter. The reference uses its own narrow display font. Same size, padding and height.
+- **Follow-up (user):** spiral rings a little closer together. `GAP` changed from 0.08 to 0.068 of the width (reference ≈ 0.077).
+  - `SIZE` changed from 0.85 to 1.0, so the images stay the same size (largest 124px at 1600).
+  - Slots raised from 200 to 240, because a phone now needs about 209.
+  - Checked: desktop gap 108px with 137 images; phone gap 24.5px with 209 images; no overflow.
+  - To change the spacing again, edit `GAP` in `src/js/cta-spiral.js`. The image count follows automatically, up to the number of slots in the template.

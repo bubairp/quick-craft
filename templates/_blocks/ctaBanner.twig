@@ -18,10 +18,10 @@
 
     {% if images|length %}
         {# Turning image spiral (reference: partiful.com, measured; src/js/cta-spiral.js).
-           200 slots cycle through the images; JS shows as many as the section needs
-           (≈125 on desktop, ≈195 on a phone), sizes and places them. Decoration only. #}
+           240 slots cycle through the images; JS shows as many as the section needs
+           (≈140 on desktop, ≈210 on a phone), sizes and places them. Decoration only. #}
         <ul class="cta-spiral pointer-events-none absolute inset-0" data-cta-spiral aria-hidden="true">
-            {% for i in 0..199 %}
+            {% for i in 0..239 %}
                 {% set image = images[i % images|length] %}
                 <li class="cta-spiral__item">
                     {% include '_components/image.twig' with { image: image, width: 140, ratio: 1, sizes: '140px', decorative: true, class: 'aspect-square w-full object-cover' } only %}

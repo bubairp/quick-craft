@@ -3,7 +3,8 @@
  * (partiful.com) at 1600×731 and 375×800, Nov 2026:
  *
  *  - The images lie on an oval spiral around the centre (oval 1.34× wider than tall),
- *    22 images per turn, each turn ≈ 8% of the section width further out, until the spiral
+ *    22 images per turn, each turn ≈ 7.7% of the section width further out (ours 6.8%: the
+ *    rings were made a little tighter on request), until the spiral
  *    reaches the section's corners (desktop ≈ 5.3 turns / 125 images, phone ≈ 9 / 194).
  *  - Each image is turned along the spiral (90° to its angle) and its size grows with its
  *    distance from the centre (tiny in the middle, ≈ 0.9 × the ring spacing at the edge),
@@ -16,9 +17,9 @@
  */
 const OVAL = 1.34;          // width / height of the spiral
 const PER_TURN = 22;        // images per turn
-const GAP = 0.08;           // ring spacing / section width
+const GAP = 0.068;          // ring spacing / section width (reference ≈ 0.077; a bit tighter on request)
 const START = 0.015;        // innermost radius / section width
-const SIZE = 0.85;          // image size at the outer edge / ring spacing (largest ≈ 135px at 1600)
+const SIZE = 1.0;           // image size at the outer edge / ring spacing (largest ≈ 135px at 1600)
 const SPEED = -2.5;         // degrees per second (negative = anticlockwise on screen)
 
 function setup(root) {
