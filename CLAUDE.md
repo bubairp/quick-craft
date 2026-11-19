@@ -31,6 +31,11 @@ All tooling runs inside DDEV (Node is not installed on the WSL host). From the W
 
 Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 
+**Environment variables:**
+- **Locally, DDEV provides the database and site URL** (`.ddev/config.yaml` `type: craftcms` injects `CRAFT_DB_DRIVER/SERVER/PORT/DATABASE/USER/PASSWORD` and `PRIMARY_SITE_URL` into the web container; Craft 5 reads `CRAFT_DB_*` directly, and the site's `baseUrl` is `$PRIMARY_SITE_URL`). So `.env` only holds the app settings (app ID, environment, security key, devMode, admin changes, robots), and there is no `config/db.php`.
+- **Database tools:** phpMyAdmin https://quick-craft.ddev.site:8037 or `ddev mysql`.
+- **On a server without DDEV** (staging/production), `.env` must also set `CRAFT_DB_*` and `PRIMARY_SITE_URL`. See `.env.example.staging` / `.env.example.production`; `.env.example.dev` explains the DDEV defaults. Never commit `.env` (gitignored) or real values.
+
 ## Front-end layout
 
 - `src/main.js`: the one Vite entry. It imports `src/css/app.css` and starts Alpine.

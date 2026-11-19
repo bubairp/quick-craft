@@ -969,3 +969,13 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `text-balance` changed the desktop line break ("Frequently / Asked Questions"): `lg:text-wrap`.
   - The border made the cards 78px instead of 76: inset ring.
   - At 768 the heading was squeezed to 166px: side by side only from `lg`.
+
+### 2026-11-20: Where the database connection comes from (documented)
+- **User's question:** "where did you link the DB? I can't see it in .env".
+- **Answer, now in CLAUDE.md › Environment variables:**
+  - DDEV (`type: craftcms`) injects `CRAFT_DB_*` and `PRIMARY_SITE_URL` into the web container. Craft 5 reads `CRAFT_DB_*` directly; the site `baseUrl` is `$PRIMARY_SITE_URL`.
+  - So `.env` only has the app settings, and there is no `config/db.php`.
+  - phpMyAdmin is at :8037.
+- **Example files:**
+  - `.env.example.dev` explains the DDEV-provided values (no secrets).
+  - `.env.example.staging` / `.production` now also list `PRIMARY_SITE_URL=`. It was missing: a server set up from them would have had an empty site URL.
