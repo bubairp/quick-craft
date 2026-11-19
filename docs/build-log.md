@@ -979,3 +979,23 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Example files:**
   - `.env.example.dev` explains the DDEV-provided values (no secrets).
   - `.env.example.staging` / `.production` now also list `PRIMARY_SITE_URL=`. It was missing: a server set up from them would have had an empty site URL.
+
+### 2026-11-20: Block: textMedia (Figma Careers 6-6646 right, 6-6862 left)
+- **Rule/tokens first:**
+  - `--text-title` (32 / 1.2 / −0.04em) and `--text-headline` (48 / 1 / −0.02em).
+  - CLAUDE.md › pageBuilder blocks › textMedia.
+  - CSS: `.rich-text--lead` (20px medium black/60, 20px between paragraphs) and `.glow-bg` (radial gradients of the aqua / orchid / glow-blue tokens, approximating Figma's blurred photos).
+- **Migration** `m261120_310000_text_media` (backup: `/tmp/before-textmedia.sql.gz`):
+  - textMedia + `headingAbove` and `glow` (lightswitchOff instances: the base-field rule) + `spacing`; body relabelled "Text".
+  - Test content on Careers: "Our mission…" (right) and "Perks & Benefits" (left, heading above, glow). The copy is from Figma (brand-specific perks generalised).
+- **Placeholder images** (to replace before launch): the two Figma images were downloaded into `web/uploads/images` (`careers-mission-collage.png`, `careers-team-photo.png`) and registered with `ddev craft index-assets/one images`. The migration links them by filename only when they exist.
+- **Template** `_blocks/textMedia.twig`:
+  - The image is cropped to the design's frame (536×351 right / 460×402 left, `ratio` prop) with `rounded-lg`.
+  - Side by side from `lg` (media `lg:w-134` / `lg:w-115`, `order-first/last`), stacked below.
+  - The column heading is `text-title`; with `headingAbove` it's centred `text-headline`.
+- **Checked (Playwright) at 1440:**
+  - Right: heading 32/38.4 700 −1.28px; image 536×351 r12; text 20/28 500 black/60, gap 20; image→text 40px.
+  - Left: heading 48/48 500 −0.96px centred; image 460×402 on the left; glow on.
+  - 768 / 375: stacked, no overflow.
+- **Fixed:** `text-balance` changed the heading's line breaks: `lg:text-wrap`. The remaining one-word difference is the font (Figma TWK Lausanne vs the site's Inter).
+- **Next on Careers:** the photo strip under 6-6646 = an imageGallery (marquee) block, added with the Careers page.

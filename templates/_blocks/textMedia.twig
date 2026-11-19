@@ -1,0 +1,45 @@
+{#
+ # Text + media block. Figma: Careers 6-6646 (mediaPosition right: heading in the text column,
+ # 536px image) and 6-6862 (left: heading centred above, 460px image, glow background).
+ # Side by side from lg, stacked below.
+ # Receives: block, headingLevel
+ # Fields: mediaPosition (right|left), heading, headingAbove, body (lead text), images (first shown),
+ #         glow, spacing
+ #}
+{% set image = block.images.eagerly().one() %}
+{% set body = block.body ?? null %}
+{% set hasBody = body and body|length %}
+{% if block.heading or hasBody or image %}
+    {% set level = headingLevel ?? 2 %}
+    {% set tag = 'h' ~ level %}
+    {% set mediaLeft = (block.mediaPosition.value ?? 'right') == 'left' %}
+    {% set above = block.headingAbove and block.heading %}
+    <section data-spacing="{{ block.spacing.value ?? 'default' }}"
+             class="bg-white/30 px-4 py-16 md:px-15 md:py-25 {{ block.glow ? 'glow-bg' }}">
+        <div class="mx-auto flex max-w-narrow flex-col gap-10">
+            {% if above %}
+                <{{ tag }} class="text-balance text-center text-4xl font-medium md:text-headline">{{ block.heading }}</{{ tag }}>
+            {% endif %}
+            <div class="flex flex-col gap-10 lg:flex-row lg:items-center">
+                {% if image %}
+                    <div class="lg:flex-none {{ mediaLeft ? 'lg:order-first lg:w-115' : 'lg:order-last lg:w-134' }}">
+                        {# cropped to the design's frame: 536×351 (right) / 460×402 (left) #}
+                        {% include '_components/image.twig' with {
+                            image: image, width: 536, ratio: mediaLeft ? 460 / 402 : 536 / 351,
+                            sizes: '(min-width: 1024px) 536px, 100vw',
+                            class: 'h-auto w-full rounded-lg object-cover',
+                        } only %}
+                    </div>
+                {% endif %}
+                {% if (block.heading and not above) or hasBody %}
+                    <div class="flex flex-1 flex-col gap-5">
+                        {% if block.heading and not above %}
+                            <{{ tag }} class="text-balance text-3xl font-bold md:text-title lg:text-wrap">{{ block.heading }}</{{ tag }}>
+                        {% endif %}
+                        {% if hasBody %}<div class="rich-text rich-text--lead">{{ body }}</div>{% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endif %}

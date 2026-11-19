@@ -113,6 +113,11 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - Each question is a `<button aria-expanded aria-controls>` inside an h3. The "+" (Tabler `plus`) turns into "×" when open. Several answers can be open at once.
     - The answer opens with the `.faq-panel` component class (a `grid-template-rows` 0fr → 1fr transition; no collapse plugin). It honours reduced motion.
     - Answers are CKEditor HTML in `.rich-text .rich-text--base` (16px, black/60). The `--base` variant is for readable body text; plain `.rich-text` is the small SEO style.
+  - **textMedia** (Figma Careers 6-6646 "right", 6-6862 "left"; migration `m261120_310000_text_media`): `mediaPosition` (right / left), `heading`, `headingAbove` (lightswitchOff instance: heading centred above both columns, `text-headline`), `body` (lead text), `images` (the first is shown, `rounded-lg`), `glow` (lightswitchOff instance: soft pastel background), `spacing`.
+    - Columns side by side from `lg` (`max-w-narrow`, gap 40; media 536px when right, 460px when left), stacked below. The heading in the text column is `text-title` bold.
+    - The body uses `.rich-text .rich-text--lead` (20px black/60, 20px between paragraphs).
+    - `.glow-bg` approximates Figma's blurred photo blobs with radial gradients of the aqua / orchid / glow-blue tokens.
+    - The photo strip under 6-6646 is a separate imageGallery block (marquee).
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`

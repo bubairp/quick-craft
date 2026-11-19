@@ -62,6 +62,12 @@
   --text-3xl: 1.75rem;
   --text-3xl--line-height: 1.1;
   --text-3xl--letter-spacing: -0.02em;
+  --text-title: 2rem;             /* 32px bold column heading (Figma 6-6652) */
+  --text-title--line-height: 1.2;
+  --text-title--letter-spacing: -0.04em;
+  --text-headline: 3rem;          /* 48px centred section heading (Figma 6-6872) */
+  --text-headline--line-height: 1;
+  --text-headline--letter-spacing: -0.02em;
   --text-4xl: 2.25rem;
   --text-4xl--line-height: 1.2;
   --text-4xl--letter-spacing: -0.04em;
@@ -450,6 +456,18 @@
   /* Readable body size (FAQ answers); plain .rich-text stays the small SEO style */
   .rich-text--base { @apply text-base text-black/60; }
   .rich-text--base :where(strong, b) { @apply text-black/80; }
+  /* Lead text (text + media blocks): 20px medium black/60, 20px between paragraphs */
+  .rich-text--lead { @apply text-xl font-medium text-black/60; }
+  .rich-text--lead :where(p, ul, ol, blockquote, table) + :where(p, ul, ol, blockquote, table) { @apply mt-5; }
+
+  /* Soft pastel glow behind a section (Figma Careers 6-6862 uses blurred photos; this
+     approximates them with token colours) */
+  .glow-bg {
+    background-image:
+      radial-gradient(45% 55% at 15% 75%, color-mix(in srgb, var(--color-aqua) 35%, transparent), transparent),
+      radial-gradient(40% 50% at 75% 45%, color-mix(in srgb, var(--color-orchid) 25%, transparent), transparent),
+      radial-gradient(35% 45% at 50% 0%, color-mix(in srgb, var(--color-glow-blue) 18%, transparent), transparent);
+  }
 
   /* FAQ answer open/close: rows 0fr → 1fr animates to the content's height (no JS measuring) */
   .faq-panel {
