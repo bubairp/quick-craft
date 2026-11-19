@@ -23,8 +23,10 @@
         {% set transform = ratio
             ? { width: width * 2, height: (width * 2 / ratio)|round, mode: 'crop', format: 'webp' }
             : { width: width * 2, mode: 'fit', format: 'webp' } %}
-        {% set srcset = image.extension == 'svg' ? false : image.getSrcset(['0.25x', '0.5x', '0.75x', '1x'], transform) %}
-        <img src="{{ image.getUrl(transform) }}"
+        {# SVGs are served as-is: transforming them rasterises to WebP with a white background #}
+        {% set isSvg = image.extension|lower == 'svg' %}
+        {% set srcset = isSvg ? false : image.getSrcset(['0.25x', '0.5x', '0.75x', '1x'], transform) %}
+        <img src="{{ isSvg ? image.url : image.getUrl(transform) }}"
              {% if srcset %}srcset="{{ srcset }}" sizes="{{ sizes ?? '100vw' }}"{% endif %}
              width="{{ image.getWidth(transform) }}"
              height="{{ image.getHeight(transform) }}"

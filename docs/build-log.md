@@ -250,3 +250,27 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - `select-none` on `.swiper`: a drag was also selecting the card text and image (blue highlight).
 - Checked in real Chrome: 6 long drags (1350px each way) plus wheel left and right gave 1388 frames with 0 empty, and nothing was selected.
 - **Lesson:** for drag and loop bugs, test with real input in a real browser (Claude in Chrome `left_click_drag` / `scroll`) together with a per-frame monitor. Synthetic events can miss them.
+
+### 2026-11-19: Press strip under the hero matched to Figma 6-1259 + smooth mouse
+- **Read from Figma** (`get_design_context` 6:1259, after loading the figma-design-to-code guide):
+  - Section background `#f7f7f7`, read from the design render's pixels; the section sits straight on the page body. That is the existing `surface` token. Padding 64/32.
+  - Item 390×219. The inactive logo is 240×40 at top 104.
+  - The active item has a white 48% card, 390×180, at top 34 with a 4px radius. The logo moves up to top 14.
+  - Quote: 20px / 26px, medium, −0.2px, `#30302f`, 310px wide, content 12px lower in the card.
+- **Built** (`_blocks/testimonials.twig`, press layout):
+  - `bg-surface` on the section, `md:w-97.5!` items.
+  - The logo is absolute at `top-26`; the active one moves by `-22.5 × spacing` (app.css).
+  - Quote: `top-8.5 h-45 bg-white/48 pt-6 leading-6.5 tracking-snug`. New token `--tracking-snug: -0.01em`.
+  - Measured in Chrome at 1585px, every value matches the design, including the text centre 102px into the card.
+- **Quotes on all items:** migration `m261119_100000_press_quotes` adds the reference site's press-strip quotes, word for word, to TIME, Business Insider, Inc., Google Play and App Store. It never overwrites an existing quote.
+  - **Skipped on purpose: The New York Times and USA Today.** Their reference quotes name the reference brand, and rewriting them to name Quick Craft would fabricate a quote from a real publication. Add real quotes in the CP: Home → Press strip block → the item's Text field.
+  - **PLACEHOLDER:** all press logos and quotes are real publications'. Replace them before launch.
+- **Smooth mouse**, same as the testimonials row:
+  - `Mousewheel { forceToAxis, thresholdDelta: 10 }`, `speed: 700`, ease-out via `--swiper-wrapper-transition-timing-function`, and `select-none`.
+  - The click-to-activate handler ignores the click that follows a drag (`if (!swiper.allowClick) return`). Read in swiper-core: `allowClick` stays false until a `nextTick` after `touchEnd`.
+  - `preloadImages(root)` is used here too.
+- **Loop gap:** with 9 logos × 390px, a long drag showed up to 208px of empty space (154 of 2013 frames, measured in real Chrome). Fix: the set is rendered 3× (27 slides), with copies `aria-hidden` and buttons `tabindex="-1"`, plus `loopAdditionalSlides: 4`. Checked:
+  - Real drags and wheel in Chrome: 0 gaps.
+  - 10 synthetic 1352px drags with 340 checks after each move step: 0px.
+- **Bug fix in `_components/image.twig`:** SVGs are now served as-is. Transforming them rasterised them to WebP with a white background, which showed as a white box behind the NYT logo on the grey section. This affects every SVG on the site.
+- **Not checked:** mobile widths. The Chrome window wouldn't resize (it's maximised), and Playwright can't load the local HTTPS site at the moment (certificate).

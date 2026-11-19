@@ -17,25 +17,34 @@
 {# Press strip (Figma Home 6-1259; reference: partiful.com). Logo buttons in a centred, looping
    Swiper; the active logo moves up and its quote appears. Item: image = logo, personName = outlet,
    text = quote (optional). #}
-<section class="pt-12 pb-6 md:pt-16 md:pb-8" aria-label="{{ block.heading ?: 'In the press'|t }}">
+{# Figma 6-1259: section bg #f7f7f7 (surface), padding 64/32; item 390×219; inactive logo
+   240×40 at top 104; active: quote card (white 48%, 390×180, top 34, radius 4, text 20/26
+   medium #30302f, 310 wide, content 12px lower) and the logo moves up to top 14. #}
+<section class="bg-surface pt-12 pb-6 md:pt-16 md:pb-8" aria-label="{{ block.heading ?: 'In the press'|t }}">
     <div data-carousel="press">
-        <div class="swiper">
+        <div class="swiper select-none">
+            {# Rendered 3×: with one set (9 × 390px) a long drag ran past Swiper's spare loop slides
+               and showed empty space. Copies are hidden from screen readers and the Tab order. #}
             <ul class="swiper-wrapper">
+                {% for pass in 1..3 %}
                 {% for item in items %}
                     {% set logo = item.image.one() %}
                     {% set label = item.personName ~ (item.text ? ': “' ~ item.text ~ '”' : '') %}
-                    <li class="swiper-slide press-slide w-72! md:w-97!">
-                        <button type="button" class="press-slide__btn relative flex h-55 w-full items-center justify-center rounded-sm" aria-label="{{ label }}">
-                            {% if logo %}
-                                {% include '_components/image.twig' with { image: logo, width: 240, sizes: '240px', decorative: true, class: 'press-slide__logo h-10 w-60 object-contain' } only %}
-                            {% elseif item.personName %}
-                                <span class="press-slide__logo text-xl font-bold">{{ item.personName }}</span>
-                            {% endif %}
+                    <li class="swiper-slide press-slide w-72! md:w-97.5!" {% if pass > 1 %}aria-hidden="true"{% endif %}>
+                        <button type="button" class="press-slide__btn relative block h-55 w-full rounded-sm" aria-label="{{ label }}" {% if pass > 1 %}tabindex="-1"{% endif %}>
                             {% if item.text %}
-                                <span class="press-slide__quote absolute inset-x-0 top-8 bottom-0 flex items-center justify-center rounded-sm bg-white/50 px-10 text-center text-xl font-medium text-ink-soft" aria-hidden="true">“{{ item.text }}”</span>
+                                <span class="press-slide__quote absolute inset-x-0 top-8.5 flex h-45 items-center justify-center rounded-sm bg-white/48 px-6 pt-6 text-center text-xl leading-6.5 font-medium tracking-snug text-balance text-ink-soft md:px-10" aria-hidden="true">“{{ item.text }}”</span>
                             {% endif %}
+                            <span class="press-slide__logo absolute inset-x-0 top-26 flex justify-center">
+                                {% if logo %}
+                                    {% include '_components/image.twig' with { image: logo, width: 240, sizes: '240px', decorative: true, class: 'h-10 w-60 object-contain' } only %}
+                                {% elseif item.personName %}
+                                    <span class="flex h-10 items-center text-xl font-bold">{{ item.personName }}</span>
+                                {% endif %}
+                            </span>
                         </button>
                     </li>
+                {% endfor %}
                 {% endfor %}
             </ul>
         </div>

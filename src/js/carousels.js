@@ -64,18 +64,28 @@ export async function initCarousels() {
     };
 
     if (variant === 'press') {
+      // Smooth mouse like the testimonials row: drag settles on a logo with a soft ease-out,
+      // sideways trackpad / shift+wheel moves one logo; spare loop slides so long drags
+      // never run out. No freeMode (it breaks the loop, see build-log 2026-11-18).
       const swiper = new Swiper(el, {
         ...base,
+        modules: [...base.modules, Mousewheel],
         spaceBetween: 0,
         centeredSlides: true,
         loop: true,
+        loopAdditionalSlides: 4,
         slideToClickedSlide: true,
+        speed: reduceMotion ? 0 : 700,
+        mousewheel: { enabled: true, forceToAxis: true, thresholdDelta: 10 },
         initialSlide: Math.max(0, [...el.querySelectorAll('.swiper-slide')].findIndex((s) => s.querySelector('.press-slide__quote'))),
         autoplay: reduceMotion ? false : { delay: 5000, pauseOnMouseEnter: true, disableOnInteraction: false },
       });
+      preloadImages(root);
       // Logo buttons (mouse, Enter, Space) make their slide active
-      // (capture phase: Swiper stops click propagation inside the slider)
+      // (capture phase: Swiper stops click propagation inside the slider).
+      // allowClick is false right after a drag: releasing over a logo is not a click.
       root.addEventListener('click', (event) => {
+        if (!swiper.allowClick) return;
         const slide = event.target.closest('.swiper-slide');
         if (slide && !slide.classList.contains('swiper-slide-active') && slide.dataset.swiperSlideIndex !== undefined) {
           swiper.slideToLoop(Number(slide.dataset.swiperSlideIndex));

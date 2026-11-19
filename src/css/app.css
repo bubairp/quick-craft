@@ -113,6 +113,9 @@
   --shadow-nav: 1px 3px 16px 4px rgb(0 0 0 / 0.04);
   --shadow-lift: 0 6px 12px 0 rgb(0 0 0 / 0.16); /* button hover (reference site) */
 
+  /* Letter spacing */
+  --tracking-snug: -0.01em;    /* -0.2px at 20px — press quotes (Home 6-1283) */
+
   /* Motion */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -239,8 +242,9 @@
     opacity: 1;
     translate: 0 0;
   }
+  /* logo moves from top 104 to top 14 (Figma 6-1259) */
   .press-slide.swiper-slide-active:has(.press-slide__quote) .press-slide__logo {
-    translate: 0 calc(var(--spacing) * -22);
+    translate: 0 calc(var(--spacing) * -22.5);
   }
   .press-slide:not(.swiper-slide-active) .press-slide__btn:hover .press-slide__logo {
     opacity: 0.6;
@@ -248,7 +252,8 @@
 
   /* Looping testimonials row: soft ease-out for drag release, wheel, arrows and autoplay.
      Set through Swiper's own variable: swiper.css is unlayered, so it beats a rule in this layer. */
-  [data-carousel="loop"] {
+  [data-carousel="loop"],
+  [data-carousel="press"] {
     --swiper-wrapper-transition-timing-function: var(--ease-out-soft);
   }
 
