@@ -5,6 +5,7 @@
  #   spiral (default) — a slowly turning oval spiral (src/js/cta-spiral.js)
  #   rows             — collage rows sliding sideways at random speeds (src/js/cta-rows.js)
  #   rowsSpot         — the same rows in grayscale; colour shows in a circle around the cursor
+ #   rowsSpotInvert   — the reverse: rows in colour; a grayscale circle follows the cursor
  # Receives: block, headingLevel
  # Fields: theme, ctaLayout, heading, text, primaryButton, secondaryButton, images, showAppBadges
  #}
@@ -20,7 +21,7 @@
 <section class="relative flex min-h-97 flex-col justify-center overflow-hidden {{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 py-24 md:min-h-175">
 
     {% set ctaLayout = block.ctaLayout.value ?? 'spiral' %}
-    {% if images|length and ctaLayout in ['rows', 'rowsSpot'] %}
+    {% if images|length and ctaLayout in ['rows', 'rowsSpot', 'rowsSpotInvert'] %}
         {# Collage rows (src/js/cta-rows.js): full-width rows of straight square images; each row
            slides sideways at a random speed and direction (chosen on each page load) and loops
            seamlessly (the row's set is rendered twice). Decoration only. #}
@@ -28,8 +29,10 @@
         {% set perRow = 14 %}
         {# the rows share the section height (minus an even top/bottom margin), so every row of
            images sits fully inside the section — nothing cut at the top or bottom #}
-        {# rowsSpot: grayscale, colour shows in a circle around the cursor (cta-rows.js) #}
-        <div class="cta-rows pointer-events-none absolute inset-0 flex flex-col justify-center gap-2 py-3 md:gap-3 md:py-6" data-cta-rows {% if ctaLayout == 'rowsSpot' %}data-cta-spotlight{% endif %} aria-hidden="true">
+        {# rowsSpot: grayscale, colour shows in a circle around the cursor;
+           rowsSpotInvert: the reverse — colour, with a grayscale circle (cta-rows.js) #}
+        {% set spot = { rowsSpot: 'colour', rowsSpotInvert: 'gray' }[ctaLayout] ?? null %}
+        <div class="cta-rows pointer-events-none absolute inset-0 flex flex-col justify-center gap-2 py-3 md:gap-3 md:py-6" data-cta-rows {% if spot %}data-cta-spotlight="{{ spot }}"{% endif %} aria-hidden="true">
             {% for r in 0..(rowCount - 1) %}
                 <div class="cta-rows__row flex w-max gap-2 md:gap-3">
                     {% for pass in 1..2 %}

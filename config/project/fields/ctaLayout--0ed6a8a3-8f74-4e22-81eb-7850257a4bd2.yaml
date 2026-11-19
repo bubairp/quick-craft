@@ -39,6 +39,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Collage rows — colour, grayscale spotlight'
+        -
+          - value
+          - rowsSpotInvert
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

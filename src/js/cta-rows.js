@@ -11,31 +11,33 @@
  * squares — no tilt, on request). Rows only move while the section is on screen.
  * Reduced motion: still.
  *
- * Spotlight option (layout "rowsSpot", data-cta-spotlight): the rows are grayscale and a
- * full-colour copy of them (cloned here, moved in step) shows only inside a soft circle around
- * the cursor (CSS mask, --mx/--my/--spot-r). The circle eases after the pointer, grows in on
+ * Spotlight options (data-cta-spotlight): "colour" (layout rowsSpot) — the rows are grayscale
+ * and a full-colour copy of them (cloned here, moved in step) shows only inside a soft circle
+ * around the cursor (CSS mask, --mx/--my/--spot-r); "gray" (rowsSpotInvert) — the reverse. The circle eases after the pointer, grows in on
  * enter and shrinks away on leave; touch works while dragging a finger. Works with reduced
  * motion too (rows still, spotlight still follows).
  */
-const SPEED = [10, 26];       // px per second, random per row (calm, so it reads as smooth)
+const SPEED = [6, 16];        // px per second, random per row (slow and calm, on request)
 const SWAY = 0.25;            // each row's speed drifts ± this fraction …
 const SWAY_PERIOD = [8, 14];  // … over a random period (s), so the motion feels organic
 const RAMP = 1.2;             // s: rows ease in when the section comes into view
-const SPOT_RADIUS = 160;      // px: colour circle around the cursor (spotlight option)
-const SPOT_FOLLOW = 0.12;     // s: how softly the circle follows the pointer
+const SPOT_RADIUS = 220;      // px: circle around the cursor (spotlight options; enlarged on request)
+const SPOT_FOLLOW = 0.25;     // s: how softly the circle follows the pointer (smooth glide)
 
 function setup(root) {
   const rows = [...root.querySelectorAll('.cta-rows__row')];
   if (!rows.length) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Spotlight: colour copy on top of the grayscale rows, moved together with them
+  // Spotlight: a copy on top of the rows, moved together with them, visible only inside the
+  // circle. data-cta-spotlight="colour": grey rows, colour circle; "gray": the reverse.
   let colour = null;
   if (root.hasAttribute('data-cta-spotlight')) {
+    const invert = root.getAttribute('data-cta-spotlight') === 'gray';
     colour = root.cloneNode(true);
     colour.removeAttribute('data-cta-rows');
     colour.removeAttribute('data-cta-spotlight');
-    colour.classList.add('cta-rows--colour');
+    colour.classList.add('cta-rows--spot', invert ? 'cta-rows--spot-gray' : 'cta-rows--spot-colour');
     root.after(colour);
     setupSpotlight(root.closest('section') || root.parentElement, colour);
   }
@@ -127,16 +129,33 @@ function setupSpotlight(area, layer) {
     requestAnimationFrame(tick);
   };
 
-  area.addEventListener('pointermove', (e) => {
+  // the pointer's screen position; the circle is placed relative to the section, so it is
+  // recalculated on scroll too (otherwise the circle drifts away from a still cursor)
+  let cx = 0, cy = 0, inside = false;
+  const aim = () => {
     const b = area.getBoundingClientRect();
-    tx = e.clientX - b.left;
-    ty = e.clientY - b.top;
+    tx = cx - b.left;
+    ty = cy - b.top;
+  };
+  area.addEventListener('pointermove', (e) => {
+    cx = e.clientX;
+    cy = e.clientY;
+    inside = true;
+    aim();
     if (!placed) { x = tx; y = ty; placed = true; }      // appear where the pointer is
     tr = SPOT_RADIUS;
     start();
   });
-  area.addEventListener('pointerleave', () => { tr = 0; start(); });
-  area.addEventListener('pointercancel', () => { tr = 0; start(); });
+  const leave = () => { inside = false; tr = 0; start(); };
+  area.addEventListener('pointerleave', leave);
+  area.addEventListener('pointercancel', leave);
+  window.addEventListener('scroll', () => {
+    if (!inside) return;
+    aim();
+    x = tx;                                              // stay exactly under the cursor
+    y = ty;
+    apply();
+  }, { passive: true });
   apply();
 }
 

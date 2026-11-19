@@ -518,3 +518,20 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `.cta-rows--colour { mask-image: radial-gradient(circle var(--spot-r) at var(--mx) var(--my), black 55%, transparent 100%) }`. A radius of 0 means no colour.
 - Checked in Chrome with real hovers: the whole section is grayscale, and the images around the cursor show in colour (light and dark). Demo order is correct, with 1 h1.
 - The demo page now shows all **6 combinations** (3 layouts × 2 themes). DEMO ONLY: delete it before launch.
+
+### 2026-11-19: "Get the app": reverse spotlight option, bigger circle, slower and smoother
+- **Reverse option** (user): `rowsSpotInvert` ("Collage rows — colour, grayscale spotlight"). The rows stay in colour and a **grey** circle follows the cursor.
+  - Migration `m261119_180000_cta_rows_spotlight_invert`: dropdown option, plus light and dark versions on the demo page.
+  - Template: `data-cta-spotlight="colour"` (rowsSpot) or `"gray"` (rowsSpotInvert).
+  - JS: the clone gets `cta-rows--spot` plus `--spot-colour` or `--spot-gray`.
+  - CSS: grayscale goes on the base for "colour" and on the copy for "gray"; one shared mask on `.cta-rows--spot`.
+- **Demo order:** `m261119_181000_cta_options_demo_reorder` sets the order to light then dark; spiral → rows → rowsSpot → rowsSpotInvert (8 blocks).
+  - **Gotcha:** the previous migration re-sorted `$page->getFieldValue('pageBuilder')->all()` after saving new blocks. That query's results were already loaded, so the new blocks were missing from the sort. Query fresh with `Entry::find()->ownerId($page->id)->field('pageBuilder')`.
+- **Bigger circle** (user): `SPOT_RADIUS` changed from 160 to 220px.
+- **Smoother and slower** (user):
+  - Rows run at 6–16px/s (was 10–26), and the gentle speed changes are kept.
+  - The circle follows with a 0.25s time constant (was 0.12s).
+- **Bug fix: the circle drifted away from a still cursor when the page scrolled.** Its position is relative to the section, and it was only updated on pointermove.
+  - Now the pointer's client x/y is remembered and recalculated on `scroll` while the pointer is inside, snapping to stay exactly under the cursor.
+  - Checked: hover at (400, 300), then scrolling 150px: the circle moves from my=280 to 430, the same as the cursor's new position over the section.
+- Demo `/cta-options-demo` now shows **8 versions**: spiral, rows, rowsSpot and rowsSpotInvert, each light and dark. DEMO ONLY.
