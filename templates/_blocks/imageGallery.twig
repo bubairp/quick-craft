@@ -13,7 +13,8 @@
 {# Fan (reference: partiful.com, measured): the gallery is one viewport tall (596px below
    1200px wide) with the heading on top at the top left; cards drift along a wavy diagonal,
    react to scroll, drag and hover (src/js/gallery-wave.js, .gallery-fan in app.css). #}
-<section class="relative overflow-hidden">
+{# overflow-x-clip (not overflow-hidden): lifted cards may rise above the section, as on the reference #}
+<section class="relative overflow-x-clip">
     <div class="gallery-fan" data-gallery-wave>
         <ul class="gallery-fan__row" aria-label="{{ block.heading ?: 'Gallery'|t }}">
             {% for image in images %}

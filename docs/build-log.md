@@ -396,3 +396,16 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Hover: 12° / −179.9px; neighbours −73/+14 and −11/+2.2 (reference −73/+15, −11/+2.35). Drift paused.
   - Scroll direction is correct.
   - 375px: touch swipe works, no overflow, no console errors.
+
+### 2026-11-19: Gallery hover: cards near the top were cut off
+- User: the hovered card should look the same everywhere; in some places it was being cut off.
+- **Reference (measured in Chrome):**
+  - The lift is the same everywhere: `rotate(12deg) translateY(−180px)`. The left card went from top 381 to 145, the middle one from 283 to 46.
+  - Its gallery wrapper is `overflow: clip visible`, so it clips **only horizontally**. A card lifted near the top rises above the gallery, over the previous section, and is never cut.
+- **Ours** clipped both ways (`overflow: hidden` on `.gallery-fan.is-wave` and on the section), so high cards on the right were cut at the gallery's top edge.
+- **Fix:**
+  - `.gallery-fan.is-wave { overflow-x: clip; overflow-y: visible }`.
+  - The section changes from `overflow-hidden` to `overflow-x-clip`.
+  - `clip`, unlike `hidden`, doesn't force the other axis to scroll/clip.
+- Checked in Chrome: no ancestor clips vertically. A right-hand card lifted 102px above the gallery top is the topmost element at every probed point, 28px above the edge included, and the screenshot shows it whole.
+- **Testing gotcha:** the card is skewed and rotated, so the top of its bounding box at the centre is empty space. Probe inside the card (15–30% of its height), not 12px under the box top.

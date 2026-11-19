@@ -178,7 +178,10 @@
   /* JS mode */
   .gallery-fan.is-wave {
     height: calc(var(--spacing) * 149);
-    overflow: hidden;
+    /* clip only the sides, like the reference ("overflow: clip visible"): a hovered card near
+       the top lifts above the gallery (over the previous section) instead of being cut off */
+    overflow-x: clip;
+    overflow-y: visible;
     cursor: grab;
     user-select: none;
     touch-action: pan-y;               /* vertical page scroll still works on touch */
