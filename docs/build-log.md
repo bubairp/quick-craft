@@ -843,3 +843,8 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Migration** `m261120_230000_cp_page_site_setup`: page "Settings" → **"Site setup"** (icon `sliders`). It reads the stored source list, renames the page, re-saves with `saveSources()`, and updates `savePageSettings()`.
 - **Checked:** 8 sources on "Site setup", none left on "Settings"; no project-config diff. The CP itself is for the user to confirm (no login here).
 - **Note:** two pushes timed out (`git push` exit 124); they are pushed with this commit.
+
+### 2026-11-20: "Site setup" → "Site Setup"
+- The user's wording. Rule text updated first (CLAUDE.md, skill).
+- **Migration** `m261120_231000_cp_page_site_setup_case`: renames the page (from "Settings" or "Site setup") in the stored source list and the page settings (icon `sliders`).
+- **Checked:** 8 sources on 'Site Setup'; no project-config diff.
