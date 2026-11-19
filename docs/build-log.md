@@ -488,3 +488,16 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - The rows container now has an even top/bottom margin (`py-3 md:py-6`). The 6 rows share the remaining height (flex: 1), so every row sits fully inside the section.
   - Checked: desktop 700px section with 24px margins top and bottom; phone 388px section with 54px rows and 12px margins; 0 images cut at the top or bottom; no overflow.
   - Left/right: the rows slide, so an image is always entering or leaving at each side. Fading those in and out per image is possible if wanted.
+
+### 2026-11-19: One demo page with every "Get the app" option
+- User request: keep both layouts and put all the options on one demo page.
+- Migration `m261119_160000_cta_options_demo`:
+  - The old `/cta-rows-demo` entry is renamed to **/cta-options-demo** ("Get the app — all options"). The old URL now returns 404; it was only a demo.
+  - Its blocks are rebuilt as four copies of Home's banner, which differ only in `ctaLayout` and `theme`: **spiral·light, rows·light, spiral·dark, rows·dark**.
+  - Home is unchanged (spiral·light).
+- Checked:
+  - 4 sections of 1585×700 in that order; the spiral ones lay out 137 images, the rows ones 6 rows.
+  - 1 h1 (first block), the rest h2.
+  - Dark versions checked by eye: white pill with ink text, `night` subtitle box, images on black.
+  - The only console error is my own test fetch of the old URL (404).
+- **DEMO PAGE ONLY:** delete it before launch. Both layouts and both themes stay available in the CP ("Background layout", "Theme").
