@@ -35,6 +35,7 @@
   --color-star: #fe8207;       /* review stars */
   --color-glow-pink: #ffc4fe;  /* blurred background blobs */
   --color-glow-blue: #5fd8ff;
+  --color-promo: #3c0a7a;      /* promo bar background (Figma 17-1076) */
 
   /* Type scale: size / line-height / tracking */
   --text-xs: 0.75rem;

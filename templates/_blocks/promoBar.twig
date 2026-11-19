@@ -1,0 +1,24 @@
+{#
+ # Promo bar block. Figma: Birthday Invitations 17-1076 (1600×36, #3c0a7a).
+ # A thin full-width strip: emoji · text · emoji. When a link is set, the whole bar is the link.
+ # Receives: block, headingLevel (not used: the text isn't a heading)
+ # Fields: emoji, text, primaryButton (label "Link")
+ #}
+{% set text = block.text|trim %}
+{% if text %}
+    {% set link = block.primaryButton ?? null %}
+    {% set emoji = block.emoji|trim %}
+    {% set inner %}
+        {% if emoji %}<span class="text-2xl leading-none" aria-hidden="true">{{ emoji }}</span>{% endif %}
+        <span class="text-center text-sm font-bold text-surface {{ link and link.url ? 'underline-offset-4 group-hover:underline' }}">{{ text }}</span>
+        {% if emoji %}<span class="text-2xl leading-none" aria-hidden="true">{{ emoji }}</span>{% endif %}
+    {% endset %}
+    {% set barClass = 'flex min-h-9 w-full items-center justify-center gap-2.5 bg-promo px-4 py-1' %}
+    <aside aria-label="{{ 'Promotion'|t }}">
+        {% if link and link.url %}
+            <a {{ attr(link.attributes|merge({ class: 'group ' ~ barClass ~ ' focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-surface' })) }}>{{ inner }}</a>
+        {% else %}
+            <div class="{{ barClass }}">{{ inner }}</div>
+        {% endif %}
+    </aside>
+{% endif %}

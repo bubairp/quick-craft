@@ -40,7 +40,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ### Organizers (17-267)
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | `hero` | centered + rotatingWords | 17-426 |
+| ☐ | banner (Banner tab) | centered + rotatingWords | 17-426 |
 | — | logo strip | | 17-530 **skipped** |
 | ☐ | `testimonials` | quotes | 17-576 / 17-591 |
 | ☐ | `featureRows` | alternating | 17-640 |
@@ -50,8 +50,8 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ### Birthday Invitations (17-890)
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | `hero` | split | 17-1049 |
-| ☐ | `promoBar` | | 17-1076 |
+| ☐ | banner (Banner tab) | split | 17-1049 |
+| ☑ | `promoBar` | | 17-1076 |
 | ☐ | `imageGallery` | grid (captions) | 17-1088 |
 | ☐ | `cardGrid` | grid | 17-1271 |
 | ☐ | `richText` | | 17-1343 |
@@ -60,7 +60,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ### Invitation Maker (17-1440)
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | `hero` | split + eyebrow pill | 17-1599 |
+| ☐ | banner (Banner tab) | split + eyebrow pill | 17-1599 |
 | — | quote marquee | | 17-1633 **skipped** |
 | ☐ | `imageGallery` | row (categories) | 17-1931 |
 | ☐ | `cardGrid` | grid | 17-2004 |
@@ -73,7 +73,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ### Sell Tickets (17-2557), dark page
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | `hero` | split, dark, video | 17-2716 |
+| ☐ | banner (Banner tab) | split, dark, video | 17-2716 |
 | — | logo strip | | 17-2735 **skipped** |
 | ☐ | `cardGrid` | grid, dark | 17-2788 |
 | ☐ | `imageGallery` | marquee | 17-3649 |
@@ -84,7 +84,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ## 4. Careers (6-6167), Single `careers` + Jobs channel
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | `hero` | fullBleed | 6-6336 |
+| ☐ | banner (Banner tab) | fullBleed | 6-6336 |
 | — | quote marquee | | 6-6349 **skipped** |
 | ☐ | `textMedia` (+ `imageGallery` row) | right | 6-6646 |
 | ☐ | `cardGrid` | grid (emoji cards) | 6-6770 |
@@ -95,7 +95,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ## 5. Press (18-5996), Single `press` + Press mentions channel
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | `hero` | simple | 18-6155 |
+| ☐ | banner (Banner tab) | simple | 18-6155 |
 | ☐ | `pressList` | numbered | 18-6161 |
 
 ## 6. Blog (channel `blog`)

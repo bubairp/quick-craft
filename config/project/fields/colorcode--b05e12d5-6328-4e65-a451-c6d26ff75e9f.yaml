@@ -184,6 +184,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#3c0a7a'
+        -
+          - label
+          - promo
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

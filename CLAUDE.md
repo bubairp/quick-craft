@@ -96,6 +96,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - **Volume:** `images` (`web/uploads/images`, gitignored). Alt text uses the native alt field.
 - **pageBuilder blocks** (each one is `_blocks/{handle}.twig`, receives `block` and `headingLevel`):
   - cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList
+  - **promoBar** (Figma 17-1076; migration `m261120_270000_promo_bar`): `emoji` (shown on both sides), `text`, `primaryButton` (when set, the whole bar is the link). Full-width, 36px tall, `bg-promo` + `text-surface`; no scheme or spacing (it's a thin strip).
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`
@@ -106,7 +107,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - **Drafts are skipped on purpose:** the CP's draft autosave would send the page without the copied blocks and delete them.
   - The module is registered in `config/app.php` (`modules` + `bootstrap`), autoloaded via `composer.json` `"modules\\": "modules/"`. Keep it small, with one class per feature.
   - `faqItems`: `faqItem` (title = question, body)
-- **Reusable sections (Shopify-style step 4; migration `m261120_240000_reusable_sections`).** For a section that appears the same on several pages ("Get the app", newsletter, contact CTA):
+- **Reusable sections (Shopify-style step 4; migration `m261120_240000_reusable_sections`; kept: the user's decision, 2026-11-20).** For a section that appears the same on several pages ("Get the app", newsletter, contact CTA):
   - Build it **once** as an entry in the **`reusableSections` Channel** (no URLs; entry type `reusableContent`: title + `pageBuilder`). Then place it on any page with the **`reusableSection` block** (field `reusableEntry`: Entries, that section only, max 1).
   - Editing the entry updates every page that uses it. Prefer this over copying a block onto several pages.
   - `_blocks/reusableSection.twig` renders the entry's pageBuilder blocks with the page's heading level. **A reusableSection block inside a reusable entry is skipped**, so they can never loop.

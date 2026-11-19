@@ -899,3 +899,18 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Every page, Single, preset and **Home's draft #247** passes `validate()` in the live scenario (what a CP save runs).
   - The 8-page snapshot is identical.
 - **Note:** Home still has the user's provisional draft #247 (unsaved edits). Publish or discard it in the CP.
+
+### 2026-11-20: Block: promoBar (Figma 17-1076, Birthday Invitations)
+- **The user's decision on reusable sections: keep them** (recorded in CLAUDE.md).
+- **Rule/token first:**
+  - `--color-promo: #3c0a7a` in `@theme`; the Color Code palette was synced (the palette = tokens rule).
+  - CLAUDE.md › pageBuilder blocks › promoBar (fields and behaviour).
+- **Migration** `m261120_270000_promo_bar` (backup: `/tmp/before-promo.sql.gz`):
+  - promoBar gets `emoji` (a plainText instance, first);
+  - colorcode palette + `promo`;
+  - test content: a promo bar on Birthday Invitations ("🎈 Get $400 to throw your birthday party", link → Invitation Maker).
+- **Template** `_blocks/promoBar.twig`:
+  - `<aside aria-label="Promotion">`; the whole bar is the link when set (`group-hover:underline`, a `focus-visible` outline in `surface`), otherwise a `<div>`.
+  - Emojis are `aria-hidden`. Nothing renders without text.
+  - `text-sm` matches Figma exactly (14/16.8, −0.04em).
+- **Checked (Playwright via `/blocks`) at 375 / 768 / 1440:** 36px tall, bg rgb(60,10,122), text 14px/16.8px 700 −0.56px rgb(247,247,247), gap 10px, no overflow; focus ring visible. Matches the Figma frame.
