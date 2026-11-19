@@ -576,3 +576,14 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Mappings for Facebook, YouTube, Threads and Pinterest are included for future items.
 - Checked: all 5 footer columns have the same links as before; the 5 social links have their icons and open in a new tab; no errors.
 - Editors: to add an icon to any footer (or header) menu link, write `icon: <name>` in its Data JSON, using names from https://tabler.io/icons.
+
+### 2026-11-19: Header: one "Contact Us" button
+- Content change only; the template is unchanged (`_partials/header.twig` already skips an empty button).
+- Migration `m261119_210000_header_contact_button` (backup first: `ddev export-db --file=/tmp/before-header-contact.sql.gz`):
+  - `siteSettings.primaryButton` → URL `/contact`, label "Contact Us". This is the same page as the footer's Support › Contact link.
+  - `siteSettings.secondaryButton` → cleared. This removes "Log in" on desktop and at the bottom of the mobile menu.
+- Checked with Playwright:
+  - 1440px: one dark "Contact Us" pill on the right.
+  - 375px: "Contact Us" (sm) next to the menu button. The open mobile panel has no extra button, and there is no horizontal overflow.
+- Editors: change the button text or link in CP › Globals › Site settings › Header primary button. Fill "Header secondary button" to bring a second button back.
+- Note: `/contact` has no page yet (placeholder, as in the footer).
