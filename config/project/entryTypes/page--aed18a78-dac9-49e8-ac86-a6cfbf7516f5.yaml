@@ -262,10 +262,10 @@ fieldLayouts:
         uid: 72cbd2d1-9470-4356-a751-7afb93c1160f
         userCondition: null
     thumbFieldKey: null
-handle: landingPage
+handle: page
 hasTitleField: true
 icon: file-lines
-name: 'Landing page'
+name: Page
 showSlugField: true
 showStatusField: true
 slugTranslationKeyFormat: null

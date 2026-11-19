@@ -11,6 +11,7 @@
 {% if not _globals.has('siteSettings') %}
     {% do _globals.put('siteSettings', craft.entries.section('siteSettings').with(['image', 'buttons', 'socialLinks', 'contactDetails']).one()) %}
     {% do _globals.put('newsletter', craft.entries.section('newsletter').with(['image']).one()) %}
+    {% do _globals.put('googleStructureData', craft.entries.section('googleStructureData').one()) %}
 {% endif -%}
 <!DOCTYPE html>
 <html lang="{{ currentSite.language }}">
@@ -26,6 +27,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
+
+    {# Google Structured Data Single: JSON-LD. Decoded and re-encoded, so invalid JSON is skipped and
+       "</script>" can't break out (json_encode escapes "/"). #}
+    {% set structuredData = (_globals.get('googleStructureData').structuredData ?? '')|trim %}
+    {% set structuredData = structuredData ? structuredData|json_decode : null %}
+    {% if structuredData %}
+        <script type="application/ld+json">{{ structuredData|json_encode|raw }}</script>
+    {% endif %}
 
     {% block headExtra %}{% endblock %}
 

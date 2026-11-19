@@ -1,0 +1,20 @@
+{#
+ # System page (404 / 500 / 503): a Single without a URL, using the `page` entry type, so editors
+ # build it like any page (Banner + page builder). Rendered through _entries/page.twig.
+ # If the Single is missing, a minimal page with translatable fallback copy is shown.
+ # Props: handle (pageNotFound | pageError | pageMaintenance), fallbackHeading, fallbackText
+ #}
+{% set entry = craft.entries.section(handle).one() %}
+{% if entry %}
+    {% include '_entries/page.twig' with { entry: entry } %}
+{% else %}
+    {% embed '_layouts/base.twig' %}
+        {% block content %}
+            <div class="mx-auto flex max-w-content flex-col items-center gap-6 px-4 pt-32 pb-16 text-center md:px-gutter md:pt-44">
+                <h1 class="text-balance text-4xl font-medium md:text-6xl">{{ fallbackHeading }}</h1>
+                <p class="max-w-xl text-xl text-muted">{{ fallbackText }}</p>
+                <a href="{{ siteUrl }}" class="rounded-full bg-ink px-6 py-4 font-semibold text-paper hover:bg-night">{{ 'Go to the homepage'|t }}</a>
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endif %}

@@ -1,0 +1,43 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  4421c869-a27e-4669-bb92-6cf70cadaf6d:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: structuredData
+            instructions: 'Valid JSON-LD, e.g. {"@context":"https://schema.org","@type":"Organization",…}. Printed in every page’s <head>; invalid JSON is skipped.'
+            label: 'Structured data (JSON-LD)'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 7957758f-5486-456e-9cfd-1d901c802e69
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 5251cfd1-0ab1-4b6e-b284-126878c346b8
+        userCondition: null
+    thumbFieldKey: null
+handle: googleStructureData
+hasTitleField: false
+icon: code
+name: 'Google Structured Data'
+showSlugField: true
+showStatusField: false
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

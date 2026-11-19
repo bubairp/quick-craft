@@ -1,0 +1,6 @@
+{# 503 — the "Page maintenance" Single (system offline / maintenance). Shown when devMode is off. #}
+{% include '_partials/system-page.twig' with {
+    handle: 'pageMaintenance',
+    fallbackHeading: 'Back soon'|t,
+    fallbackText: 'We’re making some improvements. Please check back shortly.'|t,
+} only %}

@@ -2,20 +2,21 @@ defaultPlacement: end
 enableVersioning: true
 entryTypes:
   -
-    uid: 14b4cca7-7209-4869-af0f-ae9255281943 # Press
-handle: press
+    uid: f05b1f7b-304c-435c-a11b-8ea518a454ee # LLMs Text
+handle: llmsText
 maxAuthors: 1
 minAuthors: 1
-name: Press
+name: 'LLMs Text'
 previewTargets:
   -
-    label: 'Primary entry page'
-    urlFormat: '{url}'
+    label: 'LLMs Text'
+    refresh: true
+    urlFormat: llms.txt
 propagationMethod: all
 siteSettings:
   739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
     enabledByDefault: true
-    hasUrls: true
-    template: _entries/page
-    uriFormat: press
+    hasUrls: false
+    template: null
+    uriFormat: null
 type: single

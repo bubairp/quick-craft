@@ -20,7 +20,7 @@
 {% set layoutFields = ['cardLayout', 'featureLayout', 'galleryLayout', 'testimonialLayout', 'ctaLayout', 'mediaPosition'] %}
 
 {# No .with(['images']): banner.twig calls page.images.eagerly(), which needs a query, not a collection #}
-{% set pages = craft.entries.section(['home', 'landingPages', 'careers', 'press']).all() %}
+{% set pages = craft.entries.section(['home', 'pages']).all() %}
 {% set pageBuilder = craft.app.fields.getFieldByHandle('pageBuilder') %}
 {% set blocks = pageBuilder ? craft.entries.field(pageBuilder).ownerId(pages|map(p => p.id)).with(['owner']).all() : [] %}
 

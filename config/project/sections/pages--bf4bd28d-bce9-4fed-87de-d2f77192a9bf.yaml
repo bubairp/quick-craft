@@ -2,11 +2,11 @@ defaultPlacement: end
 enableVersioning: true
 entryTypes:
   -
-    uid: aed18a78-dac9-49e8-ac86-a6cfbf7516f5 # Landing page
-handle: landingPages
+    uid: aed18a78-dac9-49e8-ac86-a6cfbf7516f5 # Page
+handle: pages
 maxAuthors: 1
 minAuthors: 1
-name: 'Landing pages'
+name: Pages
 previewTargets:
   -
     label: 'Primary entry page'
@@ -17,8 +17,8 @@ siteSettings:
     enabledByDefault: true
     hasUrls: true
     template: _entries/page
-    uriFormat: '{slug}'
+    uriFormat: "{parent ? parent.uri ~ '/'}{slug}"
 structure:
-  maxLevels: 1
+  maxLevels: null
   uid: b03b0b2d-585b-4305-be35-901a90c12253
 type: structure

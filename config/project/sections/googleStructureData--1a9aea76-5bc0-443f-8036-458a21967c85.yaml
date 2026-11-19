@@ -1,0 +1,22 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: c1a48cb4-a215-47e9-841c-0a349b595d9a # Google Structured Data
+handle: googleStructureData
+maxAuthors: 1
+minAuthors: 1
+name: 'Google Structured Data'
+previewTargets:
+  -
+    label: 'Google Structured Data'
+    refresh: true
+    urlFormat: /
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+type: single

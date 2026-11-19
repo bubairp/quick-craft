@@ -1,0 +1,6 @@
+{# 500 — the "Page error" Single. Shown when devMode is off. #}
+{% include '_partials/system-page.twig' with {
+    handle: 'pageError',
+    fallbackHeading: 'Something went wrong'|t,
+    fallbackText: 'Please try again in a moment.'|t,
+} only %}

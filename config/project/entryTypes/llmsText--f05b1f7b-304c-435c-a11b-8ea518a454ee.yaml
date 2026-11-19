@@ -1,0 +1,43 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  3178a13c-6e1b-4749-826f-b47cdb2b414a:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: llmsContent
+            instructions: 'Markdown served at /llms.txt for AI crawlers.'
+            label: 'llms.txt content'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: b6095a36-480d-4f47-99f5-0fdccd098170
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 4a57b677-726c-4049-9e06-1eca4a421643
+        userCondition: null
+    thumbFieldKey: null
+handle: llmsText
+hasTitleField: false
+icon: robot
+name: 'LLMs Text'
+showSlugField: true
+showStatusField: false
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

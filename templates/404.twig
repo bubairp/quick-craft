@@ -1,0 +1,6 @@
+{# 404 — the "Page not found" Single (CLAUDE.md › Only Home is a page Single). Shown when devMode is off. #}
+{% include '_partials/system-page.twig' with {
+    handle: 'pageNotFound',
+    fallbackHeading: 'Page not found'|t,
+    fallbackText: 'The page you’re looking for doesn’t exist or has moved.'|t,
+} only %}

@@ -787,3 +787,31 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - banner.twig takes an optional `headingLevel` (library = 3), so the page has one `<h1>`.
 - **Gotcha:** don't `.with(['images'])` on entries passed to banner.twig. It calls `page.images.eagerly()`, which needs a query, not a collection (500: "ElementCollection::eagerly does not exist").
 - **Checked:** `/blocks`, `?scheme=dark` and `?scheme=soft` return 200. One h1, an h2 per type, blocks at h3. 13 examples; 8 types correctly flagged "No template yet". No horizontal overflow at 1440.
+
+### 2026-11-20: Only Home is a page Single; Pages structure; system and settings Singles
+- **User's rules** (as in Site7 Engine):
+  - Only Home is a page Single; every other page is a standard page built with the page builder.
+  - Page not found / Page error / Page maintenance are Singles.
+  - Site settings, Google Structured Data and LLMs Text are Singles.
+- **Rule first:** CLAUDE.md content-model table + "Only Home is a page Single"; icon table; skill "Page entry types".
+- **Migration** `m261120_200000_pages_structure` (backup: `/tmp/before-pages.sql.gz`):
+  - **Pages:** `landingPages` → `pages` "Pages" (Structure, nested pages allowed, URI `{parent ? parent.uri ~ '/'}{slug}`); `landingPage` → `page` "Page".
+  - **Careers (#4) and Press (#6) moved into `pages` keeping their IDs** (menus link to them by entry ID), their URIs and field values. Their drafts/revisions were removed (they were of the old types), then the two Singles and entry types deleted.
+    - **Fallback:** if the project config already deleted the Singles, the trashed entries are restored into `pages` (raw `entries`/`elements` update, then appended to the structure).
+  - **System Singles** (no URLs, `page` entry type, starter content filled whenever the heading is empty): `pageNotFound`, `pageError`, `pageMaintenance`.
+  - **Settings Singles:**
+    - `googleStructureData` (`structuredData` = a plainText instance; preview target `/`);
+    - `llmsText` (`llmsContent` = a plainText instance; preview target `llms.txt`).
+- **Templates:**
+  - `404.twig`, `500.twig`, `503.twig` → `_partials/system-page.twig` (renders the Single through `_entries/page.twig`; `|t` fallback copy if it's missing).
+  - `llms.txt.twig` (text/plain; 404 when empty).
+  - base.twig prints the structured data as JSON-LD: `json_decode` then `json_encode`, so invalid JSON is skipped and `</script>` comes out as `<\/script>` (tested).
+  - `/blocks` reads `home` + `pages`.
+  - **Banner fix:** rotating words are filtered before the length check, so an empty table no longer prints an empty Alpine span.
+- **Gotchas:**
+  - In devMode, Craft shows its exception page for 404/500 (`ErrorHandler::showExceptionDetails`). Test the system pages at `/404`, `/500`, `/503` directly.
+  - `moveEntryToSection()` needs the entry's type to be allowed in the target section. For a type change plus a move, update `entries.sectionId` / `typeId` and copy the field values.
+- **Checked:**
+  - `/`, `/careers`, `/press`, `/organizers`, `/blocks`, `/404`, `/500`, `/503` → 200; `/llms.txt` → 404 when empty, 200 text/plain with content.
+  - The 8 page snapshots are unchanged apart from the rebuilt asset hash and whitespace.
+  - Both orders tested (migration first; restore + `craft up` with the project config first): IDs 4/6 in `pages`, menu links intact, system pages with starter content, no project-config diff.

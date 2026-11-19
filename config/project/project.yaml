@@ -1,4 +1,4 @@
-dateModified: 1795091430
+dateModified: 1795091858
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -16,14 +16,17 @@ meta:
     0ad8bc41-0b78-402d-a997-580efe0f6653: 'Blog post' # Blog post
     0ed6a8a3-8f74-4e22-81eb-7850257a4bd2: 'Background layout' # Background layout
     0fa4c80e-670a-453c-8b6c-d430775fc6fc: 'Social links' # Social links
+    1a9aea76-5bc0-443f-8036-458a21967c85: 'Google Structured Data' # Google Structured Data
     1afd5b95-7bb4-4303-a773-66fabce3b25b: 'Colour scheme' # Colour scheme
     1daa38ef-b4f6-494b-aa88-6f60a08f6bcf: Image/Video # Image/Video
     1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a: 'Lightswitch (default off)' # Lightswitch (default off)
+    2ab8e0f7-3f3a-4516-b030-cd8918212d6e: 'Page maintenance' # Page maintenance
     2b0cb8a9-792e-430c-aab8-e6b9c3045101: 'Quick Craft' # Quick Craft
     2de22aae-55dd-43ca-84cb-499365bc077d: Newsletter # Newsletter
     2e99dba1-8244-4b6e-9805-b8df8dfaaee2: 'Rich text (full)' # Rich text (full)
     2f4b01a5-9912-4315-9f48-39763a5dd99e: Department # Department
     3c0efb34-47ad-4843-b9cc-5768d4c18afe: 'Contact details' # Contact details
+    3c672367-bcf3-4d71-8bec-c7f8fda1180a: 'LLMs Text' # LLMs Text
     03f1d9c2-255c-41ed-818a-e2cb06131584: 'Contact detail' # Contact detail
     3f6d2a8e-5b1c-4e7a-9c2d-8a4b6e1f0c37: Spacing # Spacing
     4b43103e-a137-4e60-8356-f1cbcb85cb30: Stat # Stat
@@ -35,12 +38,11 @@ meta:
     7f8b1407-c8ef-4bdb-be9b-9f17cf1ee52f: 'Feature layout' # Feature layout
     8daa4bde-fbd6-4b3a-82e8-f6568c6a52eb: 'Comparison list' # Comparison list
     08e26cf8-8b84-4fa3-a0fe-bb7b40bf0a79: 'Text + media' # Text + media
+    9afffd1f-a63a-4ec2-8f87-8c1968d0002f: 'Page not found' # Page not found
     11e3d5af-5779-4d3a-861b-372205b6fd0c: 'Job list' # Job list
-    14b4cca7-7209-4869-af0f-ae9255281943: Press # Press
     18cf8c50-519d-43d3-8d63-6bafe1e82252: Testimonial # Testimonial
     30a1f63f-64b9-40be-b8b0-cbfc88088d9f: 'Employment type' # Employment type
     57b7bd4f-a6bd-42d5-aed6-89b354c589b9: Home # Home
-    67eb358b-7ce6-4e6b-8fb9-6d42b1cc869b: Press # Press
     67efb085-6691-40da-8653-a076dfebd256: Number # Number
     76de1f40-ea54-4a05-a0bc-66b4accf2173: 'Gallery layout' # Gallery layout
     82b1259f-8590-456a-a4f1-f538006f845a: Card # Card
@@ -54,6 +56,7 @@ meta:
     372aa289-261e-479e-b1db-8dd44fd14f14: Money # Money
     387e6ecc-0194-4b56-87a9-d9f42fbe983b: 'Page builder' # Page builder
     509a88e4-38a6-4ebd-adba-6af6222be685: 'Chat messages' # Chat messages
+    724d7b32-2502-4a48-9558-9f9129f9fd6e: 'Page error' # Page error
     761f1f27-3b7d-4327-833c-e38b716c0d2b: Comparison # Comparison
     864d7fef-094c-434b-ad76-e9e3b15430e6: Home # Home
     949bbee0-db0d-4930-b297-ed2a5d2f2052: Platform # Platform
@@ -79,17 +82,16 @@ meta:
     a8028db7-e7b3-40d6-b693-8ab2960cc756: Buttons # Buttons
     a44624b9-c2b7-48d3-a9a6-6b12900597ff: Department # Department
     aa6c33f4-a111-4e09-8f71-ed0bd93a53aa: Workplace # Workplace
-    aed18a78-dac9-49e8-ac86-a6cfbf7516f5: 'Landing page' # Landing page
+    aed18a78-dac9-49e8-ac86-a6cfbf7516f5: Page # Page
     b05e12d5-6328-4e65-a451-c6d26ff75e9f: 'Color Code' # Color Code
     b7e2c4a1-6d3f-4a8e-9b5c-2f1e7d0a4c93: 'Page background' # Page background
-    bbf1a91a-829d-4d7c-b672-be5ef363ac43: Careers # Careers
     bcaffb4a-ef69-4bf9-93b7-7dffd6af1f1a: Newsletter # Newsletter
     bd6bdbd4-f9b8-4fb7-a4e6-b291b99b6f51: 'Testimonial layout' # Testimonial layout
     bebe7a90-318e-4e6e-9eb3-b4c04cfc5b91: 'Rich text' # Rich text
-    bf4bd28d-bce9-4fed-87de-d2f77192a9bf: 'Landing pages' # Landing pages
+    bf4bd28d-bce9-4fed-87de-d2f77192a9bf: Pages # Pages
+    c1a48cb4-a215-47e9-841c-0a349b595d9a: 'Google Structured Data' # Google Structured Data
     c1ab53a3-753c-4acd-bdb3-5684c9e853ac: Images # Images
     c1cfe04a-e151-4b5e-bd6d-3e8ab6bf76d9: 'Lightswitch (default on)' # Lightswitch (default on)
-    c9f5ea42-caef-4bfb-96d7-afc15e1d1a63: Careers # Careers
     c39cda31-3ea4-43d7-8c7a-8257e5d98455: 'Rotating words' # Rotating words
     c724e92f-54e6-49fa-88e4-1be0f8868984: 'CTA banner' # CTA banner
     c3833a80-0361-44d0-a6e4-f5b973719a87: 'URL link' # URL link
@@ -102,6 +104,7 @@ meta:
     eb55722c-ef4f-4086-8ded-7058f8a14efe: Departments # Departments
     ed4e759a-5624-44da-8530-6257893100bd: Cards # Cards
     f031b096-7a3c-4312-b8e7-91a68217c230: 'Press mentions' # Press mentions
+    f05b1f7b-304c-435c-a11b-8ea518a454ee: 'LLMs Text' # LLMs Text
     f2ca311d-42ef-44f5-83c8-d3adf7938d60: Type # Type
     fad12a2d-f499-4eba-b487-9b0f28be78be: 'Card grid' # Card grid
     fbd8e8c2-a526-484b-9ac8-e9f7a5b6c8af: 'Card layout' # Card layout

@@ -57,18 +57,27 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 | Section | Type | URI → template | Entry type: fields |
 |---|---|---|---|
 | Home | Single | `__home__` → `_entries/page` | `home`: page tabs (below) |
-| Landing pages | Structure (1 level) | `{slug}` → `_entries/page` | `landingPage`: page tabs |
+| **Pages** | Structure (nested pages allowed) | `{parent ? parent.uri ~ '/'}{slug}` → `_entries/page` | `page`: page tabs. **Every standard page:** landing pages, Careers, Press, About… |
 | Blog | Channel | `blog/{slug}` → `blog/_entry` | `blogPost`: tabs **Post** (title, image, text = summary, blogCategories, featured) · **Content** (body) · **SEO** (seo); author = Craft user |
-| Careers | Single | `careers` → `_entries/page` | `careers`: page tabs |
 | Jobs | Channel | no URLs | `job`: department, location, employmentType, workplace, externalLink |
-| Press | Single | `press` → `_entries/page` | `press`: page tabs |
+| Page not found | Single | no URL → `404.twig` | `page`: page tabs |
+| Page error | Single | no URL → `500.twig` | `page`: page tabs |
+| Page maintenance | Single | no URL → `503.twig` | `page`: page tabs |
 | Press mentions | Channel | no URLs | `pressMention`: publication, externalLink (title = headline, postDate = date) |
 | Site settings | Single | no URLs | `siteSettings`: image (logo), buttons (header CTAs), appStoreLink, googlePlayLink, socialLinks, contactDetails |
 | Newsletter | Single | no URLs | `newsletter`: image (blog title image), heading, text, newsletterForm (Wheel Form) |
+| Google Structured Data | Single | no URL; printed in `<head>` by base.twig | `googleStructureData`: `structuredData` (a plainText instance holding JSON-LD). It must be valid JSON; it is re-encoded with `json_encode`, so a broken or unsafe value is never output |
+| LLMs Text | Single | no URL; served at `/llms.txt` (`templates/llms.txt.twig`, text/plain) | `llmsText`: `llmsContent` (a plainText instance, Markdown for AI crawlers) |
 | Blog categories | Structure | no URLs | `blogCategory`: title. Related via the Entries field `blogCategories` |
 | Departments | Structure | no URLs | `department`: title. Related via the Entries field `department` |
 
-- **Page tabs (as in Site7 Engine), every page entry type** (home, landingPage, careers, press, and any new page type). Migration `m261120_100000_page_tabs`:
+- **Only Home is a page Single** (the user's rule, as in Site7 Engine; migration `m261120_200000_pages_structure`).
+  - **Every other page is an entry in the `pages` Structure**, built with the Banner + page builder. To add a page, add an entry there; never create a new Single or section for a page.
+  - **Singles without URLs:**
+    - settings: `siteSettings`, `newsletter`, `googleStructureData`, `llmsText`;
+    - system pages: `pageNotFound`, `pageError`, `pageMaintenance`. They use the `page` entry type and are rendered by `templates/404.twig`, `500.twig` and `503.twig` via `_partials/system-page.twig`, with `|t` fallback copy if the entry is missing.
+  - Careers (ID 4) and Press (ID 6) were moved into `pages` with their IDs, so menu links by entry ID still work.
+- **Page tabs (as in Site7 Engine), every page entry type** (`home`, `page`, and any new page type). Migration `m261120_100000_page_tabs`:
   1. **Page:** title, `pageBackground` (paper / surface: the page's background colour).
   2. **Banner:** the page's fixed banner (hero). Fields: `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `buttons`, `images` (the banner/featured image), `chatMessages`.
   3. **Content:** `pageBuilder`.
@@ -155,7 +164,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   | amber | media | imageGallery (images), image (image) |
   | violet | social proof | testimonials (quote-left) |
   | gray | items inside a block | card (id-card), faqItem (circle-question), testimonial (comments), stat (chart-simple), button (hand-pointer), socialLink (share-nodes), contactDetail (address-card) |
-  | none | pages and settings | home (house), landingPage (file-lines), careers (briefcase), press (newspaper), blogPost (rss), job (briefcase), pressMention (link), siteSettings (gear), newsletter (envelope), blogCategory (hashtag), department (layer-group) |
+  | none | pages and settings | home (house), page (file-lines), blogPost (rss), job (briefcase), pressMention (link), siteSettings (gear), newsletter (envelope), googleStructureData (code), llmsText (robot), blogCategory (hashtag), department (layer-group) |
 
   **A new entry type gets an icon and a colour from this table in its migration.**
 - **Block library page `/blocks`** (`templates/blocks.twig`; login required, except in devMode so it can be checked locally; not indexed):

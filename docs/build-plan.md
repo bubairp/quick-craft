@@ -36,7 +36,7 @@ Status: ☐ to do · ◐ in progress · ☑ done
 
 All Home blocks were checked from rendered HTML only (structure, headings, empty fields). Visual QA is still pending.
 
-## 3. Landing pages (Structure `landingPages`)
+## 3. Pages (Structure `pages`: landing pages, Careers, Press…)
 ### Organizers (17-267)
 | | Block | Layout | Node |
 |---|---|---|---|
@@ -116,6 +116,6 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 
 ## 7. Finish
 - ☐ Ether SEO defaults (title suffix, social images), sitemap
-- ☐ 404 page, favicon
+- ◐ 404 page (☑ 404/500/503 system Singles), favicon ☐
 - ☐ Cross-page Playwright pass (375/768/1440), accessibility and empty-field checks
 - ☐ Replace placeholder content with real Quick Craft assets and copy (the imported design contains third-party logos, fonts and screenshots)

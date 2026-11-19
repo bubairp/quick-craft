@@ -1,0 +1,17 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: aed18a78-dac9-49e8-ac86-a6cfbf7516f5 # Page
+handle: pageMaintenance
+maxAuthors: 1
+minAuthors: 1
+name: 'Page maintenance'
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+type: single

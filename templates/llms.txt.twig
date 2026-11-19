@@ -1,0 +1,5 @@
+{#- /llms.txt — the "LLMs Text" Single (llmsContent), as plain text. 404 when empty. -#}
+{%- header "Content-Type: text/plain; charset=utf-8" -%}
+{%- set llms = craft.entries.section('llmsText').one() -%}
+{%- if not (llms.llmsContent ?? '')|trim -%}{% exit 404 %}{%- endif -%}
+{{ llms.llmsContent|raw }}
