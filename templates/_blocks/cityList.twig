@@ -9,7 +9,7 @@
 {% set level = headingLevel ?? 2 %}
 
 {% if cities|length %}
-<section class="overflow-hidden bg-paper py-16 md:py-36" x-data="{ active: 0 }">
+<section class="overflow-hidden py-16 md:py-36" x-data="{ active: 0 }">
     {% include '_components/section-heading.twig' with {
         heading: block.heading, text: block.text, level: level, class: 'px-4 md:px-gutter',
     } only %}

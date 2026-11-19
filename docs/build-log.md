@@ -274,3 +274,14 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - 10 synthetic 1352px drags with 340 checks after each move step: 0px.
 - **Bug fix in `_components/image.twig`:** SVGs are now served as-is. Transforming them rasterised them to WebP with a white background, which showed as a white box behind the NYT logo on the grey section. This affects every SVG on the site.
 - **Not checked:** mobile widths. The Chrome window wouldn't resize (it's maximised), and Playwright can't load the local HTTPS site at the moment (certificate).
+
+### 2026-11-19: Home page background = #f7f7f7 (all light sections, as in Figma)
+- Checked with a screenshot of Figma Body 6-1255, sampling pixels down the left edge and across five columns. Every light section on Home is `#f7f7f7` (`surface`): press strip, "One link. Everyone's in.", "A million reasons to hang", cities, "More than an invite", testimonials, Get the app, and the area around the footer. Ours was `paper` `#fdfdfb`.
+- Other page designs differ: Careers 6-6167 is white. So this is **Home's page background**, not a global token change.
+- How:
+  - `_layouts/base.twig` has a new block `bodyBg` (default `bg-paper`).
+  - `_entries/page.twig` sets `bg-surface` when `entry.section.handle == 'home'`.
+  - **Light sections no longer paint their own background**, so they show the page background: hero light, ctaBanner light, cityList, testimonials carousel (its `from-paper to-surface` gradient wasn't in the design) and the press strip.
+  - **Rule:** light blocks stay transparent. Only dark variants set a background.
+- The light CTA's text box (`bg-surface`) matches Figma 6-2052 (`#f7f7f7`), so it blends with the page as designed.
+- Checked in Chrome: on Home, `body` and every light section resolve to `rgb(247,247,247)`; the hero (black) and featureRows (ink) are unchanged. `/organizers` stays `rgb(253,253,251)`.

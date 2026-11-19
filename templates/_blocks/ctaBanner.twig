@@ -12,7 +12,7 @@
 {% set headingLink = block.primaryButton.url ?? null %}
 
 {% if block.heading or block.text %}
-<section class="relative overflow-hidden {{ dark ? 'bg-black text-white' : 'bg-paper text-ink' }} px-4 py-24 md:min-h-175 md:py-36">
+<section class="relative overflow-hidden {{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 py-24 md:min-h-175 md:py-36">
 
     {% if images|length %}
         {# Rings: positions are computed from each item's index (geometry, not design values) #}

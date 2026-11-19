@@ -1,6 +1,7 @@
 {#
  # Base layout — every page template extends this.
- # Blocks: bodyClass, header, content, footer
+ # Blocks: bodyBg (page background, default paper), bodyClass, header, content, footer
+ # Light sections have no background of their own, so they show the page background.
  #}
 <!DOCTYPE html>
 <html lang="{{ currentSite.language }}">
@@ -20,7 +21,7 @@
     {# Vite: dev server (HMR) in dev, hashed build from web/dist otherwise #}
     {{ craft.vite.script('src/main.js', false) }}
 </head>
-<body class="min-h-dvh flex flex-col bg-paper {% block bodyClass %}{% endblock %}">
+<body class="min-h-dvh flex flex-col {% block bodyBg %}bg-paper{% endblock %} {% block bodyClass %}{% endblock %}">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2">
         {{ 'Skip to content'|t }}
     </a>

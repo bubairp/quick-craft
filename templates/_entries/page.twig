@@ -5,6 +5,10 @@
  #}
 {% extends '_layouts/base.twig' %}
 
+{# Home's page background is #f7f7f7 (surface) in Figma (6-1255, every light section);
+   other page designs (e.g. Careers 6-6167) use the default light background. #}
+{% block bodyBg %}{{ entry.section.handle == 'home' ? 'bg-surface' : 'bg-paper' }}{% endblock %}
+
 {% block content %}
     {% set blocks = entry.pageBuilder.eagerly().all() %}
 
