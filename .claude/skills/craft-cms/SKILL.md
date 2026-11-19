@@ -16,7 +16,7 @@ Every page entry type (home, landingPage, careers, press, and new ones) uses fou
 | Tab | Fields |
 |---|---|
 | **Page** | title, `pageBackground` |
-| **Banner** | `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `primaryButton`, `secondaryButton`, `images` (banner / featured image), `chatMessages` |
+| **Banner** | `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `buttons` (common Matrix), `images` (banner / featured image), `chatMessages` |
 | **Content** | `pageBuilder` |
 | **SEO** | `seo` |
 
