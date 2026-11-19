@@ -2,7 +2,16 @@
  # Base layout — every page template extends this.
  # Blocks: bodyBg (page background, default paper), bodyClass, header, content, footer
  # Light sections have no background of their own, so they show the page background.
+ #
+ # Site-wide settings are Singles (siteSettings, newsletter). They're loaded once per request
+ # here and shared through Craft's front-end `_globals` collection, which every template sees,
+ # including `{% include … only %}`. Read them with `_globals.get('siteSettings')`; never query
+ # the section again in a partial or block.
  #}
+{% if not _globals.has('siteSettings') %}
+    {% do _globals.put('siteSettings', craft.entries.section('siteSettings').with(['image']).one()) %}
+    {% do _globals.put('newsletter', craft.entries.section('newsletter').with(['image']).one()) %}
+{% endif -%}
 <!DOCTYPE html>
 <html lang="{{ currentSite.language }}">
 <head>

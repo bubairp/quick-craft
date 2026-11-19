@@ -63,12 +63,14 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 | Jobs | Channel | no URLs | `job`: department, location, employmentType, workplace, externalLink |
 | Press | Single | `press` → `_entries/page` | `press`: pageBuilder, seo |
 | Press mentions | Channel | no URLs | `pressMention`: publication, externalLink (title = headline, postDate = date) |
+| Site settings | Single | no URLs | `siteSettings`: image (logo), primaryButton and secondaryButton (header CTAs), appStoreLink, googlePlayLink |
+| Newsletter | Single | no URLs | `newsletter`: image (blog title image), heading, text, newsletterForm (Wheel Form) |
+| Blog categories | Structure | no URLs | `blogCategory`: title. Related via the Entries field `blogCategories` |
+| Departments | Structure | no URLs | `department`: title. Related via the Entries field `department` |
 
 - **Blog listing** is `templates/blog/index.twig`. It isn't a section.
-- **Globals:**
-  - `siteSettings`: image (logo), primaryButton and secondaryButton (header CTAs), appStoreLink, googlePlayLink
-  - `newsletter`: image (blog title image), heading, text, newsletterForm (Wheel Form)
-- **Categories:** `blogCategories`, `departments`
+- **Everything is an entry (as in Site7 Engine):** no global sets and no category groups. Migration `m261119_220000_entrify_globals_categories` converted them, keeping element IDs and content. Don't add global sets or category groups; use a Single (settings) or a Structure (taxonomies) instead.
+- **Settings Singles in templates:** `templates/_layouts/base.twig` loads `siteSettings` and `newsletter` **once per request** into Craft's front-end `_globals` collection. Read them anywhere, including `only` includes, with `{% set siteSettings = _globals.get('siteSettings') %}`. Never query these sections again in a partial or block. For a new settings Single, add it to that same block in base.twig.
 - **Volume:** `images` (`web/uploads/images`, gitignored). Alt text uses the native alt field.
 - **pageBuilder blocks** (each one is `_blocks/{handle}.twig`, receives `block` and `headingLevel`):
   - hero, cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList
@@ -84,7 +86,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - Always give an instance a **meaningful handle** (`personName`, never a generic `plainText` or `plainTextSub`) so templates stay readable.
 
 ### Content & data
-- **No hard-coded copy.** All text and images come from Craft fields (or `siteName`/globals). UI microcopy (e.g. "Skip to content", "Read more") must use `|t` for translation.
+- **No hard-coded copy.** All text and images come from Craft fields (or `siteName`/the settings Singles). UI microcopy (e.g. "Skip to content", "Read more") must use `|t` for translation.
 - **Always handle empty fields**: wrap optional output in `{% if %}`, skip wrapper elements when content is empty, never emit empty `<img>`, `<a href="">`, or empty headings.
 - **Eager-load** relations in queries (`.eagerly()` or `.with([...])`) — no N+1 queries inside loops.
 - **Images**: Craft native transforms with `srcset` + `sizes`, explicit `width`/`height`, `loading="lazy"` (except the above-the-fold hero: `fetchpriority="high"`), and `alt` from the asset's alt field (empty `alt=""` only for decorative images).

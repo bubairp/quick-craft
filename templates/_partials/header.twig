@@ -2,7 +2,7 @@
  # Site header — Figma 6-2902 (floating pill nav) + mega-menu dropdowns (reference: partiful.com).
  #
  # Content
- #   siteSettings global: logo (image), primaryButton, secondaryButton
+ #   siteSettings (Single, via _globals): logo (image), primaryButton, secondaryButton
  #   Simple RP Menu 'headerMenu', read as a tree via the plugin service getResolvedMenuItems():
  #     level 1  nav item — gets a dropdown when it has children
  #     level 2  column (noLink, name = column heading) → level 3 links (data_json "icon: cake" — a Tabler icon name, _components/icon.twig)
@@ -15,6 +15,7 @@
  #   Mobile:  menu button opens a panel; dropdown items become accordions.
  #   Hides on scroll down, returns on scroll up / focus (not while a menu is open).
  #}
+{% set siteSettings = _globals.get('siteSettings') %}
 {% set logo = siteSettings.image.one() ?? null %}
 {% set primary = siteSettings.primaryButton ?? null %}
 {% set secondary = siteSettings.secondaryButton ?? null %}

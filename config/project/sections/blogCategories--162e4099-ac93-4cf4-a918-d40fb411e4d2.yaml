@@ -1,0 +1,20 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: 6e289974-25fc-41ca-8426-66c8ce5dadfa # Blog category
+handle: blogCategories
+maxAuthors: 1
+minAuthors: 1
+name: 'Blog categories'
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+structure:
+  maxLevels: 1
+  uid: 2151f975-0750-4a29-9d68-6b8a2a9e73c4
+type: structure

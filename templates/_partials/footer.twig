@@ -3,7 +3,7 @@
  # Columns: Simple RP Menu menus; column heading = menu name. Links are rendered from the
  # plugin's resolved items (simplerpmenuItems.getResolvedMenuItems, as in the header) so an
  # item can carry a Tabler icon: Data JSON "icon: brand-instagram" (e.g. the Socials menu).
- # Store links: siteSettings global. Wordmark: siteName.
+ # Store links: siteSettings Single (via _globals). Wordmark: siteName.
  #}
 {% set footerMenus = ['footerCompany', 'footerProduct', 'footerSocials', 'footerLegal', 'footerSupport'] %}
 {% set menuItems = craft.app.plugins.getPlugin('simple-rp-menu').simplerpmenuItems %}

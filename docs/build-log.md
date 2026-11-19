@@ -595,3 +595,22 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `eyebrow`, `personName`, `personDetail`, `location` and `publication` could become one PlainText field.
   - `comparisonThem` / `comparisonUs` could become one field, if their columns are the same.
   - `appStoreLink` / `googlePlayLink` could become one field.
+
+### 2026-11-19: Globals and categories → entries (as in Site7 Engine)
+- **Why:** everything is an entry. Settings get drafts, revisions and section permissions, and it's the direction Craft is heading in (the `entrify` commands).
+- **Migration** `m261119_220000_entrify_globals_categories` (backup: `/tmp/before-entrify.sql.gz`):
+  - It creates the sections and entry types itself, then runs Craft's own `entrify/categories` and `entrify/global-set` actions through `Craft::$app->runAction(…, interactive: false)`.
+  - **Category groups → Structure sections (no URLs):**
+    - `blogCategories` (entry type `blogCategory`) and `departments` (entry type `department`);
+    - the Categories fields `blogCategories` and `department` became Entries fields (`maintainHierarchy`).
+  - **Global sets → Singles (no URLs):** `siteSettings` and `newsletter`, with entry types of the same handles.
+  - Element IDs (8 and 9) and their content are kept. There were no categories yet; newsletter was already empty.
+- **Templates:**
+  - `_layouts/base.twig` loads both Singles once per request into Craft's front-end `_globals` collection (`vendor/craftcms/cms/src/web/twig/FeExtension.php`).
+  - `_partials/header.twig` and `_components/store-links.twig` read `_globals.get('siteSettings')`.
+  - This also fixes `only` includes: ctaBanner → store-links still sees the settings. Cost: two queries per request, the same as global sets. Site7's problem was each block running the same query again.
+- **Gotcha found by testing the other-environment path** (restore the backup, then `craft up`):
+  - Craft applied the project config first, which trashed the global sets, so the migration skipped them and the content wasn't converted.
+  - Fixed by looking groups and sets up `withTrashed`, reusing sections that already exist, and pinning the section and entry-type UIDs from the committed YAML.
+  - After the fix, both orders work. `project-config/diff` reports no changes, and the page still shows "Contact Us" and the store links.
+- **Docs:** CLAUDE.md (content model table, the "everything is an entry" rule, `_globals` usage) and `.claude/skills/craft-cms/SKILL.md` (settings and taxonomies, migration rules for sections, front-end gotchas from earlier work).

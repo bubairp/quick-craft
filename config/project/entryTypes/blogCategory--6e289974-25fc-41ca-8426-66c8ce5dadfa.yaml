@@ -1,6 +1,8 @@
-defaultPlacement: end
+allowLineBreaksInTitles: false
+color: null
+description: null
 fieldLayouts:
-  dfe6e66a-a636-40a2-ae0f-72290f8f0c35:
+  0e821c2d-25d4-4f1e-b12d-4484fc4ec5da:
     cardThumbAlignment: end
     tabs:
       -
@@ -38,13 +40,15 @@ fieldLayouts:
         uid: 808061a4-2395-4a00-801d-8f8bfc61a6f9
         userCondition: null
     thumbFieldKey: null
-handle: blogCategories
-name: 'Blog categories'
-siteSettings:
-  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
-    hasUrls: false
-    template: null
-    uriFormat: null
-structure:
-  maxLevels: 1
-  uid: 1870b943-efd5-45ed-9a33-9e3551cb946e
+handle: blogCategory
+hasTitleField: true
+icon: null
+name: 'Blog category'
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

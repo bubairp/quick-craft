@@ -1,0 +1,17 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: 78796148-46af-44d8-ba79-abf11861da78 # Site settings
+handle: siteSettings
+maxAuthors: 1
+minAuthors: 1
+name: 'Site settings'
+propagationMethod: all
+siteSettings:
+  739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+type: single

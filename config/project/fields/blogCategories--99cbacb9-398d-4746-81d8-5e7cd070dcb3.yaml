@@ -13,12 +13,13 @@ settings:
   selectionLabel: null
   showSearchInput: true
   showSiteMenu: false
-  source: 'group:5238936a-2b8f-43f2-9bb8-61a412fdc5c4' # Blog categories
+  sources:
+    - 'section:162e4099-ac93-4cf4-a918-d40fb411e4d2' # Blog categories
   targetSiteId: null
   validateRelatedElements: false
   viewMode: list
 tip: null
 translationKeyFormat: null
 translationMethod: none
-type: craft\fields\Categories
+type: craft\fields\Entries
 warning: null

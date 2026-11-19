@@ -13,12 +13,13 @@ settings:
   selectionLabel: null
   showSearchInput: true
   showSiteMenu: false
-  source: 'group:e589e391-55af-4c14-9d53-d3eb8bbea7cb' # Departments
+  sources:
+    - 'section:eb55722c-ef4f-4086-8ded-7058f8a14efe' # Departments
   targetSiteId: null
   validateRelatedElements: false
   viewMode: list
 tip: null
 translationKeyFormat: null
 translationMethod: none
-type: craft\fields\Categories
+type: craft\fields\Entries
 warning: null

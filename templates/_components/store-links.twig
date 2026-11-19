@@ -1,9 +1,10 @@
 {#
- # App store links from the siteSettings global. Renders nothing if both are empty.
+ # App store links from the siteSettings Single (via _globals). Renders nothing if both are empty.
  # Badge-style buttons: Tabler brand icon + a small and a large line of text
  # ("Download on the / App Store"); the full phrase is the accessible name.
  # Props: dark (bool), direction ('row'|'responsive'), class
  #}
+{% set siteSettings = _globals.get('siteSettings') %}
 {% set googlePlay = siteSettings.googlePlayLink ?? null %}
 {% set appStore = siteSettings.appStoreLink ?? null %}
 {% set dark = dark ?? false %}

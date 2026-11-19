@@ -75,6 +75,32 @@ Read `CLAUDE.md` first. It defines the stack and the rules. This skill gives the
 **Copy**
 - [ ] No hard-coded content. Microcopy goes through `|t`.
 
+## Settings and taxonomies (everything is an entry)
+
+- **Site-wide settings** are Singles without URLs (`siteSettings`, `newsletter`), not global sets.
+  - `templates/_layouts/base.twig` loads them once per request into Craft's front-end `_globals` collection.
+  - Read them with `{% set siteSettings = _globals.get('siteSettings') %}`. This works in `only` includes too.
+  - Never write `craft.entries.section('siteSettings').one()` in a partial or block. That repeats the query, which is the Site7 problem.
+- **Taxonomies** (blog categories, departments) are Structure sections, related through an **Entries** field with `maintainHierarchy`. Don't create category groups.
+- A new settings Single: create it in a migration, then add it to the `_globals` block in base.twig.
+
+## Migrations that create sections or entry types
+
+- **Back up first:** `ddev export-db --file=/tmp/<name>.sql.gz`.
+- **Pin UIDs.** After the first local run, copy the new section and entry type UIDs from `config/project/sections|entryTypes/*.yaml` into the migration (`'uid' => …`). On another environment the project config can be applied **before** the migration; pinned UIDs make the two match instead of creating duplicates. See `m261119_220000_entrify_globals_categories`.
+- **Expect the project config to have run first.** Look up anything the config may have already removed with `withTrashed` (e.g. `getGroupByHandle($h, true)`, `getSetByHandle($h, withTrashed: true)`), and reuse a section or entry type when it already exists.
+- **Test the other-environment path:** `ddev import-db --file=<backup>`, then `ddev craft up`. Check the content, and that `ddev craft project-config/diff` reports no changes.
+- **Craft's console actions can be reused** from a migration with `Craft::$app->runAction('entrify/categories', [$handle, 'section' => …, 'interactive' => false])`. Read the action first: some steps only happen in interactive mode (e.g. `sections/create` creates the entry type only then).
+- **After saving nested entries,** query them fresh (`Entry::find()->ownerId()->field()`). Block order lives in `elements_owners.sortOrder`.
+
+## Front-end gotchas (found while building)
+
+- Tailwind v4 spacing and leading utilities only exist in 0.25 steps (`leading-3.5`, not `leading-3.6`). A missing step is silently not generated.
+- Swiper: never combine `loop` with `freeMode`. For long drags, render the slide set several times and raise `loopAdditionalSlides`. Swiper's CSS is unlayered, so set easing through `--swiper-wrapper-transition-timing-function`.
+- Lenis undoes `window.scrollTo`. In browser tests, scroll with a real wheel event.
+- Background Playwright and Chrome windows throttle `requestAnimationFrame` (about 2fps). Judge animation smoothness in a foreground window.
+- Craft `svg()` returns `''` for a missing file (and logs a warning), so always guard the output.
+
 ## Menus (Simple RP Menu)
 
 Use `craft.simplerpmenu` (lowercase). Always guard the output with `getMenu(handle)`, because `getRpMenuHTML` prints an error paragraph when the handle is missing. Supported config keys: `menu-id`, `menu-class`, `ul-class`, `li-class`, `link-class`, `sub-menu-ul-class`, `without-container`, `without-ul`. The full API is in CLAUDE.md. If you need anything beyond that, read `vendor/remoteprogrammer/simple-rp-menu/src/services/SimpleRpMenuService.php`.
