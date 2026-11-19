@@ -106,8 +106,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 
   | Base field (handle) | Type | Instances (examples) |
   |---|---|---|
-  | `plainText` "Plain text" | PlainText, single line | heading, eyebrow, personName, personDetail, location, publication, detail, iconName |
-  | `textarea` "Textarea" | PlainText, multi-line | text (summary/intro/quote), the image volume's "Subtitle" |
+  | `plainText` "Plain text" | PlainText: **the only Plain Text field** (user rule). Multi-line allowed, starts at 1 row and grows | heading, eyebrow, text (summary/intro/quote), personName, personDetail, location, publication, detail, iconName, emoji, the image volume's "Subtitle" |
   | `richText` "Rich text" | CKEditor, simple: bold, italic, link, lists, remove formatting | short formatted text in blocks (intro, card text) |
   | `richTextFull` "Rich text (full)" | CKEditor, full: headings, text styles, link, lists, indent, quote, table, image, video embed, horizontal line, fullscreen, source (admins) | body (blog post) |
   | `image` "Image" | Assets: 1 image | image, logo |
@@ -130,7 +129,8 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - Tables (columns): comparisonUs (instances comparisonUs, comparisonThem), rotatingWords, chatMessages;
     - Matrix fields;
     - Entries fields (sources);
-    - `emoji` (8-character limit), `rating` (0–5, one decimal), `seo`, `newsletterForm`.
+    - `rating` (0–5, one decimal), `seo`, `newsletterForm`.
+  - **Plain Text: there is exactly one field (`plainText`).** Every plain text input in every section and block is an instance of it with its own handle and label. Never create another PlainText field; a character limit or single-line rule can't be per instance, so it isn't used.
   - **CKEditor toolbars never include font size, font colour or alignment:** they write inline styles, which breaks the tokens rule.
   - **`colorcode` keeps the tokens rule:**
     - Its palette is the `@theme` colour tokens (label = token name, e.g. `accent`), and editors can't enter custom colours.

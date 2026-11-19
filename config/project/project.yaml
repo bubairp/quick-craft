@@ -1,4 +1,4 @@
-dateModified: 1795090717
+dateModified: 1795090921
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -99,9 +99,7 @@ meta:
     d9818d83-29ba-4787-9db3-e6de4d353e2e: 'Image gallery' # Image gallery
     e4dbf038-0b21-4638-b6b0-d750cc7e4718: 'Media position' # Media position
     e7d05140-eed9-42bc-a423-92dc136c77e4: 'FAQ item' # FAQ item
-    e9eea928-bd4c-4d82-865b-fda154f0d8cd: Textarea # Textarea
     eb55722c-ef4f-4086-8ded-7058f8a14efe: Departments # Departments
-    ebd87830-6bd4-40fb-acf2-8b1b3ce02fb4: 'Emoji icon' # Emoji icon
     ed4e759a-5624-44da-8530-6257893100bd: Cards # Cards
     f031b096-7a3c-4312-b8e7-91a68217c230: 'Press mentions' # Press mentions
     f2ca311d-42ef-44f5-83c8-d3adf7938d60: Type # Type

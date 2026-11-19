@@ -64,7 +64,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Textarea
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
             handle: text
             instructions: null
             label: Text

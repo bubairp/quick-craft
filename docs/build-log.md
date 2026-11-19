@@ -765,3 +765,11 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - **Multi-select:** options belong to the field, so it's purpose-specific like Dropdown. Created with its options when a block needs it.
   - **Icon:** Craft's Icon field uses Font Awesome, but the site uses Tabler (`_components/icon.twig`). Waiting for the user's decision.
 - **Checked:** 8-page snapshot identical; no project-config diff.
+
+### 2026-11-20: One Plain Text field only
+- **User's rule:** keep a single Plain Text field and use it everywhere. Rule first: CLAUDE.md table (+ "exactly one field" rule) and the skill's field list.
+- **Migration** `m261120_180000_single_plain_text` (backup: `/tmp/before-single-plaintext.sql.gz`):
+  - `plainText` now allows multi-line text, starts at 1 row (it grows), and has no character limit.
+  - `textarea` (text and the volume's "Subtitle") and `emoji` were merged into it with Craft's fields/merge steps; their handles, labels and content are kept.
+  - **Trade-off:** emoji's 8-character limit and the separate tall textarea are gone, because those settings can't be per instance.
+- **Checked:** only one PlainText field in config/project. The 8-page snapshot is identical on both paths (migration first; restore + `craft up` with the project config first). No project-config diff.
