@@ -565,3 +565,14 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - The full phrase is the link's `aria-label`; the visual text is aria-hidden.
   - 48px tall, same border and colours as before.
 - Checked in Chrome: footer badges 160×48 and 156×48, correct icons, labels "Download on the App Store" and "Get it on Google Play".
+
+### 2026-11-19: Footer social links with icons
+- `_partials/footer.twig`: the footer menus are no longer printed with `getRpMenuHTML` (plugin HTML, which can't carry icons).
+  - Links are built from `simplerpmenuItems.getResolvedMenuItems(menu.id)` (the same service as the header), using the same `data()` macro for Data JSON.
+  - An item with `icon: <tabler-name>` gets that icon before its label. `target` and `aria-current` are kept; the classes are as before.
+- Migration `m261119_200000_footer_social_icons` sets `icon:` on the footerSocials items that have no Data JSON yet:
+  - Instagram → brand-instagram, Twitter → brand-x, TikTok → brand-tiktok, LinkedIn → brand-linkedin.
+  - Substack → `news` (Tabler has no Substack brand icon).
+  - Mappings for Facebook, YouTube, Threads and Pinterest are included for future items.
+- Checked: all 5 footer columns have the same links as before; the 5 social links have their icons and open in a new tab; no errors.
+- Editors: to add an icon to any footer (or header) menu link, write `icon: <name>` in its Data JSON, using names from https://tabler.io/icons.

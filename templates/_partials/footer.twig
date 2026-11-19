@@ -1,9 +1,23 @@
 {#
  # Site footer — Figma 6-2058 (dark rounded panel).
- # Columns: Simple RP Menu menus; column heading = menu name.
+ # Columns: Simple RP Menu menus; column heading = menu name. Links are rendered from the
+ # plugin's resolved items (simplerpmenuItems.getResolvedMenuItems, as in the header) so an
+ # item can carry a Tabler icon: Data JSON "icon: brand-instagram" (e.g. the Socials menu).
  # Store links: siteSettings global. Wordmark: siteName.
  #}
 {% set footerMenus = ['footerCompany', 'footerProduct', 'footerSocials', 'footerLegal', 'footerSupport'] %}
+{% set menuItems = craft.app.plugins.getPlugin('simple-rp-menu').simplerpmenuItems %}
+{% set currentUrl = craft.app.request.absoluteUrl|split('?')|first %}
+
+{# "key: value" lines from Simple RP Menu's data_json #}
+{% macro data(item) %}
+    {%- set out = {} -%}
+    {%- for line in (item.data_json ?? '')|split("\n") -%}
+        {%- set kv = line|split(':', 2) -%}
+        {%- if kv|length == 2 -%}{%- set out = out|merge({ (kv[0]|trim): kv[1]|trim }) -%}{%- endif -%}
+    {%- endfor -%}
+    {{- out|json_encode|raw -}}
+{% endmacro %}
 
 <footer class="px-4 pb-4 md:px-8 md:pb-8">
     <div class="overflow-hidden rounded-2xl bg-ink px-6 pb-4 pt-12 text-paper md:px-gutter md:pt-16">
@@ -15,13 +29,23 @@
                     {% if menu %}
                         <nav class="lg:min-w-45" aria-labelledby="footer-{{ handle }}">
                             <h2 id="footer-{{ handle }}" class="mb-3.5 text-xl font-bold text-paper">{{ menu.name }}</h2>
-                            {{ craft.simplerpmenu.getRpMenuHTML(handle, {
-                                'menu-id': handle,
-                                'menu-class': '',
-                                'ul-class': 'flex flex-col gap-3.5',
-                                'li-class': '',
-                                'link-class': 'text-xl font-light text-paper hover:underline underline-offset-4',
-                            }) }}
+                            <ul class="flex flex-col gap-3.5">
+                                {% for item in menuItems.getResolvedMenuItems(menu.id) %}
+                                    {% set url = item.custom_url ?? '' %}
+                                    {% if url and not item.noLink %}
+                                        {% set icon = (_self.data(item)|json_decode).icon ?? null %}
+                                        <li>
+                                            <a href="{{ url }}"
+                                               class="inline-flex items-center gap-2.5 text-xl font-light text-paper underline-offset-4 hover:underline"
+                                               {%- if item.target %} target="{{ item.target }}" rel="noopener"{% endif %}
+                                               {%- if url == currentUrl %} aria-current="page"{% endif %}>
+                                                {% if icon %}{% include '_components/icon.twig' with { name: icon, class: 'size-5' } only %}{% endif %}
+                                                <span>{{ item.name }}</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
                         </nav>
                     {% endif %}
                 {% endfor %}
