@@ -1,4 +1,82 @@
-dateModified: 1795092357
+dateModified: 1795092851
+elementSources:
+  craft\elements\Entry:
+    -
+      key: '*'
+      page: Pages
+      type: native
+    -
+      key: 'single:864d7fef-094c-434b-ad76-e9e3b15430e6' # Home
+      page: Pages
+      type: native
+    -
+      key: 'section:bf4bd28d-bce9-4fed-87de-d2f77192a9bf' # Pages
+      page: Pages
+      type: native
+    -
+      key: 'section:70567a64-a80b-45dc-b262-2934bfa9d638' # Blog
+      page: Blog
+      type: native
+    -
+      key: 'section:162e4099-ac93-4cf4-a918-d40fb411e4d2' # Blog categories
+      page: Blog
+      type: native
+    -
+      key: 'section:a2db8034-3b0c-40ed-ae4a-061e4e405d26' # Jobs
+      page: Careers
+      type: native
+    -
+      key: 'section:eb55722c-ef4f-4086-8ded-7058f8a14efe' # Departments
+      page: Careers
+      type: native
+    -
+      key: 'section:f031b096-7a3c-4312-b8e7-91a68217c230' # Press mentions
+      page: Press
+      type: native
+    -
+      key: singles
+      page: Settings
+      type: native
+    -
+      key: 'single:117c7207-1578-412d-a871-66e431a364c7' # Site settings
+      page: Settings
+      type: native
+    -
+      key: 'single:bcaffb4a-ef69-4bf9-93b7-7dffd6af1f1a' # Newsletter
+      page: Settings
+      type: native
+    -
+      key: 'single:1a9aea76-5bc0-443f-8036-458a21967c85' # Google Structured Data
+      page: Settings
+      type: native
+    -
+      key: 'single:3c672367-bcf3-4d71-8bec-c7f8fda1180a' # LLMs Text
+      page: Settings
+      type: native
+    -
+      key: 'single:9afffd1f-a63a-4ec2-8f87-8c1968d0002f' # Page not found
+      page: Settings
+      type: native
+    -
+      key: 'single:724d7b32-2502-4a48-9558-9f9129f9fd6e' # Page error
+      page: Settings
+      type: native
+    -
+      key: 'single:2ab8e0f7-3f3a-4516-b030-cd8918212d6e' # Page maintenance
+      page: Settings
+      type: native
+elementSourcesPages:
+  craft\elements\Entry:
+    Blog:
+      icon: rss
+    Careers:
+      icon: briefcase
+    Pages:
+      icon: file-lines
+    Press:
+      icon: newspaper
+    Settings:
+      icon: gear
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'

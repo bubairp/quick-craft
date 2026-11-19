@@ -822,3 +822,15 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Migration** `m261120_210000_pages_channel` (backup: `/tmp/before-pages-channel.sql.gz`): `pages` → Channel, URI `{slug}`. Entry IDs and URLs are unchanged; there are no nested pages. Navigation order comes from the menus.
 - `m261120_200000_pages_structure` now only appends to the structure when `pages` still is one (on another environment the project config makes it a Channel first).
 - **Checked:** all pages 200 (/, /careers, /press, 4 landing pages, the CTA demo, /blocks, /404). Both orders tested (restore `/tmp/before-pages.sql.gz` + `craft up` runs both migrations): IDs 4/6/10 in the `pages` Channel, no project-config diff.
+
+### 2026-11-20: Craft 5.9 features: CP entry index pages + grouped "Add block" menu
+- **Discussed first, then approved by the user.** Rule first: CLAUDE.md › "CP sidebar: entry index pages" and "Page builder 'Add block' menu groups"; skill step 3 (a new block gets a group, a new section or Single gets a sidebar page).
+- **Also (user request): "Pages = Channel" made hard to get wrong.** It's in the skill's "Never" list (no page Singles, `pages` isn't a Structure, no section per page, the list of allowed Singles) and saved to memory.
+- **Migration** `m261120_220000_cp_pages_and_block_groups` (backup: `/tmp/before-cp-pages.sql.gz`):
+  - **CP entry pages:** Pages (file-lines: All entries, Home, Pages), Blog (rss), Careers (briefcase: Jobs, Departments), Press (newspaper: Press mentions), Settings (gear: all settings and system Singles).
+    - Saved with `ElementSources::saveSources()` (each source with a `page`) + `savePageSettings()` (icons) → `elementSources` / `elementSourcesPages` in project.yaml.
+    - Singles use the Expanded Singles plugin's source keys `single:<section uid>`.
+    - Craft matches configs to the sources registered at runtime **by key**, so this works although the plugin only registers its sources for a logged-in user (none in a console migration). A source without config lands on the first page.
+  - **pageBuilder groups:** Call to action · Text · Cards & lists · Media · Social proof. Set with `setEntryTypes([['uid' => …, 'group' => …]])`; stored per field (`EntryType::getUsageConfig()`).
+- **Checked:** no project-config diff; the 8-page snapshot is identical to the previous one.
+- **Not checked here:** the CP itself (I have no login). The user confirms the sidebar pages and the grouped Add menu in the CP.

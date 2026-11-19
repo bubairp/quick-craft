@@ -13,71 +13,113 @@ settings:
         -
           - uid
           - fad12a2d-f499-4eba-b487-9b0f28be78be # Card grid
+        -
+          - group
+          - 'Cards & lists'
     -
       __assoc__:
         -
           - uid
           - d3c5f3cb-a64e-4a36-9006-e3d71969430e # Feature rows
+        -
+          - group
+          - 'Cards & lists'
     -
       __assoc__:
         -
           - uid
           - d9818d83-29ba-4787-9db3-e6de4d353e2e # Image gallery
+        -
+          - group
+          - Media
     -
       __assoc__:
         -
           - uid
           - 297742be-e35a-4330-addc-2d8f5f50d74e # City list
+        -
+          - group
+          - 'Cards & lists'
     -
       __assoc__:
         -
           - uid
           - 234d2e9f-2f97-4a91-8a5e-b1f93eeece59 # Testimonials
+        -
+          - group
+          - 'Social proof'
     -
       __assoc__:
         -
           - uid
           - 08e26cf8-8b84-4fa3-a0fe-bb7b40bf0a79 # Text + media
+        -
+          - group
+          - Text
     -
       __assoc__:
         -
           - uid
           - 761f1f27-3b7d-4327-833c-e38b716c0d2b # Comparison
+        -
+          - group
+          - Text
     -
       __assoc__:
         -
           - uid
           - 50616200-7340-4a56-86cc-34412ae13a12 # Rich text
+        -
+          - group
+          - Text
     -
       __assoc__:
         -
           - uid
           - 9481bc37-4f73-4fe3-be77-f1c33db10114 # FAQ
+        -
+          - group
+          - Text
     -
       __assoc__:
         -
           - uid
           - c724e92f-54e6-49fa-88e4-1be0f8868984 # CTA banner
+        -
+          - group
+          - 'Call to action'
     -
       __assoc__:
         -
           - uid
           - 4932a68c-f70c-480b-9e34-b4350301228d # Promo bar
+        -
+          - group
+          - 'Call to action'
     -
       __assoc__:
         -
           - uid
           - 6c77e508-9522-461f-a2e5-40a716e5302e # Image
+        -
+          - group
+          - Media
     -
       __assoc__:
         -
           - uid
           - 11e3d5af-5779-4d3a-861b-372205b6fd0c # Job list
+        -
+          - group
+          - 'Cards & lists'
     -
       __assoc__:
         -
           - uid
           - 70778550-7d69-4507-aeec-1f110529b482 # Press list
+        -
+          - group
+          - 'Cards & lists'
   includeTableView: false
   maxEntries: null
   minEntries: null

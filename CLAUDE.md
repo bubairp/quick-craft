@@ -167,6 +167,27 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   | none | pages and settings | home (house), page (file-lines), blogPost (rss), job (briefcase), pressMention (link), siteSettings (gear), newsletter (envelope), googleStructureData (code), llmsText (robot), blogCategory (hashtag), department (layer-group) |
 
   **A new entry type gets an icon and a colour from this table in its migration.**
+- **CP sidebar: entry index pages** (Craft 5.9+; migration `m261120_220000_cp_pages_and_block_groups`). Entries are split into these sidebar pages:
+
+  | Page (CP icon) | Sources |
+  |---|---|
+  | **Pages** (file-lines) | All entries, Home, Pages |
+  | **Blog** (rss) | Blog, Blog categories |
+  | **Careers** (briefcase) | Jobs, Departments |
+  | **Press** (newspaper) | Press mentions |
+  | **Settings** (gear) | Site settings, Newsletter, Google Structured Data, LLMs Text, Page not found, Page error, Page maintenance |
+
+  - Stored in the project config: `elementSources.craft\elements\Entry` (each source has a `page`) and `elementSourcesPages`.
+  - Singles are listed one by one by the Expanded Singles plugin (source key `single:<section uid>`). Sections use `section:<uid>`.
+  - **A new section or Single gets a page here in its migration.** A source with no config lands on the first page (Pages).
+- **Page builder "Add block" menu groups** (Craft 5.9+, same migration). The groups match the colours above:
+  - **Call to action:** ctaBanner, promoBar
+  - **Text:** richText, faq, textMedia, comparison
+  - **Cards & lists:** cardGrid, featureRows, cityList, jobList, pressList
+  - **Media:** imageGallery, image
+  - **Social proof:** testimonials
+
+  The group is stored per Matrix field (`pageBuilder` entry types `['uid' => …, 'group' => …]`). **A new block gets a group in its migration.** Small Matrix fields (buttons, cards, faqItems…) don't use groups.
 - **Block library page `/blocks`** (`templates/blocks.twig`; login required, except in devMode so it can be checked locally; not indexed):
   - Shows every pageBuilder block in use on the site, grouped by type: one example per layout × scheme, with the page it comes from. Also every page Banner, and the block types that have no template or no example yet.
   - `?scheme=light|white|soft|dark` re-renders every scheme-aware block in that scheme, in memory only (`setFieldValue`, never saved).

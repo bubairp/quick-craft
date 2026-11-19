@@ -38,6 +38,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
      - Create a new field only for a purpose-specific setting (a Dropdown's options, a Table's columns, a character limit), and add it to the CLAUDE.md table.
      - Templates use the instance handle (`block.personDetail`), never the base handle.
    - Give the new entry type an `icon` and a `color` from CLAUDE.md › Entry type icons and colours (CP only; Craft's icon names, e.g. `grid-2`).
+   - A new pageBuilder block gets an "Add block" **group** (CLAUDE.md › Page builder "Add block" menu groups). A new section or Single gets a **CP sidebar page** (CLAUDE.md › CP sidebar).
    - Read the Craft source in `vendor/craftcms/cms/src/` for the exact APIs and don't guess.
    - Run `ddev craft up`, then commit the migration together with `config/project/`.
 4. **Template** `templates/_blocks/{entryTypeHandle}.twig`:
@@ -168,3 +169,11 @@ Use `craft.simplerpmenu` (lowercase). Always guard the output with `getMenu(hand
 - Edit or run write commands in `/home/rp-bubai/my-project/site7-engine`. It's read-only.
 - Add Site7 Studio, Device Detect or RP Payment Gateway.
 - Guess a plugin API. Read `vendor/` or the docs first.
+- **Pages:**
+  - Make a Single for a page (only Home is a page Single).
+  - Make `pages` a Structure: it's a **Channel**, as Site7's standard pages.
+  - Add a section for a new page. A new page is an entry in `pages`.
+  - Singles exist only for Home, settings (siteSettings, newsletter, googleStructureData, llmsText) and system pages (pageNotFound, pageError, pageMaintenance).
+- Create a second Plain Text field: `plainText` is the only one.
+- Use Craft's Icon field (Font Awesome): site icons are Tabler.
+- Change a content-model rule the user decided without asking. When in doubt, check Site7 Engine (read-only) and ask.
