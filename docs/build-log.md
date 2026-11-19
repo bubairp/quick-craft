@@ -883,3 +883,19 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - The 8-page snapshot is byte-identical.
   - Other-environment path (restore + `craft up` with the project config first) creates the preset; no project-config diff.
 - **For editors:** Entries › Pages › Page presets: build or change presets there. New page → Page tab → "Page preset" → choose one → **Create**: the blocks appear in Content, ready to edit. Not checked in the CP here (no login).
+
+### 2026-11-20: Bug fix: "Buttons should contain at most 3 entries" when saving a page
+- **Reported by the user:** every page save showed the error.
+- **Cause (my bug):**
+  - `m261120_120000_common_matrix_fields` looped over all cardGrid / ctaBanner… blocks with `draftId = null`. But **nested entries of a draft aren't drafts themselves**: Home had a provisional draft (#247, the user's unsaved edits from before that migration), and its block copies (#249, #252) were included.
+  - So the draft blocks got new buttons (#260, #261, #262) on top of the buttons the draft shares with the live page (#257, #258).
+  - A later CP autosave added Craft's own draft copy (#301). Block #252 ended up with 4 buttons (max 3), and Home's draft failed validation.
+- **Rule first:** skill › "Nested entries of drafts are not drafts themselves" (how Craft shares nested items with drafts; skip blocks whose primary owner is a draft/revision; the SQL check).
+- **Fix:**
+  - `m261120_120000` now skips blocks whose primary owner is a draft or revision (for fresh environments).
+  - **New** `m261120_260000_fix_draft_buttons` (backup: `/tmp/before-fix-buttons.sql.gz`) deletes `button` entries owned by a draft-owned block that aren't derived from a live button (`canonicalId` null): #260, #261, #262. Craft's own draft copy #301 (the editor's label change) and the shared buttons are kept.
+- **Checked:**
+  - Every owner has ≤ 2 buttons (block #252 = shared #258 + draft copy #301).
+  - Every page, Single, preset and **Home's draft #247** passes `validate()` in the live scenario (what a CP save runs).
+  - The 8-page snapshot is identical.
+- **Note:** Home still has the user's provisional draft #247 (unsaved edits). Publish or discard it in the CP.

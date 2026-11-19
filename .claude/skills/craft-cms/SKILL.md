@@ -154,6 +154,11 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 - **Test the other-environment path:** `ddev import-db --file=<backup>`, then `ddev craft up`. Check the content, and that `ddev craft project-config/diff` reports no changes.
 - **Craft's console actions can be reused** from a migration with `Craft::$app->runAction('entrify/categories', [$handle, 'section' => …, 'interactive' => false])`. Read the action first: some steps only happen in interactive mode (e.g. `sections/create` creates the entry type only then).
 - **After saving nested entries,** query them fresh (`Entry::find()->ownerId()->field()`). Block order lives in `elements_owners.sortOrder`.
+- **Nested entries of drafts are not drafts themselves.**
+  - A block inside a page's draft has `draftId = null`; only its owner (`entries.primaryOwnerId`) is the draft. Craft shares the live page's nested items with the draft and only copies the ones that change (a copy has `canonicalId` = the live item).
+  - **When a migration loops over nested entries (blocks, cards…), skip those whose primary owner is a draft or revision.** Otherwise the draft gets extra items on top of the shared ones.
+  - Real bug, 2026-11-20: Home's provisional draft got duplicate buttons from `m261120_120000`, and saving showed "Buttons should contain at most 3 entries". Fixed by `m261120_260000_fix_draft_buttons`.
+  - Check: `elements e join entries n on n.id = e.id join elements o on o.id = n.primaryOwnerId where o.draftId is null and o.revisionId is null`.
 
 ## Front-end gotchas (found while building)
 

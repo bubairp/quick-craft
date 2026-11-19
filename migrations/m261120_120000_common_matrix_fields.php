@@ -359,7 +359,11 @@ class m261120_120000_common_matrix_fields extends Migration
                 ->from(['es' => Table::ELEMENTS_SITES])
                 ->innerJoin(['e' => Table::ENTRIES], '[[e.id]] = [[es.elementId]]')
                 ->innerJoin(['el' => Table::ELEMENTS], '[[el.id]] = [[es.elementId]]')
+                // Nested blocks of a draft/revision aren't drafts themselves: skip them via their primary
+                // owner, or the draft gets extra buttons on top of the shared ones (fixed by m261120_260000)
+                ->leftJoin(['po' => Table::ELEMENTS], '[[po.id]] = [[e.primaryOwnerId]]')
                 ->where(['e.typeId' => $typeId, 'el.draftId' => null, 'el.revisionId' => null, 'el.dateDeleted' => null])
+                ->andWhere(['or', ['e.primaryOwnerId' => null], ['and', ['po.draftId' => null], ['po.revisionId' => null]]])
                 ->all();
             foreach ($rows as $row) {
                 $content = json_decode((string)$row['content'], true) ?: [];
