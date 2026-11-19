@@ -535,3 +535,25 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Now the pointer's client x/y is remembered and recalculated on `scroll` while the pointer is inside, snapping to stay exactly under the cursor.
   - Checked: hover at (400, 300), then scrolling 150px: the circle moves from my=280 to 430, the same as the cursor's new position over the section.
 - Demo `/cta-options-demo` now shows **8 versions**: spiral, rows, rowsSpot and rowsSpotInvert, each light and dark. DEMO ONLY.
+
+### 2026-11-19: Mega menu tweaks + Tabler icons everywhere
+- **Menu dropdown** (`_partials/header.twig`):
+  - Column headings are uppercase (`uppercase font-medium`), on desktop and in the mobile accordion.
+  - The featured box on the right is **white** (`bg-white p-5`). No shadow, at the user's request.
+  - Link icons use the dark text colour (`text-ink`, at the user's request).
+- **Tabler icons on the whole site:**
+  - Package `@tabler/icons` 3.52.0 (raw SVGs: `icons/outline/*.svg`, `icons/filled/*.svg`).
+  - **`_components/icon.twig`**: `{% include '_components/icon.twig' with { name: 'arrow-up-right', class: 'size-4', filled: false, label: null } only %}`.
+    - It inlines the SVG with Craft's `svg('@root/node_modules/@tabler/icons/icons/<outline|filled>/<name>.svg', sanitize: false, namespace: false)` and adds `|attr` for class, removed width/height, aria-hidden or role="img" with aria-label, and focusable=false.
+    - The name is checked against `^[a-z0-9-]+$`. A missing icon renders nothing (Craft logs a warning).
+    - **Production needs `node_modules` at runtime.** The deploy already runs npm to build web/dist; keep that.
+  - Replaced every hand-drawn SVG:
+    - header: menu-2, x, chevron-down;
+    - cityList: arrow-up-right;
+    - testimonials carousel: chevron-left and chevron-right;
+    - `_components/stars.twig`: filled star.
+  - **Menu content:** migration `m261119_190000_menu_tabler_icons` rewrites the `icon:` lines in `simplerpmenu_items.data_json` from emoji to Tabler names. 25 items, for example 🎂 → cake, 🍝 → tools-kitchen-2, 🎆 → confetti (`fireworks` doesn't exist in Tabler), 📱 → brand-apple, 🤖 → brand-android. It clears the `simple-rp-menu` cache tag.
+  - **Editors:** in a menu item's Data JSON, write `icon: <name>` using any name from https://tabler.io/icons.
+- Checked:
+  - Chrome: Invites panel heading "OCCASIONS" uppercase, box `rgb(255,255,255)` with no shadow, 9 Tabler link icons in `rgb(17,17,17)`, 60 stars and 2 carousel arrows rendered.
+  - 375px: menu-2 ↔ x toggles, 5 accordion chevrons, uppercase headings, no errors.

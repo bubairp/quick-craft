@@ -107,11 +107,11 @@
                 <div class="mt-6 flex justify-center gap-2">
                     <button type="button" data-carousel-prev class="flex size-11 items-center justify-center rounded-full bg-line text-ink transition-opacity hover:bg-surface">
                         <span class="sr-only">{{ 'Previous'|t }}</span>
-                        <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+                        {% include '_components/icon.twig' with { name: 'chevron-left', class: 'size-5' } only %}
                     </button>
                     <button type="button" data-carousel-next class="flex size-11 items-center justify-center rounded-full bg-line text-ink transition-opacity hover:bg-surface">
                         <span class="sr-only">{{ 'Next'|t }}</span>
-                        <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+                        {% include '_components/icon.twig' with { name: 'chevron-right', class: 'size-5' } only %}
                     </button>
                 </div>
             {% endif %}

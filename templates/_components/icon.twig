@@ -1,0 +1,29 @@
+{#
+ # Tabler icon (https://tabler.io/icons, package @tabler/icons), inlined as SVG.
+ # Renders nothing when the name is empty or not a Tabler icon.
+ #
+ # Props:
+ #   name     string   Tabler icon name, e.g. 'arrow-up-right', 'cake'   (required)
+ #   filled   bool     use the filled variant (default false = outline)
+ #   class    string   classes for the <svg> (size it with e.g. size-4; colour = currentColor)
+ #   label    string   accessible name; without it the icon is decorative (aria-hidden)
+ #
+ # Note: the SVGs are read from node_modules at render time, so production must run
+ # `npm ci` on deploy (it already does, to build web/dist).
+ #}
+{% set name = (name ?? '')|trim|lower %}
+{% if name matches '/^[a-z0-9-]+$/' %}
+    {% set file = '@root/node_modules/@tabler/icons/icons/' ~ ((filled ?? false) ? 'filled' : 'outline') ~ '/' ~ name ~ '.svg' %}
+    {% set markup = svg(file, sanitize: false, namespace: false) %}
+    {% if markup|length %}
+        {{ markup|attr({
+            class: 'shrink-0 ' ~ (class ?? 'size-5'),
+            width: false,
+            height: false,
+            role: (label ?? false) ? 'img' : false,
+            'aria-label': label ?? false,
+            'aria-hidden': (label ?? false) ? false : 'true',
+            focusable: 'false',
+        }) }}
+    {% endif %}
+{% endif %}

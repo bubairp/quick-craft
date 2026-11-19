@@ -59,7 +59,7 @@
                             <span class="absolute inset-x-0 top-full flex items-center justify-center gap-2 text-xl text-subtle transition duration-300 ease-out-soft motion-reduce:transition-none"
                                   :class="active === {{ i }} ? 'opacity-100 -translate-y-3' : 'opacity-0 translate-y-0'">
                                 {{ link.label }}
-                                <svg class="size-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg>
+                                {% include '_components/icon.twig' with { name: 'arrow-up-right', class: 'size-4' } only %}
                             </span>
                         {% endif %}
                     </a>

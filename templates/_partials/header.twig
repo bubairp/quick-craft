@@ -5,7 +5,7 @@
  #   siteSettings global: logo (image), primaryButton, secondaryButton
  #   Simple RP Menu 'headerMenu', read as a tree via the plugin service getResolvedMenuItems():
  #     level 1  nav item — gets a dropdown when it has children
- #     level 2  column (noLink, name = column heading) → level 3 links (data_json "icon: 🎂")
+ #     level 2  column (noLink, name = column heading) → level 3 links (data_json "icon: cake" — a Tabler icon name, _components/icon.twig)
  #     level 2  class "menu-featured" → featured card: name = title, customShortContent = text,
  #              data_json "label: …" and "image: /path.png"
  #
@@ -39,7 +39,7 @@
         <a href="{{ url }}" class="{{ class }}"
            {%- if item.target %} target="{{ item.target }}" rel="noopener"{% endif %}
            {%- if url == craft.app.request.absoluteUrl|split('?')|first %} aria-current="page"{% endif %}>
-            {%- if data.icon ?? false %}<span class="text-base leading-none" aria-hidden="true">{{ data.icon }}</span>{% endif -%}
+            {%- if data.icon ?? false %}{% include '_components/icon.twig' with { name: data.icon, class: 'size-5 text-ink' } only %}{% endif -%}
             <span>{{ item.name }}</span>
         </a>
     {%- endif -%}
@@ -102,8 +102,8 @@
                             aria-expanded="false" :aria-expanded="open.toString()"
                             @click="toggle()">
                         <span class="sr-only" x-text="open ? '{{ 'Close menu'|t|e('js') }}' : '{{ 'Open menu'|t|e('js') }}'">{{ 'Open menu'|t }}</span>
-                        <svg x-show="!open" class="size-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14"/></svg>
-                        <svg x-show="open" x-cloak class="size-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg>
+                        <span x-show="!open">{% include '_components/icon.twig' with { name: 'menu-2', class: 'size-5' } only %}</span>
+                        <span x-show="open" x-cloak>{% include '_components/icon.twig' with { name: 'x', class: 'size-5' } only %}</span>
                     </button>
                 {% endif %}
             </div>
@@ -126,7 +126,7 @@
                                 {% for col in columns %}
                                     {% set links = col.children ?? [] %}
                                     <div class="min-w-36">
-                                        <p class="mb-5 text-xs font-light tracking-wide text-subtle">{{ col.name }}</p>
+                                        <p class="mb-5 text-xs font-medium tracking-wide text-subtle uppercase">{{ col.name }}</p>
                                         {% if links|length %}
                                             <ul class="{{ links|length > 6 ? 'columns-2 gap-x-12' : '' }}">
                                                 {% for link in links %}
@@ -153,7 +153,8 @@
                                     <span class="mt-1 text-3xl font-medium text-ink">{{ featured.name }}</span>
                                     {% if featured.customShortContent %}<span class="mt-2 text-base text-subtle">{{ featured.customShortContent }}</span>{% endif %}
                                 {% endset %}
-                                {% set cardClass = 'group flex w-80 flex-none flex-col justify-end rounded-lg p-3 transition-colors hover:bg-ink/5' %}
+                                {# white box on the right of the panel (no shadow) #}
+                                {% set cardClass = 'group flex w-80 flex-none flex-col justify-end rounded-lg bg-white p-5' %}
                                 {% if furl %}
                                     <a href="{{ furl }}" class="{{ cardClass }}">{{ cardInner }}</a>
                                 {% else %}
@@ -184,11 +185,11 @@
                                             aria-expanded="false" :aria-expanded="(section === {{ loop.index0 }}).toString()"
                                             @click="section = section === {{ loop.index0 }} ? null : {{ loop.index0 }}">
                                         {{ item.name }}
-                                        <svg class="size-4 transition-transform" :class="section === {{ loop.index0 }} && 'rotate-180'" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 6l5 5 5-5"/></svg>
+                                        <span class="transition-transform" :class="section === {{ loop.index0 }} && 'rotate-180'">{% include '_components/icon.twig' with { name: 'chevron-down', class: 'size-4' } only %}</span>
                                     </button>
                                     <div id="mobile-section-{{ loop.index0 }}" x-show="section === {{ loop.index0 }}" x-cloak x-transition.opacity.duration.200ms class="pb-3">
                                         {% for col in kids|filter(k => 'menu-featured' not in (k.class ?? '')) %}
-                                            <p class="mt-2 text-xs text-subtle">{{ col.name }}</p>
+                                            <p class="mt-2 text-xs font-medium text-subtle uppercase">{{ col.name }}</p>
                                             <ul class="mt-1 grid grid-cols-2 gap-x-4">
                                                 {% for link in col.children ?? [] %}
                                                     <li>{{ _self.link(link, 'flex items-center gap-2 py-2 text-base text-ink') }}</li>
