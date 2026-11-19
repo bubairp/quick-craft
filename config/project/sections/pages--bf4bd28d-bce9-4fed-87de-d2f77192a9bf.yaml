@@ -17,8 +17,5 @@ siteSettings:
     enabledByDefault: true
     hasUrls: true
     template: _entries/page
-    uriFormat: "{parent ? parent.uri ~ '/'}{slug}"
-structure:
-  maxLevels: null
-  uid: b03b0b2d-585b-4305-be35-901a90c12253
-type: structure
+    uriFormat: '{slug}'
+type: channel

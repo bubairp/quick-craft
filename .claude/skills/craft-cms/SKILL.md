@@ -11,7 +11,7 @@ Read `CLAUDE.md` first. It defines the stack and the rules. This skill gives the
 
 ## Page entry types: tabs and the fixed banner
 
-Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only Home is a Single; every other page is an entry in the `pages` Structure (CLAUDE.md › Only Home is a page Single):
+Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only Home is a Single; every other page is an entry in the `pages` Channel (CLAUDE.md › Only Home is a page Single):
 
 | Tab | Fields |
 |---|---|

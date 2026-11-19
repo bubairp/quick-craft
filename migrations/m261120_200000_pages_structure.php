@@ -93,7 +93,7 @@ class m261120_200000_pages_structure extends Migration
             if (!$moved) {
                 throw new \RuntimeException("$handle ($id) could not be loaded after the move.");
             }
-            if (!$moved->lft) {
+            if (!$moved->lft && $pages->type === Section::TYPE_STRUCTURE && $pages->structureId) {
                 Craft::$app->getStructures()->appendToRoot($pages->structureId, $moved);
             }
             $moved->setFieldValues($values);

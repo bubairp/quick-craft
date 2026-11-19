@@ -36,7 +36,7 @@ Status: ☐ to do · ◐ in progress · ☑ done
 
 All Home blocks were checked from rendered HTML only (structure, headings, empty fields). Visual QA is still pending.
 
-## 3. Pages (Structure `pages`: landing pages, Careers, Press…)
+## 3. Pages (Channel `pages`: landing pages, Careers, Press…)
 ### Organizers (17-267)
 | | Block | Layout | Node |
 |---|---|---|---|

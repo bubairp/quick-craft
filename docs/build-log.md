@@ -815,3 +815,10 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `/`, `/careers`, `/press`, `/organizers`, `/blocks`, `/404`, `/500`, `/503` → 200; `/llms.txt` → 404 when empty, 200 text/plain with content.
   - The 8 page snapshots are unchanged apart from the rebuilt asset hash and whitespace.
   - Both orders tested (migration first; restore + `craft up` with the project config first): IDs 4/6 in `pages`, menu links intact, system pages with starter content, no project-config diff.
+
+### 2026-11-20: Pages is a Channel (not a Structure)
+- **User's choice** (as Site7 Engine's standard pages). Rule first: CLAUDE.md table + "Only Home is a page Single", skill, build plan.
+- **Why it had been a Structure:** "Landing pages" was created as a Structure in the first content model (`m261118_120000`). I had also recommended a Structure earlier (nesting, drag ordering, breadcrumbs), so I only renamed it when the pages were merged, instead of following Site7's Channel. The user wants the Site7 approach.
+- **Migration** `m261120_210000_pages_channel` (backup: `/tmp/before-pages-channel.sql.gz`): `pages` → Channel, URI `{slug}`. Entry IDs and URLs are unchanged; there are no nested pages. Navigation order comes from the menus.
+- `m261120_200000_pages_structure` now only appends to the structure when `pages` still is one (on another environment the project config makes it a Channel first).
+- **Checked:** all pages 200 (/, /careers, /press, 4 landing pages, the CTA demo, /blocks, /404). Both orders tested (restore `/tmp/before-pages.sql.gz` + `craft up` runs both migrations): IDs 4/6/10 in the `pages` Channel, no project-config diff.

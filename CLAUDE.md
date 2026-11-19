@@ -57,7 +57,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 | Section | Type | URI → template | Entry type: fields |
 |---|---|---|---|
 | Home | Single | `__home__` → `_entries/page` | `home`: page tabs (below) |
-| **Pages** | Structure (nested pages allowed) | `{parent ? parent.uri ~ '/'}{slug}` → `_entries/page` | `page`: page tabs. **Every standard page:** landing pages, Careers, Press, About… |
+| **Pages** | **Channel** (the user's choice, as Site7's standard pages) | `{slug}` → `_entries/page` | `page`: page tabs. **Every standard page:** landing pages, Careers, Press, About… |
 | Blog | Channel | `blog/{slug}` → `blog/_entry` | `blogPost`: tabs **Post** (title, image, text = summary, blogCategories, featured) · **Content** (body) · **SEO** (seo); author = Craft user |
 | Jobs | Channel | no URLs | `job`: department, location, employmentType, workplace, externalLink |
 | Page not found | Single | no URL → `404.twig` | `page`: page tabs |
@@ -72,11 +72,11 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 | Departments | Structure | no URLs | `department`: title. Related via the Entries field `department` |
 
 - **Only Home is a page Single** (the user's rule, as in Site7 Engine; migration `m261120_200000_pages_structure`).
-  - **Every other page is an entry in the `pages` Structure**, built with the Banner + page builder. To add a page, add an entry there; never create a new Single or section for a page.
+  - **Every other page is an entry in the `pages` Channel** (not a Structure: the user's choice, 2026-11-20; migration `m261120_210000_pages_channel`), built with the Banner + page builder. URLs are `/{slug}`; there are no nested pages. To add a page, add an entry there; never create a new Single or section for a page.
   - **Singles without URLs:**
     - settings: `siteSettings`, `newsletter`, `googleStructureData`, `llmsText`;
     - system pages: `pageNotFound`, `pageError`, `pageMaintenance`. They use the `page` entry type and are rendered by `templates/404.twig`, `500.twig` and `503.twig` via `_partials/system-page.twig`, with `|t` fallback copy if the entry is missing.
-  - Careers (ID 4) and Press (ID 6) were moved into `pages` with their IDs, so menu links by entry ID still work.
+  - Careers (ID 4) and Press (ID 6) were moved into `pages` with their IDs, so menu links by entry ID still work. Menu order, not the section, controls navigation order.
 - **Page tabs (as in Site7 Engine), every page entry type** (`home`, `page`, and any new page type). Migration `m261120_100000_page_tabs`:
   1. **Page:** title, `pageBackground` (paper / surface: the page's background colour).
   2. **Banner:** the page's fixed banner (hero). Fields: `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `buttons`, `images` (the banner/featured image), `chatMessages`.
