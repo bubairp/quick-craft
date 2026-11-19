@@ -78,6 +78,10 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - `faqItems`: `faqItem` (title = question, body)
 - **Option fields:** `theme` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`).
 - Field handles must avoid `craft\base\Field::RESERVED_HANDLES`. For example, `icon` is reserved, which is why the field is called `emoji`.
+- **Reuse fields; don't duplicate them.** Before creating a field, check `config/project/fields/` for one of the same type with the **same settings** (character limit, options, allowed link types, asset sources, CKEditor config, translation method).
+  - **If one exists, reuse it.** Add it to the layout again and give that instance its own **handle, label and instructions** (Craft 5 multi-instance fields; in a migration, set `handle`/`label` on the layout's `CustomField` element). For example, one PlainText field can be added as `personName` and as `personDetail`.
+  - **Create a new field only when the settings must differ**, because settings belong to the field, not the instance. Dropdown options are the common case, which is why each block has its own layout dropdown.
+  - Always give an instance a **meaningful handle** (`personName`, never a generic `plainText` or `plainTextSub`) so templates stay readable.
 
 ### Content & data
 - **No hard-coded copy.** All text and images come from Craft fields (or `siteName`/globals). UI microcopy (e.g. "Skip to content", "Read more") must use `|t` for translation.

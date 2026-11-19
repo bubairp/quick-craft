@@ -587,3 +587,11 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - 375px: "Contact Us" (sm) next to the menu button. The open mobile panel has no extra button, and there is no horizontal overflow.
 - Editors: change the button text or link in CP › Globals › Site settings › Header primary button. Fill "Header secondary button" to bring a second button back.
 - Note: `/contact` has no page yet (placeholder, as in the footer).
+
+### 2026-11-19: Rule: reuse fields through handle overrides
+- Added a rule to CLAUDE.md (Content model): reuse an existing field when its settings are the same, adding it again to the layout with its own handle and label (Craft 5 multi-instance fields). Create a new field only when the settings must differ, for example dropdown options. Handles must be meaningful, never generic (`plainText`).
+- Why: the old sites used generic fields (`plainText`, `plainTextSub`, `Description`), which made templates hard to read. Craft 5's per-instance handles keep the single shared field and still give readable handles.
+- Possible later cleanup (not done):
+  - `eyebrow`, `personName`, `personDetail`, `location` and `publication` could become one PlainText field.
+  - `comparisonThem` / `comparisonUs` could become one field, if their columns are the same.
+  - `appStoreLink` / `googlePlayLink` could become one field.
