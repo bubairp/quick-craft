@@ -127,6 +127,7 @@
   --shadow-tile: 0 8px 24px 0 rgb(149 157 165 / 0.2); /* city event tile hover card (reference site) */
   --shadow-halo: 0 0 38px 30px var(--color-surface);   /* "Get the app" pill glow (Figma 6-2046) */
   --shadow-glow: 0 0 20px 0 rgb(49 189 196 / 0.2);    /* comparison card glow (Figma 17-2084) */
+  --shadow-subtle: 0 0.6px 2px -1.4px rgb(0 0 0 / 0.04), 0 2.3px 7.8px -2.8px rgb(0 0 0 / 0.03), 0 10px 34px -4.25px rgb(0 0 0 / 0.01); /* job cards (Figma 6-6917) */
 
   /* Letter spacing */
   --tracking-snug: -0.01em;    /* -0.2px at 20px — press quotes (Home 6-1283) */

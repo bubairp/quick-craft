@@ -999,3 +999,19 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - 768 / 375: stacked, no overflow.
 - **Fixed:** `text-balance` changed the heading's line breaks: `lg:text-wrap`. The remaining one-word difference is the font (Figma TWK Lausanne vs the site's Inter).
 - **Next on Careers:** the photo strip under 6-6646 = an imageGallery (marquee) block, added with the Careers page.
+
+### 2026-11-20: Block: jobList (Figma Careers 6-6899, "Open Roles")
+- **Rule/token first:** `--shadow-subtle` (the 3-layer card shadow); CLAUDE.md › pageBuilder blocks › jobList (data source, grouping, meta rule, link behaviour, empty state).
+- **Migration** `m261120_320000_job_list` (backup: `/tmp/before-joblist.sql.gz`):
+  - jobList + `glow` (lightswitchOff instance) + `spacing`.
+  - Test data from the Figma frame: departments Design / Engineering / General / Sales / Support, and 10 jobs (generic titles, New York, full time, workplace as in the design; post dates spaced 1 minute apart so the design's order holds).
+  - An "Open Roles" block on Careers (glow on) with a dark "See all roles" button.
+  - **Placeholders:** job and button links → https://example.com/jobs. Replace them with the real job board.
+- **Template** `_blocks/jobList.twig`:
+  - Jobs (`.with(['department'])`, no N+1) grouped in the Departments structure order; jobs without a department under "Other"|t.
+  - Card `rounded-lg bg-white p-6 shadow-subtle ring-1 ring-inset ring-black/5`, the whole card links (new tab from the field), Tabler `arrow-up-right` nudges on hover, focus outline.
+  - Meta = department • location • employment type • workplace, with **On-site hidden** (the design only shows Hybrid).
+  - Empty state: `|t` "No open roles right now." Buttons via `_components/buttons.twig`.
+- **Checked (Playwright) at 375 / 768 / 1440:** heading 48/48 500 (36 on a phone); list 800; card r12, pad 24; title 20/28 500 black; meta 16/22.4 black/60; card gap 12; group gap 32; links `_blank`; no overflow. The meta lines match the design exactly.
+- **Fixed:** a 2px title/meta gap made the cards 100px instead of 98.4 → removed.
+- **Known difference:** the button is 54px tall vs 48 in Figma (the shared button size, kept consistent site-wide).

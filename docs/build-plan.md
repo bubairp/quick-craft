@@ -89,7 +89,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 | ☑ | `textMedia` (+ `imageGallery` row ☐) | right | 6-6646 |
 | ☐ | `cardGrid` | grid (emoji cards) | 6-6770 |
 | ☑ | `textMedia` | left | 6-6862 |
-| ☐ | `jobList` | grouped by department | 6-6899 |
+| ☑ | `jobList` | grouped by department | 6-6899 |
 | ☐ | `image` | full width | 6-7092 |
 
 ## 5. Press (18-5996), Single `press` + Press mentions channel

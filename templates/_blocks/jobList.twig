@@ -1,0 +1,78 @@
+{#
+ # Job list block. Figma: Careers 6-6899 ("Open Roles").
+ # Jobs from the Jobs channel, grouped by department (Departments structure order). Each job is a
+ # card linking to its posting (externalLink); meta = department • location • type • workplace
+ # (workplace hidden when On-site, as in the design). Buttons below (e.g. "See all roles").
+ # Receives: block, headingLevel
+ # Fields: heading, glow, buttons, spacing
+ #}
+{% set jobs = craft.entries.section('jobs').with(['department']).orderBy('postDate asc, title asc').all() %}
+{% set level = headingLevel ?? 2 %}
+{% set tag = 'h' ~ level %}
+
+{# group by department, in the Departments structure order; jobs without one go last #}
+{% set departments = craft.entries.section('departments').all() %}
+{% set groups = [] %}
+{% for dept in departments %}
+    {% set inDept = jobs|filter(j => (j.department|length ? (j.department|first).id : null) == dept.id) %}
+    {% if inDept|length %}{% set groups = groups|merge([{ name: dept.title, jobs: inDept }]) %}{% endif %}
+{% endfor %}
+{% set other = jobs|filter(j => not (j.department|length)) %}
+{% if other|length %}{% set groups = groups|merge([{ name: 'Other'|t, jobs: other }]) %}{% endif %}
+
+{% if block.heading or groups|length %}
+    <section data-spacing="{{ block.spacing.value ?? 'default' }}"
+             class="bg-white/80 px-4 py-16 md:px-15 md:py-25 {{ block.glow ? 'glow-bg' }}">
+        <div class="mx-auto flex max-w-200 flex-col gap-10">
+            {% if block.heading %}
+                <{{ tag }} class="text-balance text-center text-4xl font-medium md:text-headline">{{ block.heading }}</{{ tag }}>
+            {% endif %}
+
+            {% if groups|length %}
+                <div class="flex flex-col gap-8">
+                    {% for group in groups %}
+                        <div class="flex flex-col gap-3">
+                            <{{ 'h' ~ (level + 1) }} class="text-xl font-medium text-black/60">{{ group.name }}</{{ 'h' ~ (level + 1) }}>
+                            <ul class="flex flex-col gap-3">
+                                {% for job in group.jobs %}
+                                    {% set link = job.externalLink ?? null %}
+                                    {% set meta = [
+                                        (job.department|first).title ?? null,
+                                        job.location|trim ?: null,
+                                        job.employmentType.label ?? null,
+                                        (job.workplace.value ?? '') not in ['', 'onSite'] ? job.workplace.label : null,
+                                    ]|filter %}
+                                    {% set inner %}
+                                        <span class="flex flex-1 flex-col px-1">
+                                            <span class="text-xl font-medium text-black">{{ job.title }}</span>
+                                            {% if meta|length %}<span class="text-base text-black/60">{{ meta|join(' • ') }}</span>{% endif %}
+                                        </span>
+                                        {% if link and link.url %}
+                                            {% include '_components/icon.twig' with { name: 'arrow-up-right', class: 'size-6 text-black/60 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5' } only %}
+                                        {% endif %}
+                                    {% endset %}
+                                    {% set cardClass = 'flex items-start gap-1 rounded-lg bg-white p-6 shadow-subtle ring-1 ring-inset ring-black/5' %}
+                                    <li>
+                                        {% if link and link.url %}
+                                            <a {{ attr(link.attributes|merge({ class: 'group ' ~ cardClass ~ ' transition-shadow duration-200 hover:shadow-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink' })) }}>{{ inner }}</a>
+                                        {% else %}
+                                            <div class="{{ cardClass }}">{{ inner }}</div>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-xl text-black/60">{{ 'No open roles right now.'|t }}</p>
+            {% endif %}
+
+            {% include '_components/buttons.twig' with {
+                buttons: block.buttons.eagerly().all(),
+                variants: { primary: 'dark', secondary: 'light' },
+                shape: 'rounded', class: 'flex flex-wrap justify-center gap-3',
+            } only %}
+        </div>
+    </section>
+{% endif %}

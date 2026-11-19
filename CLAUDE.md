@@ -118,6 +118,11 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - The body uses `.rich-text .rich-text--lead` (20px black/60, 20px between paragraphs).
     - `.glow-bg` approximates Figma's blurred photo blobs with radial gradients of the aqua / orchid / glow-blue tokens.
     - The photo strip under 6-6646 is a separate imageGallery block (marquee).
+  - **jobList** (Figma Careers 6-6899; migration `m261120_320000_job_list`): `heading` (centred `text-headline`), `glow` (lightswitchOff instance), `buttons` (e.g. "See all roles"), `spacing`.
+    - **The list comes from the Jobs channel**, eager-loaded with `department`, and grouped by department in the Departments structure order. Jobs without a department go under "Other"|t.
+    - Card: `rounded-lg bg-white p-6 shadow-subtle ring-1 ring-inset ring-black/5`; title `text-xl font-medium`; meta `text-base text-black/60` = department • location • employment type • workplace (the workplace is hidden when On-site, as in Figma); Tabler `arrow-up-right`.
+    - The whole card is the link (`externalLink`, opens in a new tab when set there). Without a link it's a plain card with no arrow.
+    - With no jobs: the heading and a `|t` "No open roles right now." message.
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`
