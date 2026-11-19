@@ -9,7 +9,7 @@
  # the section again in a partial or block.
  #}
 {% if not _globals.has('siteSettings') %}
-    {% do _globals.put('siteSettings', craft.entries.section('siteSettings').with(['image']).one()) %}
+    {% do _globals.put('siteSettings', craft.entries.section('siteSettings').with(['image', 'buttons', 'socialLinks', 'contactDetails']).one()) %}
     {% do _globals.put('newsletter', craft.entries.section('newsletter').with(['image']).one()) %}
 {% endif -%}
 <!DOCTYPE html>

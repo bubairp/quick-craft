@@ -41,11 +41,11 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: f7732655-f05d-47c7-8b76-d1a20cce7eee # Publication
-            handle: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Short text
+            handle: publication
             instructions: null
-            label: null
-            oldFieldUid: null
+            label: Publication
+            oldFieldUid: f7732655-f05d-47c7-8b76-d1a20cce7eee
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

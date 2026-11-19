@@ -4,7 +4,7 @@
  # used by landing pages. Included by _entries/page.twig only when the page has a heading or images.
  # The heading is the page's <h1>.
  # Receives: page (the entry)
- # Fields (Banner tab): heroLayout, scheme, eyebrow, heading, rotatingWords, text, primaryButton, secondaryButton, images,
+ # Fields (Banner tab): heroLayout, scheme, eyebrow, heading, rotatingWords, text, buttons (common Matrix), images,
  #         chatMessages (split layout: animated chat over images[0], see _components/hero-chat.twig)
  #}
 {% set layout = page.heroLayout.value ?? 'split' %}
@@ -12,18 +12,20 @@
 {% set dark = scheme == 'dark' %}
 {% set media = page.images.eagerly().all() %}
 {% set tag = 'h1' %}
-{% set hasButtons = (page.primaryButton.url ?? false) or (page.secondaryButton.url ?? false) %}
+{% set buttons = page.buttons.eagerly().all() %}
+{% set hasButtons = buttons|filter(b => b.buttonLink.url ?? false)|length > 0 %}
 
 {% set sectionClass = [
     'relative overflow-hidden',
     layout == 'fullBleed' ? 'min-h-svh' : 'pt-32 pb-16 md:pt-44 lg:pb-24',
 ]|join(' ') %}
 
-{% macro buttons(page, dark) %}
-    <div class="flex flex-wrap gap-3">
-        {% include '_components/button.twig' with { link: page.primaryButton, variant: dark ? 'light' : 'dark', shape: 'rounded' } only %}
-        {% include '_components/button.twig' with { link: page.secondaryButton, variant: dark ? 'darkOnDark' : 'light', shape: 'rounded' } only %}
-    </div>
+{% macro buttons(buttons, dark) %}
+    {% include '_components/buttons.twig' with {
+        buttons: buttons,
+        variants: { primary: dark ? 'light' : 'dark', secondary: dark ? 'darkOnDark' : 'light' },
+        dark: dark, shape: 'rounded', class: 'flex flex-wrap gap-3',
+    } only %}
 {% endmacro %}
 
 {# No spacing option: the banner's top padding clears the fixed header. #}
@@ -42,7 +44,7 @@
                         <p class="max-w-md text-xl md:text-2xl {{ dark ? 'text-line' : 'text-black/60' }}">{{ page.text|nl2br }}</p>
                     {% endif %}
                 </div>
-                {% if hasButtons %}{{ _self.buttons(page, dark) }}{% endif %}
+                {% if hasButtons %}{{ _self.buttons(buttons, dark) }}{% endif %}
             </div>
 
             {% set chat = (page.chatMessages ?? [])|filter(r => r.message or r.kind == 'typing') %}
@@ -72,7 +74,7 @@
         <div class="relative mx-auto flex min-h-svh max-w-content flex-col items-center justify-center gap-6 px-4 pt-32 pb-16 text-center md:px-gutter {{ media|length ? 'text-white' }}">
             {% if page.heading %}<{{ tag }} class="text-balance text-5xl md:text-6xl">{{ page.heading }}</{{ tag }}>{% endif %}
             {% if page.text %}<p class="max-w-xl text-xl md:text-2xl">{{ page.text|nl2br }}</p>{% endif %}
-            {% if hasButtons %}{{ _self.buttons(page, true) }}{% endif %}
+            {% if hasButtons %}{{ _self.buttons(buttons, true) }}{% endif %}
         </div>
 
     {% else %}
@@ -92,7 +94,7 @@
                 </{{ tag }}>
             {% endif %}
             {% if page.text and layout != 'simple' %}<p class="max-w-xl text-xl text-black/60 md:text-2xl">{{ page.text|nl2br }}</p>{% endif %}
-            {% if hasButtons %}{{ _self.buttons(page, dark) }}{% endif %}
+            {% if hasButtons %}{{ _self.buttons(buttons, dark) }}{% endif %}
             {% if media|length and layout != 'simple' %}
                 <div class="mt-6 grid w-full grid-cols-2 gap-4 md:grid-cols-4">
                     {% for image in media %}

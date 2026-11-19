@@ -1,0 +1,37 @@
+{#
+ # Contact details from the common `contactDetails` Matrix on siteSettings (entry type
+ # `contactDetail`: contactType, detail). Email → mailto:, phone → tel:, WhatsApp → wa.me,
+ # address → plain text. Renders nothing when empty. Use it wherever the design shows contact info
+ # (contact page, footer).
+ #
+ # Props:
+ #   details    array of `contactDetail` entries (siteSettings.contactDetails.all())
+ #   linkClass  classes on each link / address
+ #   iconClass  classes on each icon (default 'size-5')
+ #   class      classes on the <ul>
+ #}
+{% set icons = { email: 'mail', phone: 'phone', whatsapp: 'brand-whatsapp', address: 'map-pin' } %}
+{% set items = (details ?? [])|filter(d => d.detail|trim|length) %}
+{% if items|length %}
+    <ul class="{{ class ?? '' }}">
+        {% for item in items %}
+            {% set type = item.contactType.value ?? 'email' %}
+            {% set value = item.detail|trim %}
+            {% set digits = value|replace('/[^0-9+]/', '') %}
+            {% set href = {
+                email: 'mailto:' ~ value,
+                phone: 'tel:' ~ digits,
+                whatsapp: 'https://wa.me/' ~ digits|replace({ '+': '' }),
+            }[type] ?? null %}
+            {% set icon %}{% include '_components/icon.twig' with { name: icons[type] ?? 'info-circle', class: iconClass ?? 'size-5' } only %}{% endset %}
+            <li>
+                {% if href %}
+                    <a href="{{ href }}" class="{{ linkClass ?? '' }}" {% if type == 'whatsapp' %}target="_blank" rel="noopener"{% endif %}
+                       aria-label="{{ item.contactType.label }}: {{ value }}">{{ icon }}<span>{{ value }}</span></a>
+                {% else %}
+                    <address class="not-italic {{ linkClass ?? '' }}">{{ icon }}<span>{{ value|nl2br }}</span></address>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -1,7 +1,7 @@
 columnSuffix: null
 handle: comparisonUs
 instructions: null
-name: 'Comparison: us'
+name: 'Comparison list'
 searchable: false
 settings:
   addRowLabel: 'Add row'

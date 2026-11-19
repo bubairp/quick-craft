@@ -1,7 +1,7 @@
 columnSuffix: null
 handle: appStoreLink
 instructions: null
-name: 'App Store link'
+name: 'Store link'
 searchable: false
 settings:
   fullGraphqlData: true

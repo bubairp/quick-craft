@@ -1,0 +1,57 @@
+columnSuffix: null
+handle: contactType
+instructions: null
+name: Type
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - Email
+        -
+          - value
+          - email
+        -
+          - default
+          - true
+    -
+      __assoc__:
+        -
+          - label
+          - Phone
+        -
+          - value
+          - phone
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - WhatsApp
+        -
+          - value
+          - whatsapp
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Address
+        -
+          - value
+          - address
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

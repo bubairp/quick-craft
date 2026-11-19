@@ -1,0 +1,123 @@
+columnSuffix: null
+handle: platform
+instructions: null
+name: Platform
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - Instagram
+        -
+          - value
+          - instagram
+        -
+          - default
+          - true
+    -
+      __assoc__:
+        -
+          - label
+          - 'X (Twitter)'
+        -
+          - value
+          - x
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - TikTok
+        -
+          - value
+          - tiktok
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - LinkedIn
+        -
+          - value
+          - linkedin
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Facebook
+        -
+          - value
+          - facebook
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - YouTube
+        -
+          - value
+          - youtube
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Threads
+        -
+          - value
+          - threads
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Pinterest
+        -
+          - value
+          - pinterest
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Substack
+        -
+          - value
+          - substack
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Other
+        -
+          - value
+          - other
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

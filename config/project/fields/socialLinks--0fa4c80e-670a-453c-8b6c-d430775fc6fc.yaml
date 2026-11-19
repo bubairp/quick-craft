@@ -1,0 +1,28 @@
+columnSuffix: null
+handle: socialLinks
+instructions: null
+name: 'Social links'
+searchable: false
+settings:
+  createButtonLabel: 'Add social link'
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - a6b5c3a2-e479-4e42-b644-69a0f6e5363b # Social link
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: blocks
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix
+warning: null

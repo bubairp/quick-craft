@@ -30,44 +30,27 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Primary button
-            handle: null
-            instructions: null
-            label: 'Header primary button'
-            oldFieldUid: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: 1b39b1e9-6271-426e-8228-964070fd9c12
-            userCondition: null
-            warning: null
-            width: 100
-          -
-            dateAdded: null
-            editCondition: null
-            elementCondition: null
-            elementEditCondition: null
-            fieldUid: 5eb1e556-9b7b-4d71-a114-baee0a3f751d # Secondary button
-            handle: null
-            instructions: null
-            label: 'Header secondary button'
-            oldFieldUid: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: 5af5dc9a-3d89-4d28-b6c1-e7c95926b1d4
-            userCondition: null
-            warning: null
-            width: 100
-          -
-            dateAdded: null
-            editCondition: null
-            elementCondition: null
-            elementEditCondition: null
-            fieldUid: 94877b10-33d0-4265-940d-2e085b80ebd7 # App Store link
+            fieldUid: a8028db7-e7b3-40d6-b693-8ab2960cc756 # Buttons
             handle: null
             instructions: null
             label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: a998671d-b659-454d-a161-bda31ef598c6
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 94877b10-33d0-4265-940d-2e085b80ebd7 # Store link
+            handle: null
+            instructions: null
+            label: 'App Store link'
             oldFieldUid: null
             required: false
             tip: null
@@ -81,7 +64,24 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 31de628c-a882-4903-9026-b953ce3f2a37 # Google Play link
+            fieldUid: 94877b10-33d0-4265-940d-2e085b80ebd7 # Store link
+            handle: googlePlayLink
+            instructions: null
+            label: 'Google Play link'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 25b9a0ad-0445-41c1-b93e-4f84133aa196
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 0fa4c80e-670a-453c-8b6c-d430775fc6fc # Social links
             handle: null
             instructions: null
             label: null
@@ -89,7 +89,24 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
-            uid: 25b9a0ad-0445-41c1-b93e-4f84133aa196
+            uid: 3abe5576-32e3-4298-8d48-aa2468b505e9
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 3c0efb34-47ad-4843-b9cc-5768d4c18afe # Contact details
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 0024031c-75e2-482c-a18d-33846ac7da71
             userCondition: null
             warning: null
             width: 100

@@ -1,7 +1,7 @@
 columnSuffix: null
 handle: eyebrow
 instructions: 'Small label above the heading.'
-name: Eyebrow
+name: 'Short text'
 searchable: false
 settings:
   byteLimit: null

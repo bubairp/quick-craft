@@ -64,10 +64,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 8daa4bde-fbd6-4b3a-82e8-f6568c6a52eb # Comparison: us
+            fieldUid: 8daa4bde-fbd6-4b3a-82e8-f6568c6a52eb # Comparison list
             handle: null
             instructions: null
-            label: null
+            label: 'Comparison: us'
             oldFieldUid: null
             required: false
             tip: null
@@ -81,11 +81,11 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 35fbc822-08af-46bb-b655-4fc29f947de7 # Comparison: them
-            handle: null
+            fieldUid: 8daa4bde-fbd6-4b3a-82e8-f6568c6a52eb # Comparison list
+            handle: comparisonThem
             instructions: null
-            label: null
-            oldFieldUid: null
+            label: 'Comparison: them'
+            oldFieldUid: 35fbc822-08af-46bb-b655-4fc29f947de7
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

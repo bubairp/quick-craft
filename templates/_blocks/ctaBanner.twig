@@ -7,7 +7,7 @@
  #   rowsSpot         — the same rows in grayscale; colour shows in a circle around the cursor
  #   rowsSpotInvert   — the reverse: rows in colour; a grayscale circle follows the cursor
  # Receives: block, headingLevel
- # Fields: scheme, spacing, ctaLayout, heading, text, primaryButton, secondaryButton, images, showAppBadges
+ # Fields: scheme, spacing, ctaLayout, heading, text, primaryButton (= heading link), buttons (common Matrix), images, showAppBadges
  #}
 {% set scheme = block.scheme.value ?? 'light' %}
 {% set dark = scheme == 'dark' %}
@@ -84,7 +84,10 @@
                 <p class="p-2 text-base leading-4.75 font-light text-balance md:max-w-60 md:p-3 md:text-lg md:leading-5.5 {{ dark ? 'bg-night text-line' : (scheme == 'soft' ? 'bg-white text-graphite' : 'bg-surface text-graphite') }}">{{ block.text|nl2br }}</p>
             {% endif %}
 
-            {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'light' : 'dark', class: 'mt-2' } only %}
+            {% include '_components/buttons.twig' with {
+                buttons: block.buttons.eagerly().all(), dark: dark, class: 'mt-2 flex flex-wrap justify-center gap-3',
+                variants: { primary: dark ? 'light' : 'dark', secondary: dark ? 'darkOnDark' : 'light' },
+            } only %}
 
             {% if block.showAppBadges %}
                 {% include '_components/store-links.twig' with { dark: dark, class: 'mt-2 justify-center' } %}

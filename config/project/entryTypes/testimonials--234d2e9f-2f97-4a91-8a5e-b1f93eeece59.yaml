@@ -30,10 +30,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Eyebrow
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Short text
             handle: null
             instructions: null
-            label: null
+            label: Eyebrow
             oldFieldUid: null
             required: false
             tip: null

@@ -2,11 +2,13 @@
  # Image gallery block. Figma: Home 6-1384 (fan; motion/hover/resize measured on the reference
  # site, see src/js/gallery-wave.js). Also grid (17-1088), row (17-1931), marquee (17-3649).
  # Receives: block, headingLevel
- # Fields: galleryLayout, eyebrow, heading, text, images, primaryButton
+ # Fields: galleryLayout, eyebrow, heading, text, images, buttons (common Matrix)
  # Captions use each asset's title (grid/row layouts only).
  #}
 {% set layout = block.galleryLayout.value ?? 'grid' %}
 {% set images = block.images.eagerly().all() %}
+{% set buttons = block.buttons.eagerly().all() %}
+{% set buttonVariants = { primary: 'dark', secondary: 'light' } %}
 {% set level = headingLevel ?? 2 %}
 
 {% if layout == 'fan' and images|length %}
@@ -39,11 +41,7 @@
             </div>
         </div>
     {% endif %}
-    {% if block.primaryButton.url ?? false %}
-        <div class="flex justify-center px-4 pb-16">
-            {% include '_components/button.twig' with { link: block.primaryButton, variant: 'dark', shape: 'rounded' } only %}
-        </div>
-    {% endif %}
+    {% include '_components/buttons.twig' with { buttons: buttons, variants: buttonVariants, shape: 'rounded', class: 'flex flex-wrap justify-center gap-3 px-4 pb-16' } only %}
 </section>
 
 {% elseif block.heading or images|length %}
@@ -90,10 +88,6 @@
         {% endif %}
     {% endif %}
 
-    {% if block.primaryButton.url ?? false %}
-        <div class="mt-10 flex justify-center px-4">
-            {% include '_components/button.twig' with { link: block.primaryButton, variant: 'dark', shape: 'rounded' } only %}
-        </div>
-    {% endif %}
+    {% include '_components/buttons.twig' with { buttons: buttons, variants: buttonVariants, shape: 'rounded', class: 'mt-10 flex flex-wrap justify-center gap-3 px-4' } only %}
 </section>
 {% endif %}

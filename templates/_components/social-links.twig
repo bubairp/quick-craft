@@ -1,0 +1,31 @@
+{#
+ # Social links from the common `socialLinks` Matrix on siteSettings (entry type `socialLink`:
+ # platform, externalLink). The Tabler icon comes from the platform, so editors never type icon names.
+ # Renders nothing when there are no links.
+ #
+ # Props:
+ #   links      array of `socialLink` entries (siteSettings.socialLinks.all(), eager-loaded in base.twig)
+ #   linkClass  classes on each <a>
+ #   iconClass  classes on each icon (default 'size-5')
+ #   class      classes on the <ul>
+ #}
+{% set icons = {
+    instagram: 'brand-instagram', x: 'brand-x', tiktok: 'brand-tiktok', linkedin: 'brand-linkedin',
+    facebook: 'brand-facebook', youtube: 'brand-youtube', threads: 'brand-threads', pinterest: 'brand-pinterest',
+    substack: 'news', other: 'link',
+} %}
+{% set items = (links ?? [])|filter(l => l.externalLink.url ?? false) %}
+{% if items|length %}
+    <ul class="{{ class ?? '' }}">
+        {% for item in items %}
+            {% set platform = item.platform.value ?? 'other' %}
+            <li>
+                <a {{ attr(item.externalLink.attributes|merge({ class: linkClass ?? '', rel: 'noopener' })) }}>
+                    {% include '_components/icon.twig' with { name: icons[platform] ?? 'link', class: iconClass ?? 'size-5' } only %}
+                    {# getLabel(true): only a label the editor typed; otherwise the platform name (not the URL host) #}
+                    <span>{{ item.externalLink.getLabel(true) ?: item.platform.label }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

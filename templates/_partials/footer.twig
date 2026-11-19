@@ -1,11 +1,15 @@
 {#
  # Site footer — Figma 6-2058 (dark rounded panel).
- # Columns: Simple RP Menu menus; column heading = menu name. Links are rendered from the
+ # Columns: Simple RP Menu menus (heading = menu name) + the "Socials" column from siteSettings.socialLinks.
+ # Menu links are rendered from the
  # plugin's resolved items (simplerpmenuItems.getResolvedMenuItems, as in the header) so an
  # item can carry a Tabler icon: Data JSON "icon: brand-instagram" (e.g. the Socials menu).
  # Store links: siteSettings Single (via _globals). Wordmark: siteName.
  #}
-{% set footerMenus = ['footerCompany', 'footerProduct', 'footerSocials', 'footerLegal', 'footerSupport'] %}
+{# 'socials' = the siteSettings `socialLinks` Matrix (_components/social-links.twig), not a menu #}
+{% set footerMenus = ['footerCompany', 'footerProduct', 'socials', 'footerLegal', 'footerSupport'] %}
+{% set siteSettings = _globals.get('siteSettings') %}
+{% set footerLinkClass = 'inline-flex items-center gap-2.5 text-xl font-light text-paper underline-offset-4 hover:underline' %}
 {% set menuItems = craft.app.plugins.getPlugin('simple-rp-menu').simplerpmenuItems %}
 {% set currentUrl = craft.app.request.absoluteUrl|split('?')|first %}
 
@@ -21,13 +25,27 @@
 
 <footer class="px-4 pb-4 md:px-8 md:pb-8">
     <div class="overflow-hidden rounded-2xl bg-ink px-6 pb-4 pt-12 text-paper md:px-gutter md:pt-16">
-        <div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
+        {# 5 columns + store badges: side by side from xl (columns spread to fill, badges never shrink);
+           below xl the badges sit under the columns (they didn't fit next to five 180px columns). #}
+        <div class="flex flex-col gap-10 xl:flex-row xl:items-start xl:justify-between">
 
-            <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:flex lg:gap-12">
+            <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5 xl:flex xl:flex-1 xl:justify-between xl:gap-8">
                 {% for handle in footerMenus %}
-                    {% set menu = craft.simplerpmenu.getMenu(handle) %}
+                    {% if handle == 'socials' %}
+                        {% set socialHtml %}{% include '_components/social-links.twig' with {
+                            links: siteSettings ? siteSettings.socialLinks.all() : [],
+                            class: 'flex flex-col gap-3.5', linkClass: footerLinkClass,
+                        } only %}{% endset %}
+                        {% if socialHtml|trim|length %}
+                            <nav class="min-w-0" aria-labelledby="footer-socials">
+                                <h2 id="footer-socials" class="mb-3.5 text-xl font-bold text-paper">{{ 'Socials'|t }}</h2>
+                                {{ socialHtml }}
+                            </nav>
+                        {% endif %}
+                    {% endif %}
+                    {% set menu = handle != 'socials' ? craft.simplerpmenu.getMenu(handle) : null %}
                     {% if menu %}
-                        <nav class="lg:min-w-45" aria-labelledby="footer-{{ handle }}">
+                        <nav class="min-w-0" aria-labelledby="footer-{{ handle }}">
                             <h2 id="footer-{{ handle }}" class="mb-3.5 text-xl font-bold text-paper">{{ menu.name }}</h2>
                             <ul class="flex flex-col gap-3.5">
                                 {% for item in menuItems.getResolvedMenuItems(menu.id) %}
@@ -51,7 +69,7 @@
                 {% endfor %}
             </div>
 
-            {% include '_components/store-links.twig' with { dark: true, direction: 'responsive' } %}
+            {% include '_components/store-links.twig' with { dark: true, direction: 'responsive', class: 'shrink-0' } %}
         </div>
 
         <p class="mt-20 select-none whitespace-nowrap text-center text-wordmark font-extrabold leading-none text-white lg:mt-40" aria-hidden="true">{{ siteName|lower }}</p>

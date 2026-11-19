@@ -63,14 +63,14 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 | Jobs | Channel | no URLs | `job`: department, location, employmentType, workplace, externalLink |
 | Press | Single | `press` → `_entries/page` | `press`: page tabs |
 | Press mentions | Channel | no URLs | `pressMention`: publication, externalLink (title = headline, postDate = date) |
-| Site settings | Single | no URLs | `siteSettings`: image (logo), primaryButton and secondaryButton (header CTAs), appStoreLink, googlePlayLink |
+| Site settings | Single | no URLs | `siteSettings`: image (logo), buttons (header CTAs), appStoreLink, googlePlayLink, socialLinks, contactDetails |
 | Newsletter | Single | no URLs | `newsletter`: image (blog title image), heading, text, newsletterForm (Wheel Form) |
 | Blog categories | Structure | no URLs | `blogCategory`: title. Related via the Entries field `blogCategories` |
 | Departments | Structure | no URLs | `department`: title. Related via the Entries field `department` |
 
 - **Page tabs (as in Site7 Engine), every page entry type** (home, landingPage, careers, press, and any new page type). Migration `m261120_100000_page_tabs`:
   1. **Page:** title, `pageBackground` (paper / surface: the page's background colour).
-  2. **Banner:** the page's fixed banner (hero). Fields: `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `primaryButton`, `secondaryButton`, `images` (the banner/featured image), `chatMessages`.
+  2. **Banner:** the page's fixed banner (hero). Fields: `heroLayout`, `scheme`, `eyebrow`, `heading`, `rotatingWords`, `text`, `buttons`, `images` (the banner/featured image), `chatMessages`.
   3. **Content:** `pageBuilder`.
   4. **SEO:** `seo`.
 - **The banner is fixed per page, not a pageBuilder block** (there is no `hero` block any more).
@@ -85,9 +85,27 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - **pageBuilder blocks** (each one is `_blocks/{handle}.twig`, receives `block` and `headingLevel`):
   - cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList
 - **Nested Matrix fields:**
-  - `cards`: `card` (image, emoji, heading, text, primaryButton)
+  - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`
   - `faqItems`: `faqItem` (title = question, body)
+- **Common Matrix fields** (reusable anywhere; migration `m261120_120000_common_matrix_fields`). Before adding a repeating group, use one of these, or reuse their item entry type in another Matrix.
+  - **`buttons`** (entry type `button`: `buttonLink` = a Link with label, `buttonStyle` dropdown, `iconName` = an optional Tabler icon name). Max 3.
+    - **Every button group uses it:** page Banner, cardGrid, ctaBanner, imageGallery, jobList, siteSettings (header buttons).
+    - **`buttonStyle` options** (the user's decision, 2026-11-20):
+      - `primary` / `secondary`: automatic. The block maps them to colours for its scheme, as in the Figma design.
+      - `dark` / `light`: a fixed colour wherever the button is placed. On a dark section, `dark` uses the dark-on-dark border (`darkOnDark`).
+      - Only the button component's variants are offered (`_components/button.twig`); never free colours.
+    - Render with `{% include '_components/buttons.twig' with { buttons: …, variants: { primary: '…', secondary: '…' }, dark: <bool>, shape, size, class } only %}`. The block passes its primary/secondary map; `dark`/`light` are resolved by the component.
+    - **A single inline link stays a Link field:** a card's link (`primaryButton`), a city's link, ctaBanner's heading link (`primaryButton`, labelled "Heading link"), promoBar.
+  - **`socialLinks`** on siteSettings (entry type `socialLink`: `platform` dropdown → the Tabler icon is chosen by the template, `externalLink`). Rendered by `_components/social-links.twig` (the footer's "Socials" column).
+  - **`contactDetails`** on siteSettings (entry type `contactDetail`: `contactType` email / phone / whatsapp / address, `detail`). Rendered by `_components/contact-details.twig` (makes mailto:, tel: and wa.me links). Used by the contact page and anywhere the design shows contact info.
+  - **Next, with their pages:** `person` (Careers), `logo` and `download` (Press kit).
+- **Shared base fields** (one field, several instances with their own handles; same migration):
+  - `eyebrow` ("Short text", single line): instances `eyebrow`, `personName`, `personDetail`, `location`, `publication`, `detail`.
+  - `comparisonUs` ("Comparison list"): instances `comparisonUs`, `comparisonThem`.
+  - `appStoreLink` ("Store link"): instances `appStoreLink`, `googlePlayLink`.
+  - `primaryButton` (Link with label): also the instance `buttonLink` in `button`.
+  - **How a merge keeps content:** content is keyed by the layout element's UID, so the migration points the existing layout element at the shared field, sets the old handle as an instance override, and only then deletes the old field.
 - **Option fields:** `scheme`, `spacing` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`).
 - **Section options (Shopify-style), migration `m261119_230000_scheme_and_spacing`:**
   - **`scheme`** (Colour scheme): `light` (page background, none of its own), `white`, `soft` (surface grey), `dark`.

@@ -7,6 +7,7 @@
  #   variant  'dark' | 'darkOnDark' | 'light' | 'outlineLight'   (default 'dark')
  #   shape    'pill' | 'rounded'                   (default 'pill')
  #   size     'md' | 'sm'   (default 'md'; 'sm' = 44px tall, e.g. next to the mobile menu button)
+ #   icon     optional Tabler icon name, shown before the label (from the `button` entry's iconName)
  #   class    extra classes (layout/margins only; padding and font size come from size,
  #            because a padding class passed here would not reliably override them)
  # Hover (reference site): lifts 2px, scales to 1.01, soft shadow. Off for reduced motion.
@@ -31,5 +32,8 @@
         variants[variant ?? 'dark'] ?? variants.dark,
         class ?? '',
     ]|join(' ') %}
-    <a {{ attr(link.attributes|merge({ class: classes })) }}>{{ link.label ?: link.url }}</a>
+    <a {{ attr(link.attributes|merge({ class: classes })) }}>
+        {%- if icon ?? false %}{% include '_components/icon.twig' with { name: icon, class: (size ?? 'md') == 'sm' ? 'size-4' : 'size-5' } only %}{% endif -%}
+        {{ link.label ?: link.url -}}
+    </a>
 {% endif %}

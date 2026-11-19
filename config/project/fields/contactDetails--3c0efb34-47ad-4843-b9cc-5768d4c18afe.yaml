@@ -1,0 +1,28 @@
+columnSuffix: null
+handle: contactDetails
+instructions: null
+name: 'Contact details'
+searchable: false
+settings:
+  createButtonLabel: 'Add contact detail'
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 03f1d9c2-255c-41ed-818a-e2cb06131584 # Contact detail
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: blocks
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix
+warning: null

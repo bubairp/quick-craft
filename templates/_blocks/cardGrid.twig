@@ -3,7 +3,7 @@
  #   grid (default): Figma Home 6-1320 — centered heading, big cards, button below
  #   compact:        Figma Home 6-1719 — heading left + buttons right, small square tiles
  # Receives: block, headingLevel
- # Fields: cardLayout, scheme, spacing, eyebrow, heading, text, cards, primaryButton, secondaryButton
+ # Fields: cardLayout, scheme, spacing, eyebrow, heading, text, cards, buttons (common Matrix)
  #}
 {% set layout = block.cardLayout.value ?? 'grid' %}
 {% set compact = layout == 'compact' %}
@@ -16,8 +16,7 @@
     : (count == 2 ? 'sm:grid-cols-2'
     : (count == 3 ? 'sm:grid-cols-2 lg:grid-cols-3'
     : 'sm:grid-cols-2 lg:grid-cols-4')) %}
-{% set hasSecondary = block.secondaryButton.url ?? false %}
-{% set hasButtons = (block.primaryButton.url ?? false) or hasSecondary %}
+{% set buttons = block.buttons.eagerly().all() %}
 
 {% if block.heading or count %}
 <section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 md:px-gutter {{ compact ? 'py-16 md:py-28' : 'pt-16 pb-20 md:pt-24 md:pb-section' }}">
@@ -28,12 +27,10 @@
                 {% include '_components/section-heading.twig' with {
                     eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level, dark: dark, align: 'left',
                 } only %}
-                {% if hasButtons %}
-                    <div class="flex flex-wrap gap-2">
-                        {% include '_components/button.twig' with { link: block.primaryButton, variant: dark ? 'outlineLight' : 'light' } only %}
-                        {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'light' : 'dark' } only %}
-                    </div>
-                {% endif %}
+                {% include '_components/buttons.twig' with {
+                    buttons: buttons, dark: dark, class: 'flex flex-wrap gap-2',
+                    variants: { primary: dark ? 'outlineLight' : 'light', secondary: dark ? 'light' : 'dark' },
+                } only %}
             </div>
         {% else %}
             {% include '_components/section-heading.twig' with {
@@ -49,11 +46,11 @@
             </div>
         {% endif %}
 
-        {% if not compact and hasButtons %}
-            <div class="flex flex-wrap justify-center gap-3">
-                {% include '_components/button.twig' with { link: block.primaryButton, variant: dark ? 'light' : 'darkOnDark', shape: 'rounded' } only %}
-                {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'outlineLight' : 'light', shape: 'rounded' } only %}
-            </div>
+        {% if not compact %}
+            {% include '_components/buttons.twig' with {
+                buttons: buttons, dark: dark, shape: 'rounded', class: 'flex flex-wrap justify-center gap-3',
+                variants: { primary: dark ? 'light' : 'darkOnDark', secondary: dark ? 'outlineLight' : 'light' },
+            } only %}
         {% endif %}
     </div>
 </section>

@@ -673,3 +673,41 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `Tokens::createPreviewToken($route, $usageLimit, $token)`: the 2nd argument is a usage limit, not an expiry date.
   - Don't redefine `CRAFT_BASE_PATH` in a script that requires `bootstrap.php`.
   - Read the URL from a plain `echo`, not from escaped JSON.
+
+### 2026-11-20: Common Matrix fields (buttons, socialLinks, contactDetails) + shared base fields
+- **Rule first:**
+  - CLAUDE.md › "Common Matrix fields" and "Shared base fields".
+  - Skill › "Common Matrix fields and shared fields": how to render buttons, how to merge two fields, how to move values between fields.
+  - **User's decision:** `buttonStyle` = Primary / Secondary (automatic per scheme) / Dark / Light (fixed).
+- **Migration** `m261120_120000_common_matrix_fields` (backup: `/tmp/before-common-matrix.sql.gz`):
+  - **Shared base fields** (Craft's own `fields/merge` steps, non-interactive; see `vendor/.../console/controllers/FieldsController::updateFieldUsages`):
+    - Each layout element is pointed at the shared field, keeping its UID (content is keyed by it), its old handle and its label. Then the outgoing field is deleted.
+    - `eyebrow` → "Short text": personName, personDetail, location, publication.
+    - `comparisonUs` → "Comparison list": comparisonThem.
+    - `appStoreLink` → "Store link": googlePlayLink.
+  - **New fields:**
+    - `buttons` (entry type `button`: `buttonLink` = an instance of primaryButton, `buttonStyle`, `iconName` = an instance of the Short text field; max 3).
+    - `socialLinks` (entry type `socialLink`: `platform` + `externalLink`).
+    - `contactDetails` (entry type `contactDetail`: `contactType` + `detail`).
+  - **`buttons` replaces the button Link fields** on home, landingPage, careers, press, cardGrid, ctaBanner (its old secondary button), imageGallery, jobList and siteSettings (header).
+    - 9 values moved, read from each owner's raw content at the old layout element UIDs, so it also works when the project config has already been applied.
+    - Single links stay Link fields, relabelled: ctaBanner "Heading link", card "Link", promoBar "Link".
+  - **siteSettings.socialLinks** was filled from the footerSocials menu (5 links). **The menu itself is kept but no longer rendered.** Delete it in the CP when you no longer need it as a backup.
+- **Templates:**
+  - New: `_components/buttons.twig` (group; the block passes `variants` for primary/secondary; dark/light resolved there), `_components/social-links.twig` (icon chosen by platform), `_components/contact-details.twig` (mailto:, tel:, wa.me; not placed yet, it's for the contact page).
+  - `button.twig` takes an optional `icon`.
+  - Updated: banner, cardGrid (both layouts), ctaBanner, imageGallery, header (desktop: all buttons; mobile: the first beside the menu button, the rest in the panel), footer ("Socials" column from socialLinks).
+  - base.twig eager-loads `buttons`, `socialLinks` and `contactDetails` with siteSettings.
+- **Bug found while checking, fixed:**
+  - **Footer store badges were squeezed to 121px** (the text wrapped onto 4 lines). Five 180px columns + 48px gaps (1092px) didn't fit beside them: the columns overflowed at 1024/1280, and at 1440 only 121px was left. This came from the old layout, not this change.
+  - **Now:** side by side from xl, with columns at natural width spread evenly (`xl:flex-1 justify-between`) and badges `shrink-0` + `whitespace-nowrap`. Below xl the badges sit under the columns (store-links `responsive` now stacks from xl).
+  - **Measured:** badges 160×48 / 155×48 at 375–1440, no horizontal overflow.
+- **Gotchas:**
+  - `link` is a reserved handle (`Field::RESERVED_HANDLES`), hence `buttonLink`.
+  - `LinkData.label` falls back to the URL host. Use `getLabel(true)` for "only the label the editor typed".
+  - Button labels: trim whitespace before `</a>` (`{{ … -}}`).
+- **Checked:**
+  - Home: every button with the same colours and links as before ("Contact Us" header, banner "Create event" / "Get the app", "Create for free", "For organizers").
+  - Merged fields still render (reviews "Quiviler / Sept 3", press names).
+  - Socials column with icons, at 1440 and 375.
+  - Both orders: migration first, and restore + `craft up` (project config first). Both give 9 buttons and 5 social links, with no project-config diff.

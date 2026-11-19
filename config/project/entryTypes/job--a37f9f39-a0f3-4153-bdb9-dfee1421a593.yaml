@@ -58,11 +58,11 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 95352d2f-22ac-4212-bbc2-5ed6eec633e0 # Location
-            handle: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Short text
+            handle: location
             instructions: null
-            label: null
-            oldFieldUid: null
+            label: Location
+            oldFieldUid: 95352d2f-22ac-4212-bbc2-5ed6eec633e0
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField

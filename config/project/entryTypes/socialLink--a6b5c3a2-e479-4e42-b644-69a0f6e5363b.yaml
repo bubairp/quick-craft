@@ -1,0 +1,60 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  5355ce60-c64e-4bbc-9cee-5c4603ffce44:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 949bbee0-db0d-4930-b297-ed2a5d2f2052 # Platform
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 0bbe84d4-c0a4-44b4-9728-ff0affe03b55
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: c3833a80-0361-44d0-a6e4-f5b973719a87 # External link
+            handle: null
+            instructions: null
+            label: URL
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 44ce6475-85cf-4b58-9aa5-2d7d078ef4d3
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: d94cd9df-5179-4211-ab01-d27e91e855b4
+        userCondition: null
+    thumbFieldKey: null
+handle: socialLink
+hasTitleField: false
+icon: null
+name: 'Social link'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{platform.label}'

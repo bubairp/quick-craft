@@ -93,6 +93,28 @@ Every page entry type (home, landingPage, careers, press, and new ones) uses fou
 **Copy**
 - [ ] No hard-coded content. Microcopy goes through `|t`.
 
+## Common Matrix fields and shared fields
+
+- **Repeating groups:** use the common Matrix fields (CLAUDE.md › Common Matrix fields): `buttons`, `socialLinks`, `contactDetails`. For a new group, reuse an existing item entry type (`button`, `card`, `socialLink`…) in the new Matrix before creating a type.
+- **Buttons in a block template:**
+  ```twig
+  {% include '_components/buttons.twig' with {
+      buttons: block.buttons.eagerly().all(),
+      variants: { primary: dark ? 'light' : 'dark', secondary: dark ? 'darkOnDark' : 'light' },
+      dark: dark, shape: 'rounded', class: 'flex flex-wrap gap-3',
+  } only %}
+  ```
+  `buttonStyle` options are primary, secondary, dark and light:
+  - The block maps primary and secondary per scheme.
+  - `dark` and `light` are fixed colours, resolved in `_components/buttons.twig`.
+  - Any new style must be an existing variant in `_components/button.twig`.
+- **Merging two fields into one shared field (keeping content):**
+  1. Point the existing layout element at the shared field (`$el->setField($shared)` or set its `fieldUid`), keeping the element's UID.
+  2. Set the old handle and label on the element (`$el->handle = 'personName'; $el->label = 'Person name'`).
+  3. Save the entry type, then delete the old field.
+  - Content is keyed by the layout element's UID, so it carries over, and the project config applied first on another environment gives the same result.
+- **Moving values between fields** (e.g. Link fields → `buttons` entries): read each owner's raw `elements_sites.content` at the old layout element UIDs, so it works whether or not the project config already removed the old elements. Then create the nested entries with `new Entry(['fieldId' => …, 'ownerId' => …, 'primaryOwnerId' => …, 'typeId' => …, 'siteId' => …, 'sortOrder' => …])`.
+
 ## Settings and taxonomies (everything is an entry)
 
 - **Site-wide settings** are Singles without URLs (`siteSettings`, `newsletter`), not global sets.

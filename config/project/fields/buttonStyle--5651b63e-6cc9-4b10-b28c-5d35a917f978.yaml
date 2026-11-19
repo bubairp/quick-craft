@@ -1,0 +1,57 @@
+columnSuffix: null
+handle: buttonStyle
+instructions: 'Primary and Secondary follow the section’s colour scheme. Dark and Light are fixed colours.'
+name: Style
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Primary (automatic colour)'
+        -
+          - value
+          - primary
+        -
+          - default
+          - true
+    -
+      __assoc__:
+        -
+          - label
+          - 'Secondary (automatic colour)'
+        -
+          - value
+          - secondary
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Dark
+        -
+          - value
+          - dark
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Light
+        -
+          - value
+          - light
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

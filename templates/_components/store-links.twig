@@ -2,7 +2,7 @@
  # App store links from the siteSettings Single (via _globals). Renders nothing if both are empty.
  # Badge-style buttons: Tabler brand icon + a small and a large line of text
  # ("Download on the / App Store"); the full phrase is the accessible name.
- # Props: dark (bool), direction ('row'|'responsive'), class
+ # Props: dark (bool), direction ('row'|'responsive' = stacked from xl, as in the footer), class
  #}
 {% set siteSettings = _globals.get('siteSettings') %}
 {% set googlePlay = siteSettings.googlePlayLink ?? null %}
@@ -14,13 +14,13 @@
 ]|filter(l => l.link and l.link.url) %}
 
 {% if links|length %}
-    <ul class="flex flex-wrap gap-2 {{ (direction ?? 'row') == 'responsive' ? 'lg:flex-col' : '' }} {{ class ?? '' }}" aria-label="{{ 'Download the app'|t }}">
+    <ul class="flex flex-wrap gap-2 {{ (direction ?? 'row') == 'responsive' ? 'xl:flex-col' : '' }} {{ class ?? '' }}" aria-label="{{ 'Download the app'|t }}">
         {% for item in links %}
             <li>
                 <a href="{{ item.link.url }}" target="_blank" rel="noopener" aria-label="{{ item.label }}"
                    class="inline-flex h-12 items-center gap-2.5 rounded-md border px-3.5 transition-colors duration-200 {{ dark ? 'border-paper/30 text-paper hover:bg-paper/10' : 'border-ink bg-ink text-paper hover:bg-night' }}">
                     {% include '_components/icon.twig' with { name: item.icon, class: 'size-6' } only %}
-                    <span class="flex flex-col items-start text-left leading-none" aria-hidden="true">
+                    <span class="flex flex-col items-start whitespace-nowrap text-left leading-none" aria-hidden="true">
                         <span class="text-xs leading-none tracking-normal opacity-80">{{ item.small }}</span>
                         <span class="mt-0.5 text-base leading-none font-semibold tracking-normal">{{ item.big }}</span>
                     </span>

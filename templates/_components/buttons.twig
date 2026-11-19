@@ -1,0 +1,37 @@
+{#
+ # A group of buttons from the common `buttons` Matrix (entry type `button`:
+ # buttonLink, buttonStyle, iconName). Renders nothing when no button has a URL.
+ #
+ # Props:
+ #   buttons   array of `button` entries (eager-load them: block.buttons.eagerly().all())
+ #   variants  { primary: '<variant>', secondary: '<variant>' }: the block's colours for the
+ #             automatic styles, usually depending on its scheme (see _components/button.twig)
+ #   dark      bool: the section is dark. Used for the fixed "dark" style (dark-on-dark border)
+ #   shape     'pill' | 'rounded'
+ #   size      'md' | 'sm'
+ #   itemClass extra classes on every button (layout only)
+ #   class     classes on the wrapper (e.g. 'flex flex-wrap gap-3'); no wrapper when empty
+ #}
+{% set items = (buttons ?? [])|filter(b => b.buttonLink.url ?? false) %}
+{% if items|length %}
+    {% set dark = dark ?? false %}
+    {% set map = {
+        primary: variants.primary ?? 'dark',
+        secondary: variants.secondary ?? 'light',
+        dark: dark ? 'darkOnDark' : 'dark',
+        light: 'light',
+    } %}
+    {% set html %}
+        {% for b in items %}
+            {% include '_components/button.twig' with {
+                link: b.buttonLink,
+                variant: map[b.buttonStyle.value ?? 'primary'] ?? map.primary,
+                icon: b.iconName ?? null,
+                shape: shape ?? 'pill',
+                size: size ?? 'md',
+                class: itemClass ?? '',
+            } only %}
+        {% endfor %}
+    {% endset %}
+    {% if class ?? false %}<div class="{{ class }}">{{ html }}</div>{% else %}{{ html }}{% endif %}
+{% endif %}
