@@ -6,10 +6,12 @@
  #                (Swiper, carousels.js). No JS: the cards stack.
  #   alternating: Figma Organizers 17-640 — text beside a wide image, sides alternate
  # Receives: block, headingLevel
- # Fields: featureLayout, theme, heading, cards (card: heading, text, image, primaryButton)
+ # Fields: featureLayout, scheme, heading, cards (card: heading, text, image, primaryButton)
+ # No spacing option: the padding sits on inner wrappers (heading, slider, rows), not the section.
  #}
 {% set layout = block.featureLayout.value ?? 'alternating' %}
-{% set dark = (block.theme.value ?? 'light') == 'dark' %}
+{% set scheme = block.scheme.value ?? 'light' %}
+{% set dark = scheme == 'dark' %}
 {% set rows = block.cards.eagerly().with(['image']).all() %}
 {% set level = headingLevel ?? 2 %}
 {% set rowLevel = block.heading ? level + 1 : level %}
@@ -17,7 +19,8 @@
 {% set textClass = dark ? 'text-line' : 'text-black/60' %}
 
 {% if rows|length %}
-<section class="{{ dark ? 'bg-ink text-white' : 'text-ink' }}">
+{# Dark here is ink (#111, Figma 6-1499), not the scheme's black: the utility overrides [data-scheme]. #}
+<section data-scheme="{{ scheme }}" class="{{ dark ? 'bg-ink' }}">
     {% if block.heading %}
         {% include '_components/section-heading.twig' with { heading: block.heading, level: level, dark: dark, class: 'px-4 pt-20 md:px-gutter md:pt-32' } only %}
     {% endif %}

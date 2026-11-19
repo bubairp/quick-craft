@@ -4,7 +4,7 @@
  #   quotes:   Figma Organizers 17-591 — 3 centered quotes with avatar image
  #   reviews:  Figma Invitation Maker 17-2211 — grid of review cards
  # Receives: block, headingLevel
- # Fields: testimonialLayout, eyebrow, heading, text,
+ # Fields: testimonialLayout, spacing, eyebrow, heading, text,
  #         testimonials (testimonial: text=quote, heading, personName, personDetail, image, rating;
  #                       stat: heading=value, text=label, image=background)
  #}
@@ -20,7 +20,7 @@
 {# Figma 6-1259: section bg #f7f7f7 (surface), padding 64/32; item 390×219; inactive logo
    240×40 at top 104; active: quote card (white 48%, 390×180, top 34, radius 4, text 20/26
    medium #30302f, 310 wide, content 12px lower) and the logo moves up to top 14. #}
-<section class="pt-12 pb-6 md:pt-16 md:pb-8" aria-label="{{ block.heading ?: 'In the press'|t }}">
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="pt-12 pb-6 md:pt-16 md:pb-8" aria-label="{{ block.heading ?: 'In the press'|t }}">
     <div data-carousel="press">
         <div class="swiper select-none">
             {# Rendered 3×: with one set (9 × 390px) a long drag ran past Swiper's spare loop slides
@@ -52,7 +52,7 @@
 </section>
 
 {% elseif items|length %}
-<section class="py-16 md:py-24">
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="py-16 md:py-24">
     {% include '_components/section-heading.twig' with {
         eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level,
         align: layout == 'reviews' ? 'left' : 'center',

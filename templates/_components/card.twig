@@ -6,6 +6,7 @@
  #            'compact' (Home 6-1719: square tile, inline caption + link)
  #   level    heading level (3)
  #   dark     bool
+ #   soft     bool: the section uses the "soft" (grey) scheme, so the empty media panel is white
  #   sizes    sizes attribute for the image
  #   revealIndex  position in its grid, for the staggered reveal-on-scroll (0, 1, 2 …)
  #}
@@ -17,7 +18,7 @@
 {% set aspect = compact ? 'aspect-tile' : 'aspect-card' %}
 
 <article class="group flex flex-col {{ compact ? 'gap-4' : 'gap-6 md:gap-8' }}" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
-    <div class="overflow-hidden rounded-md {{ dark ? 'bg-night' : (compact ? 'bg-line' : 'bg-surface') }}">
+    <div class="overflow-hidden rounded-md {{ dark ? 'bg-night' : (compact ? 'bg-line' : ((soft ?? false) ? 'bg-white' : 'bg-surface')) }}">
         {% if image %}
             {% include '_components/image.twig' with {
                 image: image, width: compact ? 360 : 480, ratio: compact ? 347 / 339 : 472 / 502,

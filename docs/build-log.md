@@ -614,3 +614,21 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Fixed by looking groups and sets up `withTrashed`, reusing sections that already exist, and pinning the section and entry-type UIDs from the committed YAML.
   - After the fix, both orders work. `project-config/diff` reports no changes, and the page still shows "Contact Us" and the store links.
 - **Docs:** CLAUDE.md (content model table, the "everything is an entry" rule, `_globals` usage) and `.claude/skills/craft-cms/SKILL.md` (settings and taxonomies, migration rules for sections, front-end gotchas from earlier work).
+
+### 2026-11-19: Shopify-style step 1: colour schemes + spacing presets
+- **Migration** `m261119_230000_scheme_and_spacing` (backup: `/tmp/before-scheme.sql.gz`):
+  - **`theme` → `scheme`** ("Colour scheme"; same field and UID, so the light/dark values are kept). Two new options: `white` and `soft`.
+  - **New field `spacing`** (default / noTop / noBottom / none, UID pinned), added to cardGrid, cityList, testimonials and ctaBanner, right after the scheme where there is one.
+- **CSS** (`src/css/app.css`):
+  - `[data-scheme]` in the components layer: background and text colour from tokens. Block utilities still win.
+  - `[data-spacing]` unlayered: it beats the blocks' `py-*` utilities.
+- **Templates:**
+  - Blocks put `data-scheme` / `data-spacing` on their `<section>` instead of `bg-black text-white` / `text-ink`.
+  - featureRows keeps `bg-ink` for dark (Figma), which overrides the scheme's black.
+  - On `soft`, the card component's empty media panel and the CTA subtitle box become white so they stay visible.
+- **Why the spacing options are "remove padding" and not "compact":** each block has its own Figma padding, so a "compact" preset would mean something different in every block. Removing top/bottom padding means the same everywhere; it's for joining two sections with the same scheme.
+- **Not added:** spacing on hero (its top padding clears the fixed header) and featureRows (padding on inner wrappers). No scheme on imageGallery, cityList or testimonials, because their designs are light-only and their inner elements don't switch.
+- **Checked (Playwright, 1440):**
+  - Existing sections compute the same colours and padding as before. Hero dark = #000, featureRows dark = #111.
+  - Switching the attributes on a live section: page background = transparent, white = #fff, soft = #f7f7f7, dark = #000 with white text; noTop, noBottom and none remove the right padding.
+  - Other-environment path (restore the backup, then `craft up`): no project-config diff, values kept.

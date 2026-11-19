@@ -7,9 +7,10 @@
  #   rowsSpot         — the same rows in grayscale; colour shows in a circle around the cursor
  #   rowsSpotInvert   — the reverse: rows in colour; a grayscale circle follows the cursor
  # Receives: block, headingLevel
- # Fields: theme, ctaLayout, heading, text, primaryButton, secondaryButton, images, showAppBadges
+ # Fields: scheme, spacing, ctaLayout, heading, text, primaryButton, secondaryButton, images, showAppBadges
  #}
-{% set dark = (block.theme.value ?? 'light') == 'dark' %}
+{% set scheme = block.scheme.value ?? 'light' %}
+{% set dark = scheme == 'dark' %}
 {% set images = block.images.eagerly().all() %}
 {% set level = headingLevel ?? 2 %}
 {% set tag = 'h' ~ level %}
@@ -18,7 +19,7 @@
 {% if block.heading or block.text %}
 {# Measured on the reference: section 700px tall (388 on a phone); the pill is centred on the
    section (= the spiral's centre); the subtitle hangs 8px below it, outside the centring. #}
-<section class="relative flex min-h-97 flex-col justify-center overflow-hidden {{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 py-24 md:min-h-175">
+<section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="relative flex min-h-97 flex-col justify-center overflow-hidden px-4 py-24 md:min-h-175">
 
     {% set ctaLayout = block.ctaLayout.value ?? 'spiral' %}
     {% if images|length and ctaLayout in ['rows', 'rowsSpot', 'rowsSpotInvert'] %}
@@ -80,7 +81,7 @@
         <div class="{{ block.heading ? 'absolute top-full left-1/2 mt-2 w-max max-w-xs -translate-x-1/2' }} flex flex-col items-center gap-4">
             {% if block.text %}
                 {# 16/19 with 8px padding on a phone, 18/22 with 12px and two lines (237 wide) from md #}
-                <p class="p-2 text-base leading-4.75 font-light text-balance md:max-w-60 md:p-3 md:text-lg md:leading-5.5 {{ dark ? 'bg-night text-line' : 'bg-surface text-graphite' }}">{{ block.text|nl2br }}</p>
+                <p class="p-2 text-base leading-4.75 font-light text-balance md:max-w-60 md:p-3 md:text-lg md:leading-5.5 {{ dark ? 'bg-night text-line' : (scheme == 'soft' ? 'bg-white text-graphite' : 'bg-surface text-graphite') }}">{{ block.text|nl2br }}</p>
             {% endif %}
 
             {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'light' : 'dark', class: 'mt-2' } only %}

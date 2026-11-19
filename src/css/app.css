@@ -411,4 +411,19 @@
   .menu-link.active {
     @apply underline decoration-2 underline-offset-4;
   }
+
+  /* Colour schemes (pageBuilder `scheme` option, Shopify-style). A block puts
+     data-scheme="{{ scheme }}" on its <section>; the colours are set here once.
+     In the components layer, so a block's own utility (e.g. featureRows' bg-ink) still wins.
+     Inner elements switch on `scheme == 'dark'` in Twig (buttons, muted text). */
+  [data-scheme="light"] { color: var(--color-ink); }
+  [data-scheme="white"] { background-color: var(--color-white); color: var(--color-ink); }
+  [data-scheme="soft"] { background-color: var(--color-surface); color: var(--color-ink); }
+  [data-scheme="dark"] { background-color: var(--color-black); color: var(--color-white); }
 }
+
+/* Spacing presets (pageBuilder `spacing` option). They mean the same in every block: drop the
+   section's own top and/or bottom padding. Unlayered on purpose, so they override the block's
+   py-* / pt-* / pb-* utilities (unlayered CSS beats every @layer). */
+[data-spacing="noTop"], [data-spacing="none"] { padding-top: 0; }
+[data-spacing="noBottom"], [data-spacing="none"] { padding-bottom: 0; }

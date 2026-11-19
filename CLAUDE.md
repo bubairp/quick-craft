@@ -78,7 +78,16 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - `cards`: `card` (image, emoji, heading, text, primaryButton)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`
   - `faqItems`: `faqItem` (title = question, body)
-- **Option fields:** `theme` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`).
+- **Option fields:** `scheme`, `spacing` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`).
+- **Section options (Shopify-style), migration `m261119_230000_scheme_and_spacing`:**
+  - **`scheme`** (Colour scheme): `light` (page background, none of its own), `white`, `soft` (surface grey), `dark`.
+    - The block puts `data-scheme="{{ scheme }}"` on its `<section>`. The colours are defined once in `src/css/app.css` (`[data-scheme]`, components layer), so a block's own utility can still override them (featureRows' dark is `bg-ink`).
+    - Inner elements switch on `scheme == 'dark'` (button variants, muted text), and on `soft` where a light inner panel would vanish against grey.
+    - Used by hero, cardGrid, featureRows, ctaBanner.
+  - **`spacing`**: `default`, `noTop`, `noBottom`, `none`.
+    - It means the same thing in every block: it removes the section's own top and/or bottom padding (`[data-spacing]`, unlayered CSS so it beats the `py-*` utilities).
+    - Only add it to blocks whose padding sits on the `<section>` (cardGrid, cityList, testimonials, ctaBanner). Hero (fixed-header clearance) and featureRows (padding on inner wrappers) don't have it.
+  - **New blocks:** add `scheme` only if the template supports every scheme, and `spacing` only if the padding sits on the `<section>`. Never add free colour or padding values.
 - Field handles must avoid `craft\base\Field::RESERVED_HANDLES`. For example, `icon` is reserved, which is why the field is called `emoji`.
 - **Reuse fields; don't duplicate them.** Before creating a field, check `config/project/fields/` for one of the same type with the **same settings** (character limit, options, allowed link types, asset sources, CKEditor config, translation method).
   - **If one exists, reuse it.** Add it to the layout again and give that instance its own **handle, label and instructions** (Craft 5 multi-instance fields; in a migration, set `handle`/`label` on the layout's `CustomField` element). For example, one PlainText field can be added as `personName` and as `personDetail`.

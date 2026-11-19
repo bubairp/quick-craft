@@ -13,7 +13,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 1afd5b95-7bb4-4303-a773-66fabce3b25b # Theme
+            fieldUid: 1afd5b95-7bb4-4303-a773-66fabce3b25b # Colour scheme
             handle: null
             instructions: null
             label: null
@@ -22,6 +22,23 @@ fieldLayouts:
             tip: null
             type: craft\fieldlayoutelements\CustomField
             uid: 0720beb2-d646-45dd-84ff-2fa11a8aaa36
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 3f6d2a8e-5b1c-4e7a-9c2d-8a4b6e1f0c37 # Spacing
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: fa6d25ea-90f5-4805-8e9c-2a6a0d52fa88
             userCondition: null
             warning: null
             width: 100

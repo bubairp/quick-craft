@@ -1,4 +1,4 @@
-dateModified: 1795085371
+dateModified: 1795085813
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -15,12 +15,13 @@ meta:
   __names__:
     0ad8bc41-0b78-402d-a997-580efe0f6653: 'Blog post' # Blog post
     0ed6a8a3-8f74-4e22-81eb-7850257a4bd2: 'Background layout' # Background layout
-    1afd5b95-7bb4-4303-a773-66fabce3b25b: Theme # Theme
+    1afd5b95-7bb4-4303-a773-66fabce3b25b: 'Colour scheme' # Colour scheme
     1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a: Featured # Featured
     2b0cb8a9-792e-430c-aab8-e6b9c3045101: 'Quick Craft' # Quick Craft
     2de22aae-55dd-43ca-84cb-499365bc077d: Newsletter # Newsletter
     2e99dba1-8244-4b6e-9805-b8df8dfaaee2: Body # Body
     2f4b01a5-9912-4315-9f48-39763a5dd99e: Department # Department
+    3f6d2a8e-5b1c-4e7a-9c2d-8a4b6e1f0c37: Spacing # Spacing
     4b43103e-a137-4e60-8356-f1cbcb85cb30: Stat # Stat
     5c240c8c-77a4-4623-9bcb-acbe6852884a: 'Primary button' # Primary button
     5eb1e556-9b7b-4d71-a114-baee0a3f751d: 'Secondary button' # Secondary button

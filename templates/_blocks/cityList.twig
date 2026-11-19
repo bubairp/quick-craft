@@ -5,7 +5,7 @@
  # sides (130px, 16px apart, starting 252px from the centre).
  # Hovering a tile shows a white card with the event title and subtitle under the image.
  # Receives: block, headingLevel
- # Fields: heading, text, cards (card: heading = city, primaryButton = link,
+ # Fields: heading, text, spacing, cards (card: heading = city, primaryButton = link,
  #         images = event tiles; tile text = asset title + asset "Subtitle" field)
  #}
 {% set cities = block.cards.eagerly().with(['images']).all() %}
@@ -13,7 +13,7 @@
 
 {% if cities|length %}
 {# Figma 6-4774: this section is white (#fff), unlike Home's #f7f7f7 page background #}
-<section class="overflow-hidden bg-white py-16 md:py-36" x-data="{ active: 0 }">
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="overflow-hidden bg-white py-16 md:py-36" x-data="{ active: 0 }">
     {% include '_components/section-heading.twig' with {
         heading: block.heading, text: block.text, level: level, class: 'px-4 md:px-gutter',
     } only %}

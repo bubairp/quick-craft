@@ -1,18 +1,18 @@
 {#
  # Hero block. Figma: Home 6-2210 (split, dark). Other layouts are used by landing pages.
  # Receives: block, headingLevel
- # Fields: heroLayout, theme, eyebrow, heading, rotatingWords, text, primaryButton, secondaryButton, images,
+ # Fields: heroLayout, scheme, eyebrow, heading, rotatingWords, text, primaryButton, secondaryButton, images,
  #         chatMessages (split layout: animated chat over images[0], see _components/hero-chat.twig)
  #}
 {% set layout = block.heroLayout.value ?? 'split' %}
-{% set dark = (block.theme.value ?? 'light') == 'dark' %}
+{% set scheme = block.scheme.value ?? 'light' %}
+{% set dark = scheme == 'dark' %}
 {% set media = block.images.eagerly().all() %}
 {% set tag = 'h' ~ (headingLevel ?? 1) %}
 {% set hasButtons = (block.primaryButton.url ?? false) or (block.secondaryButton.url ?? false) %}
 
 {% set sectionClass = [
     'relative overflow-hidden',
-    dark ? 'bg-black text-white' : 'text-ink',
     layout == 'fullBleed' ? 'min-h-svh' : 'pt-32 pb-16 md:pt-44 lg:pb-24',
 ]|join(' ') %}
 
@@ -23,7 +23,8 @@
     </div>
 {% endmacro %}
 
-<section class="{{ sectionClass }}">
+{# No spacing option: the hero's top padding clears the fixed header. #}
+<section data-scheme="{{ scheme }}" class="{{ sectionClass }}">
     {% if layout == 'split' %}
         <div class="mx-auto grid max-w-content items-center gap-12 px-4 md:px-gutter lg:grid-cols-2 lg:gap-12">
             <div class="flex flex-col gap-10 lg:gap-12">

@@ -3,11 +3,12 @@
  #   grid (default): Figma Home 6-1320 — centered heading, big cards, button below
  #   compact:        Figma Home 6-1719 — heading left + buttons right, small square tiles
  # Receives: block, headingLevel
- # Fields: cardLayout, theme, eyebrow, heading, text, cards, primaryButton, secondaryButton
+ # Fields: cardLayout, scheme, spacing, eyebrow, heading, text, cards, primaryButton, secondaryButton
  #}
 {% set layout = block.cardLayout.value ?? 'grid' %}
 {% set compact = layout == 'compact' %}
-{% set dark = (block.theme.value ?? 'light') == 'dark' %}
+{% set scheme = block.scheme.value ?? 'light' %}
+{% set dark = scheme == 'dark' %}
 {% set cards = block.cards.eagerly().with(['image']).all() %}
 {% set level = headingLevel ?? 2 %}
 {% set count = cards|length %}
@@ -19,7 +20,7 @@
 {% set hasButtons = (block.primaryButton.url ?? false) or hasSecondary %}
 
 {% if block.heading or count %}
-<section class="{{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 md:px-gutter {{ compact ? 'py-16 md:py-28' : 'pt-16 pb-20 md:pt-24 md:pb-section' }}">
+<section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 md:px-gutter {{ compact ? 'py-16 md:py-28' : 'pt-16 pb-20 md:pt-24 md:pb-section' }}">
     <div class="mx-auto flex max-w-site flex-col gap-10 md:gap-14 {{ compact ? 'items-stretch' : 'items-center' }}">
 
         {% if compact %}
@@ -43,7 +44,7 @@
         {% if count %}
             <div class="grid w-full grid-cols-1 {{ compact ? 'gap-x-7 gap-y-10' : 'gap-x-7 gap-y-12' }} {{ cols }}">
                 {% for card in cards %}
-                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: compact ? 'compact' : 'feature', revealIndex: loop.index0 } only %}
+                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, soft: scheme == 'soft', variant: compact ? 'compact' : 'feature', revealIndex: loop.index0 } only %}
                 {% endfor %}
             </div>
         {% endif %}
