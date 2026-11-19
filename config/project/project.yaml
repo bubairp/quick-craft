@@ -1,4 +1,4 @@
-dateModified: 1795068499
+dateModified: 1795071940
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -14,6 +14,7 @@ fs:
 meta:
   __names__:
     0ad8bc41-0b78-402d-a997-580efe0f6653: 'Blog post' # Blog post
+    0ed6a8a3-8f74-4e22-81eb-7850257a4bd2: 'Background layout' # Background layout
     1afd5b95-7bb4-4303-a773-66fabce3b25b: Theme # Theme
     1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a: Featured # Featured
     2b0cb8a9-792e-430c-aab8-e6b9c3045101: 'Quick Craft' # Quick Craft

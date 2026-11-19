@@ -1,9 +1,11 @@
 {#
  # CTA banner block. Figma: Home 6-1787 ("Get the app").
  # Big pill heading (links to primaryButton if set), subtitle, optional buttons and
- # store links (showAppBadges); images (if any) form a slowly turning spiral around it.
+ # store links (showAppBadges). Images (if any) behind it, by ctaLayout:
+ #   spiral (default) — a slowly turning oval spiral (src/js/cta-spiral.js)
+ #   rows             — collage rows sliding sideways at random speeds (src/js/cta-rows.js)
  # Receives: block, headingLevel
- # Fields: theme, heading, text, primaryButton, secondaryButton, images, showAppBadges
+ # Fields: theme, ctaLayout, heading, text, primaryButton, secondaryButton, images, showAppBadges
  #}
 {% set dark = (block.theme.value ?? 'light') == 'dark' %}
 {% set images = block.images.eagerly().all() %}
@@ -16,7 +18,28 @@
    section (= the spiral's centre); the subtitle hangs 8px below it, outside the centring. #}
 <section class="relative flex min-h-97 flex-col justify-center overflow-hidden {{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 py-24 md:min-h-175">
 
-    {% if images|length %}
+    {% if images|length and (block.ctaLayout.value ?? 'spiral') == 'rows' %}
+        {# Collage rows (src/js/cta-rows.js): full-width rows of slightly tilted images; each row
+           slides sideways at a random speed and direction (chosen on each page load) and loops
+           seamlessly (the row's set is rendered twice). Decoration only. #}
+        {% set rowCount = 6 %}
+        {% set perRow = 14 %}
+        <div class="cta-rows pointer-events-none absolute inset-0 flex flex-col justify-center gap-2 md:gap-3" data-cta-rows aria-hidden="true">
+            {% for r in 0..(rowCount - 1) %}
+                <div class="cta-rows__row flex w-max gap-2 md:gap-3">
+                    {% for pass in 1..2 %}
+                        {% for k in 0..(perRow - 1) %}
+                            {% set image = images[(r * 5 + k * 3) % images|length] %}
+                            <div class="cta-rows__item">
+                                {% include '_components/image.twig' with { image: image, width: 120, ratio: 1, sizes: '120px', decorative: true, class: 'aspect-square size-full object-cover' } only %}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+    {% elseif images|length %}
         {# Turning image spiral (reference: partiful.com, measured; src/js/cta-spiral.js).
            240 slots cycle through the images; JS shows as many as the section needs
            (≈140 on desktop, ≈210 on a phone), sizes and places them. Decoration only. #}

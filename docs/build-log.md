@@ -457,3 +457,22 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Slots raised from 200 to 240, because a phone now needs about 209.
   - Checked: desktop gap 108px with 137 images; phone gap 24.5px with 209 images; no overflow.
   - To change the spacing again, edit `GAP` in `src/js/cta-spiral.js`. The image count follows automatically, up to the number of slots in the template.
+
+### 2026-11-19: "Get the app": second background layout, collage rows
+- User request: keep the spiral and add an option where the images form rows like a collage, with the rows moving randomly.
+- Migration `m261119_150000_cta_layout_rows`:
+  - New dropdown field `ctaLayout` ("Background layout"): `spiral` (default) or `rows` ("Collage rows (sliding)"). Added to the ctaBanner entry type after `theme`.
+  - Home keeps the spiral (the default).
+  - Demo page **/cta-rows-demo** has a copy of Home's banner set to `rows`. The copy is made field by field with `serializeValue`.
+  - **DEMO PAGE ONLY:** delete it once a layout is chosen.
+- `ctaBanner.twig` (layout `rows`): 6 rows × 14 images, each row's set rendered twice for a seamless loop, cycling through the block's images.
+- `src/js/cta-rows.js` (new, in main.js):
+  - On each page load, each row gets a random speed (14–42px/s), a random direction and a random starting point. Each image gets a random tilt of ±6°.
+  - It moves by a fraction of one set's width, so the loop wraps without a jump.
+  - rAF only while visible. Reduced motion keeps it still (tilt kept). Re-measures on resize.
+- CSS `.cta-rows__row` (flex 1: the 6 rows share the section height) and `.cta-rows__item` (square, row height, `rounded-sm`, `shadow-card`).
+- **Rule kept:** no inline styles. The random tilt is set by JS, not a Twig `style="--tilt"`.
+- Checked:
+  - Desktop 1585×700: rows 107px, images about 110px, every row covers the width, one h1, directions random (+ and −).
+  - Phone 360×388: rows 58px, rows cover the width, no overflow, no console errors.
+- **Testing note:** both test browsers ran rAF at about 2fps when not in front. The 0.05s per-frame step cap then slows movement about 10× (measured 1.5–2.7px/s for the configured 14–42), so judge speed in a focused browser.

@@ -1,0 +1,35 @@
+columnSuffix: null
+handle: ctaLayout
+instructions: 'How the images behind the heading are arranged.'
+name: 'Background layout'
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Spiral (turning)'
+        -
+          - value
+          - spiral
+        -
+          - default
+          - true
+    -
+      __assoc__:
+        -
+          - label
+          - 'Collage rows (sliding)'
+        -
+          - value
+          - rows
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

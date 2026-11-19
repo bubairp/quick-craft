@@ -30,6 +30,23 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
+            fieldUid: 0ed6a8a3-8f74-4e22-81eb-7850257a4bd2 # Background layout
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: a17bded0-86e4-4690-ad84-327431cbbda3
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
             fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
             handle: null
             instructions: null

@@ -276,6 +276,23 @@
     border-radius: var(--radius-xs);
   }
 
+  /* "Get the app" collage rows (src/js/cta-rows.js moves each row and tilts each image).
+     6 rows share the section height; images are square, as tall as their row. */
+  .cta-rows__row {
+    flex: 1 1 0;
+    min-height: 0;
+    will-change: transform;
+  }
+  .cta-rows__item {
+    height: 100%;
+    aspect-ratio: 1;
+    flex: none;
+  }
+  .cta-rows__item img {
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+  }
+
   /* Header pill → mega menu (reference site: the pill itself grows into the dropdown panel) */
   .site-nav-pill {
     max-width: var(--container-nav);
