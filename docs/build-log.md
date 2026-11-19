@@ -834,3 +834,12 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - **pageBuilder groups:** Call to action · Text · Cards & lists · Media · Social proof. Set with `setEntryTypes([['uid' => …, 'group' => …]])`; stored per field (`EntryType::getUsageConfig()`).
 - **Checked:** no project-config diff; the 8-page snapshot is identical to the previous one.
 - **Not checked here:** the CP itself (I have no login). The user confirms the sidebar pages and the grouped Add menu in the CP.
+
+### 2026-11-20: CP sidebar: rule is a principle, not a fixed table; "Settings" → "Site setup"
+- **User's feedback:**
+  - The sidebar pages won't be the same for every site, and page names change when pages are added, so the skill must describe how to choose pages, not a fixed list.
+  - There were two "Settings" items (ours + Craft's own).
+- **Rule first:** CLAUDE.md › "CP sidebar: entry index pages" is now a principle (Pages first; one page per content area; "Site setup" last; never a name used by a Craft CP item; how to add a new section/Single; how it's stored), with the current layout given only as an example. Skill step 3 updated.
+- **Migration** `m261120_230000_cp_page_site_setup`: page "Settings" → **"Site setup"** (icon `sliders`). It reads the stored source list, renames the page, re-saves with `saveSources()`, and updates `savePageSettings()`.
+- **Checked:** 8 sources on "Site setup", none left on "Settings"; no project-config diff. The CP itself is for the user to confirm (no login here).
+- **Note:** two pushes timed out (`git push` exit 124); they are pushed with this commit.

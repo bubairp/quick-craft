@@ -38,7 +38,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
      - Create a new field only for a purpose-specific setting (a Dropdown's options, a Table's columns, a character limit), and add it to the CLAUDE.md table.
      - Templates use the instance handle (`block.personDetail`), never the base handle.
    - Give the new entry type an `icon` and a `color` from CLAUDE.md › Entry type icons and colours (CP only; Craft's icon names, e.g. `grid-2`).
-   - A new pageBuilder block gets an "Add block" **group** (CLAUDE.md › Page builder "Add block" menu groups). A new section or Single gets a **CP sidebar page** (CLAUDE.md › CP sidebar).
+   - A new pageBuilder block gets an "Add block" **group** (CLAUDE.md › Page builder "Add block" menu groups). A new section or Single gets a **CP sidebar page** by the principle in CLAUDE.md › CP sidebar: Pages first, one page per content area, "Site setup" last; never a page named like a Craft CP item (Settings, Entries…).
    - Read the Craft source in `vendor/craftcms/cms/src/` for the exact APIs and don't guess.
    - Run `ddev craft up`, then commit the migration together with `config/project/`.
 4. **Template** `templates/_blocks/{entryTypeHandle}.twig`:

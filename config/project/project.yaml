@@ -1,4 +1,4 @@
-dateModified: 1795092851
+dateModified: 1795093065
 elementSources:
   craft\elements\Entry:
     -
@@ -35,35 +35,35 @@ elementSources:
       type: native
     -
       key: singles
-      page: Settings
+      page: 'Site setup'
       type: native
     -
       key: 'single:117c7207-1578-412d-a871-66e431a364c7' # Site settings
-      page: Settings
+      page: 'Site setup'
       type: native
     -
       key: 'single:bcaffb4a-ef69-4bf9-93b7-7dffd6af1f1a' # Newsletter
-      page: Settings
+      page: 'Site setup'
       type: native
     -
       key: 'single:1a9aea76-5bc0-443f-8036-458a21967c85' # Google Structured Data
-      page: Settings
+      page: 'Site setup'
       type: native
     -
       key: 'single:3c672367-bcf3-4d71-8bec-c7f8fda1180a' # LLMs Text
-      page: Settings
+      page: 'Site setup'
       type: native
     -
       key: 'single:9afffd1f-a63a-4ec2-8f87-8c1968d0002f' # Page not found
-      page: Settings
+      page: 'Site setup'
       type: native
     -
       key: 'single:724d7b32-2502-4a48-9558-9f9129f9fd6e' # Page error
-      page: Settings
+      page: 'Site setup'
       type: native
     -
       key: 'single:2ab8e0f7-3f3a-4516-b030-cd8918212d6e' # Page maintenance
-      page: Settings
+      page: 'Site setup'
       type: native
 elementSourcesPages:
   craft\elements\Entry:
@@ -75,8 +75,8 @@ elementSourcesPages:
       icon: file-lines
     Press:
       icon: newspaper
-    Settings:
-      icon: gear
+    'Site setup':
+      icon: sliders
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'

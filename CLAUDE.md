@@ -167,19 +167,14 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   | none | pages and settings | home (house), page (file-lines), blogPost (rss), job (briefcase), pressMention (link), siteSettings (gear), newsletter (envelope), googleStructureData (code), llmsText (robot), blogCategory (hashtag), department (layer-group) |
 
   **A new entry type gets an icon and a colour from this table in its migration.**
-- **CP sidebar: entry index pages** (Craft 5.9+; migration `m261120_220000_cp_pages_and_block_groups`). Entries are split into these sidebar pages:
-
-  | Page (CP icon) | Sources |
-  |---|---|
-  | **Pages** (file-lines) | All entries, Home, Pages |
-  | **Blog** (rss) | Blog, Blog categories |
-  | **Careers** (briefcase) | Jobs, Departments |
-  | **Press** (newspaper) | Press mentions |
-  | **Settings** (gear) | Site settings, Newsletter, Google Structured Data, LLMs Text, Page not found, Page error, Page maintenance |
-
-  - Stored in the project config: `elementSources.craft\elements\Entry` (each source has a `page`) and `elementSourcesPages`.
-  - Singles are listed one by one by the Expanded Singles plugin (source key `single:<section uid>`). Sections use `section:<uid>`.
-  - **A new section or Single gets a page here in its migration.** A source with no config lands on the first page (Pages).
+- **CP sidebar: entry index pages** (Craft 5.9+). The sidebar pages **follow the site's content, not a fixed list.** Page names and pages change as sections are added; every site (and every new site) decides its own. The principle:
+  1. **First page: "Pages"**: All entries, Home, and the `pages` Channel (everything editors build with the page builder).
+  2. **One page per content area that has its own sections** (a channel plus its taxonomies or related items). Name it after the area as editors know it, e.g. Blog (Blog + Blog categories), Careers (Jobs + Departments).
+  3. **Last page: "Site setup"**: the settings and system Singles.
+  4. **Never name a page after one of Craft's own CP items** (Settings, Entries, Assets, Users, Utilities, Dashboard, Plugin Store, GraphQL). A page called "Settings" appeared twice next to Craft's Settings; that's why it's "Site setup" (icon `sliders`).
+  5. **A new section or Single:** add it to the matching page in its migration, or create a new page for a new content area (Craft CP icon from `vendor/craftcms/cms/src/icons/solid`). A source with no config lands on the first page.
+  - **How it's stored:** `elementSources.craft\elements\Entry` (each source has a `page`) and `elementSourcesPages` (icons) in the project config. Sections use the source key `section:<uid>`; Singles use the Expanded Singles plugin's `single:<section uid>`. To change it, re-save the whole list with `ElementSources::saveSources()` + `savePageSettings()` (see migrations `m261120_220000…` and `m261120_230000…`).
+  - **Current layout (2026-11-20):** Pages (All entries, Home, Pages) · Blog (Blog, Blog categories) · Careers (Jobs, Departments) · Press (Press mentions) · Site setup (Site settings, Newsletter, Google Structured Data, LLMs Text, Page not found / error / maintenance).
 - **Page builder "Add block" menu groups** (Craft 5.9+, same migration). The groups match the colours above:
   - **Call to action:** ctaBanner, promoBar
   - **Text:** richText, faq, textMedia, comparison
