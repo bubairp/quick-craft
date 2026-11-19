@@ -238,3 +238,15 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
 - Also added `preloadImages(root)`: within one screen of the carousel, its lazy images switch to eager and are decoded, so a fast scroll never reaches an undrawn photo. The loop copies reuse the same 5 files.
 - Checked at 1585px: 925 frames covering 24 fast drags each way and 160 wheel steps, with 0 frames of empty space. Easing is `cubic-bezier(0.22, 1, 0.36, 1)`. No warnings.
 - Noticed: `/favicon.ico` returns 404, because no favicon is set up yet. Unrelated.
+
+### 2026-11-19: Testimonials loop: empty space on long mouse drags (real cause)
+- The user still saw empty space after the freeMode fix. I reproduced it in the user's **real Chrome** (Claude in Chrome), with real mouse drags and wheel scrolling, plus an in-page `requestAnimationFrame` monitor that measures the uncovered width every frame.
+  - Result: a long, fast drag (about 1200px) produced 27 frames with up to 267px empty (active slide 16 of 18).
+  - Synthetic PointerEvents in Playwright had passed, because their drags were too short.
+- **Cause:** Swiper reshuffles loop slides when a drag starts. With 18 slides (6 × 3) at about 1590px wide, the spare slides on the leading side ran out before a long drag ended.
+- **Fix:**
+  - Render the set 4× (24 slides).
+  - `loopAdditionalSlides: 6`, so more spare slides are kept on each side.
+  - `select-none` on `.swiper`: a drag was also selecting the card text and image (blue highlight).
+- Checked in real Chrome: 6 long drags (1350px each way) plus wheel left and right gave 1388 frames with 0 empty, and nothing was selected.
+- **Lesson:** for drag and loop bugs, test with real input in a real browser (Claude in Chrome `left_click_drag` / `scroll`) together with a per-frame monitor. Synthetic events can miss them.

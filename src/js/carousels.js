@@ -100,6 +100,9 @@ export async function initCarousels() {
         modules: [...base.modules, Mousewheel],
         spaceBetween: 16,
         loop: true,
+        // spare slides kept on each side when the loop reshuffles (at drag start / each move):
+        // without them a long, fast mouse drag ran past the last slide and showed empty space
+        loopAdditionalSlides: 6,
         centeredSlides: true,
         speed: reduceMotion ? 0 : 700,
         mousewheel: { enabled: true, forceToAxis: true, thresholdDelta: 10 },
