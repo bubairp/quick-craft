@@ -67,7 +67,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 | ☑ | `comparison` | | 17-2074 |
 | ☐ | `testimonials` | reviews | 17-2211 |
 | ☐ | `richText` | | 17-2385 |
-| ☐ | `faq` | | 17-2418 |
+| ☑ | `faq` | | 17-2418 |
 | ☐ | `ctaBanner` | | 17-2485 |
 
 ### Sell Tickets (17-2557), dark page

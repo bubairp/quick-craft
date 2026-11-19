@@ -948,3 +948,24 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Gotchas:**
   - A Table field stores rows by column ID (`col1`, `col2`); the value also exposes the handles (`label`, `status`), so templates use handles.
   - Playwright's browser restarted without trusting the DDEV certificate (`ERR_CERT_AUTHORITY_INVALID`). Use `browser.newContext({ ignoreHTTPSErrors: true })` in `browser_run_code_unsafe`.
+
+### 2026-11-20: Block: faq (Figma 17-2418, Invitation Maker)
+- **Rule first:** CLAUDE.md › pageBuilder blocks › faq (fields, layout, accessibility, `.faq-panel`, `.rich-text--base`).
+- **CSS (components layer):**
+  - `.rich-text--base` (16px black/60, for readable body text; plain `.rich-text` stays the small SEO style).
+  - `.faq-panel`: `grid-template-rows` 0fr → 1fr with `--ease-out-soft`, off for reduced motion. This avoids adding the Alpine collapse plugin.
+- **Migration** `m261120_300000_faq` (backup: `/tmp/before-faq.sql.gz`): faq + `spacing`; test content = the 6 Figma questions on Invitation Maker, with placeholder answers (the frame shows them closed; editors replace them).
+- **Template** `_blocks/faq.twig`:
+  - The heading (h2) on the left; on the right, cards `rounded-lg bg-white shadow-soft ring-1 ring-inset ring-black/10` (Figma's border is inside the card, so it's a ring, not a border).
+  - Each question is a `<button aria-expanded aria-controls>` in an h3; Tabler `plus` rotates 45° to ×.
+  - The answer is `role=region aria-labelledby`; its content gets `:inert="!open"`, so closed answers aren't focusable.
+  - Side by side from `lg`.
+- **Checked (Playwright, 375 / 768 / 1440):**
+  - Padding 100/60 (64/16 on a phone), bg white/30.
+  - Heading 36/43.2 700 −1.44px; at 1440, 390px wide on 2 lines as in Figma.
+  - List 500px, gap 4; cards 76px tall (exactly Figma); question 20/28 500 black/60, padding 24.
+  - Click opens (`aria-expanded=true`, answer 16px black/60, + → ×); Enter closes; focus outline visible; no overflow.
+- **Fixed during the check:**
+  - `text-balance` changed the desktop line break ("Frequently / Asked Questions"): `lg:text-wrap`.
+  - The border made the cards 78px instead of 76: inset ring.
+  - At 768 the heading was squeezed to 166px: side by side only from `lg`.

@@ -447,6 +447,21 @@
     @apply rounded-xs text-ink underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink;
   }
   .rich-text :where(strong, b) { @apply font-semibold text-black/60; }
+  /* Readable body size (FAQ answers); plain .rich-text stays the small SEO style */
+  .rich-text--base { @apply text-base text-black/60; }
+  .rich-text--base :where(strong, b) { @apply text-black/80; }
+
+  /* FAQ answer open/close: rows 0fr → 1fr animates to the content's height (no JS measuring) */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms var(--ease-out-soft);
+  }
+  .faq-panel > * { overflow: hidden; }
+  .faq-panel.is-open { grid-template-rows: 1fr; }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-panel { transition: none; }
+  }
 }
 
 /* Spacing presets (pageBuilder `spacing` option). They mean the same in every block: drop the

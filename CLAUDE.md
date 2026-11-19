@@ -103,6 +103,11 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - **comparison** (Figma 17-2074, Invitation Maker; migration `m261120_290000_comparison`): `heading`, `text` (subtitle), `image` (our column's logo; falls back to the site logo, then the site name), `comparisonUs` / `comparisonThem` (Table: label + status yes / warning / no), `themLabel` (the other column's heading), `body` (closing note, italic).
     - Status icons are Tabler filled: circle-check `text-success`, alert-triangle `text-warning`, circle-x `text-muted`. The status is also given as text for screen readers.
     - Our column is a card (`bg-linear-to-b from-aqua/10 to-orchid/10`, `rounded-xl`, `shadow-glow`); the columns stack on phones.
+  - **faq** (Figma 17-2418, Invitation Maker; migration `m261120_300000_faq`): `heading`, `faqItems` (faqItem: title = question, `body` = answer), `spacing`.
+    - Heading left, question cards right from `lg` (`max-w-narrow`, cards 500px); stacked below `lg`. The card border is an inset ring (Figma draws it inside the card).
+    - Each question is a `<button aria-expanded aria-controls>` inside an h3. The "+" (Tabler `plus`) turns into "×" when open. Several answers can be open at once.
+    - The answer opens with the `.faq-panel` component class (a `grid-template-rows` 0fr → 1fr transition; no collapse plugin). It honours reduced motion.
+    - Answers are CKEditor HTML in `.rich-text .rich-text--base` (16px, black/60). The `--base` variant is for readable body text; plain `.rich-text` is the small SEO style.
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`

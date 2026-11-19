@@ -1,0 +1,44 @@
+{#
+ # FAQ block. Figma: Invitation Maker 17-2418.
+ # Heading left, question cards right (stacked on phones). Each question is a button that opens
+ # its answer (.faq-panel: grid-template-rows 0fr → 1fr); the "+" turns into "×". Several can be open.
+ # Receives: block, headingLevel
+ # Fields: heading, faqItems (faqItem: title = question, body = answer), spacing
+ #}
+{% set items = block.faqItems.eagerly().all()|filter(i => i.title|trim) %}
+{% if items|length %}
+    {% set level = headingLevel ?? 2 %}
+    {% set qTag = 'h' ~ (block.heading ? level + 1 : level) %}
+    <section data-spacing="{{ block.spacing.value ?? 'default' }}" class="bg-white/30 px-4 py-16 md:px-15 md:py-25">
+        <div class="mx-auto flex max-w-narrow flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-2.5">
+            {% if block.heading %}
+                <h{{ level }} class="text-balance text-3xl font-bold md:text-4xl lg:max-w-97.5 lg:text-wrap">{{ block.heading }}</h{{ level }}>
+            {% endif %}
+            <div class="flex w-full flex-col gap-1 lg:w-125 lg:flex-none">
+                {% for item in items %}
+                    {% set id = 'faq-' ~ block.id ~ '-' ~ loop.index %}
+                    <div class="rounded-lg bg-white shadow-soft ring-1 ring-black/10 ring-inset" x-data="{ open: false }">
+                        <{{ qTag }}>
+                            <button type="button" id="{{ id }}-q"
+                                    class="flex w-full items-center gap-5 rounded-lg p-6 text-left text-xl font-medium text-black/60 transition-colors hover:text-black/80 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink"
+                                    aria-expanded="false" :aria-expanded="open.toString()" aria-controls="{{ id }}-a"
+                                    @click="open = !open">
+                                <span class="flex-1">{{ item.title }}</span>
+                                <span class="flex size-7 flex-none items-center justify-center transition-transform duration-300 ease-out-soft motion-reduce:transition-none" :class="open && 'rotate-45'">
+                                    {% include '_components/icon.twig' with { name: 'plus', class: 'size-5' } only %}
+                                </span>
+                            </button>
+                        </{{ qTag }}>
+                        {% if item.body and item.body|length %}
+                            <div id="{{ id }}-a" role="region" aria-labelledby="{{ id }}-q" class="faq-panel" :class="open && 'is-open'">
+                                <div>
+                                    <div class="rich-text rich-text--base px-6 pb-6" :inert="!open">{{ item.body }}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endif %}
