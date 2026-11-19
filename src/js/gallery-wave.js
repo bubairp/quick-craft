@@ -11,7 +11,8 @@
  *  - Cards drift left at 0.175 steps/s. Page scroll pushes them along, direction-aware
  *    (down = forward/left, up = back/right), 0.3px per scrolled px.
  *  - Drag (mouse/finger): the row follows the pointer smoothly and glides on after release.
- *  - Hover (mouse): the drift pauses; the card turns 12° and lifts 0.705 × card; the two
+ *  - Hover (mouse): the drift pauses; the card turns 12° and lifts 0.705 × card (moved down
+ *    first if needed, so it never leaves the gallery — cards on the right sit high); the two
  *    cards on its left (which overlap it) slide away along the path (0.286 / 0.044 × card).
  *    The lift/push transitions are CSS (app.css, .gallery-fan__*).
  *
@@ -37,6 +38,10 @@ const SCROLL = 0.3;           // card px per scrolled px
 const HALF_HEIGHT = 0.632;    // half the skewed card's height / card
 const EDGE = 12;              // px kept free at the top and bottom
 const PUSH = [0.286, 0.044];  // left neighbours of a hovered card slide away (× card)
+// A hovered card lifts 0.705 × card (CSS). If that would take it out of the gallery (cards high
+// up on the right), the reference first moves it down so the lifted card's top stays EDGE px
+// inside: y ≥ −H/2 + EDGE + (0.705 + 0.72) × card (0.72 = half the turned card's height).
+const HOVER_ROOM = 0.705 + 0.72;
 const FOLLOW = 0.6;           // s: the row eases towards the pointer (reference feels floaty)
 const GLIDE = 0.35;           // s: time constant of the momentum after a drag
 const GLIDE_MAX = 2.5;        // steps/s: cap, so a fast flick only glides a little further
@@ -52,7 +57,8 @@ function setup(root) {
 
   root.classList.add('is-wave');
 
-  let card = 0, step = 1, clampY = 0, slope = 0;   // layout (px; slope = dy/dx)
+  let card = 0, step = 1, clampY = 0, slope = 0, height = 0;   // layout (px; slope = dy/dx)
+  let drop = 0;                                    // px the hovered card is moved down
   let target = 0, current = 0;            // row offset, in steps (grows = cards move left)
   let wave = 0;                           // wave phase, in steps
   let glide = 0;                          // momentum after a drag, steps per second
@@ -63,6 +69,7 @@ function setup(root) {
   // ── layout (re-run on resize) ────────────────────────────────────────────
   const layout = () => {
     const w = root.clientWidth, h = root.clientHeight;
+    height = h;
     card = w * (window.innerWidth < PHONE ? CARD_PHONE : CARD);
     step = card * STEP;
     clampY = Math.max(0, h / 2 - card * HALF_HEIGHT - EDGE);
@@ -83,6 +90,13 @@ function setup(root) {
         slope * x + card * WAVE * Math.sin((2 * Math.PI * (s + wave)) / n)));
       el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       el.style.zIndex = String(Math.round((n / 2 - s) * 10));   // left cards on top
+      if (i === hovered) {
+        const need = Math.max(0, -height / 2 + EDGE + HOVER_ROOM * card - y);
+        if (Math.abs(need - drop) > 0.5) {
+          drop = need;
+          lifts[i].style.setProperty('--hover-drop', `${drop}px`);
+        }
+      }
     });
   };
 
@@ -99,10 +113,15 @@ function setup(root) {
   };
   const hover = (i) => {
     if (i === hovered) return;
-    if (hovered >= 0) items[hovered].classList.remove('is-hovered');
+    if (hovered >= 0) {
+      items[hovered].classList.remove('is-hovered');
+      lifts[hovered].style.removeProperty('--hover-drop');
+    }
     hovered = i;
+    drop = 0;
     if (hovered >= 0) items[hovered].classList.add('is-hovered');
     setPush();
+    place();
   };
   items.forEach((el, i) => {
     el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse' && !dragging) hover(i); });

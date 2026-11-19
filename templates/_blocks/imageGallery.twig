@@ -11,7 +11,7 @@
 
 {% if layout == 'fan' and images|length %}
 {# Fan (reference: partiful.com, measured): the gallery is one viewport tall (596px below
-   1200px wide) with the heading on top at the top left; cards drift along a wavy diagonal,
+   1200px wide) with the heading behind it at the top left; cards drift along a wavy diagonal,
    react to scroll, drag and hover (src/js/gallery-wave.js, .gallery-fan in app.css). #}
 {# overflow-x-clip (not overflow-hidden): lifted cards may rise above the section, as on the reference #}
 <section class="relative overflow-x-clip">
@@ -29,9 +29,9 @@
         </ul>
     </div>
     {% if block.heading or block.text %}
-        {# above the cards; clicks/drags pass through to the gallery #}
-        <div class="pointer-events-none absolute inset-x-0 top-0 z-10">
-            <div class="mx-auto max-w-site px-4 pt-12 md:px-gutter md:pt-16">
+        {# under the cards (the gallery has z-index 1), 128px from the top — as on the reference #}
+        <div class="pointer-events-none absolute inset-x-0 top-0 z-0">
+            <div class="mx-auto max-w-site px-4 pt-12 md:px-gutter md:pt-section">
                 {% include '_components/section-heading.twig' with {
                     eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level,
                     align: 'left', class: 'max-w-lg',

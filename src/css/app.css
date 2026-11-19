@@ -145,6 +145,7 @@
   .gallery-fan {
     --card: calc(var(--spacing) * 40);
     position: relative;
+    z-index: 1;                        /* above the heading, like the reference: cards pass over it */
     isolation: isolate;
   }
   .gallery-fan__item {
@@ -202,7 +203,8 @@
   /* hover: the card turns 12° and lifts 0.705 × card (its left neighbours are pushed by JS) */
   .gallery-fan.is-wave .gallery-fan__item.is-hovered .gallery-fan__lift {
     rotate: 12deg;
-    translate: 0 calc(var(--card) * -0.705);
+    /* --hover-drop (JS): moves a high card down first so the lifted card stays inside */
+    translate: 0 calc(var(--card) * -0.705 + var(--hover-drop, 0px));
   }
   @media (prefers-reduced-motion: reduce) {
     .gallery-fan__lift { transition: none; }

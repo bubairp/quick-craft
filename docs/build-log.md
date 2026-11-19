@@ -409,3 +409,21 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `clip`, unlike `hidden`, doesn't force the other axis to scroll/clip.
 - Checked in Chrome: no ancestor clips vertically. A right-hand card lifted 102px above the gallery top is the topmost element at every probed point, 28px above the edge included, and the screenshot shows it whole.
 - **Testing gotcha:** the card is skewed and rotated, so the top of its bounding box at the centre is empty space. Probe inside the card (15–30% of its height), not 12px under the box top.
+
+### 2026-11-19: Gallery hover stays inside the section; heading under the cards
+- The previous fix (letting lifted cards rise above the section) was wrong. The user pointed out that on the reference a hovered card **never goes above the slider section**.
+- **Measured on the reference** (real hovers at the left, middle and right):
+  - The lift is always `rotate(12deg) translateY(−180px)`.
+  - A card that sits high (on the right) is **first moved down**: its base went from about −115 to +11, so the lifted card's top lands about 12px inside the section.
+  - Lifted tops: left 145, middle 46, right 13.
+  - Rule: hovered y ≥ −H/2 + 12 + (0.705 + 0.72) × card, where 0.72 is half the turned card's height (−365.5 + 12 + 363 ≈ 10, against 11 measured).
+- **Ours:**
+  - `place()` computes `need = max(0, −H/2 + EDGE + HOVER_ROOM·card − y)` for the hovered card and sets `--hover-drop` on its lift wrapper.
+  - CSS: `translate: 0 calc(var(--card) * −0.705 + var(--hover-drop, 0px))`. The same spring transition animates the drop.
+  - Checked: right 10 (dropped 100px), middle 38, left 141 (reference 13 / 46 / 145).
+- **Heading overlay:**
+  - The reference's heading comes first in the markup with z auto; the gallery has `z-index: 1`, so the cards pass **over** the heading.
+  - The heading sits 128px from the top.
+  - Ours: `.gallery-fan { z-index: 1 }`, heading wrapper `z-0`, `md:pt-section` (128px). Checked: heading top is 128px from the gallery and under the cards.
+- Overflow stays `overflow-x: clip; overflow-y: visible` (the same as the reference), but with the drop rule nothing needs to leave the section any more.
+- **Lesson:** measure the reference at several positions (left, middle, right) before concluding the effect is the same everywhere. A single measurement hid the drop rule.
