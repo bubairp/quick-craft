@@ -735,3 +735,17 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Migration** `m261120_140000_lightswitch_on_off` (backup: `/tmp/before-lightswitch.sql.gz`): `lightswitch` → `lightswitchOff` "Lightswitch (default off)" (its instances featured / showAppBadges keep their handles), plus a new `lightswitchOn` "Lightswitch (default on)".
 - **Checked:** 8-page HTML snapshot identical; no project-config diff.
 - **Note:** the previous push (`1577afc`) failed with "/dev/tty: No such device or address" (git asked for credentials). It's pushed together with this commit.
+
+### 2026-11-20: Two CKEditor base fields (Rich text / Rich text (full))
+- **User's request.** Rule first:
+  - CLAUDE.md table with two rows;
+  - a new rule: "CKEditor toolbars never include font size, font colour or alignment" (inline styles);
+  - the skill's field list.
+- **Migration** `m261120_150000_rich_text_simple_full` (backup: `/tmp/before-richtext.sql.gz`):
+  - **`richText` → `richTextFull` "Rich text (full)":**
+    - Toolbar: heading | bold italic underline strikethrough | link | bulleted/numbered list, outdent, indent | blockQuote, insertTable, insertImage, mediaEmbed, horizontalLine | removeFormat, fullscreen, sourceEditing (admins).
+    - Headings limited to **h2–h4**, because the page title is the `<h1>`.
+    - Its instances (blog `body`, and the richText / faq blocks' body) keep their handles and content.
+  - **New `richText` "Rich text":** bold, italic, link | lists | removeFormat; no headings, no images, no source editing. For short formatted text in blocks.
+  - Toolbar button names come from `vendor/craftcms/ckeditor/src/helpers/CkeditorConfig.php`.
+- **Checked:** 8-page snapshot identical; no project-config diff.

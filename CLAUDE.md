@@ -108,7 +108,8 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   |---|---|---|
   | `plainText` "Plain text" | PlainText, single line | heading, eyebrow, personName, personDetail, location, publication, detail, iconName |
   | `textarea` "Textarea" | PlainText, multi-line | text (summary/intro/quote), the image volume's "Subtitle" |
-  | `richText` "Rich text" | CKEditor | body |
+  | `richText` "Rich text" | CKEditor, simple: bold, italic, link, lists, remove formatting | short formatted text in blocks (intro, card text) |
+  | `richTextFull` "Rich text (full)" | CKEditor, full: headings, text styles, link, lists, indent, quote, table, image, video embed, horizontal line, fullscreen, source (admins) | body (blog post) |
   | `image` / `images` "Image" / "Images" | Assets (1 / many) | image, logo, images |
   | `linkWithLabel` "Link (with label)" | Link: entry / URL / email, label | buttonLink, primaryButton (a card's link, ctaBanner's "Heading link") |
   | `urlLink` "URL link" | Link: URL only, optional new tab | externalLink, appStoreLink, googlePlayLink |
@@ -124,6 +125,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - Matrix fields;
     - Entries fields (sources);
     - `emoji` (8-character limit), `rating` (0–5, one decimal), `seo`, `newsletterForm`.
+  - **CKEditor toolbars never include font size, font colour or alignment:** they write inline styles, which breaks the tokens rule.
   - **A new field is created only when no base field has the needed settings.** Then add it to this table: as a base field if it's generic, or to the purpose-specific list.
   - **How existing fields became base fields (keeping content):**
     - Content is keyed by the layout element's UID, not the field.

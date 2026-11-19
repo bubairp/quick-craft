@@ -1,0 +1,64 @@
+columnSuffix: null
+handle: richTextFull
+instructions: null
+name: 'Rich text (full)'
+searchable: false
+settings:
+  availableTransforms: '*'
+  availableVolumes:
+    - c1ab53a3-753c-4acd-bdb3-5684c9e853ac # Images
+  characterLimit: null
+  css: null
+  cssFile: null
+  defaultTransform: null
+  defaultUploadLocationSubpath: null
+  defaultUploadLocationVolume: c1ab53a3-753c-4acd-bdb3-5684c9e853ac # Images
+  fullGraphqlData: true
+  headingLevels:
+    - 2
+    - 3
+    - 4
+  imageEntryTypeUid: null
+  imageFieldUid: null
+  imageMode: img
+  js: null
+  jsFile: null
+  options: null
+  parseEmbeds: false
+  purifierConfig: null
+  purifyHtml: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: false
+  showWordCount: false
+  sourceEditingGroups:
+    - __ADMINS__
+  toolbar:
+    - heading
+    - '|'
+    - bold
+    - italic
+    - underline
+    - strikethrough
+    - '|'
+    - link
+    - '|'
+    - bulletedList
+    - numberedList
+    - outdent
+    - indent
+    - '|'
+    - blockQuote
+    - insertTable
+    - insertImage
+    - mediaEmbed
+    - horizontalLine
+    - '|'
+    - removeFormat
+    - fullscreen
+    - sourceEditing
+  wordLimit: null
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\ckeditor\Field
+warning: null
