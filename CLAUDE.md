@@ -100,6 +100,9 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - **richText** (Figma 17-1343, the SEO text under a page; migration `m261120_280000_rich_text`): optional `heading`, `body` (Rich text (full)), `spacing`. Small muted text (`text-xs`, black/40) in `max-w-text`, with a divider below.
     - CKEditor output is styled by the `.rich-text` component class in app.css (headings like small subheads, 20px before a heading, 8px between a heading and its text, links in ink). Content can't carry utility classes, so prose styling always goes through `.rich-text`.
     - Headings inside the body start at h2 (no block heading) or h3 (with one).
+  - **comparison** (Figma 17-2074, Invitation Maker; migration `m261120_290000_comparison`): `heading`, `text` (subtitle), `image` (our column's logo; falls back to the site logo, then the site name), `comparisonUs` / `comparisonThem` (Table: label + status yes / warning / no), `themLabel` (the other column's heading), `body` (closing note, italic).
+    - Status icons are Tabler filled: circle-check `text-success`, alert-triangle `text-warning`, circle-x `text-muted`. The status is also given as text for screen readers.
+    - Our column is a card (`bg-linear-to-b from-aqua/10 to-orchid/10`, `rounded-xl`, `shadow-glow`); the columns stack on phones.
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`

@@ -36,6 +36,9 @@
   --color-glow-pink: #ffc4fe;  /* blurred background blobs */
   --color-glow-blue: #5fd8ff;
   --color-promo: #3c0a7a;      /* promo bar background (Figma 17-1076) */
+  --color-warning: #ffbf00;    /* comparison "warning" icon (Figma 17-2074) */
+  --color-aqua: #85f5ff;       /* comparison card gradient start, used at /10 (Figma 17-2084) */
+  --color-orchid: #f49eff;     /* comparison card gradient end, used at /10 */
 
   /* Type scale: size / line-height / tracking */
   --text-xs: 0.75rem;
@@ -117,10 +120,12 @@
   --shadow-lift: 0 6px 12px 0 rgb(0 0 0 / 0.16); /* button hover (reference site) */
   --shadow-tile: 0 8px 24px 0 rgb(149 157 165 / 0.2); /* city event tile hover card (reference site) */
   --shadow-halo: 0 0 38px 30px var(--color-surface);   /* "Get the app" pill glow (Figma 6-2046) */
+  --shadow-glow: 0 0 20px 0 rgb(49 189 196 / 0.2);    /* comparison card glow (Figma 17-2084) */
 
   /* Letter spacing */
   --tracking-snug: -0.01em;    /* -0.2px at 20px — press quotes (Home 6-1283) */
   --tracking-loose: 0.02em;    /* +1px at 50px — "Get the app" pill (Home 6-2049) */
+  --tracking-heading: -0.04em; /* bold 24px headings, e.g. comparison column heading (Figma 17-2165) */
 
   /* Motion */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);

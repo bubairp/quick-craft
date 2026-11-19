@@ -195,6 +195,39 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#ffbf00'
+        -
+          - label
+          - warning
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#85f5ff'
+        -
+          - label
+          - aqua
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#f49eff'
+        -
+          - label
+          - orchid
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

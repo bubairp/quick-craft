@@ -50,7 +50,7 @@ fieldLayouts:
             fieldUid: 14091199-6132-4c42-922f-b1b61358f694 # Image
             handle: null
             instructions: null
-            label: null
+            label: 'Logo (our column)'
             oldFieldUid: null
             required: false
             tip: null
@@ -67,7 +67,7 @@ fieldLayouts:
             fieldUid: 8daa4bde-fbd6-4b3a-82e8-f6568c6a52eb # Comparison list
             handle: null
             instructions: null
-            label: 'Comparison: us'
+            label: 'Our column'
             oldFieldUid: null
             required: false
             tip: null
@@ -81,10 +81,27 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: themLabel
+            instructions: 'e.g. “Other free makers”.'
+            label: 'Other column heading'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 1069ccb0-0c0a-41f7-8976-888def8942b9
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
             fieldUid: 8daa4bde-fbd6-4b3a-82e8-f6568c6a52eb # Comparison list
             handle: comparisonThem
             instructions: null
-            label: 'Comparison: them'
+            label: 'Other column'
             oldFieldUid: null
             required: false
             tip: null
@@ -101,12 +118,29 @@ fieldLayouts:
             fieldUid: 2e99dba1-8244-4b6e-9805-b8df8dfaaee2 # Rich text (full)
             handle: body
             instructions: null
-            label: Body
+            label: 'Closing note'
             oldFieldUid: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
             uid: 1e8113d2-8606-4d41-a169-e766266e06c2
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 3f6d2a8e-5b1c-4e7a-9c2d-8a4b6e1f0c37 # Spacing
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 4332c6f3-482e-4e7a-8960-8a1c5c4bac9c
             userCondition: null
             warning: null
             width: 100

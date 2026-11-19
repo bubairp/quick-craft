@@ -1,0 +1,71 @@
+{#
+ # Comparison block. Figma: Invitation Maker 17-2074.
+ # Heading + subtitle, two columns of features with status icons (ours in a glowing gradient card),
+ # an italic closing note. Columns stack on phones.
+ # Receives: block, headingLevel
+ # Fields: heading, text (subtitle), image (our logo; falls back to the site logo, then the site
+ #         name), comparisonUs, themLabel, comparisonThem (Table: label + status yes|warning|no),
+ #         body (closing note)
+ #}
+{% set us = (block.comparisonUs ?? [])|filter(r => r.label|trim) %}
+{% set them = (block.comparisonThem ?? [])|filter(r => r.label|trim) %}
+{% if us|length or them|length %}
+    {% set level = headingLevel ?? 2 %}
+    {% set icons = {
+        yes: { name: 'circle-check', class: 'text-success', label: 'Yes'|t },
+        warning: { name: 'alert-triangle', class: 'text-warning', label: 'Partly'|t },
+        no: { name: 'circle-x', class: 'text-muted', label: 'No'|t },
+    } %}
+    {% set logo = block.image.eagerly().one() ?? (_globals.get('siteSettings').image.one() ?? null) %}
+
+    {% macro rows(rows, icons, textClass) %}
+        <ul class="flex flex-col gap-6">
+            {% for row in rows %}
+                {% set status = icons[row.status ?? 'yes'] ?? icons.yes %}
+                <li class="flex items-center gap-2 text-lg font-medium {{ textClass }}">
+                    {% include '_components/icon.twig' with { name: status.name, filled: true, class: 'size-5 ' ~ status.class } only %}
+                    <span class="sr-only">{{ status.label }}:</span>
+                    <span>{{ row.label }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endmacro %}
+
+    <section data-spacing="{{ block.spacing.value ?? 'default' }}" class="bg-white px-4 py-20 md:px-gutter">
+        <div class="mx-auto flex max-w-content flex-col items-center gap-10 text-center">
+            {% if block.heading or block.text %}
+                <div class="flex flex-col items-center gap-3">
+                    {% if block.heading %}<h{{ level }} class="text-balance text-3xl font-bold md:text-4xl">{{ block.heading }}</h{{ level }}>{% endif %}
+                    {% if block.text %}<p class="text-balance text-xl font-medium text-black/60 md:text-2xl">{{ block.text }}</p>{% endif %}
+                </div>
+            {% endif %}
+
+            <div class="grid w-full max-w-187.5 gap-6 text-left sm:grid-cols-2">
+                {% if us|length %}
+                    <div class="flex flex-col gap-6 rounded-xl bg-linear-to-b from-aqua/10 to-orchid/10 p-4 shadow-glow">
+                        <div class="flex h-10.5 items-center justify-center">
+                            {% if logo %}
+                                {% include '_components/image.twig' with { image: logo, width: 160, sizes: '160px', class: 'h-6.5 w-auto' } only %}
+                            {% else %}
+                                <span class="text-2xl font-bold">{{ siteName }}</span>
+                            {% endif %}
+                        </div>
+                        {{ _self.rows(us, icons, 'text-black/80') }}
+                    </div>
+                {% endif %}
+                {% if them|length %}
+                    <div class="flex flex-col gap-6 p-4">
+                        {% if block.themLabel|trim %}
+                            <h{{ level + 1 }} class="flex h-10.5 items-center justify-center text-2xl font-bold tracking-heading">{{ block.themLabel }}</h{{ level + 1 }}>
+                        {% endif %}
+                        {{ _self.rows(them, icons, 'text-black/60') }}
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if block.body and block.body|length %}
+                <div class="text-xl font-medium text-black/60 italic md:text-2xl">{{ block.body }}</div>
+            {% endif %}
+        </div>
+    </section>
+{% endif %}

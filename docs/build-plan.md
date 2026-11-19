@@ -64,7 +64,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 | — | quote marquee | | 17-1633 **skipped** |
 | ☐ | `imageGallery` | row (categories) | 17-1931 |
 | ☐ | `cardGrid` | grid | 17-2004 |
-| ☐ | `comparison` | | 17-2074 |
+| ☑ | `comparison` | | 17-2074 |
 | ☐ | `testimonials` | reviews | 17-2211 |
 | ☐ | `richText` | | 17-2385 |
 | ☐ | `faq` | | 17-2418 |

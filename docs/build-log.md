@@ -924,3 +924,27 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Template** `_blocks/richText.twig`: optional block heading (`headingLevel`), body in `.rich-text`, `max-w-text`, `gap-15` to an `<hr class="border-black/30">`; nothing renders when both are empty.
 - **Checked (Playwright via `/blocks`, full reload) at 375 / 768 / 1440:** column 328 / 673 / 1120; padding 40 (16px sides on a phone); text 12px/16.8px −0.24px black/40; heading→text 8px, text→next heading 20px; link rgb(17,17,17); hr 1px black/30, 60px below the text; no overflow. Matches the Figma frame.
 - **Gotcha:** `page.goto()` to the same URL with only a different `#hash` doesn't reload (same-document navigation). Add a query string (`?t=…`) to force a fresh page.
+
+### 2026-11-20: Block: comparison (Figma 17-2074, Invitation Maker)
+- **Rule/tokens first:**
+  - Tokens `--color-warning` #ffbf00 (sampled from the Figma icon PNG), `--color-aqua` #85f5ff, `--color-orchid` #f49eff, `--shadow-glow`, `--tracking-heading` −0.04em. Color Code palette synced.
+  - ✓ = existing `success` (#31c431 from the SVG); ✕ #5f5f5f ≈ `muted`.
+  - CLAUDE.md › pageBuilder blocks › comparison.
+- **The Figma frame shows a third-party brand logo** (imported reference). Our column shows the block's `image`, else the site logo, else `siteName`.
+- **Migration** `m261120_290000_comparison` (backup: `/tmp/before-comparison.sql.gz`):
+  - `themLabel` (plainText instance) before comparisonThem, plus `spacing`;
+  - labels: image "Logo (our column)", tables "Our column" / "Other column", body "Closing note";
+  - palette + warning/aqua/orchid;
+  - test content = the Figma copy on Invitation Maker.
+- **Template** `_blocks/comparison.twig`:
+  - Rows (Table: label + status) with Tabler **filled** icons (circle-check / alert-triangle / circle-x) and an `sr-only` status label.
+  - Our column is a card: `bg-linear-to-b from-aqua/10 to-orchid/10 rounded-xl shadow-glow p-4`.
+  - `max-w-187.5` (750) grid, 2 columns from `sm`; heading h2 + column heading h3.
+- **Checked (Playwright) at 375 / 768 / 1440:**
+  - heading 36/43.2 700 −1.44px (28px on a phone); subtitle 24/33.6 black/60;
+  - grid 750, 2 columns, gap 24 (stacked on a phone); card radius 20 + glow + pad 16 + gradient;
+  - rows 18/25.2 black/80 vs /60, icons 20px; row gap 24; note 24 italic black/60; no overflow.
+  - Matches the Figma frame.
+- **Gotchas:**
+  - A Table field stores rows by column ID (`col1`, `col2`); the value also exposes the handles (`label`, `status`), so templates use handles.
+  - Playwright's browser restarted without trusting the DDEV certificate (`ERR_CERT_AUTHORITY_INVALID`). Use `browser.newContext({ ignoreHTTPSErrors: true })` in `browser_run_code_unsafe`.
