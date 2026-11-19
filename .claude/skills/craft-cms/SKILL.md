@@ -102,6 +102,22 @@ Every page entry type (home, landingPage, careers, press, and new ones) uses fou
 - **Taxonomies** (blog categories, departments) are Structure sections, related through an **Entries** field with `maintainHierarchy`. Don't create category groups.
 - A new settings Single: create it in a migration, then add it to the `_globals` block in base.twig.
 
+## Live Preview
+
+- **How Craft refreshes it:** every change reloads the page in a **new iframe** (`?x-craft-live-preview=…&token=…`). On load it calls `contentWindow.scrollTo(x, y)` to restore the scroll position. Lenis keeps that position. Each refresh is a full page load, so every script and animation starts again.
+- **Preview targets:**
+  - Every section with URLs has `Primary entry page` = `{url}`.
+  - Settings Singles have no URL, so give them a target page instead: `siteSettings` → `/` (Home), so header, footer and store-link changes show live. This works because Craft swaps the previewed element into ordinary queries (`Elements::setPlaceholderElement()`), so base.twig's `_globals` query returns the unsaved version.
+  - When the blog listing exists, give `newsletter` a target → `blog`.
+- **Test without logging in:**
+  1. Create a token with a throwaway script in `storage/runtime/` (gitignored; delete it afterwards). Use `Craft::$app->getTokens()->createPreviewToken(['preview/preview', ['elementType' => Entry::class, 'canonicalId' => …, 'siteId' => …, 'draftId' => …, 'revisionId' => null, 'userId' => <admin id>]])`.
+  2. Load the page URL with `?x-craft-live-preview=x&token=…` inside a same-origin `<iframe>`.
+  3. On `load`, call `contentWindow.scrollTo()` the way Craft does.
+  4. Check the scroll position stays, wheel scrolling continues from there, and the sticky featureRows slider shows one clean step.
+  5. Check at the preview pane's width (~720) and at 375.
+  - To prove that unsaved content shows, create a draft (`Craft::$app->getDrafts()->createDraft()`), change a field, preview with its `draftId`, then delete the draft.
+- **Never** use `{% cache %}` around content that Live Preview must update without a key based on the element's `dateUpdated`. Drafts keep their canonical's ID, so an ID-only key would show stale content.
+
 ## Migrations that create sections or entry types
 
 - **Back up first:** `ddev export-db --file=/tmp/<name>.sql.gz`.

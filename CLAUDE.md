@@ -79,6 +79,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - **Headings:** the banner heading is the page's `<h1>`, and pageBuilder blocks start at `<h2>`. If the banner has no heading, the page outputs a visually hidden `<h1>` with the entry title, so every page still has exactly one `<h1>`.
 - **Blog listing** is `templates/blog/index.twig`. It isn't a section.
 - **Everything is an entry (as in Site7 Engine):** no global sets and no category groups. Migration `m261119_220000_entrify_globals_categories` converted them, keeping element IDs and content. Don't add global sets or category groups; use a Single (settings) or a Structure (taxonomies) instead.
+- **Live Preview of settings:** `siteSettings` has a preview target, Home (`/`). Editing it in the CP shows header, footer and store-link changes live on Home. Each new settings Single gets a preview target pointing at a page that shows it. Testing procedure: skill › Live Preview.
 - **Settings Singles in templates:** `templates/_layouts/base.twig` loads `siteSettings` and `newsletter` **once per request** into Craft's front-end `_globals` collection. Read them anywhere, including `only` includes, with `{% set siteSettings = _globals.get('siteSettings') %}`. Never query these sections again in a partial or block. For a new settings Single, add it to that same block in base.twig.
 - **Volume:** `images` (`web/uploads/images`, gitignored). Alt text uses the native alt field.
 - **pageBuilder blocks** (each one is `_blocks/{handle}.twig`, receives `block` and `headingLevel`):

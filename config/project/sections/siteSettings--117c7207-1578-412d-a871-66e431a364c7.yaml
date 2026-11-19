@@ -7,6 +7,11 @@ handle: siteSettings
 maxAuthors: 1
 minAuthors: 1
 name: 'Site settings'
+previewTargets:
+  -
+    label: 'Home page'
+    refresh: true
+    urlFormat: /
 propagationMethod: all
 siteSettings:
   739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft

@@ -652,3 +652,24 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Home looks the same at 1440: one `<h1>` ("Parties are back"), blocks at h2/h3, chat bubbles and both buttons.
   - Careers, Press and Organizers return 200 with a hidden `<h1>`.
   - Both orders tested: migration first (local), and restore backup + `craft up` (project config first, fallback path). No project-config diff.
+
+### 2026-11-20: Shopify-style step 2: Live Preview check and fixes
+- **Rule first:** skill › "Live Preview" (how Craft refreshes the preview, preview targets, how to test it without logging in); CLAUDE.md › Live Preview of settings.
+- **How Craft 5 refreshes** (`vendor/craftcms/cms/src/web/assets/cp/dist/cp.js`): every change loads the page in a **new iframe** with `?x-craft-live-preview=…&token=…`, then restores the scroll position on `load` with `contentWindow.scrollTo()`. `useIframeResizer` is off (the default).
+- **Tested without a CP login:**
+  1. Created a preview token with a throwaway script in `storage/runtime/` (deleted afterwards).
+  2. Loaded Home in a same-origin iframe at 720px (the CP preview pane) and 1280px, and restored the scroll position the way Craft does.
+- **Results:**
+  - The scroll position holds (2500 stays 2500), and wheel scrolling continues from there with Lenis.
+  - Reveal animations are visible after the restore.
+  - The sticky featureRows slider restored mid-way shows one clean step ("Collect info upfront").
+  - No console errors and no sideways scroll.
+  - **No fixes were needed in the front end.**
+- **Added:** a preview target for the `siteSettings` Single → Home (`/`). Migration `m261120_110000_settings_preview_target`.
+  - Craft swaps the previewed element into ordinary queries (`PreviewController` → `Elements::setPlaceholderElement`), so base.twig's `_globals` query returns the unsaved draft.
+  - Proved it with a draft that changes the header button label: the preview shows "LP draft label" while the live site shows "Contact Us". The test drafts were deleted.
+- **Later:** a `newsletter` preview target → `blog`, once the blog listing exists.
+- **Gotchas:**
+  - `Tokens::createPreviewToken($route, $usageLimit, $token)`: the 2nd argument is a usage limit, not an expiry date.
+  - Don't redefine `CRAFT_BASE_PATH` in a script that requires `bootstrap.php`.
+  - Read the URL from a plain `echo`, not from escaped JSON.
