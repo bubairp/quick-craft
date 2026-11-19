@@ -1,7 +1,7 @@
 columnSuffix: null
-handle: showAppBadges
+handle: lightswitch
 instructions: null
-name: 'Show app store badges'
+name: Lightswitch
 searchable: false
 settings:
   default: false

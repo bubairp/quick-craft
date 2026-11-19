@@ -1,7 +1,7 @@
 columnSuffix: null
-handle: externalLink
+handle: urlLink
 instructions: null
-name: 'External link'
+name: 'URL link'
 searchable: false
 settings:
   advancedFields:

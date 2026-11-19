@@ -64,10 +64,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
-            handle: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: heading
             instructions: null
-            label: null
+            label: Heading
             oldFieldUid: null
             required: false
             tip: null
@@ -81,10 +81,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
-            handle: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Textarea
+            handle: text
             instructions: null
-            label: null
+            label: Text
             oldFieldUid: null
             required: false
             tip: null
@@ -98,8 +98,8 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Primary button
-            handle: null
+            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Link (with label)
+            handle: primaryButton
             instructions: null
             label: 'Heading link'
             oldFieldUid: null
@@ -149,10 +149,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 8d5e9adb-95b9-4022-bb51-2eda391db51a # Show app store badges
-            handle: null
+            fieldUid: 1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a # Lightswitch
+            handle: showAppBadges
             instructions: null
-            label: null
+            label: 'Show app store badges'
             oldFieldUid: null
             required: false
             tip: null

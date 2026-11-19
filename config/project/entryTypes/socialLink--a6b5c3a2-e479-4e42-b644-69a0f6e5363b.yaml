@@ -30,8 +30,8 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: c3833a80-0361-44d0-a6e4-f5b973719a87 # External link
-            handle: null
+            fieldUid: c3833a80-0361-44d0-a6e4-f5b973719a87 # URL link
+            handle: externalLink
             instructions: null
             label: URL
             oldFieldUid: null

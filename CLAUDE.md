@@ -100,12 +100,34 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - **`socialLinks`** on siteSettings (entry type `socialLink`: `platform` dropdown → the Tabler icon is chosen by the template, `externalLink`). Rendered by `_components/social-links.twig` (the footer's "Socials" column).
   - **`contactDetails`** on siteSettings (entry type `contactDetail`: `contactType` email / phone / whatsapp / address, `detail`). Rendered by `_components/contact-details.twig` (makes mailto:, tel: and wa.me links). Used by the contact page and anywhere the design shows contact info.
   - **Next, with their pages:** `person` (Careers), `logo` and `download` (Press kit).
-- **Shared base fields** (one field, several instances with their own handles; same migration):
-  - `eyebrow` ("Short text", single line): instances `eyebrow`, `personName`, `personDetail`, `location`, `publication`, `detail`.
-  - `comparisonUs` ("Comparison list"): instances `comparisonUs`, `comparisonThem`.
-  - `appStoreLink` ("Store link"): instances `appStoreLink`, `googlePlayLink`.
-  - `primaryButton` (Link with label): also the instance `buttonLink` in `button`.
-  - **How a merge keeps content:** content is keyed by the layout element's UID, so the migration points the existing layout element at the shared field, sets the old handle as an instance override, and only then deletes the old field.
+- **Base field library: create once, reuse everywhere** (the user's rule, 2026-11-20; migration `m261120_130000_base_field_library`).
+  - **The fields:** generic fields, each added to sections and blocks many times, every time with its own **handle and label** (a Craft 5 field-instance override).
+  - **In templates, always use the instance handle** (`block.heading`, `item.personName`), never the base handle.
+
+  | Base field (handle) | Type | Instances (examples) |
+  |---|---|---|
+  | `plainText` "Plain text" | PlainText, single line | heading, eyebrow, personName, personDetail, location, publication, detail, iconName |
+  | `textarea` "Textarea" | PlainText, multi-line | text (summary/intro/quote), the image volume's "Subtitle" |
+  | `richText` "Rich text" | CKEditor | body |
+  | `image` / `images` "Image" / "Images" | Assets (1 / many) | image, logo, images |
+  | `linkWithLabel` "Link (with label)" | Link: entry / URL / email, label | buttonLink, primaryButton (a card's link, ctaBanner's "Heading link") |
+  | `urlLink` "URL link" | Link: URL only, optional new tab | externalLink, appStoreLink, googlePlayLink |
+  | `lightswitch` "Lightswitch" | Lightswitch | featured, showAppBadges |
+  | `number` "Number" | Number | (ready) |
+  | `date` "Date" | Date | (ready) |
+  | `email` "Email" | Email | (ready) |
+
+  - **Purpose-specific fields** stay their own field, because their settings can't be shared per instance:
+    - every Dropdown (options): scheme, spacing, the layout dropdowns, buttonStyle, platform, contactType, pageBackground, employmentType, workplace;
+    - Tables (columns): comparisonUs (instances comparisonUs, comparisonThem), rotatingWords, chatMessages;
+    - Matrix fields;
+    - Entries fields (sources);
+    - `emoji` (8-character limit), `rating` (0–5, one decimal), `seo`, `newsletterForm`.
+  - **A new field is created only when no base field has the needed settings.** Then add it to this table: as a base field if it's generic, or to the purpose-specific list.
+  - **How existing fields became base fields (keeping content):**
+    - Content is keyed by the layout element's UID, not the field.
+    - So every existing instance first gets its current handle and label as an explicit override; then the field is renamed. Or, when merging, the element is pointed at the base field (`oldFieldUid` + `setField()`, Craft's own `fields/merge` steps) and the old field is deleted.
+    - Layouts outside entry types (e.g. the `images` volume) are included, via `Fields::findFieldUsages()` and the project config paths that hold those layouts.
 - **Option fields:** `scheme`, `spacing` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`).
 - **Section options (Shopify-style), migration `m261119_230000_scheme_and_spacing`:**
   - **`scheme`** (Colour scheme): `light` (page background, none of its own), `white`, `soft` (surface grey), `dark`.
@@ -117,10 +139,10 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - Only add it to blocks whose padding sits on the `<section>` (cardGrid, cityList, testimonials, ctaBanner). Hero (fixed-header clearance) and featureRows (padding on inner wrappers) don't have it.
   - **New blocks:** add `scheme` only if the template supports every scheme, and `spacing` only if the padding sits on the `<section>`. Never add free colour or padding values.
 - Field handles must avoid `craft\base\Field::RESERVED_HANDLES`. For example, `icon` is reserved, which is why the field is called `emoji`.
-- **Reuse fields; don't duplicate them.** Before creating a field, check `config/project/fields/` for one of the same type with the **same settings** (character limit, options, allowed link types, asset sources, CKEditor config, translation method).
-  - **If one exists, reuse it.** Add it to the layout again and give that instance its own **handle, label and instructions** (Craft 5 multi-instance fields; in a migration, set `handle`/`label` on the layout's `CustomField` element). For example, one PlainText field can be added as `personName` and as `personDetail`.
-  - **Create a new field only when the settings must differ**, because settings belong to the field, not the instance. Dropdown options are the common case, which is why each block has its own layout dropdown.
-  - Always give an instance a **meaningful handle** (`personName`, never a generic `plainText` or `plainTextSub`) so templates stay readable.
+- **Adding a field to a section or block:**
+  - Take it from the base field library above and add it to the layout with its own **handle, label and instructions** (in a migration: `new CustomField($baseField, ['handle' => 'personName', 'label' => 'Person name'])`).
+  - Always give the instance a **meaningful handle** (`personName`), never the generic base handle (`plainText`), so templates stay readable.
+  - Create a new field only when no base field has the needed settings (settings belong to the field, not the instance).
 
 ### Content & data
 - **No hard-coded copy.** All text and images come from Craft fields (or `siteName`/the settings Singles). UI microcopy (e.g. "Skip to content", "Read more") must use `|t` for translation.

@@ -1,4 +1,4 @@
-dateModified: 1795088061
+dateModified: 1795089862
 email:
   fromEmail: admin@quick-craft.ddev.site
   fromName: 'Quick Craft'
@@ -17,23 +17,21 @@ meta:
     0ed6a8a3-8f74-4e22-81eb-7850257a4bd2: 'Background layout' # Background layout
     0fa4c80e-670a-453c-8b6c-d430775fc6fc: 'Social links' # Social links
     1afd5b95-7bb4-4303-a773-66fabce3b25b: 'Colour scheme' # Colour scheme
-    1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a: Featured # Featured
+    1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a: Lightswitch # Lightswitch
     2b0cb8a9-792e-430c-aab8-e6b9c3045101: 'Quick Craft' # Quick Craft
     2de22aae-55dd-43ca-84cb-499365bc077d: Newsletter # Newsletter
-    2e99dba1-8244-4b6e-9805-b8df8dfaaee2: Body # Body
+    2e99dba1-8244-4b6e-9805-b8df8dfaaee2: 'Rich text' # Rich text
     2f4b01a5-9912-4315-9f48-39763a5dd99e: Department # Department
     3c0efb34-47ad-4843-b9cc-5768d4c18afe: 'Contact details' # Contact details
     03f1d9c2-255c-41ed-818a-e2cb06131584: 'Contact detail' # Contact detail
     3f6d2a8e-5b1c-4e7a-9c2d-8a4b6e1f0c37: Spacing # Spacing
     4b43103e-a137-4e60-8356-f1cbcb85cb30: Stat # Stat
-    5c240c8c-77a4-4623-9bcb-acbe6852884a: 'Primary button' # Primary button
-    5eb1e556-9b7b-4d71-a114-baee0a3f751d: 'Secondary button' # Secondary button
+    5c240c8c-77a4-4623-9bcb-acbe6852884a: 'Link (with label)' # Link (with label)
     6c77e508-9522-461f-a2e5-40a716e5302e: Image # Image
     6e289974-25fc-41ca-8426-66c8ce5dadfa: 'Blog category' # Blog category
     7cc654a9-6dbf-43d9-896b-a55e4cb5a4fa: SEO # SEO
     7deac560-7fee-4591-b9b3-f8e899dc2df8: Images # Images
     7f8b1407-c8ef-4bdb-be9b-9f17cf1ee52f: 'Feature layout' # Feature layout
-    8d5e9adb-95b9-4022-bb51-2eda391db51a: 'Show app store badges' # Show app store badges
     8daa4bde-fbd6-4b3a-82e8-f6568c6a52eb: 'Comparison list' # Comparison list
     08e26cf8-8b84-4fa3-a0fe-bb7b40bf0a79: 'Text + media' # Text + media
     11e3d5af-5779-4d3a-861b-372205b6fd0c: 'Job list' # Job list
@@ -42,6 +40,7 @@ meta:
     30a1f63f-64b9-40be-b8b0-cbfc88088d9f: 'Employment type' # Employment type
     57b7bd4f-a6bd-42d5-aed6-89b354c589b9: Home # Home
     67eb358b-7ce6-4e6b-8fb9-6d42b1cc869b: Press # Press
+    67efb085-6691-40da-8653-a076dfebd256: Number # Number
     76de1f40-ea54-4a05-a0bc-66b4accf2173: 'Gallery layout' # Gallery layout
     82b1259f-8590-456a-a4f1-f538006f845a: Card # Card
     99cbacb9-398d-4746-81d8-5e7cd070dcb3: 'Blog categories' # Blog categories
@@ -50,6 +49,7 @@ meta:
     207df538-4069-47af-8683-02eb17a5dcad: Rating # Rating
     234d2e9f-2f97-4a91-8a5e-b1f93eeece59: Testimonials # Testimonials
     289cd371-3ba2-4745-ae22-a370d9990f91: 'Hero layout' # Hero layout
+    307d793e-57cd-4151-95be-1487af7be8be: Date # Date
     387e6ecc-0194-4b56-87a9-d9f42fbe983b: 'Page builder' # Page builder
     509a88e4-38a6-4ebd-adba-6af6222be685: 'Chat messages' # Chat messages
     761f1f27-3b7d-4327-833c-e38b716c0d2b: Comparison # Comparison
@@ -61,7 +61,7 @@ meta:
     8539c76c-6153-4b8c-9ccc-29ed3c3d7d0a: 'FAQ items' # FAQ items
     9481bc37-4f73-4fe3-be77-f1c33db10114: FAQ # FAQ
     70567a64-a80b-45dc-b262-2934bfa9d638: Blog # Blog
-    94877b10-33d0-4265-940d-2e085b80ebd7: 'Store link' # Store link
+    92954f06-6453-48a6-a1c5-c32d85d07717: Email # Email
     297742be-e35a-4330-addc-2d8f5f50d74e: 'City list' # City list
     702803d9-1580-4d51-b136-141b857a2b9b: Button # Button
     739635e4-10bd-4f41-a8f1-4a0cc5ed1057: 'Quick Craft' # Quick Craft
@@ -72,7 +72,6 @@ meta:
     a2db8034-3b0c-40ed-ae4a-061e4e405d26: Jobs # Jobs
     a6b5c3a2-e479-4e42-b644-69a0f6e5363b: 'Social link' # Social link
     a37f9f39-a0f3-4153-bdb9-dfee1421a593: Job # Job
-    a50e76ea-5264-45fb-abeb-7b9ffd358933: Heading # Heading
     a8028db7-e7b3-40d6-b693-8ab2960cc756: Buttons # Buttons
     a44624b9-c2b7-48d3-a9a6-6b12900597ff: Department # Department
     aa6c33f4-a111-4e09-8f71-ed0bd93a53aa: Workplace # Workplace
@@ -86,14 +85,14 @@ meta:
     c9f5ea42-caef-4bfb-96d7-afc15e1d1a63: Careers # Careers
     c39cda31-3ea4-43d7-8c7a-8257e5d98455: 'Rotating words' # Rotating words
     c724e92f-54e6-49fa-88e4-1be0f8868984: 'CTA banner' # CTA banner
-    c3833a80-0361-44d0-a6e4-f5b973719a87: 'External link' # External link
+    c3833a80-0361-44d0-a6e4-f5b973719a87: 'URL link' # URL link
     c111214e-599d-43d5-913d-20371dbdecc7: Testimonials # Testimonials
-    cbc81cae-5356-4e94-a54e-e20f8c3cf62a: 'Short text' # Short text
+    cbc81cae-5356-4e94-a54e-e20f8c3cf62a: 'Plain text' # Plain text
     d3c5f3cb-a64e-4a36-9006-e3d71969430e: 'Feature rows' # Feature rows
     d9818d83-29ba-4787-9db3-e6de4d353e2e: 'Image gallery' # Image gallery
     e4dbf038-0b21-4638-b6b0-d750cc7e4718: 'Media position' # Media position
     e7d05140-eed9-42bc-a423-92dc136c77e4: 'FAQ item' # FAQ item
-    e9eea928-bd4c-4d82-865b-fda154f0d8cd: Text # Text
+    e9eea928-bd4c-4d82-865b-fda154f0d8cd: Textarea # Textarea
     eb55722c-ef4f-4086-8ded-7058f8a14efe: Departments # Departments
     ebd87830-6bd4-40fb-acf2-8b1b3ce02fb4: 'Emoji icon' # Emoji icon
     ed4e759a-5624-44da-8530-6257893100bd: Cards # Cards

@@ -47,8 +47,8 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 94877b10-33d0-4265-940d-2e085b80ebd7 # Store link
-            handle: null
+            fieldUid: c3833a80-0361-44d0-a6e4-f5b973719a87 # URL link
+            handle: appStoreLink
             instructions: null
             label: 'App Store link'
             oldFieldUid: null
@@ -64,7 +64,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 94877b10-33d0-4265-940d-2e085b80ebd7 # Store link
+            fieldUid: c3833a80-0361-44d0-a6e4-f5b973719a87 # URL link
             handle: googlePlayLink
             instructions: null
             label: 'Google Play link'

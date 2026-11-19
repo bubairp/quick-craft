@@ -98,8 +98,8 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Short text
-            handle: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: eyebrow
             instructions: null
             label: Eyebrow
             oldFieldUid: null
@@ -115,10 +115,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: a50e76ea-5264-45fb-abeb-7b9ffd358933 # Heading
-            handle: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: heading
             instructions: null
-            label: null
+            label: Heading
             oldFieldUid: null
             required: false
             tip: null
@@ -149,10 +149,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
-            handle: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Textarea
+            handle: text
             instructions: null
-            label: null
+            label: Text
             oldFieldUid: null
             required: false
             tip: null

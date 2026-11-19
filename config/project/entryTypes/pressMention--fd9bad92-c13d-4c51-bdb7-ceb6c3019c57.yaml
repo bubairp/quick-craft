@@ -41,11 +41,11 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Short text
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
             handle: publication
             instructions: null
             label: Publication
-            oldFieldUid: f7732655-f05d-47c7-8b76-d1a20cce7eee
+            oldFieldUid: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
@@ -58,10 +58,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: c3833a80-0361-44d0-a6e4-f5b973719a87 # External link
-            handle: null
+            fieldUid: c3833a80-0361-44d0-a6e4-f5b973719a87 # URL link
+            handle: externalLink
             instructions: null
-            label: null
+            label: 'External link'
             oldFieldUid: null
             required: false
             tip: null

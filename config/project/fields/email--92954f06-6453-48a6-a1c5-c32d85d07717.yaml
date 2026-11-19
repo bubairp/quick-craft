@@ -1,15 +1,12 @@
 columnSuffix: null
-handle: featured
+handle: email
 instructions: null
-name: Featured
+name: Email
 searchable: false
 settings:
-  default: false
-  offLabel: null
-  onLabel: null
-  showLabelsInCards: false
+  placeholder: null
 tip: null
 translationKeyFormat: null
 translationMethod: none
-type: craft\fields\Lightswitch
+type: craft\fields\Email
 warning: null

@@ -13,10 +13,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
-            handle: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Textarea
+            handle: text
             instructions: null
-            label: null
+            label: Text
             oldFieldUid: null
             required: false
             tip: null
@@ -30,8 +30,8 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Primary button
-            handle: null
+            fieldUid: 5c240c8c-77a4-4623-9bcb-acbe6852884a # Link (with label)
+            handle: primaryButton
             instructions: null
             label: Link
             oldFieldUid: null

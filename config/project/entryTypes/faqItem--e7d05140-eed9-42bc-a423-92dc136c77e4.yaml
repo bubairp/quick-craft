@@ -41,10 +41,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 2e99dba1-8244-4b6e-9805-b8df8dfaaee2 # Body
-            handle: null
+            fieldUid: 2e99dba1-8244-4b6e-9805-b8df8dfaaee2 # Rich text
+            handle: body
             instructions: null
-            label: null
+            label: Body
             oldFieldUid: null
             required: false
             tip: null

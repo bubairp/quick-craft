@@ -64,8 +64,8 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
-            handle: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Textarea
+            handle: text
             instructions: 'Short line under the title where the image is shown with text, e.g. “34 going” (city list event tiles).'
             label: Subtitle
             oldFieldUid: null

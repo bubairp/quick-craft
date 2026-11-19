@@ -32,10 +32,11 @@ Every page entry type (home, landingPage, careers, press, and new ones) uses fou
 3. **Content model in a migration.**
    - `ddev craft migrate/create add_<handle>_block`
    - Create the fields and the entry type in `safeUp()` using `Craft::$app->getFields()` and `Craft::$app->getEntries()`. Add the entry type to the `pageBuilder` Matrix field's `entryTypes`. Make it idempotent: check whether the field or entry type exists before creating it.
-   - **Reuse fields first.** For each field the block needs, look in `config/project/fields/` for one of the same type with the same settings.
-     - If one exists, add it to the layout again as a new instance with its own meaningful handle and label: `new CustomField($field, ['handle' => 'personDetail', 'label' => 'Person detail'])`.
-     - Create a new field only when the settings must differ (dropdown options, link types, asset sources, CKEditor config, character limit).
-     - Never use generic handles in templates (`plainText`, `plainTextSub`). See CLAUDE.md › Content model.
+   - **Fields come from the base field library** (CLAUDE.md › Base field library): `plainText`, `textarea`, `richText`, `image`, `images`, `linkWithLabel`, `urlLink`, `lightswitch`, `number`, `date`, `email`.
+     - Add each one as an instance with the block's own handle and label: `new CustomField($fields->getFieldByHandle('plainText'), ['handle' => 'personDetail', 'label' => 'Person detail', 'uid' => <stable uid>])`.
+     - Repeating groups come from the common Matrix fields (`buttons`, `socialLinks`, `contactDetails`, `cards`, `faqItems`…).
+     - Create a new field only for a purpose-specific setting (a Dropdown's options, a Table's columns, a character limit), and add it to the CLAUDE.md table.
+     - Templates use the instance handle (`block.personDetail`), never the base handle.
    - Read the Craft source in `vendor/craftcms/cms/src/` for the exact APIs and don't guess.
    - Run `ddev craft up`, then commit the migration together with `config/project/`.
 4. **Template** `templates/_blocks/{entryTypeHandle}.twig`:

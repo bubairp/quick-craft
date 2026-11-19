@@ -1,7 +1,7 @@
 columnSuffix: null
-handle: secondaryButton
+handle: linkWithLabel
 instructions: null
-name: 'Secondary button'
+name: 'Link (with label)'
 searchable: false
 settings:
   fullGraphqlData: true

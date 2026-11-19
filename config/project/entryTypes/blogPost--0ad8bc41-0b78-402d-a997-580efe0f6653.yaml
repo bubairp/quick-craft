@@ -58,10 +58,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Text
-            handle: null
+            fieldUid: e9eea928-bd4c-4d82-865b-fda154f0d8cd # Textarea
+            handle: text
             instructions: null
-            label: null
+            label: Text
             oldFieldUid: null
             required: false
             tip: null
@@ -92,10 +92,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a # Featured
-            handle: null
+            fieldUid: 1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a # Lightswitch
+            handle: featured
             instructions: null
-            label: null
+            label: Featured
             oldFieldUid: null
             required: false
             tip: null
@@ -115,10 +115,10 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 2e99dba1-8244-4b6e-9805-b8df8dfaaee2 # Body
-            handle: null
+            fieldUid: 2e99dba1-8244-4b6e-9805-b8df8dfaaee2 # Rich text
+            handle: body
             instructions: null
-            label: null
+            label: Body
             oldFieldUid: null
             required: false
             tip: null

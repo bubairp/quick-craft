@@ -711,3 +711,21 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Merged fields still render (reviews "Quiviler / Sept 3", press names).
   - Socials column with icons, at 1440 and 375.
   - Both orders: migration first, and restore + `craft up` (project config first). Both give 9 buttons and 5 social links, with no project-config diff.
+
+### 2026-11-20: Base field library (create generic fields once, reuse with per-instance handles)
+- **User's rule** (as in the old sites, but with Craft 5 instance overrides): create generic fields once (Plain text, Textarea, Rich text…) and add them to sections and blocks many times, each time with its own handle and label.
+- **Rule first:** CLAUDE.md › "Base field library" (the table of base fields + the purpose-specific list) and "Adding a field to a section or block"; skill step 3 updated.
+- **Migration** `m261120_130000_base_field_library` (backup: `/tmp/before-base-fields.sql.gz`):
+  - **Renamed into base fields.** Every existing instance first got its current handle and label as an explicit override, so templates and content didn't change:
+    - eyebrow → `plainText`, text → `textarea`, body → `richText`;
+    - primaryButton → `linkWithLabel`, externalLink → `urlLink`, featured → `lightswitch`.
+  - **Merged** (Craft's fields/merge steps): heading → plainText (the 255-character limit goes), appStoreLink → urlLink, showAppBadges → lightswitch.
+  - **Deleted:** `secondaryButton` (unused since the buttons Matrix).
+  - **New base fields:** `number`, `date`, `email`.
+  - **Layouts outside entry types are included:** the `images` volume's "Subtitle" (handle `text`) now uses `textarea`. This uses `Fields::findFieldUsages()` + the project-config update copied from `FieldsController::updateFieldUsages()`.
+- **Kept purpose-specific:** Dropdowns (options), Tables (columns), Matrix fields, Entries fields, `emoji` (8-character limit), `rating` (0–5), `seo`, `newsletterForm`.
+- **Checked:**
+  - HTML snapshot of 8 pages (Home, the CTA demo, 4 landing pages, Careers, Press) before and after: **byte-for-byte identical**.
+  - Same result for the other-environment path (restore + `craft up`, project config applied first).
+  - `project-config/diff`: no changes.
+- **Testing tip:** for refactors that must not change output, snapshot the pages (`curl` → file, strip CSRF tokens) before and after, then `cmp`.
