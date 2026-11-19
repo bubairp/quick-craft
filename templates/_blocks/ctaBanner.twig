@@ -1,7 +1,7 @@
 {#
  # CTA banner block. Figma: Home 6-1787 ("Get the app").
  # Big pill heading (links to primaryButton if set), subtitle, optional buttons and
- # store links; images (if any) orbit the heading in rings on md+.
+ # store links (showAppBadges); images (if any) form a slowly turning spiral around it.
  # Receives: block, headingLevel
  # Fields: theme, heading, text, primaryButton, secondaryButton, images, showAppBadges
  #}
@@ -12,23 +12,29 @@
 {% set headingLink = block.primaryButton.url ?? null %}
 
 {% if block.heading or block.text %}
-<section class="relative overflow-hidden {{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 py-24 md:min-h-175 md:py-36">
+{# Measured on the reference: section 700px tall (388 on a phone); the pill is centred on the
+   section (= the spiral's centre); the subtitle hangs 8px below it, outside the centring. #}
+<section class="relative flex min-h-97 flex-col justify-center overflow-hidden {{ dark ? 'bg-black text-white' : 'text-ink' }} px-4 py-24 md:min-h-175">
 
     {% if images|length %}
-        {# Rings: positions are computed from each item's index (geometry, not design values) #}
-        <ul class="pointer-events-none absolute inset-0 hidden md:block" aria-hidden="true"
-            x-data="{ ring(i) { const per = [16, 28, 40]; let r = 0, n = i; while (r < per.length - 1 && n >= per[r]) { n -= per[r]; r++; } const count = per[r]; const radius = 200 + r * 160; const a = (n / count) * Math.PI * 2 + r * 0.3; return `translate(-50%, -50%) translate(${Math.cos(a) * radius * 1.35}px, ${Math.sin(a) * radius}px) rotate(${(a * 57.3 + 90) % 360}deg)`; } }">
-            {% for image in images|slice(0, 84) %}
-                <li class="absolute top-1/2 left-1/2 w-16 lg:w-20" :style="{ transform: ring({{ loop.index0 }}) }">
-                    {% include '_components/image.twig' with { image: image, width: 80, ratio: 1, sizes: '80px', decorative: true, class: 'aspect-square w-full rounded-sm object-cover shadow-card' } only %}
+        {# Turning image spiral (reference: partiful.com, measured; src/js/cta-spiral.js).
+           200 slots cycle through the images; JS shows as many as the section needs
+           (≈125 on desktop, ≈195 on a phone), sizes and places them. Decoration only. #}
+        <ul class="cta-spiral pointer-events-none absolute inset-0" data-cta-spiral aria-hidden="true">
+            {% for i in 0..199 %}
+                {% set image = images[i % images|length] %}
+                <li class="cta-spiral__item">
+                    {% include '_components/image.twig' with { image: image, width: 140, ratio: 1, sizes: '140px', decorative: true, class: 'aspect-square w-full object-cover' } only %}
                 </li>
             {% endfor %}
         </ul>
     {% endif %}
 
-    <div class="relative mx-auto flex max-w-content flex-col items-center gap-4 text-center">
+    <div class="relative mx-auto flex max-w-content flex-col items-center text-center">
         {% if block.heading %}
-            {% set pill = 'inline-flex items-center justify-center rounded-full px-10 py-6 text-4xl uppercase md:px-14 md:py-8 md:text-5xl ' ~ (dark ? 'bg-paper text-ink' : 'bg-ink text-white') %}
+            {# pill: 170×64 on a phone (20/28 padding, 24px), 350×114 from md (32/56, 50px);
+               light: soft page-coloured halo hides the spiral right behind it (Figma 6-2046) #}
+            {% set pill = 'inline-flex items-center justify-center rounded-full px-7 py-5 text-2xl leading-none tracking-loose uppercase md:px-14 md:py-8 md:text-5xl md:leading-none ' ~ (dark ? 'bg-paper text-ink' : 'bg-ink text-white shadow-halo') %}
             <{{ tag }}>
                 {% if headingLink %}
                     <a {{ attr(block.primaryButton.attributes|merge({ class: pill ~ ' transition-transform hover:scale-105' })) }}>{{ block.heading }}</a>
@@ -37,15 +43,21 @@
                 {% endif %}
             </{{ tag }}>
         {% endif %}
-        {% if block.text %}
-            <p class="max-w-60 rounded-sm px-3 py-3 text-lg font-light {{ dark ? 'bg-night text-line' : 'bg-surface text-graphite' }}">{{ block.text|nl2br }}</p>
-        {% endif %}
 
-        {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'light' : 'dark', class: 'mt-4' } only %}
+        {# below the pill, not part of the centring #}
+        {# own width (not the pill's): on a phone the subtitle is one line, wider than the pill #}
+        <div class="{{ block.heading ? 'absolute top-full left-1/2 mt-2 w-max max-w-xs -translate-x-1/2' }} flex flex-col items-center gap-4">
+            {% if block.text %}
+                {# 16/19 with 8px padding on a phone, 18/22 with 12px and two lines (237 wide) from md #}
+                <p class="p-2 text-base leading-4.75 font-light text-balance md:max-w-60 md:p-3 md:text-lg md:leading-5.5 {{ dark ? 'bg-night text-line' : 'bg-surface text-graphite' }}">{{ block.text|nl2br }}</p>
+            {% endif %}
 
-        {% if block.showAppBadges %}
-            {% include '_components/store-links.twig' with { dark: dark, class: 'mt-4 justify-center' } %}
-        {% endif %}
+            {% include '_components/button.twig' with { link: block.secondaryButton, variant: dark ? 'light' : 'dark', class: 'mt-2' } only %}
+
+            {% if block.showAppBadges %}
+                {% include '_components/store-links.twig' with { dark: dark, class: 'mt-2 justify-center' } %}
+            {% endif %}
+        </div>
     </div>
 </section>
 {% endif %}

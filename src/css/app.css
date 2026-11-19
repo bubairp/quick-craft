@@ -114,9 +114,11 @@
   --shadow-nav: 1px 3px 16px 4px rgb(0 0 0 / 0.04);
   --shadow-lift: 0 6px 12px 0 rgb(0 0 0 / 0.16); /* button hover (reference site) */
   --shadow-tile: 0 8px 24px 0 rgb(149 157 165 / 0.2); /* city event tile hover card (reference site) */
+  --shadow-halo: 0 0 38px 30px var(--color-surface);   /* "Get the app" pill glow (Figma 6-2046) */
 
   /* Letter spacing */
   --tracking-snug: -0.01em;    /* -0.2px at 20px — press quotes (Home 6-1283) */
+  --tracking-loose: 0.02em;    /* +1px at 50px — "Get the app" pill (Home 6-2049) */
 
   /* Motion */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -254,6 +256,24 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .city-tile, .city-tile__card, .city-tile__media, .city-tile__text { transition: none; }
+  }
+
+  /* "Get the app" spiral (src/js/cta-spiral.js sets each item's width and transform) */
+  .cta-spiral {
+    visibility: hidden;                /* until JS has laid it out (decoration only) */
+  }
+  .cta-spiral.is-ready {
+    visibility: visible;
+  }
+  .cta-spiral__item {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--spacing) * 10);
+    will-change: transform;
+  }
+  .cta-spiral__item img {
+    border-radius: var(--radius-xs);
   }
 
   /* Header pill → mega menu (reference site: the pill itself grows into the dropdown panel) */

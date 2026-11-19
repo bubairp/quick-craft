@@ -427,3 +427,28 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Ours: `.gallery-fan { z-index: 1 }`, heading wrapper `z-0`, `md:pt-section` (128px). Checked: heading top is 128px from the gallery and under the cards.
 - Overflow stays `overflow-x: clip; overflow-y: visible` (the same as the reference), but with the drop rule nothing needs to leave the section any more.
 - **Lesson:** measure the reference at several positions (left, middle, right) before concluding the effect is the same everywhere. A single measurement hid the drop rule.
+
+### 2026-11-19: "Get the app" section: turning image spiral, pill and subtitle as on the reference
+- **Measured on the reference** (Chrome 1600×731 and Playwright 375×800):
+  - 125 images (194 on a phone) in one 39px box at the centre, each placed by its own transform.
+  - **The shape is an oval spiral** (1.34× wider than tall):
+    - 22 images per turn.
+    - About 121px further out per turn (≈ 8% of the section width).
+    - About 5.3 turns, ending at the section corners (√((W/2 ÷ 1.34)² + (H/2)²) ≈ 687 against 673 measured).
+  - Each image is turned along the spiral (90° to its angle). Its size grows with distance from the centre (tiny in the middle, about 0.85 × ring spacing at the edge) with random variation.
+  - **Motion:** the spiral turns anticlockwise at about 2.5°/s. It also has a ±1% "breathing" pulse (not copied). Scroll doesn't affect it.
+  - Pill: 350×114 centred on the section (the spiral centre); padding 32/56; 50/50px; +0.02em spacing; `#111`; halo `0 0 38px 30px #f7f7f7` (Figma 6-2046).
+  - Subtitle: 8px below the pill and outside the centring; 237×67; padding 12; 18/21.7px light; `#4b4b49`; bg `#f7f7f7`; square corners.
+  - Phone: section 360×388; pill 170×64 (20/28, 24px); subtitle on one line (16/19.2, padding 8).
+  - No store buttons.
+- **Built:**
+  - `src/js/cta-spiral.js` (new, in main.js): layout() sizes and hides items from the section size (ResizeObserver); place() turns the spiral; rAF only while visible; reduced motion stays still.
+  - `ctaBanner.twig`: 200 `li.cta-spiral__item` cycling through the block's images (JS shows about 117 on desktop and 178 on a phone). The old static 3-ring Alpine version is removed.
+  - The content wrapper centres only the pill. The subtitle, button and badges sit in an absolute `top-full mt-2 left-1/2 w-max max-w-xs -translate-x-1/2` box with their own width, so the phone subtitle is one line.
+  - Section `min-h-97 md:min-h-175` (388/700).
+  - Tokens: `--shadow-halo`, `--tracking-loose` (0.02em).
+- **Store buttons removed** (user request): migration `m261119_140000_cta_no_store_badges` turns off `showAppBadges` on Home's ctaBanner. The option stays in the CP.
+- **Checked:**
+  - Desktop: section 1585×700, pill centre at 350 (reference 346), height 114, 50/50px, +1px. Subtitle 240×68, 8px below. Spiral turns at −2.5°/s exactly. No store links.
+  - Phone: section 360×388, pill 64px tall, subtitle one line 218×35 (reference 229×35), no overflow, no console errors.
+- **Known difference:** the pill is wider (433 against 350 on desktop) because "GET THE APP" is set in Inter. The reference uses its own narrow display font. Same size, padding and height.

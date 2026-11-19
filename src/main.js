@@ -6,6 +6,7 @@ import { initReveal } from './js/reveal.js';
 import { initScrollSliders } from './js/scroll-slider.js';
 import { initGalleryWave } from './js/gallery-wave.js';
 import { initHeroChat } from './js/hero-chat.js';
+import { initCtaSpiral } from './js/cta-spiral.js';
 
 /**
  * Header that hides while scrolling down and slides back in when scrolling up
@@ -56,3 +57,4 @@ initReveal();
 initScrollSliders();
 initGalleryWave();
 initHeroChat();
+initCtaSpiral();
