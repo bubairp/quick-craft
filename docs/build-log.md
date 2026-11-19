@@ -483,3 +483,8 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - The per-frame step cap went from 0.05s to 0.1s, so a briefly slow frame doesn't visibly stall the rows.
   - Checked: about 10–21px in the first 1.5s (ramp), then 15–32px/s; directions still random; no errors.
 - **Follow-up (user): don't change the items' shape.** The random ±6° tilt per image was removed from `cta-rows.js`, so the images stay straight squares. Checked: 168 items, 0 rotated, 107×107, all 6 rows moving, no errors.
+- **Follow-up (user): no gradient; the images should fit the section, not be cut.**
+  - I had briefly added top/bottom fades (`.cta-fade`, plus a `--page-bg` variable on `<body>`). The user didn't want them, so they were removed again before committing.
+  - The rows container now has an even top/bottom margin (`py-3 md:py-6`). The 6 rows share the remaining height (flex: 1), so every row sits fully inside the section.
+  - Checked: desktop 700px section with 24px margins top and bottom; phone 388px section with 54px rows and 12px margins; 0 images cut at the top or bottom; no overflow.
+  - Left/right: the rows slide, so an image is always entering or leaving at each side. Fading those in and out per image is possible if wanted.

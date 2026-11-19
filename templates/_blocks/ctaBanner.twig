@@ -24,7 +24,9 @@
            seamlessly (the row's set is rendered twice). Decoration only. #}
         {% set rowCount = 6 %}
         {% set perRow = 14 %}
-        <div class="cta-rows pointer-events-none absolute inset-0 flex flex-col justify-center gap-2 md:gap-3" data-cta-rows aria-hidden="true">
+        {# the rows share the section height (minus an even top/bottom margin), so every row of
+           images sits fully inside the section — nothing cut at the top or bottom #}
+        <div class="cta-rows pointer-events-none absolute inset-0 flex flex-col justify-center gap-2 py-3 md:gap-3 md:py-6" data-cta-rows aria-hidden="true">
             {% for r in 0..(rowCount - 1) %}
                 <div class="cta-rows__row flex w-max gap-2 md:gap-3">
                     {% for pass in 1..2 %}

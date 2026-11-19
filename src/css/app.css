@@ -136,8 +136,7 @@
 
   [x-cloak] {
     display: none !important;
-  }
-}
+  }}
 
 /* Simple RP Menu marks the current page's link with .active (no aria-current) */
 @layer components {
