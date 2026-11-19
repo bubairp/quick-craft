@@ -9,7 +9,8 @@
 {% set level = headingLevel ?? 2 %}
 
 {% if cities|length %}
-<section class="overflow-hidden py-16 md:py-36" x-data="{ active: 0 }">
+{# Figma 6-4774: this section is white (#fff), unlike Home's #f7f7f7 page background #}
+<section class="overflow-hidden bg-white py-16 md:py-36" x-data="{ active: 0 }">
     {% include '_components/section-heading.twig' with {
         heading: block.heading, text: block.text, level: level, class: 'px-4 md:px-gutter',
     } only %}

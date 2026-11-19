@@ -285,3 +285,8 @@ How I inspected the reference (Playwright `browser_evaluate` + `browser_hover`; 
   - **Rule:** light blocks stay transparent. Only dark variants set a background.
 - The light CTA's text box (`bg-surface`) matches Figma 6-2052 (`#f7f7f7`), so it blends with the page as designed.
 - Checked in Chrome: on Home, `body` and every light section resolve to `rgb(247,247,247)`; the hero (black) and featureRows (ink) are unchanged. `/organizers` stays `rgb(253,253,251)`.
+
+### 2026-11-19: "The best events in your city" section is white
+- User request. Checked with a screenshot of Figma frame 6-4774: its background is `#ffffff`. The earlier Body (6-1255) sampling showed grey there, because that section is a separate frame in the file.
+- `_blocks/cityList.twig`: `bg-white` on the section. This is an exception to "light blocks are transparent": the design gives this block its own white background.
+- **Lesson:** sample each section's own frame, not only the page body.
