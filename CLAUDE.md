@@ -97,6 +97,9 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - **pageBuilder blocks** (each one is `_blocks/{handle}.twig`, receives `block` and `headingLevel`):
   - cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList
   - **promoBar** (Figma 17-1076; migration `m261120_270000_promo_bar`): `emoji` (shown on both sides), `text`, `primaryButton` (when set, the whole bar is the link). Full-width, 36px tall, `bg-promo` + `text-surface`; no scheme or spacing (it's a thin strip).
+  - **richText** (Figma 17-1343, the SEO text under a page; migration `m261120_280000_rich_text`): optional `heading`, `body` (Rich text (full)), `spacing`. Small muted text (`text-xs`, black/40) in `max-w-text`, with a divider below.
+    - CKEditor output is styled by the `.rich-text` component class in app.css (headings like small subheads, 20px before a heading, 8px between a heading and its text, links in ink). Content can't carry utility classes, so prose styling always goes through `.rich-text`.
+    - Headings inside the body start at h2 (no block heading) or h3 (with one).
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`

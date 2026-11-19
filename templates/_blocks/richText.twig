@@ -1,0 +1,21 @@
+{#
+ # Rich text block. Figma: Birthday Invitations 17-1343 (the SEO text under a page; also 17-2385).
+ # Small muted text in a 1120px column, a 1px divider 60px below. The body is CKEditor HTML,
+ # styled by the .rich-text component class (src/css/app.css).
+ # Receives: block, headingLevel
+ # Fields: heading (optional), body (Rich text (full): headings h2–h4), spacing
+ #}
+{% set heading = block.heading|trim %}
+{% set body = block.body ?? null %}
+{% if heading or (body and body|length) %}
+    {% set tag = 'h' ~ (headingLevel ?? 2) %}
+    <section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-10 md:px-10">
+        <div class="mx-auto flex max-w-text flex-col gap-15">
+            <div class="flex flex-col gap-2">
+                {% if heading %}<{{ tag }} class="text-xs text-black/40">{{ heading }}</{{ tag }}>{% endif %}
+                {% if body and body|length %}<div class="rich-text">{{ body }}</div>{% endif %}
+            </div>
+            <hr class="border-black/30">
+        </div>
+    </section>
+{% endif %}

@@ -86,6 +86,7 @@
   /* Content widths */
   --container-site: 92rem;     /* 1472 */
   --container-content: 75rem;  /* 1200 */
+  --container-text: 70rem;     /* 1120 — rich text block (Figma 17-1343) */
   --container-narrow: 62.5rem; /* 1000 */
   --container-prose: 43.75rem; /* 700 — blog post */
   --container-nav: 61rem;      /* 976 — floating header pill */
@@ -421,6 +422,26 @@
   [data-scheme="white"] { background-color: var(--color-white); color: var(--color-ink); }
   [data-scheme="soft"] { background-color: var(--color-surface); color: var(--color-ink); }
   [data-scheme="dark"] { background-color: var(--color-black); color: var(--color-white); }
+
+  /* Rich text (CKEditor output can't carry utility classes). Figma 17-1343: small muted
+     text, headings styled like subheads, 20px before a heading, 8px between a heading
+     and its text, links in ink. */
+  .rich-text {
+    @apply flex flex-col text-xs text-black/40;
+  }
+  .rich-text :where(h2, h3, h4) {
+    @apply mt-5 font-normal first:mt-0;
+  }
+  .rich-text :where(p, ul, ol, blockquote, table) + :where(p, ul, ol, blockquote, table),
+  .rich-text :where(h2, h3, h4) + :where(p, ul, ol, blockquote, table) {
+    @apply mt-2;
+  }
+  .rich-text :where(ul) { @apply list-disc pl-5; }
+  .rich-text :where(ol) { @apply list-decimal pl-5; }
+  .rich-text :where(a) {
+    @apply rounded-xs text-ink underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink;
+  }
+  .rich-text :where(strong, b) { @apply font-semibold text-black/60; }
 }
 
 /* Spacing presets (pageBuilder `spacing` option). They mean the same in every block: drop the

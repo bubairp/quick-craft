@@ -914,3 +914,13 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Emojis are `aria-hidden`. Nothing renders without text.
   - `text-sm` matches Figma exactly (14/16.8, −0.04em).
 - **Checked (Playwright via `/blocks`) at 375 / 768 / 1440:** 36px tall, bg rgb(60,10,122), text 14px/16.8px 700 −0.56px rgb(247,247,247), gap 10px, no overflow; focus ring visible. Matches the Figma frame.
+
+### 2026-11-20: Block: richText (Figma 17-1343, Birthday Invitations SEO text)
+- **Rule/token first:**
+  - `--container-text: 70rem` (1120) in `@theme`.
+  - CLAUDE.md › pageBuilder blocks › richText: fields; the `.rich-text` rule (CKEditor content can't carry utilities, so prose styling always goes through `.rich-text`); heading levels inside the body.
+- **CSS:** `.rich-text` component (`@apply` with tokens only): `text-xs` black/40; h2–h4 like subheads (`mt-5`, the first `mt-0`); 8px between a heading and its text; links ink with hover underline and a `focus-visible` outline; lists; strong black/60.
+- **Migration** `m261120_280000_rich_text` (backup: `/tmp/before-richtext-block.sql.gz`): richText + `spacing`; test content = the Figma copy (3 h2 + paragraphs + a link) on Birthday Invitations after the promo bar.
+- **Template** `_blocks/richText.twig`: optional block heading (`headingLevel`), body in `.rich-text`, `max-w-text`, `gap-15` to an `<hr class="border-black/30">`; nothing renders when both are empty.
+- **Checked (Playwright via `/blocks`, full reload) at 375 / 768 / 1440:** column 328 / 673 / 1120; padding 40 (16px sides on a phone); text 12px/16.8px −0.24px black/40; heading→text 8px, text→next heading 20px; link rgb(17,17,17); hr 1px black/30, 60px below the text; no overflow. Matches the Figma frame.
+- **Gotcha:** `page.goto()` to the same URL with only a different `#hash` doesn't reload (same-document navigation). Add a query string (`?t=…`) to force a fresh page.

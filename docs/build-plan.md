@@ -54,7 +54,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 | ☑ | `promoBar` | | 17-1076 |
 | ☐ | `imageGallery` | grid (captions) | 17-1088 |
 | ☐ | `cardGrid` | grid | 17-1271 |
-| ☐ | `richText` | | 17-1343 |
+| ☑ | `richText` | | 17-1343 |
 | ☐ | `ctaBanner` | app badges | 17-1368 |
 
 ### Invitation Maker (17-1440)
