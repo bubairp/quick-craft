@@ -20,12 +20,19 @@
         <video src="{{ image.url }}" class="{{ class }}" autoplay muted loop playsinline preload="metadata"
                {% if image.alt %}aria-label="{{ image.alt }}"{% else %}aria-hidden="true"{% endif %}></video>
     {% elseif image.kind == 'image' %}
+        {# Largest file: 2× the rendered width for sharp high-DPI screens, but never wider than the
+           original (Craft would upscale it). #}
+        {% set maxWidth = image.width ? min(width * 2, image.width) : width * 2 %}
+        {% if ratio and image.height %}{% set maxWidth = min(maxWidth, (image.height * ratio)|round) %}{% endif %}
         {% set transform = ratio
-            ? { width: width * 2, height: (width * 2 / ratio)|round, mode: 'crop', format: 'webp' }
-            : { width: width * 2, mode: 'fit', format: 'webp' } %}
+            ? { width: maxWidth, height: (maxWidth / ratio)|round, mode: 'crop', format: 'webp' }
+            : { width: maxWidth, mode: 'fit', format: 'webp' } %}
         {# SVGs are served as-is: transforming them rasterises to WebP with a white background #}
         {% set isSvg = image.extension|lower == 'svg' %}
-        {% set srcset = isSvg ? false : image.getSrcset(['0.25x', '0.5x', '0.75x', '1x'], transform) %}
+        {# Width descriptors (…w), so the browser can use `sizes` to pick a file; density descriptors
+           (0.5x) would make it ignore `sizes`. Steps under 160px are skipped. #}
+        {% set srcWidths = [0.25, 0.5, 0.75, 1]|map(f => (maxWidth * f)|round)|filter(w => w >= 160 or w == maxWidth)|map(w => w ~ 'w') %}
+        {% set srcset = isSvg ? false : image.getSrcset(srcWidths|values, transform) %}
         <img src="{{ isSvg ? image.url : image.getUrl(transform) }}"
              {% if srcset %}srcset="{{ srcset }}" sizes="{{ sizes ?? '100vw' }}"{% endif %}
              width="{{ image.getWidth(transform) }}"

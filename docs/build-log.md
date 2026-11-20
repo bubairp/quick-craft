@@ -1024,3 +1024,13 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Template** `_blocks/image.twig`: `<figure>` + `_components/image.twig` (width 1600, `sizes="100vw"`, never cropped) + an optional `<figcaption>`.
 - **Checked (375 / 768 / 1440):** edge to edge (360 / 753 / 1425 wide), ratio 1.500 like Figma, alt present, no overflow.
 - **Found while checking (fixed in the next commit):** `_components/image.twig` builds `srcset` with density descriptors (`0.25x…1x`) next to `sizes`, which browsers ignore. It also always transforms at `width × 2` (3200px from this 2048px original = upscaling, and slow first loads).
+
+### 2026-11-20: Fix: image srcset used density descriptors with `sizes` + upscaled transforms
+- **Found** while checking the image block. `_components/image.twig` called `getSrcset(['0.25x','0.5x','0.75x','1x'])` next to a `sizes` attribute, which browsers ignore with density descriptors, so they couldn't pick by layout width. It also always transformed at `width × 2`, even past the original's size (Craft upscales by default): a 3200px transform from a 2048px photo, slow to generate on first load.
+- **Rule first:** skill › Images checklist: width descriptors via the component; never wider than the original.
+- **Fix:**
+  - The largest width = `min(width × 2, asset width)`, and for crops also `≤ asset height × ratio`.
+  - `srcset` = width descriptors at 25/50/75/100% of that (steps under 160px skipped), e.g. 512w/1024w/1536w/2048w for the Careers photo.
+- **Checked:**
+  - /, /careers, /invitation-maker, /birthday-invitations, /cta-options-demo, /blocks, /404 all return 200 with 0 density descriptors and 0 Twig errors.
+  - Home: 369 images, 0 broken, no console errors, no overflow; the city tiles and gallery look as before.

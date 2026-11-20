@@ -83,7 +83,8 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 
 **Images**
 - [ ] Use Craft native transforms.
-- [ ] Generate `srcset` with `image.getSrcset(['640w','1024w','1600w'], transform)` and add a matching `sizes`.
+- [ ] Render images through `_components/image.twig`. It builds `srcset` with **width descriptors** (`…w`) plus a matching `sizes`. Never use density descriptors (`0.5x`) together with `sizes`: browsers then ignore `sizes` (a real bug until 2026-11-20).
+- [ ] Never request a transform wider than the original (Craft upscales by default): the component caps the largest width at the asset's own width.
 - [ ] Set `width` and `height` from the transformed image.
 - [ ] Use `loading="lazy"`, except the hero, which gets `fetchpriority="high"` and no lazy loading.
 - [ ] Take `alt` from the asset's alt field. Use `alt=""` only for decorative images.
