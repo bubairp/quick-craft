@@ -1579,3 +1579,31 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Fix:** Alpine `mobileNav` (main.js) replaces the inline `section` toggle. While the sections animate, a rAF loop (~600ms) eases the scroll area towards the clicked header's offsetTop (re-read every frame, so it follows the collapsing section above; clamped to the scroll range) and lands on it exactly. The scroll area is `relative` so offsetTop is measured against it. Reduced motion: it jumps there. Closing a section doesn't scroll.
 
 **Checked:** the header ends 5px from the top of the panel after opening Products (after Invites) and Company. Per frame while Company opens: 626 → 292 → 60 → 32 → 18 → 10 → 7 → 5 (smooth, no jump). Closing the open section leaves the position unchanged. No console errors.
+
+## 2026-11-20 · Contact page redesign (contactInfo block + contact form)
+
+**Before (close to Figma 76:2, but plain):**
+- The form hung alone under the lists, with a big empty area on its left.
+- The contact details and socials were text lists with no icons and didn't look clickable.
+- Phones got one long flat list.
+
+**Done**
+- `_blocks/contactInfo.twig`, from `lg` two columns:
+  - **Left 5/12:** heading (`text-4xl md:text-6xl` bold) + text.
+    - Contact details as link cards: white `rounded-lg`, inset ring, `shadow-subtle` → `shadow-card` and a 2px lift on hover; an icon tile by contactType; label over detail; ↗ that moves on hover. An address is a plain card.
+    - Socials as 2-column chips: the icon tile turns ink on hover; the handle uses `line-clamp-2`.
+  - **Right 7/12, sticky** (`lg:top-32`): the form in a white `rounded-2xl` card with `shadow-card`.
+  - Phones: heading → details → socials → form.
+- `_components/wheel-form.twig`:
+  - `columns: 2` (short inputs half width from `sm`).
+  - Softly filled inputs (`bg-surface` → white + 2px ink ring on focus, red ring via `aria-[invalid=true]`).
+  - Errors inside each field's wrapper (one grid cell per field).
+  - Submit full width on phones, with an arrow.
+  - Success = a card with a ✓ in a `bg-success` circle.
+
+**Checked (Playwright 1440 / 768 / 375):**
+- Name + Email share a row from 768, stacked at 375. One h1; h2 → h3 order; no overflow; no console errors.
+- The form card sticks (128 → 112px while scrolling); a card lifts 2px on hover.
+- Error path: red ring, the message under the field, values kept. Success path: the ✓ card with the form's message.
+
+**Gotcha:** a sticky column only sticks when it's the shorter one; the left column (cards + chips) was taller than the form, so the form card is the sticky one.

@@ -11,6 +11,8 @@
  #   errors       wheelformErrors (default {})
  #   values       values (default {})
  #   dark         bool
+ #   columns      1 (default) or 2: short inputs (text, email, number, phone, date, time) half width from
+ #                sm, everything else full width
  # Field types: text, email, number, telephone, date, time → <input>; textarea; select; radio and
  # checkbox groups (fieldsets); hidden. file / list / html fields aren't rendered (no design yet).
  #}
@@ -19,30 +21,35 @@
 {% set errors = errors ?? {} %}
 {% set values = values ?? {} %}
 {% set dark = dark ?? false %}
+{% set twoCols = (columns ?? 1) == 2 %}
+{% set full = twoCols ? 'sm:col-span-2' : '' %}
 {% set session = craft.app.session %}
 {% set submitted = form and session.hasFlash('wheelformSubmittedForm') and session.getFlash('wheelformSubmittedForm', null, false) == form.id %}
 {% set successMessage = submitted ? session.getFlash('wheelformSuccess') : null %}
 {% if submitted %}{% do session.getFlash('wheelformSubmittedForm') %}{% endif %}
 
 {% if submitted %}
-    <p class="rounded-xl p-6 text-lg {{ dark ? 'bg-white/10' : 'bg-surface' }}" role="status" tabindex="-1">
+    <div class="flex items-center gap-4 rounded-xl p-6 {{ dark ? 'bg-white/10' : 'bg-surface' }}" role="status" tabindex="-1">
+        <span class="grid size-12 shrink-0 place-items-center rounded-full bg-success text-white" aria-hidden="true">{% include '_components/icon.twig' with { name: 'check', class: 'size-6' } only %}</span>
         {# the form's own success message (content); the |t text only when it has none #}
-        <strong class="block text-xl">{{ successMessage ?: 'Thanks for your message!'|t }}</strong>
-    </p>
+        <strong class="text-xl">{{ successMessage ?: 'Thanks for your message!'|t }}</strong>
+    </div>
 {% elseif form %}
-    {% set buttonHtml %}<button type="submit" class="inline-flex h-12 items-center justify-center self-start rounded-sm px-6 text-base font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 {{ dark ? 'bg-paper text-ink hover:bg-surface focus-visible:outline-paper' : 'bg-ink text-white hover:bg-black focus-visible:outline-ink' }}">{{ submitLabel ?? 'Send message'|t }}</button>{% endset %}
+    {% set buttonHtml %}<button type="submit" class="group/submit mt-1 inline-flex h-12 w-full items-center justify-center gap-2 self-start rounded-md px-6 text-base font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto {{ twoCols ? 'sm:col-span-2 sm:justify-self-start' }} {{ dark ? 'bg-paper text-ink hover:bg-surface focus-visible:outline-paper' : 'bg-ink text-white hover:bg-black focus-visible:outline-ink' }}">{{ submitLabel ?? 'Send message'|t }}{% include '_components/icon.twig' with { name: 'arrow-right', class: 'size-5 transition-transform group-hover/submit:translate-x-0.5' } only %}</button>{% endset %}
     {% set service = wheelform.form({
         id: form.id,
         redirect: craft.app.request.absoluteUrl|split('#')|first ~ '#' ~ anchor,
         submitButton: { html: buttonHtml|trim },
     }) %}
     {% set formErrors = errors|filter((v, k) => k not in service.fields|map(f => f.name))|values %}
-    {% set inputClass = 'w-full rounded-md px-4 py-3 text-lg ring-1 ring-inset outline-none focus-visible:ring-2 ' ~ (dark ? 'bg-white/10 ring-white/20 focus-visible:ring-paper placeholder:text-white/40' : 'bg-white ring-black/15 focus-visible:ring-ink placeholder:text-black/40') %}
+    {# softly filled; white + a 2px ring on focus; red ring when invalid #}
+    {% set inputClass = 'w-full rounded-md px-4 py-3 text-base ring-1 ring-inset outline-none transition-[background-color,box-shadow] duration-200 focus-visible:ring-2 aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-danger md:text-lg ' ~ (dark ? 'bg-white/10 ring-white/20 focus-visible:ring-paper placeholder:text-white/40' : 'bg-surface ring-transparent hover:ring-black/15 focus-visible:bg-white focus-visible:ring-ink placeholder:text-black/40') %}
+    {% set labelClass = 'text-sm font-semibold md:text-base' %}
     {% set autocomplete = { name: 'name', fullname: 'name', full_name: 'name', email: 'email', phone: 'tel', telephone: 'tel', company: 'organization' } %}
 
-    {{ service.open('', { class: 'flex flex-col gap-5', novalidate: false }) }}
+    {{ service.open('', { class: twoCols ? 'grid gap-5 sm:grid-cols-2' : 'flex flex-col gap-5', novalidate: false }) }}
         {% if formErrors|length %}
-            <p class="text-base text-danger" role="alert">{{ formErrors|flatten|join(' ') }}</p>
+            <p class="text-base text-danger {{ full }}" role="alert">{{ formErrors|flatten|join(' ') }}</p>
         {% endif %}
         {% for field in service.fields %}
             {% set id = anchor ~ '-' ~ field.name %}
@@ -50,31 +57,36 @@
             {% set value = values[field.name] ?? field.value %}
             {% set described = fieldErrors|length ? 'aria-invalid="true" aria-describedby="' ~ id ~ '-error"' : '' %}
             {% set required = field.required ? 'required' : '' %}
+            {# the error sits inside the field's wrapper (one grid cell per field) #}
+            {% set error %}{% if fieldErrors|length %}<p id="{{ id }}-error" class="text-sm text-danger">{{ fieldErrors|flatten|join(' ') }}</p>{% endif %}{% endset %}
             {% if field.type == 'hidden' %}
                 <input type="hidden" name="{{ field.name }}" value="{{ value is iterable ? '' : value }}">
             {% elseif field.type in ['text', 'email', 'number', 'telephone', 'date', 'time'] %}
                 <div class="flex flex-col gap-2">
-                    <label for="{{ id }}" class="text-base font-semibold">{{ field.label }}{% if field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
+                    <label for="{{ id }}" class="{{ labelClass }}">{{ field.label }}{% if field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
                     <input id="{{ id }}" name="{{ field.name }}" type="{{ { telephone: 'tel' }[field.type] ?? field.type }}" value="{{ value is iterable ? '' : value }}"
                            {{ required }} {{ described|raw }} {% if autocomplete[field.name|lower] is defined %}autocomplete="{{ autocomplete[field.name|lower] }}"{% elseif field.type == 'email' %}autocomplete="email"{% endif %}
                            {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %} class="{{ inputClass }}">
+                    {{ error }}
                 </div>
             {% elseif field.type == 'textarea' %}
-                <div class="flex flex-col gap-2">
-                    <label for="{{ id }}" class="text-base font-semibold">{{ field.label }}{% if field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
+                <div class="flex flex-col gap-2 {{ full }}">
+                    <label for="{{ id }}" class="{{ labelClass }}">{{ field.label }}{% if field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
                     <textarea id="{{ id }}" name="{{ field.name }}" rows="5" {{ required }} {{ described|raw }}
                               {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %} class="{{ inputClass }}">{{ value is iterable ? '' : value }}</textarea>
+                    {{ error }}
                 </div>
             {% elseif field.type == 'select' %}
-                <div class="flex flex-col gap-2">
-                    <label for="{{ id }}" class="text-base font-semibold">{{ field.label }}{% if field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
+                <div class="flex flex-col gap-2 {{ full }}">
+                    <label for="{{ id }}" class="{{ labelClass }}">{{ field.label }}{% if field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
                     <select id="{{ id }}" name="{{ field.name }}" {{ required }} {{ described|raw }} class="{{ inputClass }}">
                         {% for item in field.items ?? [] %}<option value="{{ item }}" {% if item == value %}selected{% endif %}>{{ item }}</option>{% endfor %}
                     </select>
+                    {{ error }}
                 </div>
             {% elseif field.type in ['radio', 'checkbox'] %}
-                <fieldset class="flex flex-col gap-2" {{ described|raw }}>
-                    <legend class="mb-1 text-base font-semibold">{{ field.label }}</legend>
+                <fieldset class="flex flex-col gap-2 {{ full }}" {{ described|raw }}>
+                    <legend class="mb-1 {{ labelClass }}">{{ field.label }}</legend>
                     {% for item in field.items ?? [] %}
                         <label class="flex items-center gap-2 text-base">
                             <input type="{{ field.type }}" name="{{ field.name }}{{ field.type == 'checkbox' ? '[]' }}" value="{{ item }}"
@@ -82,10 +94,8 @@
                             {{ item }}
                         </label>
                     {% endfor %}
+                    {{ error }}
                 </fieldset>
-            {% endif %}
-            {% if fieldErrors|length %}
-                <p id="{{ id }}-error" class="-mt-3 text-sm text-danger">{{ fieldErrors|flatten|join(' ') }}</p>
             {% endif %}
         {% endfor %}
         {% if service.getHoneypot() %}{{ service.honeypot('hidden') }}{% endif %}

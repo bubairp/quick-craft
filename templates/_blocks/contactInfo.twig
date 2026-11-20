@@ -1,7 +1,8 @@
 {#
- # Contact details block. Figma: Contact 76:166 (+ the contact form, which Figma doesn't show).
- # Left: heading + text. Right: "Have a question?" (siteSettings contactDetails: label over the linked
- # detail) and "Find us on" (siteSettings socialLinks: platform over the handle), then the Wheel Form.
+ # Contact details block. Figma: Contact 76:166 (+ the contact form, which Figma doesn't show);
+ # redesigned 2026-11-20 (CLAUDE.md › contactInfo block).
+ # From lg: left (5/12) = heading + text, the contact details as link cards, the socials as
+ # chips; right (7/12, sticky) = the Wheel Form in a white card. Phones: the same order, stacked.
  # The lists always come from Site settings (via _globals), never from the block.
  # Receives: block, headingLevel, wheelformErrors, values (from the page, for the form's error state)
  # Fields: heading, text, contactHeading, socialHeading, formHeading, contactForm, spacing
@@ -14,34 +15,51 @@
 {% set tag = 'h' ~ level %}
 {% set subTag = 'h' ~ (block.heading ? level + 1 : level) %}
 {% set platformNames = { instagram: 'Instagram', x: 'X (Twitter)', tiktok: 'TikTok', linkedin: 'LinkedIn', facebook: 'Facebook', youtube: 'YouTube', threads: 'Threads', pinterest: 'Pinterest', substack: 'Substack' } %}
-{% set valueClass = 'text-base text-black/60 underline-offset-4 hover:text-ink hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink' %}
+{% set platformIcons = { instagram: 'brand-instagram', x: 'brand-x', tiktok: 'brand-tiktok', linkedin: 'brand-linkedin', facebook: 'brand-facebook', youtube: 'brand-youtube', threads: 'brand-threads', pinterest: 'brand-pinterest', substack: 'news', other: 'link' } %}
+{% set detailIcons = { email: 'mail', phone: 'phone', whatsapp: 'brand-whatsapp', address: 'map-pin' } %}
+{# shared card look: white, inset ring; links lift a little and their shadow grows on hover #}
+{% set card = 'rounded-lg bg-white ring-1 ring-inset ring-black/5 shadow-subtle' %}
+{% set cardLink = card ~ ' group transition-[translate,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink' %}
+{% set iconTile = 'grid shrink-0 place-items-center rounded-md bg-surface text-ink' %}
 
 {% if block.heading or details|length or socials|length or form %}
-<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-12 md:px-gutter md:py-16">
-    <div class="mx-auto grid max-w-content gap-10 lg:grid-cols-12 lg:gap-x-10">
-        {% if block.heading or block.text %}
-            <div class="flex flex-col gap-2.5 lg:col-span-3">
-                {% if block.heading %}<{{ tag }} class="text-4xl font-bold">{{ block.heading }}</{{ tag }}>{% endif %}
-                {% if block.text %}<p class="text-xl text-black/60 md:text-2xl">{{ block.text }}</p>{% endif %}
-            </div>
-        {% endif %}
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-12 md:px-gutter md:py-20">
+    <div class="mx-auto grid max-w-content gap-12 lg:grid-cols-12 lg:items-start lg:gap-16">
 
-        <div class="grid gap-10 sm:grid-cols-2 lg:col-span-9 {{ not (block.heading or block.text) ? 'lg:col-start-4' }}">
+        {# ── Left: heading, contact cards, social chips ── #}
+        <div class="flex flex-col gap-10 lg:col-span-5">
+            {% if block.heading or block.text %}
+                <div class="flex flex-col gap-3">
+                    {% if block.heading %}<{{ tag }} class="text-4xl font-bold md:text-6xl">{{ block.heading }}</{{ tag }}>{% endif %}
+                    {% if block.text %}<p class="text-xl text-black/60 md:text-2xl">{{ block.text }}</p>{% endif %}
+                </div>
+            {% endif %}
+
             {% if details|length %}
-                <div class="flex flex-col gap-6">
-                    {% if block.contactHeading %}<{{ subTag }} class="text-2xl font-bold">{{ block.contactHeading }}</{{ subTag }}>{% endif %}
-                    <ul class="flex flex-col gap-5">
+                <div class="flex flex-col gap-4">
+                    {% if block.contactHeading %}<{{ subTag }} class="text-xl font-bold">{{ block.contactHeading }}</{{ subTag }}>{% endif %}
+                    <ul class="flex flex-col gap-3">
                         {% for item in details %}
                             {% set type = item.contactType.value ?? 'email' %}
                             {% set value = item.detail|trim %}
                             {% set digits = value|replace('/[^0-9+]/', '') %}
                             {% set href = { email: 'mailto:' ~ value, phone: 'tel:' ~ digits, whatsapp: 'https://wa.me/' ~ digits|replace({ '+': '' }) }[type] ?? null %}
-                            <li class="flex flex-col gap-2.5">
-                                <span class="text-lg font-bold">{{ item.label ?: item.contactType.label }}</span>
+                            {% set label = item.label ?: item.contactType.label %}
+                            {% set inner %}
+                                <span class="{{ iconTile }} size-11">{% include '_components/icon.twig' with { name: detailIcons[type] ?? 'info-circle', class: 'size-5' } only %}</span>
+                                <span class="flex min-w-0 flex-1 flex-col">
+                                    <span class="text-lg font-bold">{{ label }}</span>
+                                    <span class="text-base break-words text-black/60">{{ href ? value : value|nl2br }}</span>
+                                </span>
+                            {% endset %}
+                            <li>
                                 {% if href %}
-                                    <a href="{{ href }}" class="self-start {{ valueClass }}" {% if type == 'whatsapp' %}target="_blank" rel="noopener"{% endif %}>{{ value }}</a>
+                                    <a href="{{ href }}" class="{{ cardLink }} flex items-center gap-4 p-4" {% if type == 'whatsapp' %}target="_blank" rel="noopener"{% endif %}>
+                                        {{ inner }}
+                                        {% include '_components/icon.twig' with { name: 'arrow-up-right', class: 'size-5 shrink-0 text-black/30 transition-[translate,color] duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ink' } only %}
+                                    </a>
                                 {% else %}
-                                    <address class="text-base not-italic text-black/60">{{ value|nl2br }}</address>
+                                    <address class="{{ card }} flex items-center gap-4 p-4 not-italic">{{ inner }}</address>
                                 {% endif %}
                             </li>
                         {% endfor %}
@@ -50,33 +68,39 @@
             {% endif %}
 
             {% if socials|length %}
-                <div class="flex flex-col gap-6">
-                    {% if block.socialHeading %}<{{ subTag }} class="text-2xl font-bold">{{ block.socialHeading }}</{{ subTag }}>{% endif %}
-                    <ul class="flex flex-col gap-5">
+                <div class="flex flex-col gap-4">
+                    {% if block.socialHeading %}<{{ subTag }} class="text-xl font-bold">{{ block.socialHeading }}</{{ subTag }}>{% endif %}
+                    <ul class="grid grid-cols-2 gap-3">
                         {% for item in socials %}
                             {% set platform = item.platform.value ?? 'other' %}
                             {% set name = platformNames[platform] ?? item.platform.label %}
-                            <li class="flex flex-col gap-2.5">
-                                <span class="text-lg font-bold">{{ name }}</span>
-                                <a {{ attr(item.externalLink.attributes|merge({ class: 'self-start ' ~ valueClass, 'aria-label': name ~ ': ' ~ ((item.handle ?? '')|trim ?: item.externalLink.url) })) }}>{{ (item.handle ?? '')|trim ?: item.externalLink.url|replace('/^https?:\\/\\/(www\\.)?/', '') }}</a>
+                            {% set shown = (item.handle ?? '')|trim ?: item.externalLink.url|replace('/^https?:\\/\\/(www\\.)?/', '') %}
+                            <li>
+                                <a {{ attr(item.externalLink.attributes|merge({ class: cardLink ~ ' flex h-full items-center gap-3 p-3', 'aria-label': name ~ ': ' ~ shown })) }}>
+                                    <span class="{{ iconTile }} size-10 transition-colors duration-300 group-hover:bg-ink group-hover:text-paper">{% include '_components/icon.twig' with { name: platformIcons[platform] ?? 'link', class: 'size-5' } only %}</span>
+                                    <span class="flex min-w-0 flex-col">
+                                        <span class="text-base font-semibold">{{ name }}</span>
+                                        <span class="line-clamp-2 text-sm break-words text-black/60">{{ shown }}</span>
+                                    </span>
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
             {% endif %}
-
-            {% if form or (currentUser and currentUser.admin) %}
-                <div id="contact-form" class="flex scroll-mt-28 flex-col gap-6 sm:col-span-2">
-                    {% if block.formHeading %}<{{ subTag }} class="text-2xl font-bold">{{ block.formHeading }}</{{ subTag }}>{% endif %}
-                    <div class="max-w-162.5">
-                        {% include '_components/wheel-form.twig' with {
-                            form: form, anchor: 'contact-form',
-                            errors: wheelformErrors ?? {}, values: values ?? {},
-                        } only %}
-                    </div>
-                </div>
-            {% endif %}
         </div>
+
+        {# ── Right: the form card ── #}
+        {% if form or (currentUser and currentUser.admin) %}
+            {# sticky from lg: the left column is the taller one, so the form stays in view beside it #}
+            <div id="contact-form" class="scroll-mt-28 rounded-2xl bg-white p-6 shadow-card ring-1 ring-inset ring-black/5 md:p-10 lg:sticky lg:top-32 lg:col-span-7">
+                {% if block.formHeading %}<{{ subTag }} class="mb-6 text-3xl font-bold md:mb-8">{{ block.formHeading }}</{{ subTag }}>{% endif %}
+                {% include '_components/wheel-form.twig' with {
+                    form: form, anchor: 'contact-form', columns: 2,
+                    errors: wheelformErrors ?? {}, values: values ?? {},
+                } only %}
+            </div>
+        {% endif %}
     </div>
 </section>
 {% endif %}
