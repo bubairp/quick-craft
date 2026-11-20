@@ -1081,3 +1081,22 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Content was vertically centred, so the titles sat at different heights. It's now top-aligned, and the titles line up.
   - Equal-height rows only from `sm` (on a phone they added empty space to the shorter cards).
 - **Known difference:** the title is 24px (`text-2xl`) vs Figma 22; there's no 22px token.
+
+### 2026-11-20: Banners: Careers (Figma 6-6336, fullBleed) + Press (Figma 18-6155, simple)
+- **Rule first:** CLAUDE.md › Page tabs › banner › Layouts (fullBleed, simple), plus the `--text-banner` token (100px / 1.4 / −0.02em).
+- **Design:**
+  - Careers: a 1600×745 photo edge to edge, with "Join the party" (100px) and a 24px subtitle in white near the top, centred.
+  - Press: a white band with a centred 48px "Press" (80px padding).
+- **Placeholder photo** (replace before launch): `web/uploads/images/careers-banner.png` (2048×1270) downloaded from Figma, then `ddev craft index-assets/one images`.
+- **Template** `_partials/banner.twig`:
+  - **fullBleed:** `h-140 md:h-186` instead of `min-h-svh` (Figma's 745px; a full-screen banner hid all the content below). Text at the top (`pt-32 md:pt-40`); heading `text-5xl md:text-banner` medium; subtitle `text-xl md:text-2xl` medium, no gap from `md` (the 140px line height already spaces it, as in Figma).
+    - The flat `bg-black/40` overlay became a top-only gradient (`from-black/40`, top two thirds), so the photo keeps Figma's colours and the white text stays readable.
+    - Without an image, it uses normal padding and dark text.
+  - **simple:** heading `md:text-headline` (48) instead of 56; bottom padding `md:pb-20` (80, as in Figma).
+- **Migration** `m261120_370000_careers_press_banners` (backup: `/tmp/before-banners.sql.gz`), content only, and only when the banner heading is empty:
+  - Careers: fullBleed, scheme dark, heading + text from Figma, the photo (alt text from the Figma layer name).
+  - Press: simple, scheme white, "Press".
+- **Checked (Playwright) at 375 / 768 / 1440:**
+  - Careers: banner 560 / 744 / 744 tall; h1 100px/140 −2px 500 white at 160px from the top (Figma 162.8); image `fetchpriority=high` with alt.
+  - Press: h1 48px 500, white band.
+  - Both: exactly one h1, no overflow, no console errors. /, /careers, /press, /blocks, /invitation-maker, /birthday-invitations and /404 all return 200 with no Twig errors.

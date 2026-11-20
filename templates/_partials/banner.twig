@@ -18,7 +18,8 @@
 
 {% set sectionClass = [
     'relative overflow-hidden',
-    layout == 'fullBleed' ? 'min-h-svh' : 'pt-32 pb-16 md:pt-44 lg:pb-24',
+    layout == 'fullBleed' ? (media|length ? 'h-140 md:h-186' : 'pt-32 pb-16 md:pt-44 lg:pb-24')
+    : (layout == 'simple' ? 'pt-32 pb-12 md:pt-44 md:pb-20' : 'pt-32 pb-16 md:pt-44 lg:pb-24'),
 ]|join(' ') %}
 
 {% macro buttons(buttons, dark) %}
@@ -65,17 +66,19 @@
         </div>
 
     {% elseif layout == 'fullBleed' %}
+        {# Figma Careers 6-6336: photo edge to edge (745px), white text near the top so the people
+           in the photo stay visible. The gradient is only there for contrast. #}
         {% if media|length %}
             {% include '_components/image.twig' with {
                 image: media|first, width: 1600, sizes: '100vw', eager: true,
                 class: 'absolute inset-0 size-full object-cover',
             } only %}
-            <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
+            <div class="absolute inset-x-0 top-0 h-2/3 bg-linear-to-b from-black/40 to-transparent" aria-hidden="true"></div>
         {% endif %}
-        <div class="relative mx-auto flex min-h-svh max-w-content flex-col items-center justify-center gap-6 px-4 pt-32 pb-16 text-center md:px-gutter {{ media|length ? 'text-white' }}">
-            {% if page.heading %}<{{ tag }} class="text-balance text-5xl md:text-6xl">{{ page.heading }}</{{ tag }}>{% endif %}
-            {% if page.text %}<p class="max-w-xl text-xl md:text-2xl">{{ page.text|nl2br }}</p>{% endif %}
-            {% if hasButtons %}{{ _self.buttons(buttons, true) }}{% endif %}
+        <div class="relative mx-auto flex max-w-content flex-col items-center gap-2 px-4 text-center md:gap-0 md:px-gutter {{ media|length ? 'pt-32 text-white md:pt-40' }}">
+            {% if page.heading %}<{{ tag }} class="text-balance text-5xl font-medium md:text-banner">{{ page.heading }}</{{ tag }}>{% endif %}
+            {% if page.text %}<p class="max-w-xl text-xl font-medium md:text-2xl">{{ page.text|nl2br }}</p>{% endif %}
+            {% if hasButtons %}{{ _self.buttons(buttons, media|length > 0 or dark) }}{% endif %}
         </div>
 
     {% else %}
@@ -83,7 +86,7 @@
         <div class="mx-auto flex max-w-content flex-col items-center gap-6 px-4 text-center md:px-gutter">
             {% if page.eyebrow %}<p class="text-2xl font-medium">{{ page.eyebrow }}</p>{% endif %}
             {% if page.heading %}
-                <{{ tag }} class="text-balance text-4xl font-medium md:text-6xl">
+                <{{ tag }} class="text-balance text-4xl font-medium {{ layout == 'simple' ? 'md:text-headline' : 'md:text-6xl' }}">
                     {{ page.heading }}
                     {# filter out empty rows before testing, so an empty table never prints an empty span #}
                     {% set words = (page.rotatingWords ?? [])|map(r => r.word|trim)|filter|values %}

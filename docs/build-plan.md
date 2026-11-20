@@ -84,7 +84,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ## 4. Careers (6-6167), Single `careers` + Jobs channel
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | banner (Banner tab) | fullBleed | 6-6336 |
+| ☑ | banner (Banner tab) | fullBleed | 6-6336 |
 | — | quote marquee | | 6-6349 **skipped** |
 | ☑ | `textMedia` + `imageGallery` (marquee strip) | right | 6-6646 |
 | ☑ | `cardGrid` | textCards (emoji cards) | 6-6770 |
@@ -95,7 +95,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ## 5. Press (18-5996), Single `press` + Press mentions channel
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | banner (Banner tab) | simple | 18-6155 |
+| ☑ | banner (Banner tab) | simple | 18-6155 |
 | ☑ | `pressList` | numbered | 18-6161 |
 
 ## 6. Blog (channel `blog`)

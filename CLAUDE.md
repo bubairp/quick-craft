@@ -93,6 +93,9 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - **The banner is fixed per page, not a pageBuilder block** (there is no `hero` block any more).
   - `_entries/page.twig` renders it with `_partials/banner.twig` from the entry's own Banner fields.
   - The banner renders when it has a heading or images.
+  - **Layouts (`heroLayout`):** split (Home 6-2210), centered (landing pages), and:
+    - **fullBleed** (Figma Careers 6-6336): the first image edge to edge, `h-140 md:h-186` (745px in Figma), never `min-h-svh`. White text **near the top** (`pt-40`, as in Figma, so the faces below stay visible): heading `text-5xl md:text-banner` (new token: 100px / 1.4 / −0.02em) medium, text `text-xl md:text-2xl` medium. A top-down `from-black/40` gradient keeps the white text readable (Figma has none, but a light photo would make it unreadable). Without an image it falls back to dark text on the page background.
+    - **simple** (Figma Press 18-6155): a centred heading only, `text-4xl md:text-headline` medium; it clears the fixed header and keeps 80px below (`md:pb-20`), so the first block's own padding gives Figma's spacing. The Press page uses scheme `white` (Figma's white page).
   - **Headings:** the banner heading is the page's `<h1>`, and pageBuilder blocks start at `<h2>`. If the banner has no heading, the page outputs a visually hidden `<h1>` with the entry title, so every page still has exactly one `<h1>`.
 - **Blog listing** is `templates/blog/index.twig`. It isn't a section.
 - **Everything is an entry (as in Site7 Engine):** no global sets and no category groups. Migration `m261119_220000_entrify_globals_categories` converted them, keeping element IDs and content. Don't add global sets or category groups; use a Single (settings) or a Structure (taxonomies) instead.

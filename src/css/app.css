@@ -68,6 +68,9 @@
   --text-headline: 3rem;          /* 48px centred section heading (Figma 6-6872) */
   --text-headline--line-height: 1;
   --text-headline--letter-spacing: -0.02em;
+  --text-banner: 6.25rem;         /* 100px full-bleed banner heading (Figma Careers 6-6342) */
+  --text-banner--line-height: 1.4;
+  --text-banner--letter-spacing: -0.02em;
   --text-4xl: 2.25rem;
   --text-4xl--line-height: 1.2;
   --text-4xl--letter-spacing: -0.04em;
