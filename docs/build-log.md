@@ -1147,3 +1147,20 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Fixed while checking:** `rounded-3xl` doesn't exist (the radius scale is reset to tokens), so the phone layout had square corners. It's `rounded-xl` now.
 - **Note:** the test submissions (test@example.com, test3@example.com) are saved as Wheel Form entries locally; delete them in CP › Wheel Form if wanted.
 - **Before launch (user):** fill in Wheel Form's plugin settings (From email, Success Message), and replace the placeholder pitch address in the note.
+
+### 2026-11-20: Blog post page (Figma 18-5645 / article 18-5804)
+- **Rule first:** CLAUDE.md › Blog post (header, hero, body styles, Next link); the `.rich-text--article` variant; skill: don't name a token after a Tailwind static utility.
+- **Design:** a 700px centred column. Grey tag pills (Featured / Latest, 24px), the title (48 semibold), the summary (24, black/60), a 700×311 hero, the body (36 / 24 bold headings, 18px black/60 text, bullet lists, full-width images, underlined black links), then "Next: …" (24, centred, 600 wide) and the newsletter.
+- **Template** `blog/_entry.twig` (was empty):
+  - Tags = "Featured"|t (when `featured`) + the post's categories. "Latest" in the design isn't a category, so it isn't shown.
+  - The title is the only h1. The hero uses `ratio: 700/311` and is eager.
+  - The body goes through `.rich-text .rich-text--article`: CKEditor h2 → 36px, h3 → 24px (the title is the h1, so heading order stays correct).
+  - "Next" = `entry.getNext({ section: 'blog' })` (the next older post, newest-first order), hidden on the oldest post. The newsletter partial goes below.
+- **CSS:** `.rich-text--article` (spacing 40 before headings, 20 between text, 32 before lists and figures; links underlined; images full width; blockquote, hr, figcaption).
+- **Fixed while checking:** the column was 654px, not 700. The token `--container-prose` lost to Tailwind's built-in `max-w-prose` (65ch). It's renamed `--container-article` / `max-w-article` (also used by cardGrid's textCards intro).
+- **Placeholder content:** the 2 body images downloaded from Figma (`blog-cards-1.png`, `blog-cards-2.png`). Migration `m261120_400000_blog_post` (backup: `/tmp/before-blog-post.sql.gz`) gives "Introducing Cards on Quick Craft" the full article from Figma (images as `{asset:ID:url}` reference tags with alt text, links to /invitation-maker for now) and marks it Featured.
+- **Checked (Playwright) at 375 / 768 / 1440:**
+  - One h1 (48/48 600; 36 on a phone); tags Featured + Party 101 (24px #777772 on black/5); summary 24 black/60; hero 700×310 `fetchpriority=high`.
+  - Body p 18/25.2 black/60, h2 36 bold, h3 24 bold; gaps h2→h3 40, before list 32, before figure 32; disc bullets; links black and underlined.
+  - "Next: Parti Recap…"; the oldest post (Hot Literati) has no Next link. No overflow, no console errors; all pages 200 with no Twig errors.
+- **Known gap:** images inside the CKEditor body are output at their original size (no transform, srcset or lazy loading). Option for later: set a default image transform on the `richTextFull` field, or post-process `<img>` in the template.

@@ -104,7 +104,7 @@
   --container-content: 75rem;  /* 1200 */
   --container-text: 70rem;     /* 1120 — rich text block (Figma 17-1343) */
   --container-narrow: 62.5rem; /* 1000 */
-  --container-prose: 43.75rem; /* 700 — blog post */
+  --container-article: 43.75rem; /* 700 — blog post (not "prose": Tailwind has a built-in max-w-prose = 65ch that wins) */
   --container-nav: 61rem;      /* 976 — floating header pill */
   --container-nav-open: 80.5rem; /* 1288 — pill grown into the mega menu (reference site) */
 
@@ -468,6 +468,22 @@
   /* Lead text (text + media blocks): 20px medium black/60, 20px between paragraphs */
   .rich-text--lead { @apply text-xl font-medium text-black/60; }
   .rich-text--lead :where(p, ul, ol, blockquote, table) + :where(p, ul, ol, blockquote, table) { @apply mt-5; }
+  /* Article body (blog post, Figma 18-5827): 18px black/60; h2 36 / h3 24 bold black; 40px before a
+     heading, 20px between text blocks, 32px before lists and images; links always underlined */
+  .rich-text--article { @apply text-lg text-black/60; }
+  .rich-text--article :where(h2, h3, h4) { @apply mt-10 font-bold text-black; }
+  .rich-text--article :where(h2) { @apply text-4xl; }
+  .rich-text--article :where(h3) { @apply text-2xl; }
+  .rich-text--article :where(h4) { @apply text-xl; }
+  .rich-text--article :where(p, ul, ol, blockquote, table, figure) + :where(p, blockquote, table),
+  .rich-text--article :where(h2, h3, h4) + :where(p, blockquote, table) { @apply mt-5; }
+  .rich-text--article * + :where(ul, ol, figure) { @apply mt-8; }
+  .rich-text--article :where(a) { @apply text-black underline; }
+  .rich-text--article :where(strong, b) { @apply text-black/80; }
+  .rich-text--article :where(img) { @apply h-auto w-full; }
+  .rich-text--article :where(figcaption) { @apply mt-2 text-sm; }
+  .rich-text--article :where(blockquote) { @apply border-l-2 border-black/20 pl-4 italic; }
+  .rich-text--article :where(hr) { @apply my-10 border-black/10; }
 
   /* Soft pastel glow behind a section (Figma Careers 6-6862 uses blurred photos; this
      approximates them with token colours) */

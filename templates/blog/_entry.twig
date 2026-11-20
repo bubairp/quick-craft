@@ -1,11 +1,53 @@
-{# Blog post — placeholder until the Blog post frame (18-5645) is built #}
+{#
+ # Blog post at /blog/{slug}. Figma: 18-5645 (article 18-5804).
+ # Tags (Featured + categories) · title (h1) · summary · hero image · body · "Next:" link · newsletter.
+ # Fields (blogPost): title, image, text (summary), blogCategories, featured, body, seo
+ #}
 {% extends '_layouts/base.twig' %}
 
+{% block bodyBg %}bg-white{% endblock %}
+
 {% block content %}
-    <article class="mx-auto max-w-prose px-4 py-section">
-        <h1 class="text-4xl font-bold">{{ entry.title }}</h1>
-        {% if entry.body|length %}
-            <div class="mt-8">{{ entry.body }}</div>
+    {% set image = entry.image.eagerly().one() %}
+    {% set categories = entry.blogCategories.eagerly().all() %}
+    {% set tags = (entry.featured ? ['Featured'|t] : [])|merge(categories|map(c => c.title)) %}
+    {% set next = entry.getNext({ section: 'blog' }) %}
+
+    <article class="px-4 pt-32 pb-16 md:px-gutter md:pt-55 md:pb-20">
+        <div class="mx-auto flex max-w-article flex-col gap-10">
+            <header class="flex flex-col items-center gap-6 text-center">
+                {% if tags|length %}
+                    <ul class="flex flex-wrap justify-center gap-2.5" aria-label="{{ 'Tags'|t }}">
+                        {% for tag in tags %}
+                            <li class="rounded-md bg-black/5 px-2 text-xl text-subtle md:text-2xl">{{ tag }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <h1 class="text-balance text-4xl font-semibold md:text-headline">{{ entry.title }}</h1>
+                {% if entry.text|trim %}
+                    <p class="text-balance text-xl text-black/60 md:text-2xl">{{ entry.text }}</p>
+                {% endif %}
+            </header>
+
+            {% if image %}
+                {% include '_components/image.twig' with {
+                    image: image, width: 700, ratio: 700 / 311, eager: true,
+                    sizes: '(min-width: 768px) 700px, 100vw',
+                    class: 'h-auto w-full object-cover',
+                } only %}
+            {% endif %}
+
+            {% if entry.body|length %}
+                <div class="rich-text rich-text--article">{{ entry.body }}</div>
+            {% endif %}
+        </div>
+
+        {% if next %}
+            <p class="mx-auto mt-10 max-w-150 text-center text-xl text-black md:text-2xl">
+                <a href="{{ next.url }}" rel="next" class="underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">{{ 'Next:'|t }} {{ next.title }}</a>
+            </p>
         {% endif %}
     </article>
+
+    {% include '_partials/newsletter.twig' with { wheelformErrors: wheelformErrors ?? {}, values: values ?? {} } only %}
 {% endblock %}

@@ -32,7 +32,7 @@
                     <{{ 'h' ~ level }} class="text-balance text-4xl font-medium md:text-headline">{{ block.heading }}</{{ 'h' ~ level }}>
                 {% endif %}
                 {% if block.text %}
-                    <p class="max-w-prose text-balance text-lg {{ dark ? 'text-line' : 'text-black/60' }}">{{ block.text|nl2br }}</p>
+                    <p class="max-w-article text-balance text-lg {{ dark ? 'text-line' : 'text-black/60' }}">{{ block.text|nl2br }}</p>
                 {% endif %}
             </div>
         {% endif %}
