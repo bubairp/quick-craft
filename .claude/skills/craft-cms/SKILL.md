@@ -155,6 +155,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 - **Test the other-environment path:** `ddev import-db --file=<backup>`, then `ddev craft up`. Check the content, and that `ddev craft project-config/diff` reports no changes.
 - **Craft's console actions can be reused** from a migration with `Craft::$app->runAction('entrify/categories', [$handle, 'section' => …, 'interactive' => false])`. Read the action first: some steps only happen in interactive mode (e.g. `sections/create` creates the entry type only then).
 - **After saving nested entries,** query them fresh (`Entry::find()->ownerId()->field()`). Block order lives in `elements_owners.sortOrder`.
+- **Inserting a block mid-page:** shift `elements_owners.sortOrder` +1 for the page's blocks from the target position, then save the new block with `sortOrder` = that position (see `m261120_350000_gallery_marquee`).
 - **Nested entries of drafts are not drafts themselves.**
   - A block inside a page's draft has `draftId = null`; only its owner (`entries.primaryOwnerId`) is the draft. Craft shares the live page's nested items with the draft and only copies the ones that change (a copy has `canonicalId` = the live item).
   - **When a migration loops over nested entries (blocks, cards…), skip those whose primary owner is a draft or revision.** Otherwise the draft gets extra items on top of the shared ones.
@@ -168,6 +169,8 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 - Lenis undoes `window.scrollTo`. In browser tests, scroll with a real wheel event.
 - Background Playwright and Chrome windows throttle `requestAnimationFrame` (about 2fps). Judge animation smoothness in a foreground window.
 - Craft `svg()` returns `''` for a missing file (and logs a warning), so always guard the output.
+- Figma MCP asset URLs only download with the extension appended (`…/asset/<id>.png`). Figma often shows photos cropped (`object-cover`); check the original size before using one as a placeholder.
+- A CSS marquee (`translateX(-50%)` loop) needs each half of the track wider than the widest screen; repeat the set and `aria-hidden` the copies. Playwright can't `scrollIntoViewIfNeeded` a moving track; scroll with `evaluate` instead.
 
 ## Menus (Simple RP Menu)
 
