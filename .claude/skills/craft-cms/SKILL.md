@@ -41,11 +41,15 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
      - Templates use the instance handle (`block.personDetail`), never the base handle.
    - Give the new entry type an `icon` and a `color` from CLAUDE.md › Entry type icons and colours (CP only; Craft's icon names, e.g. `grid-2`).
    - A new pageBuilder block gets an "Add block" **group** (CLAUDE.md › Page builder "Add block" menu groups). A new section or Single gets a **CP sidebar page** by the principle in CLAUDE.md › CP sidebar: Pages first, one page per content area, "Site Setup" last; never a page named like a Craft CP item (Settings, Entries…).
+   - **Section options:** add `scheme` only if the template supports all four schemes, and `spacing` only if the padding sits on the `<section>` (CLAUDE.md › Section options). A new layout is a new option on the block's layout dropdown, not a new block.
+   - A new **section with URLs** also gets a sitemap row (`seo_sitemap`, see `m261120_450000_seo_defaults`).
    - Read the Craft source in `vendor/craftcms/cms/src/` for the exact APIs and don't guess.
    - Run `ddev craft up`, then commit the migration together with `config/project/`.
 4. **Template** `templates/_blocks/{entryTypeHandle}.twig`:
-   - It receives only `block` and `headingLevel` (1 for the first block on the page, otherwise 2). Use `<h{{ headingLevel }}>` for the block's main heading.
-   - Put shared pieces in `templates/_components/` and include them with `with {...} only`.
+   - It receives `block` and `headingLevel` (always 2: the page banner holds the `<h1>`). Use `<h{{ headingLevel }}>` for the block's main heading and `headingLevel + 1` inside it. A block with a form also receives `wheelformErrors` / `values` (passed by `_entries/page.twig`).
+   - Put shared pieces in `templates/_components/` and include them with `with {...} only`. The existing components are: `image`, `button`/`buttons`, `section-heading` (`plain: true` = sentence-case landing-page heading), `card`, `blog-card`, `icon` (Tabler), `social-links`, `contact-details`, `store-links`, `stars`, `wheel-form`.
+   - **A form in a block** = a `newsletterForm` instance (Wheel Form field) + `_components/wheel-form.twig` (`form`, `anchor`, `errors: wheelformErrors`, `values: values`, `dark`). Wrap it in an element with `id="<anchor>"`. The form needs a `submit_message`, and sending email needs the plugin's From email.
+   - CKEditor output always goes in `.rich-text` (+ `--base` / `--lead` / `--article`), never Tailwind's `prose`.
 5. **Verify.** Run `ddev npm run dev` and add test content in the control panel. Then use Playwright at **375, 768 and 1440 px**:
    - screenshot each width and compare it with the Figma frame
    - open `/blocks` (logged in) and check the block in every scheme (`?scheme=dark` …) next to the others
@@ -56,17 +60,21 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 ## Block template skeleton
 
 ```twig
-{# _blocks/hero.twig — receives: block #}
+{# _blocks/example.twig — receives: block, headingLevel
+ # Fields: scheme, spacing, heading, body, image #}
 {% set image = block.image.eagerly().one() %}
 {% set heading = block.heading ?? null %}
+{% set hasBody = block.body and block.body|length %}
+{% set scheme = block.scheme.value ?? 'light' %}
+{% set tag = 'h' ~ (headingLevel ?? 2) %}
 
-{% if heading or image %}
-<section class="py-section">
-  <div class="mx-auto max-w-site px-4 md:px-8">
-    {% if heading %}<h2 class="text-display">{{ heading }}</h2>{% endif %}
-    {% if block.body|length %}<div class="prose">{{ block.body }}</div>{% endif %}
+{% if heading or hasBody or image %}
+<section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-16 md:px-10 md:py-25">
+  <div class="mx-auto flex max-w-content flex-col gap-10">
+    {% if heading %}<{{ tag }} class="text-4xl font-medium md:text-headline">{{ heading }}</{{ tag }}>{% endif %}
+    {% if hasBody %}<div class="rich-text rich-text--base">{{ block.body }}</div>{% endif %}
     {% if image %}
-      {% include '_components/image.twig' with { image: image, sizes: '(min-width: 1024px) 50vw, 100vw' } only %}
+      {% include '_components/image.twig' with { image: image, width: 1200, sizes: '(min-width: 1280px) 1200px, 100vw', class: 'h-auto w-full rounded-lg' } only %}
     {% endif %}
   </div>
 </section>
@@ -137,7 +145,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 - **Preview targets:**
   - Every section with URLs has `Primary entry page` = `{url}`.
   - Settings Singles have no URL, so give them a target page instead: `siteSettings` → `/` (Home), so header, footer and store-link changes show live. This works because Craft swaps the previewed element into ordinary queries (`Elements::setPlaceholderElement()`), so base.twig's `_globals` query returns the unsaved version.
-  - When the blog listing exists, give `newsletter` a target → `blog`.
+  - `newsletter` → `blog` (done).
 - **Test without logging in:**
   1. Create a token with a throwaway script in `storage/runtime/` (gitignored; delete it afterwards). Use `Craft::$app->getTokens()->createPreviewToken(['preview/preview', ['elementType' => Entry::class, 'canonicalId' => …, 'siteId' => …, 'draftId' => …, 'revisionId' => null, 'userId' => <admin id>]])`.
   2. Load the page URL with `?x-craft-live-preview=x&token=…` inside a same-origin `<iframe>`.
@@ -172,6 +180,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 - The radius scale is reset to the project tokens (`xs sm md lg xl 2xl photo`), so Tailwind's own `rounded-3xl` etc. silently don't exist. The same goes for colours (`text-red-700` produces nothing; use a token such as `text-danger`).
 - Don't name a token after a Tailwind static utility: `--container-prose` lost to the built-in `max-w-prose` (65ch), so the blog column was 654px instead of 700. It's `--container-article` now. Check a new token's utility in the built CSS.
 - Wheel Form: in Twig, `form.honeypot` calls `honeypot()` (prints a field or throws); use `form.getHoneypot()` to test for one. A form without `submit_message` (and no plugin Success Message) gives a 500 on a successful submit. A form with "send email" on also needs the plugin's From email, or a successful submit throws "Plugin settings need to be configured." (500); check `storage/logs/web-*.log`.
+- Ether SEO: a template without an entry sets `{% set seo = craft.seo.custom('Title'|t, description) %}` at the top (outside blocks). Pass the bare title: `custom()` adds " - siteName" itself.
 - Twig: no `{# #}` comments inside a hash literal (`include … with { … }`): it fails with a misleading "Unclosed block" error. Put the comment above the tag.
 - Playwright: `main section:nth-of-type(2)` counts siblings of the same tag, not matches; use `document.querySelectorAll('main section')[1]`.
 - Figma MCP asset URLs only download with the extension appended (`…/asset/<id>.png`). Figma often shows photos cropped (`object-cover`); check the original size before using one as a placeholder.
@@ -186,6 +195,7 @@ Use `craft.simplerpmenu` (lowercase). Always guard the output with `getMenu(hand
 - Keep `.mcp.json` portable: no absolute paths, distro names or usernames; per-developer values come from environment variables (`${VAR:-default}`).
 - Good for: checking real content and field values before writing a template or migration, finding entries, drafts and revisions, system status, and content edits the user asks for.
 - **Not for content-model changes.** Fields, entry types, sections, volumes, plugins and project config go through content migrations (and the build log). MCP runs as admin and would bypass both.
+- **CP › Settings › MCP stays off** (both switches). It controls only the HTTP servers: the authenticated `/mcp` (OAuth, acts as the logged-in user) and the public, no-login `/mcp` (read-only content the admin picks, advertised in `/.well-known/ai-catalog.json`). Our stdio server doesn't need them. Turning either on is a launch decision for the user.
 - Testing it by hand: pipe JSON-RPC lines into `ddev exec php craft mcp/serve --user=admin` (never `--raw`, which drops stdin): `initialize`, `notifications/initialized`, `tools/list`.
 
 ## Never
