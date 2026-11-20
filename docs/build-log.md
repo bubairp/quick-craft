@@ -1468,3 +1468,16 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Checked:** the animation frames (old word up + out, new word up + in); one h1; logo alts; 375 has no overflow and the logos wrap. Ten pages incl. `/blocks` → 200 with no overflow or JS errors; glow sections render with soft edges (Careers checked).
 
 **Not copied:** the reference's display font and brand. Copy and images stay Quick Craft's (placeholder logos from the imported design).
+
+## 2026-11-20 · Organizers logo row → Swiper ticker
+
+**Decision (user):** the logo row under the Organizers banner is a Swiper slider.
+
+**Done**
+- `testimonials.twig` › logoRow: `data-carousel="logos"` markup. The set is rendered 3×; copies are `aria-hidden` with empty alt. Slides are `w-auto!`.
+- `src/js/carousels.js` › `logos` variant: `loop`, `autoplay` delay 0 + `speed` 5000, linear timing (app.css `--swiper-wrapper-transition-timing-function: linear`), spaceBetween 32 / 48 (md), no drag or keyboard; reduced motion → still.
+- Without JS (or before Swiper loads): one flex row with a 48px gap.
+
+**Checked (Playwright):** the wrapper moves at a steady ~58px/s at 1440 with a logo always coming in on the right (no gap in the loop). Readable: the 5 outlet names once. 375: one moving row, no overflow. Reduced motion: transform stays at 0. No console errors.
+
+**Gotcha:** comparing `getComputedStyle().transform` before and after Swiper starts shows a change (`none` → matrix) even when nothing moves. Sample the matrix x (`DOMMatrix.m41`) after start-up instead.

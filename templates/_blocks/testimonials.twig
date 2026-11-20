@@ -54,23 +54,31 @@
 </section>
 
 {% elseif items|length and layout == 'logoRow' %}
-{# Logo row (the strip under the Organizers banner, partiful.com/org-profiles): a static centred row
-   of press logos, no quotes; wraps on phones. Item: image = logo, personName = outlet (alt / fallback). #}
-<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-10 md:px-gutter" aria-label="{{ block.heading ?: 'In the press'|t }}">
-    <ul class="mx-auto flex max-w-content flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-12">
-        {% for item in items %}
-            {% set logo = item.image.one() %}
-            {% if logo or item.personName %}
-                <li class="flex items-center">
-                    {% if logo %}
-                        {{ images.singleImg(logo, 200, { sizes: '200px' }, 'h-6 w-auto md:h-8', { alt: item.personName ?: logo.alt }) }}
-                    {% else %}
-                        <span class="text-xl font-bold">{{ item.personName }}</span>
-                    {% endif %}
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+{# Logo row (the strip under the Organizers banner, partiful.com/org-profiles): a Swiper ticker
+   (data-carousel="logos", src/js/carousels.js) moving at a steady speed, no quotes. The set is
+   rendered 3× so the loop never shows a gap; only the first set is read out.
+   Item: image = logo, personName = outlet (alt / fallback). #}
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="overflow-hidden py-10" aria-label="{{ block.heading ?: 'In the press'|t }}">
+    <div data-carousel="logos">
+        <div class="swiper">
+            <ul class="swiper-wrapper items-center">
+                {% for pass in 1..3 %}
+                    {% for item in items %}
+                        {% set logo = item.image.one() %}
+                        {% if logo or item.personName %}
+                            <li class="swiper-slide flex! w-auto! items-center" {% if pass > 1 %}aria-hidden="true"{% endif %}>
+                                {% if logo %}
+                                    {{ images.singleImg(logo, 200, { sizes: '200px', decorative: pass > 1 }, 'h-6 w-auto md:h-8', pass > 1 ? {} : { alt: item.personName ?: logo.alt }) }}
+                                {% else %}
+                                    <span class="text-xl font-bold whitespace-nowrap">{{ item.personName }}</span>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </section>
 
 {% elseif items|length and layout == 'pressRow' %}

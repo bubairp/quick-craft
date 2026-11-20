@@ -405,6 +405,12 @@
   [data-carousel="press"] {
     --swiper-wrapper-transition-timing-function: var(--ease-out-soft);
   }
+  /* Logo ticker: a linear transition, so autoplay (delay 0) moves at one steady speed */
+  [data-carousel="logos"] {
+    --swiper-wrapper-transition-timing-function: linear;
+  }
+  /* before Swiper loads (and without JS): one row, no wrapping */
+  [data-carousel="logos"] .swiper:not(.swiper-initialized) .swiper-wrapper { display: flex; gap: 3rem; }
 
   /* featureRows stickyPhone fallback cards: a Swiper row; without JS (no swiper.css) they stack */
   .feature-cards .swiper:not(.swiper-initialized) .swiper-wrapper {

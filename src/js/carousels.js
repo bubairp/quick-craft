@@ -10,6 +10,8 @@
  *   data-carousel          plain row with prev/next
  *   data-carousel="loop"   testimonials row (templates/_blocks/testimonials.twig, carousel layout):
  *                          endless loop, auto-advances every 3.5s (paused on hover; off for reduced motion)
+ *   data-carousel="logos"  logo ticker (testimonials › logoRow): endless loop at a steady speed,
+ *                          no drag (still for reduced motion)
  *   data-carousel="press"  press strip: centred, looping, click a logo to activate it,
  *                          auto-advances every 5s (paused on hover; off for reduced motion)
  *
@@ -62,6 +64,27 @@ export async function initCarousels() {
       keyboard: { enabled: true, onlyInViewport: true },
       a11y: { enabled: true },
     };
+
+    if (variant === 'logos') {
+      // Logo ticker (Organizers, under the banner): moves at a steady speed in an endless loop:
+      // autoplay with no delay + a long linear transition (linear timing: app.css). No drag, no
+      // keyboard (it's decorative motion; the logos are plain images). Reduced motion: still.
+      preloadImages(root);
+      new Swiper(el, {
+        ...base,
+        modules: [Autoplay],
+        spaceBetween: 32,
+        breakpoints: { 768: { spaceBetween: 48 } },
+        loop: true,
+        loopAdditionalSlides: 5,
+        allowTouchMove: false,
+        grabCursor: false,
+        keyboard: { enabled: false },
+        speed: reduceMotion ? 0 : 5000,
+        autoplay: reduceMotion ? false : { delay: 0, disableOnInteraction: false },
+      });
+      return;
+    }
 
     if (variant === 'press') {
       // Smooth mouse like the testimonials row: drag settles on a logo with a soft ease-out,
