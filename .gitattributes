@@ -1,0 +1,7 @@
+# Line endings: the repo stores LF. Windows tools (Git with autocrlf, Windows Python) can write CRLF
+# into the working copy on the WSL share; with this, both Windows Git and WSL Git compare files
+# without line-ending noise (WSL Git showed 17 "modified" files whose content was identical).
+* text=auto eol=lf
+
+# keep byte-for-byte
+config/license.key -text
