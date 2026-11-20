@@ -79,13 +79,16 @@ export async function initCarousels() {
         direction: 'vertical',
         loop: true,
         allowTouchMove: false,
-        speed: 450,
-        autoplay: { delay: 600, disableOnInteraction: false },
+        // measured on the reference (per animation frame, side by side): a ~140ms swap, a word
+        // every ~1020ms; the old word goes ~62px up, the next comes from ~60px below (≈120% of
+        // the 52px line). Move and fade together; easing in app.css.
+        speed: 150,
+        autoplay: { delay: 840, disableOnInteraction: false },
         effect: 'creative',
         creativeEffect: {
           limitProgress: 1,
-          prev: { translate: [0, '-110%', 0], opacity: 0 },
-          next: { translate: [0, '110%', 0], opacity: 0 },
+          prev: { translate: [0, '-120%', 0], opacity: 0 },
+          next: { translate: [0, '120%', 0], opacity: 0 },
         },
       });
       return;

@@ -530,7 +530,13 @@
      33,554,432px. */
   .rotating-words .rotating-words__swiper { position: absolute !important; inset: 0; overflow: visible !important; }
   .rotating-words .swiper-wrapper { display: flex; flex-direction: column; }  /* also before Swiper loads */
-  .rotating-words .swiper-slide { height: 100%; padding-bottom: 0.08em; white-space: nowrap; overflow: visible !important; }
+  .rotating-words .swiper-slide {
+    height: 100%; padding-bottom: 0.08em; white-space: nowrap; overflow: visible !important;
+    /* the reference's swap (measured per animation frame, side by side): move and fade together,
+       slow start, fast middle, soft end (3% → 40% → 76% → 95% of the way at 13/38/63/87% of the
+       time). Swiper sets only the duration. */
+    transition-timing-function: cubic-bezier(0.4, 0, 0.3, 1) !important;
+  }
   /* before Swiper loads (and without JS): only the first word */
   .rotating-words .swiper:not(.swiper-initialized) .swiper-slide:not(:first-child) { visibility: hidden; }
 

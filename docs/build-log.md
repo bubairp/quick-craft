@@ -1495,3 +1495,15 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Checked (Playwright):** frames match the reference: the old word goes up to about −55px and fades, the next comes from +56px below and fades in, about every second. The line doesn't move (x 620 throughout); box 285×52; 375 has no overflow; reduced motion shows only the first word; no console errors.
 
 **Gotcha:** the box first measured 33,554,432px tall. `swiper.css` (unlayered) set `.swiper { position: relative }` over our layered `absolute`, so the vertical Swiper sized itself from its own content. Fixed with `!important`; recorded in the skill.
+
+## 2026-11-20 · Rotating words: timing matched to the reference
+
+**Why:** the user said the effect wasn't the same. Measured per animation frame (requestAnimationFrame), reference and ours side by side:
+- Reference: a ~140ms swap, move and fade **together**, slow start → fast middle → soft end; old word −62px, new word from +60px; a word every ~1017ms.
+- Before: our swap took 450ms (Swiper's default ease).
+
+**Done:** `speed` 150, `autoplay.delay` 840, creative translate ±120%, slide `transition-timing-function: cubic-bezier(0.4, 0, 0.3, 1)` (!important; swiper.css is unlayered).
+
+**Result (same frames):** reference / ours at 51ms: op .63 y−26 / op .63 y−23; 84ms: .27 −46 / .21 −49; 117ms: .07 −57 / .04 −60; done at ~134ms in both.
+
+**Gotcha:** sampling every 100–250ms (as at first) made the reference look like "move first, fade later". Measure animations per frame and compare both sites in the same script before tuning.
