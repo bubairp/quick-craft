@@ -1289,3 +1289,18 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - The unknown URL shows Craft's devMode error page locally (404.twig renders when devMode is off).
 - **Overflow pass at 375 and 768:** no horizontal scroll on any page (including /404).
 - **Keyboard:** 12 Tabs on Home, Invitation Maker and Blog — every focused element shows a visible focus style; the first stop is "Skip to content".
+
+### 2026-11-20: Craft MCP (built-in server) for Claude Code
+- **Rule first:** CLAUDE.md › Craft MCP; skill › Craft MCP.
+  - Use it for reading and content edits; content-model changes stay in migrations; destructive tools only on request.
+- **Found:** Craft 5.12.1 itself requires `mcp/sdk` and ships an MCP server (`vendor/craftcms/cms/src/mcp/`) — no plugin needed. It works on Solo; only the user-group and per-user permission tools need Team or Pro.
+  - **stdio:** `php craft mcp/serve --user=<id|username|email>`, as that user. This is the one we use.
+  - **HTTP:** `/mcp` + OAuth (`/mcp/auth`), switched on in CP › Settings › MCP. Left off.
+- **Added** `.mcp.json` (server `craft`): `wsl -d Ubuntu -- bash -lc "cd ~/my-project/quick-craft && ddev exec php craft mcp/serve --user=admin"`. It runs as admin (Solo has one user). DDEV must be running.
+- **Tested (read-only):**
+  - initialize → "Craft CMS MCP server" 5.12.1; tools/list → about 50 tools (elements, drafts, revisions, assets, configuration, plugins, caches, queue, search, …).
+  - `tools/call system_status_get` → `{"live": true}`.
+- **Gotchas:**
+  - `ddev exec --raw` drops piped stdin (the server gets nothing); use plain `ddev exec`.
+  - Piping JSON from Windows PowerShell 5.1 into a native exe adds a BOM, so the first line fails with "Syntax error". Git Bash (and Claude Code itself) pipe clean bytes.
+- **To use:** restart Claude Code in this project and approve the `craft` server; `/mcp` should show it as connected.

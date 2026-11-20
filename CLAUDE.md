@@ -309,6 +309,15 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - Always give the instance a **meaningful handle** (`personName`), never the generic base handle (`plainText`), so templates stay readable.
   - Create a new field only when no base field has the needed settings (settings belong to the field, not the instance).
 
+### Craft MCP (built into Craft 5.12)
+- **Server:** Craft's own MCP server (`vendor/craftcms/cms/src/mcp/`, no plugin), stdio transport: `php craft mcp/serve --user=admin`. It's registered for Claude Code in **`.mcp.json`** (server `craft`) and runs through `wsl` → `ddev exec`. DDEV must be running.
+  - Use plain `ddev exec`, **not `ddev exec --raw`**: `--raw` drops piped stdin, so the server receives nothing.
+  - The HTTP transport (`/mcp` + OAuth, CP › Settings › MCP) stays **off**.
+- **It acts as `admin` with full rights** (Solo allows one user). So:
+  - **Use it for:** reading and inspecting (`info_get` first; entries, fields, sections, drafts, system status, search) and **content** edits (entries, drafts, assets).
+  - **Never use it for content-model changes** (fields, entry types, sections, volumes, plugin install/uninstall, project config). Those stay in **content migrations**, as the Content model rules require; a change made through MCP would skip the migration and the build log.
+  - Destructive tools (delete, uninstall, `system_status_disable`, cache clear) only when the user asks for them.
+
 ### SEO, sitemap and favicon (migration `m261120_450000_seo_defaults`)
 - **Ether SEO** renders `<title>`, meta, OG/Twitter and canonical from the entry's `seo` field (`{% hook 'seo' %}` in base.twig). Read `vendor/ether/seo` before changing anything.
   - Plugin settings (project config): title = `{title} - {{ siteName }}` (the default), a default **description** (editable in CP › SEO › Settings), the default robots.txt (everything disallowed unless `CRAFT_ENVIRONMENT=production`). A default **social image** is set once the brand image exists.

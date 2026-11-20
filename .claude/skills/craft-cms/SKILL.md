@@ -179,6 +179,12 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 
 Use `craft.simplerpmenu` (lowercase). Always guard the output with `getMenu(handle)`, because `getRpMenuHTML` prints an error paragraph when the handle is missing. Supported config keys: `menu-id`, `menu-class`, `ul-class`, `li-class`, `link-class`, `sub-menu-ul-class`, `without-container`, `without-ul`. The full API is in CLAUDE.md. If you need anything beyond that, read `vendor/remoteprogrammer/simple-rp-menu/src/services/SimpleRpMenuService.php`.
 
+## Craft MCP (`craft` server in .mcp.json)
+- Craft 5.12's built-in MCP server over stdio (`wsl` → `ddev exec php craft mcp/serve --user=admin`). Call `info_get` first; it explains the identifiers, schemas and workflows.
+- Good for: checking real content and field values before writing a template or migration, finding entries, drafts and revisions, system status, and content edits the user asks for.
+- **Not for content-model changes.** Fields, entry types, sections, volumes, plugins and project config go through content migrations (and the build log). MCP runs as admin and would bypass both.
+- Testing it by hand: pipe JSON-RPC lines into `ddev exec php craft mcp/serve --user=admin` (never `--raw`, which drops stdin): `initialize`, `notifications/initialized`, `tools/list`.
+
 ## Never
 - Edit or run write commands in `/home/rp-bubai/my-project/site7-engine`. It's read-only.
 - Add Site7 Studio, Device Detect or RP Payment Gateway.
