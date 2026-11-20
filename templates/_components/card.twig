@@ -33,7 +33,7 @@
             <{{ tag }} class="text-2xl font-semibold">{{ card.heading }}</{{ tag }}>
         {% endif %}
         {% if card.text %}
-            <p class="{{ image ? 'text-xl' : 'text-base' }} {{ dark ? 'text-line' : 'text-black/60' }}">{{ card.text|nl2br }}</p>
+            <p class="{{ image ? 'text-lg' : 'text-base' }} {{ dark ? 'text-line' : 'text-black/60' }}">{{ card.text|nl2br }}</p>
         {% endif %}
         {% if link and link.url and image %}
             {# with an image (Birthday 17-1271): a small dark pill with an arrow #}

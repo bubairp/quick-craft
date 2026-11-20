@@ -19,7 +19,7 @@
 
 {% if (block.ctaLayout.value ?? '') == 'simple' and (block.heading or block.text) %}
 {# Simple (Figma Birthday 17-1368): plain centred heading + text, buttons and store badges; no images #}
-<section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-16 md:px-10 md:py-25">
+<section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-16 md:px-10 md:py-25 {{ (block.glow ?? false) and not dark ? 'glow-bg' }}">
     <div class="mx-auto flex max-w-content flex-col items-center gap-10 text-center md:gap-15">
         {% include '_components/section-heading.twig' with { heading: block.heading, text: block.text, level: level, dark: dark, plain: true } only %}
         {% set buttons = block.buttons.eagerly().all() %}

@@ -60,15 +60,15 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ### Invitation Maker (17-1440)
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | banner (Banner tab) | split + eyebrow pill | 17-1599 |
+| ☑ | banner (Banner tab) | split + eyebrow pill | 17-1599 |
 | — | quote marquee | | 17-1633 **skipped** |
-| ☐ | `imageGallery` | row (categories) | 17-1931 |
-| ☐ | `cardGrid` | grid | 17-2004 |
+| ☑ | `imageGallery` | row (categories) | 17-1931 |
+| ☑ | `cardGrid` | textCards (images + pill) | 17-2004 |
 | ☑ | `comparison` | | 17-2074 |
-| ☐ | `testimonials` | reviews | 17-2211 |
-| ☐ | `richText` | | 17-2385 |
+| ☑ | `testimonials` | reviews | 17-2211 |
+| ☑ | `richText` | | 17-2385 |
 | ☑ | `faq` | | 17-2418 |
-| ☐ | `ctaBanner` | | 17-2485 |
+| ☑ | `ctaBanner` | simple + glow | 17-2485 |
 
 ### Sell Tickets (17-2557), dark page
 | | Block | Layout | Node |

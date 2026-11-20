@@ -1219,3 +1219,25 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Card text is 20px (Organizers' size) vs 16 here.
   - The banner's purple wash (Figma: transparent → violet 48%) uses the shared `glow-bg` instead.
   - Gallery tiles aren't links (Figma links each to its template; there's no per-image link field).
+
+### 2026-11-20: Invitation Maker page (Figma 17-1440)
+- **Rule first:** CLAUDE.md › Invitation Maker page:
+  - Gallery row with a left heading; image-card text settled at `text-lg`; reviews redesign; ctaBanner `glow`.
+- **Design and build:**
+  - **Banner (17-1599):** split with the eyebrow pill "Free · No Ads · No App Required"; the heading as plain text (Figma's italic "invitation maker" can't be set in a plain text field); "Make a free invite →".
+  - **"Find your vibe instantly" (17-1931):** imageGallery `row`. Eyebrow + heading + text left-aligned in `max-w-narrow`; 6 square tiles `rounded-xl` (147px at 1440, Figma 152), gap 24; captions 20 semibold; "View all →".
+  - **"More than a maker" (17-2004):** textCards with images + "Try it" pills. The image-card text is now `text-lg` everywhere (Figma uses 20 / 16 / 18 on the three pages).
+  - **Comparison:** built earlier, stays third.
+  - **"People are obsessed" (17-2211):** testimonials `reviews` rebuilt — `bg-surface`, left plain heading with an accent eyebrow, white cards (title + stars left; date + name right in black/40; quote `text-sm`).
+  - **Rich text (17-2385):** Figma's SEO copy (third-party tool names removed; "birthday invitations" links to /birthday-invitations).
+  - **FAQ:** built earlier, sixth.
+  - **CTA (17-2485):** ctaBanner `simple` + `glow` + "Create invite".
+- **Migration** `m261120_430000_invitation_maker` (backup: `/tmp/before-invitation-maker.sql.gz`):
+  - ctaBanner + `glow`.
+  - Banner content; the existing comparison / FAQ moved to sortOrder 3 / 6 (`elements_owners`); 5 new blocks at 1, 2, 4, 5, 7.
+  - Tile captions as asset titles, with alt text.
+  - 10 placeholder images (`im-*`) downloaded from Figma.
+- **Checked (Playwright) at 375 / 1440:**
+  - Order: banner → gallery row → cards → comparison → reviews → rich text → FAQ → CTA.
+  - Tiles 147 (152 on a phone) with radius 20; no overflow; 0 broken images; no console errors. All pages 200 with no Twig errors.
+- **Fixed while checking:** row captions at 24px wrapped ("Kids’ Birthday" on two lines) → 20px.
