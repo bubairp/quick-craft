@@ -152,7 +152,7 @@
                                 {% set furl = featured.custom_url ?? '' %}
                                 {% set cardInner %}
                                     {% if fdata.image ?? false %}
-                                        <img src="{{ fdata.image }}" alt="" width="228" height="228" loading="lazy" class="mb-4 size-40 object-contain transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-3">
+                                        <img src="{{ fdata.image }}" alt="" width="228" height="228" loading="lazy" class="mb-4 size-40 rounded-lg object-contain transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-3">
                                     {% endif %}
                                     {% if fdata.label ?? false %}<span class="text-xs font-medium uppercase tracking-wide text-subtle">{{ fdata.label }}</span>{% endif %}
                                     <span class="mt-1 text-3xl font-medium text-ink">{{ featured.name }}</span>
@@ -230,7 +230,7 @@
                                                         {% if featured and (featured.custom_url ?? '') %}
                                                             {% set fdata = _self.data(featured)|json_decode %}
                                                             <a href="{{ featured.custom_url }}" class="flex items-center gap-4 rounded-lg bg-surface p-3 focus-visible:outline-2 focus-visible:outline-ink">
-                                                                {% if fdata.image ?? false %}<img src="{{ fdata.image }}" alt="" width="56" height="56" loading="lazy" class="size-14 shrink-0 object-contain">{% endif %}
+                                                                {% if fdata.image ?? false %}<img src="{{ fdata.image }}" alt="" width="56" height="56" loading="lazy" class="size-14 shrink-0 rounded-md object-contain">{% endif %}
                                                                 <span class="flex min-w-0 flex-col">
                                                                     {% if fdata.label ?? false %}<span class="text-xs font-medium tracking-wide text-subtle uppercase">{{ fdata.label }}</span>{% endif %}
                                                                     <span class="text-lg font-medium text-ink">{{ featured.name }}</span>

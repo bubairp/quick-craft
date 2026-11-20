@@ -1623,3 +1623,19 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Follow-up (user: a bit more gap):** banner `px-3 pt-3 md:px-4 md:pt-4`, footer `px-3 pb-3 md:px-4 md:pb-4` → 12px on phones, 16px from md, the same for both. Checked at 1440 / 768 / 375: banner top/left/right and footer left/right/bottom all 16 / 16 / 12px; no overflow.
 **Follow-up (user: add a gap on the footer's top):** `<footer>` → `p-3 md:p-4`, so every side incl. the top has the same 12 / 16px gap. Checked: the panel sits 16px below the content on /contact, /organizers and /sell-tickets at 1440 and 12px at 375; no overflow.
 **Follow-up (user: the banner's top gap as it was at first):** back to `pt-28 md:pt-40` (the photo below the header); the sides keep the footer's gap (`px-3 md:px-4`). Checked: image top 160px at 1440 (header ends at 120), 112px at 375 (header ends at 86); sides 16 / 12px.
+
+## 2026-11-20 · Mega menu: images for every featured card
+
+**Before:** only Invites' featured card had an image (Figma 17:2 designs only that dropdown: the balloons). Products, For Organizers and Company had none.
+
+**Done** (migration `m261120_500000_menu_featured_images`, backup `/tmp/before-menu-images.sql.gz`)
+- Adds an `image:` line to each featured item's Data JSON (matched by name + `menu-featured`; skipped when an editor already set one). PLACEHOLDERS from our uploads:
+  - Products → `home-step-1.png` (the invite editor phone);
+  - For Organizers → `home-tile-1.png` (ticket roll);
+  - Company → `careers-mission-collage.png` (polaroids).
+- Skipped `home-tile-3.png`: it shows the reference site's logo.
+- Card images get `rounded-lg` (desktop) / `rounded-md` (mobile), since some placeholders have a background.
+
+**Gotcha:** Simple RP Menu caches `getResolvedMenuItems` for 24h (tag `simple-rp-menu`; only CP edits and entry saves clear it), so the images didn't show after the migration. The migration now calls `TagDependency::invalidate(..., ['simple-rp-menu'])`; here `ddev craft clear-caches/data` cleared it. Recorded in the skill.
+
+**Checked (1440):** hovering each of the 4 dropdowns shows its image, loaded (naturalWidth > 0); no 4xx.
