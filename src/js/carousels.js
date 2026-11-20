@@ -10,6 +10,8 @@
  *   data-carousel          plain row with prev/next
  *   data-carousel="loop"   testimonials row (templates/_blocks/testimonials.twig, carousel layout):
  *                          endless loop, auto-advances every 3.5s (paused on hover; off for reduced motion)
+ *   data-carousel="words"  rotating words in a banner heading: vertical loop, creative effect
+ *                          (old word up + out, next up from below), ~1s per word; off for reduced motion
  *   data-carousel="logos"  logo ticker (testimonials › logoRow): endless loop at a steady speed,
  *                          no drag (still for reduced motion)
  *   data-carousel="press"  press strip: centred, looping, click a logo to activate it,
@@ -50,7 +52,7 @@ export async function initCarousels() {
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  roots.forEach((root) => {
+  roots.forEach(async (root) => {
     const el = root.querySelector('.swiper');
     if (!el || el.swiper) return;
     const variant = root.dataset.carousel;
@@ -64,6 +66,30 @@ export async function initCarousels() {
       keyboard: { enabled: true, onlyInViewport: true },
       a11y: { enabled: true },
     };
+
+    if (variant === 'words') {
+      // Rotating words in a banner heading (Organizers; partiful.com/org-profiles): a vertical
+      // loop, a new word about every second. Creative effect: the old word slides up and fades,
+      // the next comes up from below. Decorative (aria-hidden; the heading has the first word as
+      // sr-only text), so no drag, keyboard or A11y module. Reduced motion: the first word stays.
+      if (reduceMotion) return;
+      const [{ EffectCreative }] = await Promise.all([import('swiper/modules'), import('swiper/css/effect-creative')]);
+      new Swiper(el, {
+        modules: [Autoplay, EffectCreative],
+        direction: 'vertical',
+        loop: true,
+        allowTouchMove: false,
+        speed: 450,
+        autoplay: { delay: 600, disableOnInteraction: false },
+        effect: 'creative',
+        creativeEffect: {
+          limitProgress: 1,
+          prev: { translate: [0, '-110%', 0], opacity: 0 },
+          next: { translate: [0, '110%', 0], opacity: 0 },
+        },
+      });
+      return;
+    }
 
     if (variant === 'logos') {
       // Logo ticker (Organizers, under the banner): moves at a steady speed in an endless loop:

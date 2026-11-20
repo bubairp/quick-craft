@@ -517,24 +517,22 @@
     mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
   }
 
-  /* Rotating words (Organizers banner; partiful.com/org-profiles; src/js/rotating-words.js):
-     the words share one grid cell (the widest sets the width, so the line doesn't jump). The old
-     word slides up and out, the next slides up from below; slight sideways stretch while moving. */
-  .rotating-words { display: inline-grid; justify-items: start; text-align: left; vertical-align: bottom; }
-  .rotating-words__word {
-    grid-area: 1 / 1;
-    padding-bottom: 0.08em;           /* descenders inside the clipped gradient */
-    opacity: 0;
-    transform: translateY(0.9em) scaleX(1.05);
-    transform-origin: left center;
-  }
-  .rotating-words:not([data-ready]) .rotating-words__word:first-of-type,
-  .rotating-words__word.is-active { opacity: 1; transform: none; }
-  .rotating-words__word.is-leaving { opacity: 0; transform: translateY(-0.9em) scaleX(1.05); }
-  .rotating-words__word.is-active,
-  .rotating-words__word.is-leaving {
-    transition: opacity 450ms ease-out, transform 450ms var(--ease-spring);
-  }
+  /* Rotating words (Organizers banner; partiful.com/org-profiles): a vertical Swiper
+     (data-carousel="words", src/js/carousels.js) on top of an invisible sizer. The sizer stacks
+     every word in one grid cell: the box gets the widest word's width and one line's height, so
+     the line doesn't jump. Overflow stays visible (the moving words aren't clipped). */
+  .rotating-words { position: relative; display: inline-grid; text-align: left; vertical-align: bottom; }
+  .rotating-words__sizer { display: grid; visibility: hidden; }
+  .rotating-words__sizer > * { grid-area: 1 / 1; padding-bottom: 0.08em; }
+  /* !important: swiper.css is unlayered, so its `.swiper { position: relative; overflow: hidden }`
+     and the creative effect's slide `overflow: hidden` beat this layer. Relative positioning put the
+     slider in the grid, and a vertical Swiper sizes slides from its own height: the box grew to
+     33,554,432px. */
+  .rotating-words .rotating-words__swiper { position: absolute !important; inset: 0; overflow: visible !important; }
+  .rotating-words .swiper-wrapper { display: flex; flex-direction: column; }  /* also before Swiper loads */
+  .rotating-words .swiper-slide { height: 100%; padding-bottom: 0.08em; white-space: nowrap; overflow: visible !important; }
+  /* before Swiper loads (and without JS): only the first word */
+  .rotating-words .swiper:not(.swiper-initialized) .swiper-slide:not(:first-child) { visibility: hidden; }
 
   /* Banner collage (Figma Organizers 17-426): tilted event cards and avatars around the centred
      text, from xl. Slots = Figma positions in % of the 1600×713 banner (left/top) and % of its

@@ -110,18 +110,28 @@
                 {% set words = (page.rotatingWords ?? [])|map(r => r.word|trim)|filter|values %}
                 <{{ tag }} class="text-balance text-4xl font-medium md:text-headline">
                     {% if words|length %}
-                        {# Rotating words (partiful.com/org-profiles; src/js/rotating-words.js): the heading's
-                           last word stays with the word ("your Book Club"); each word its own gradient.
-                           Screen readers get the first word once; the animated copies are hidden. #}
+                        {# Rotating words (partiful.com/org-profiles): a vertical Swiper (data-carousel="words",
+                           src/js/carousels.js). The sizer (every word stacked, invisible) sets the box: the
+                           widest word's width, one line's height; the slider sits on top. The heading's last
+                           word stays with the word ("your Book Club"); each word its own gradient. Screen
+                           readers get the first word once; the slider is hidden from them. Spans only
+                           (phrasing content inside a heading). #}
                         {% set parts = page.heading|trim|split(' ') %}
                         {% set gradients = ['from-magenta to-tangerine', 'from-teal to-violet', 'from-indigo to-scarlet', 'from-leaf to-lime', 'from-sky to-cobalt', 'from-forest to-mint'] %}
                         {{ parts|slice(0, parts|length - 1)|join(' ') }}
                         <span class="md:whitespace-nowrap">{{ parts|last }}
                             <span class="sr-only">{{ words|first }}</span>
-                            <span class="rotating-words" data-rotating-words aria-hidden="true">
-                                {%- for word in words -%}
-                                    <span class="rotating-words__word bg-linear-277 {{ gradients[loop.index0 % gradients|length] }} bg-clip-text text-transparent">{{ word }}</span>
-                                {%- endfor -%}
+                            <span class="rotating-words" data-carousel="words" aria-hidden="true">
+                                <span class="rotating-words__sizer">
+                                    {%- for word in words -%}<span>{{ word }}</span>{%- endfor -%}
+                                </span>
+                                <span class="swiper rotating-words__swiper">
+                                    <span class="swiper-wrapper">
+                                        {%- for word in words -%}
+                                            <span class="swiper-slide"><span class="bg-linear-277 {{ gradients[loop.index0 % gradients|length] }} bg-clip-text text-transparent">{{ word }}</span></span>
+                                        {%- endfor -%}
+                                    </span>
+                                </span>
                             </span>
                         </span>
                     {% else %}

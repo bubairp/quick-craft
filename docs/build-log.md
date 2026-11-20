@@ -1481,3 +1481,17 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Checked (Playwright):** the wrapper moves at a steady ~58px/s at 1440 with a logo always coming in on the right (no gap in the loop). Readable: the 5 outlet names once. 375: one moving row, no overflow. Reduced motion: transform stays at 0. No console errors.
 
 **Gotcha:** comparing `getComputedStyle().transform` before and after Swiper starts shows a change (`none` → matrix) even when nothing moves. Sample the matrix x (`DOMMatrix.m41`) after start-up instead.
+
+## 2026-11-20 · Rotating words → Swiper (same effect as the reference)
+
+**Decision (user):** build the rotating words with Swiper, keeping the partiful.com/org-profiles effect.
+
+**Done**
+- `banner.twig`: `data-carousel="words"` (spans only, inside the h1). An invisible sizer (all words stacked) sets the box: the widest word's width, one line's height. The Swiper is absolutely positioned on top of it.
+- `carousels.js` › `words`: `direction: 'vertical'`, `loop`, `autoplay` delay 600 + `speed` 450 (~1s per word), `EffectCreative` (prev: up 110% + fade, next: from 110% below + fade). No drag or keyboard; A11y off (aria-hidden; the heading has the first word as sr-only text). Reduced motion: not started. The forEach callback became `async` so the variant can import the effect on demand.
+- `src/js/rotating-words.js` removed.
+- app.css `.rotating-words`: sizer, absolute slider, overflow visible (the moving words aren't clipped), only the first word before Swiper loads.
+
+**Checked (Playwright):** frames match the reference: the old word goes up to about −55px and fades, the next comes from +56px below and fades in, about every second. The line doesn't move (x 620 throughout); box 285×52; 375 has no overflow; reduced motion shows only the first word; no console errors.
+
+**Gotcha:** the box first measured 33,554,432px tall. `swiper.css` (unlayered) set `.swiper { position: relative }` over our layered `absolute`, so the vertical Swiper sized itself from its own content. Fixed with `!important`; recorded in the skill.

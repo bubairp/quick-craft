@@ -177,6 +177,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 
 - Tailwind v4 spacing and leading utilities only exist in 0.25 steps (`leading-3.5`, not `leading-3.6`). A missing step is silently not generated.
 - Swiper: never combine `loop` with `freeMode`. For long drags, render the slide set several times and raise `loopAdditionalSlides`. Swiper's CSS is unlayered, so set easing through `--swiper-wrapper-transition-timing-function`.
+- Swiper's CSS is unlayered, so it beats every rule in our `@layer components`, whatever the specificity (`.swiper { position: relative; overflow: hidden }`, the creative effect's slide `overflow: hidden`). Override those with `!important` (or set Swiper's own CSS variables). A vertical Swiper that isn't absolutely positioned inside an auto-height box sizes its slides from its own height and grows without limit (the rotating words box reached 33,554,432px).
 - Lenis undoes `window.scrollTo`. In browser tests, scroll with a real wheel event.
 - Background Playwright and Chrome windows throttle `requestAnimationFrame` (about 2fps). Judge animation smoothness in a foreground window.
 - Craft `svg()` returns `''` for a missing file (and logs a warning), so always guard the output.
