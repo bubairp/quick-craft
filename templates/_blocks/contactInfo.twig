@@ -2,7 +2,7 @@
  # Contact details block. Figma: Contact 76:166 (+ the contact form, which Figma doesn't show);
  # redesigned 2026-11-20 (CLAUDE.md › contactInfo block).
  # From lg: left (5/12) = heading + text, the contact details as link cards, the socials as
- # chips; right (7/12, sticky) = the Wheel Form in a white card. Phones: the same order, stacked.
+ # chips; right (7/12, sticky) = the Wheel Form in a flat soft card (no shadow). Phones: the same order, stacked.
  # The lists always come from Site settings (via _globals), never from the block.
  # Receives: block, headingLevel, wheelformErrors, values (from the page, for the form's error state)
  # Fields: heading, text, contactHeading, socialHeading, formHeading, contactForm, spacing
@@ -93,7 +93,7 @@
         {# ── Right: the form card ── #}
         {% if form or (currentUser and currentUser.admin) %}
             {# sticky from lg: the left column is the taller one, so the form stays in view beside it #}
-            <div id="contact-form" class="scroll-mt-28 rounded-2xl bg-white p-6 shadow-card ring-1 ring-inset ring-black/5 md:p-10 lg:sticky lg:top-32 lg:col-span-7">
+            <div id="contact-form" class="scroll-mt-28 rounded-2xl bg-surface p-6 md:p-10 lg:sticky lg:top-32 lg:col-span-7">
                 {% if block.formHeading %}<{{ subTag }} class="mb-6 text-3xl font-bold md:mb-8">{{ block.formHeading }}</{{ subTag }}>{% endif %}
                 {% include '_components/wheel-form.twig' with {
                     form: form, anchor: 'contact-form', columns: 2,

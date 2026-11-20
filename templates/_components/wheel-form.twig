@@ -42,8 +42,8 @@
         submitButton: { html: buttonHtml|trim },
     }) %}
     {% set formErrors = errors|filter((v, k) => k not in service.fields|map(f => f.name))|values %}
-    {# softly filled; white + a 2px ring on focus; red ring when invalid #}
-    {% set inputClass = 'w-full rounded-md px-4 py-3 text-base ring-1 ring-inset outline-none transition-[background-color,box-shadow] duration-200 focus-visible:ring-2 aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-danger md:text-lg ' ~ (dark ? 'bg-white/10 ring-white/20 focus-visible:ring-paper placeholder:text-white/40' : 'bg-surface ring-transparent hover:ring-black/15 focus-visible:bg-white focus-visible:ring-ink placeholder:text-black/40') %}
+    {# white with a thin outline (for the soft card), darker on hover, a 2px ring on focus; red ring when invalid #}
+    {% set inputClass = 'w-full rounded-md px-4 py-3 text-base ring-1 ring-inset outline-none transition-[background-color,box-shadow] duration-200 focus-visible:ring-2 aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-danger md:text-lg ' ~ (dark ? 'bg-white/10 ring-white/20 focus-visible:ring-paper placeholder:text-white/40' : 'bg-white ring-black/10 hover:ring-black/25 focus-visible:ring-ink placeholder:text-black/40') %}
     {% set labelClass = 'text-sm font-semibold md:text-base' %}
     {% set autocomplete = { name: 'name', fullname: 'name', full_name: 'name', email: 'email', phone: 'tel', telephone: 'tel', company: 'organization' } %}
 

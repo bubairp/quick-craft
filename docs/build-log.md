@@ -1607,3 +1607,5 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - Error path: red ring, the message under the field, values kept. Success path: the ✓ card with the form's message.
 
 **Gotcha:** a sticky column only sticks when it's the shorter one; the left column (cards + chips) was taller than the form, so the form card is the sticky one.
+
+**Follow-up (user: "the form design doesn't look right, no shadow"):** the form card is now flat (`rounded-2xl bg-surface p-6 md:p-10`, no shadow or ring) with white inputs (`ring-1 ring-black/10`, darker on hover, 2px ink ring on focus, red when invalid). Checked at 1440 / 375: the card has `box-shadow: none`; the focus ring shows on the email field.
