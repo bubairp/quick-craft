@@ -1015,3 +1015,12 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Checked (Playwright) at 375 / 768 / 1440:** heading 48/48 500 (36 on a phone); list 800; card r12, pad 24; title 20/28 500 black; meta 16/22.4 black/60; card gap 12; group gap 32; links `_blank`; no overflow. The meta lines match the design exactly.
 - **Fixed:** a 2px title/meta gap made the cards 100px instead of 98.4 → removed.
 - **Known difference:** the button is 54px tall vs 48 in Figma (the shared button size, kept consistent site-wide).
+
+### 2026-11-20: Block: image (Figma Careers 6-7092)
+- **Rule first:** CLAUDE.md › pageBuilder blocks › image (one image edge to edge at its own ratio, optional caption, no scheme or spacing).
+- **No content-model change:** `image` + `text` (caption) already existed.
+- **Placeholder image** (replace before launch): the Figma photo was downloaded as `web/uploads/images/careers-team-office.png` (2048×1365) and registered with `ddev craft index-assets/one images`.
+- **Migration** `m261120_330000_image_block` (backup: `/tmp/before-image-block.sql.gz`): sets the asset's alt text from the Figma layer name and adds the block at the end of Careers.
+- **Template** `_blocks/image.twig`: `<figure>` + `_components/image.twig` (width 1600, `sizes="100vw"`, never cropped) + an optional `<figcaption>`.
+- **Checked (375 / 768 / 1440):** edge to edge (360 / 753 / 1425 wide), ratio 1.500 like Figma, alt present, no overflow.
+- **Found while checking (fixed in the next commit):** `_components/image.twig` builds `srcset` with density descriptors (`0.25x…1x`) next to `sizes`, which browsers ignore. It also always transforms at `width × 2` (3200px from this 2048px original = upscaling, and slow first loads).

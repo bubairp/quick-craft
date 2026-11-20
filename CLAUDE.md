@@ -123,6 +123,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - Card: `rounded-lg bg-white p-6 shadow-subtle ring-1 ring-inset ring-black/5`; title `text-xl font-medium`; meta `text-base text-black/60` = department • location • employment type • workplace (the workplace is hidden when On-site, as in Figma); Tabler `arrow-up-right`.
     - The whole card is the link (`externalLink`, opens in a new tab when set there). Without a link it's a plain card with no arrow.
     - With no jobs: the heading and a `|t` "No open roles right now." message.
+  - **image** (Figma Careers 6-7092; migration `m261120_330000_image_block`): `image` (one asset, shown edge to edge at its own ratio, never cropped), `text` (optional caption under it, `text-sm text-black/60`). `<figure>` + `<figcaption>`; `alt` from the asset; lazy-loaded with `sizes="100vw"`. No scheme or spacing (no padding of its own).
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`
