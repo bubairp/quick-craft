@@ -15,12 +15,14 @@
 {% set tag = 'h' ~ (headingLevel ?? 1) %}
 {% set buttons = page.buttons.eagerly().all() %}
 {% set hasButtons = buttons|filter(b => b.buttonLink.url ?? false)|length > 0 %}
+{# Uppercase display headings only on Home; every other page uses sentence case (CLAUDE.md) #}
+{% set isHome = (page.type.handle ?? '') == 'home' %}
 
 {% set sectionClass = [
     'relative overflow-hidden',
     layout == 'fullBleed' ? (media|length ? 'h-140 md:h-186' : 'pt-32 pb-16 md:pt-44 lg:pb-24')
     : (layout == 'simple' ? 'pt-32 pb-12 md:pt-44 md:pb-20' : 'pt-32 pb-16 md:pt-44 lg:pb-24'),
-    layout == 'centered' and not dark ? 'glow-bg',
+    (layout == 'centered' or (layout == 'split' and not isHome)) and not dark ? 'glow-bg',
 ]|join(' ') %}
 
 {% macro buttons(buttons, dark) %}
@@ -41,10 +43,10 @@
                         <p class="w-fit rounded-full border {{ dark ? 'border-graphite' : 'border-line bg-white' }} px-3 py-1 text-sm font-medium">{{ page.eyebrow }}</p>
                     {% endif %}
                     {% if page.heading %}
-                        <{{ tag }} class="text-balance text-5xl uppercase md:text-6xl lg:text-7xl">{{ page.heading }}</{{ tag }}>
+                        <{{ tag }} class="text-balance {{ isHome ? 'text-5xl uppercase md:text-6xl lg:text-7xl' : 'text-4xl font-medium md:text-headline' }}">{{ page.heading }}</{{ tag }}>
                     {% endif %}
                     {% if page.text %}
-                        <p class="max-w-md text-xl md:text-2xl {{ dark ? 'text-line' : 'text-black/60' }}">{{ page.text|nl2br }}</p>
+                        <p class="max-w-md text-xl {{ isHome ? 'md:text-2xl' }} {{ dark ? 'text-line' : 'text-black/60' }}">{{ page.text|nl2br }}</p>
                     {% endif %}
                 </div>
                 {% if hasButtons %}{{ _self.buttons(buttons, dark) }}{% endif %}
@@ -57,10 +59,10 @@
                 <div class="flex justify-center">
                     {% include '_components/image.twig' with {
                         image: media|first,
-                        width: 560,
-                        sizes: '(min-width: 1024px) 560px, 100vw',
+                        width: 580,
+                        sizes: '(min-width: 1024px) 580px, 100vw',
                         eager: true,
-                        class: 'h-auto w-full max-w-lg rounded-2xl object-cover',
+                        class: 'h-auto w-full max-w-145 rounded-xl object-cover',
                     } only %}
                 </div>
             {% endif %}

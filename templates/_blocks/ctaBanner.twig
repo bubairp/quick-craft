@@ -6,6 +6,7 @@
  #   rows             — collage rows sliding sideways at random speeds (src/js/cta-rows.js)
  #   rowsSpot         — the same rows in grayscale; colour shows in a circle around the cursor
  #   rowsSpotInvert   — the reverse: rows in colour; a grayscale circle follows the cursor
+ #   simple           — Figma Birthday 17-1368: plain heading + text + badges, no images
  # Receives: block, headingLevel
  # Fields: scheme, spacing, ctaLayout, heading, text, primaryButton (= heading link), buttons (common Matrix), images, showAppBadges
  #}
@@ -16,7 +17,27 @@
 {% set tag = 'h' ~ level %}
 {% set headingLink = block.primaryButton.url ?? null %}
 
-{% if block.heading or block.text %}
+{% if (block.ctaLayout.value ?? '') == 'simple' and (block.heading or block.text) %}
+{# Simple (Figma Birthday 17-1368): plain centred heading + text, buttons and store badges; no images #}
+<section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-16 md:px-10 md:py-25">
+    <div class="mx-auto flex max-w-content flex-col items-center gap-10 text-center md:gap-15">
+        {% include '_components/section-heading.twig' with { heading: block.heading, text: block.text, level: level, dark: dark, plain: true } only %}
+        {% set buttons = block.buttons.eagerly().all() %}
+        {% if buttons|length or block.showAppBadges %}
+            <div class="flex flex-col items-center gap-4">
+                {% include '_components/buttons.twig' with {
+                    buttons: buttons, dark: dark, shape: 'rounded', class: 'flex flex-wrap justify-center gap-3',
+                    variants: { primary: dark ? 'light' : 'dark', secondary: dark ? 'darkOnDark' : 'light' },
+                } only %}
+                {% if block.showAppBadges %}
+                    {% include '_components/store-links.twig' with { dark: dark, class: 'justify-center' } %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% elseif block.heading or block.text %}
 {# Measured on the reference: section 700px tall (388 on a phone); the pill is centred on the
    section (= the spiral's centre); the subtitle hangs 8px below it, outside the centring. #}
 <section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="relative flex min-h-97 flex-col justify-center overflow-hidden px-4 py-24 md:min-h-175">

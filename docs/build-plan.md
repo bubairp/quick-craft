@@ -50,12 +50,12 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ### Birthday Invitations (17-890)
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | banner (Banner tab) | split | 17-1049 |
+| ☑ | banner (Banner tab) | split | 17-1049 |
 | ☑ | `promoBar` | | 17-1076 |
-| ☐ | `imageGallery` | grid (captions) | 17-1088 |
-| ☐ | `cardGrid` | grid | 17-1271 |
+| ☑ | `imageGallery` | grid (captions, 3:2) | 17-1088 |
+| ☑ | `cardGrid` | textCards (images + pill) | 17-1271 |
 | ☑ | `richText` | | 17-1343 |
-| ☐ | `ctaBanner` | app badges | 17-1368 |
+| ☑ | `ctaBanner` | simple + app badges | 17-1368 |
 
 ### Invitation Maker (17-1440)
 | | Block | Layout | Node |

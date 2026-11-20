@@ -1188,3 +1188,34 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Fixed while checking:** "Join thousands" and "Get started" had no gap between them (`noBottom` + `noTop`); the photo cards keep their default padding now.
 - **Note:** full-page screenshots show `data-reveal` sections as blank (they appear on scroll), so check sections one by one after scrolling them into view.
 - **Placeholders:** all club names, quotes and photos come from the imported design; buttons → https://example.com/app.
+
+### 2026-11-20: Birthday Invitations page (Figma 17-890)
+- **Rule first:** CLAUDE.md › Birthday Invitations page:
+  - Banner headings are uppercase only on Home; split banner on landing pages.
+  - Gallery grid 3:2 + `note`; textCards image-card pill link; ctaBanner `simple`.
+- **Design:**
+  - Split banner (17-1049: "Fun birthday invitations", text, "Create free invite", a 580×330 image with radius 20).
+  - Promo bar (built earlier).
+  - "Endless design options" (17-1088): 18 captioned 3:2 tiles in 3 columns, then "Choose from thousands of options" + "Start creating".
+  - "Get your birthday party started" (17-1271): 3 image cards with a "Try it ↗" pill.
+  - Rich text (built earlier).
+  - "Want to keep the party going? Get the app" (17-1368) with store badges.
+- **Templates:**
+  - `banner.twig`: `isHome` (entry type `home`) decides uppercase vs sentence case (Home keeps its split dark hero); a landing split gets `glow-bg` and a `max-w-145 rounded-xl` image.
+  - `imageGallery.twig`: plain headings; grid tiles 3:2 with gap 20 × 52 (the row layout keeps squares); a `note` line above the buttons.
+  - `card.twig`: a text card with an image shows its link as a dark pill with `arrow-up-right`.
+  - `ctaBanner.twig`: a `simple` branch (plain section heading, buttons, `store-links`), no min height or images.
+- **Migration** `m261120_420000_birthday` (backup: `/tmp/before-birthday.sql.gz`):
+  - ctaLayout + `simple`; imageGallery + `note`.
+  - The 18 tile assets get title = caption and alt text from the Figma layer names.
+  - Banner content; the gallery + cards inserted after the promo bar (`elements_owners.sortOrder` +2 for the later blocks); the CTA at the end.
+  - The 22 placeholder images (`bday-*`) were downloaded from Figma.
+- **Checked (Playwright) at 375 / 1440:**
+  - Order: banner → promo → gallery → cards → rich text → CTA. h1 48px sentence case (36 on a phone).
+  - Tiles 320×213 (Figma 320×213); 18 captions; "Try it" pills; 2 store badges.
+  - No overflow; 0 broken images. Card images 320×240; the first screenshot was taken while their transforms were still generating.
+  - All pages 200 with no Twig errors; no uppercase h1 except on Home.
+- **Known differences:**
+  - Card text is 20px (Organizers' size) vs 16 here.
+  - The banner's purple wash (Figma: transparent → violet 48%) uses the shared `glow-bg` instead.
+  - Gallery tiles aren't links (Figma links each to its template; there's no per-image link field).
