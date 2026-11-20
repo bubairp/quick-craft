@@ -70,4 +70,7 @@
             {% endif %}
         </div>
     </section>
+
+    {# wheelformErrors / values exist when Wheel Form re-renders this page after a failed submit #}
+    {% include '_partials/newsletter.twig' with { wheelformErrors: wheelformErrors ?? {}, values: values ?? {} } only %}
 {% endblock %}

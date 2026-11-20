@@ -1122,3 +1122,28 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - 1 / 2 / 3 columns; cards 347 wide at 1440 (Figma 346.7), square images; title 26/31.2 600; filter-to-grid gap 80 (40 on a phone).
   - `?category=party-101` → 2 posts with Party 101 current; an unknown slug → all 6. 0 broken images, no overflow, no console errors.
 - **Not shown yet:** the author avatar, because the site logo (siteSettings `image`) isn't set; the logo export is still pending in the build plan. Next: the newsletter partial under the grid, then the post page.
+
+### 2026-11-20: Newsletter partial (Figma 18-5576) + Wheel Form success-message fix
+- **Rule first:** CLAUDE.md › Newsletter partial (layout, a no-JS Wheel Form flow, success / error states, Live Preview target, "every Wheel Form needs a success message"); the `--color-danger` token; skill gotchas (reset radius/colour scales, `form.getHoneypot()`).
+- **Design:** "Get on the list." (42px) on the left, an embedded sign-up form (650 wide) on the right, a note "💡 Have an idea? Pitch us: …" below, and aqua/orchid blur blobs (→ `.glow-bg`).
+- **Read first** (`vendor/xpertbot/craft-wheelform`, and the old site's `_components/newsletter-form.twig` for reference):
+  - `wheelform.form({id, redirect, submitButton})` returns a FormService.
+  - `open()` prints `<form>` + CSRF + `form_id` + `action` + a hashed `redirect`.
+  - `close()` prints the honeypot (if configured and not printed yet), the submit button (`submitButton.html` wins) and `</form>`.
+  - A non-AJAX submit: success → the flashes `wheelformSuccess` / `wheelformSubmittedForm` + a redirect; errors → the same page re-renders with `wheelformErrors` / `values`.
+- **Template** `_partials/newsletter.twig` (included by `blog/index.twig`, which passes `wheelformErrors` / `values` through):
+  - The `<form>` itself is the pill: sr-only label + email input + hidden honeypot + our `|t` button.
+  - Success shows a `role="status"` box with the form's message; errors show a `role="alert"` line tied to the input (`aria-invalid`, `aria-describedby`), keeping the typed value.
+  - Admins see a hint when no form is chosen.
+- **Migrations:**
+  - `m261120_390000_newsletter` (backup: `/tmp/before-newsletter.sql.gz`):
+    - A Wheel Form "Newsletter" (email field required; honeypot `website`; saves entries; sends no email).
+    - Newsletter Single content (heading, note, form); preview target Blog (`blog`); palette + `danger`.
+  - `m261120_391000_wheelform_submit_messages`: **bug found while testing.** A successful submit gave a 500 (`SessionBehavior::setNotice(): null given`), because the plugin's Success Message setting was never saved and the forms had no `submit_message`. Every form without one now gets a default (Newsletter: "Watch your inbox for the next issue."; Contact Form: "Thanks! We’ll get back to you soon."). The 390000 insert now includes it too.
+- **Checked (Playwright) at 375 / 768 / 1440:**
+  - Heading 36 → 48 (Figma 42; no 42 token); form 328 / 625 / 650; stacked below `lg`, a row at 1440; no overflow; no console errors.
+  - **Error path** (browser validation bypassed, "not-an-email"): page re-rendered, "Email address is not a valid email address.", `aria-invalid`, value kept.
+  - **Success path:** 200, redirect to `#newsletter`, "Thanks, you’re on the list! Watch your inbox for the next issue.", form hidden; after a reload the form is back.
+- **Fixed while checking:** `rounded-3xl` doesn't exist (the radius scale is reset to tokens), so the phone layout had square corners. It's `rounded-xl` now.
+- **Note:** the test submissions (test@example.com, test3@example.com) are saved as Wheel Form entries locally; delete them in CP › Wheel Form if wanted.
+- **Before launch (user):** fill in Wheel Form's plugin settings (From email, Success Message), and replace the placeholder pitch address in the note.

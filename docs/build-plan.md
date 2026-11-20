@@ -103,7 +103,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 |---|---|---|---|
 | ☑ | `blog/index.twig` | 18-4865 (header 18-5024, grid 18-5028) | category filter, 3-col cards, pagination |
 | ☐ | `blog/_entry.twig` | 18-5645 (article 18-5804) | featured/latest tags, body, "Next:" link |
-| ☐ | `_partials/newsletter.twig` | 18-5576 / 18-5927 | `newsletter` Single (via `_globals`) + Wheel Form; add its Live Preview target → `blog` |
+| ☑ | `_partials/newsletter.twig` | 18-5576 / 18-5927 | `newsletter` Single (via `_globals`) + Wheel Form; add its Live Preview target → `blog` |
 
 ## 6b. Shopify-style page builder (agreed 2026-11-19, in this order)
 - ☑ Colour schemes (`scheme`: light / white / soft / dark) + spacing presets (`spacing`: default / noTop / noBottom / none)

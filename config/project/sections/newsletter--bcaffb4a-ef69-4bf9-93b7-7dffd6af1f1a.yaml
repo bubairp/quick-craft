@@ -7,6 +7,11 @@ handle: newsletter
 maxAuthors: 1
 minAuthors: 1
 name: Newsletter
+previewTargets:
+  -
+    label: Blog
+    refresh: true
+    urlFormat: blog
 propagationMethod: all
 siteSettings:
   739635e4-10bd-4f41-a8f1-4a0cc5ed1057: # Quick Craft

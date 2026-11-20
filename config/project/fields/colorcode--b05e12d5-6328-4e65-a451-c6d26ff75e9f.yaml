@@ -228,6 +228,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#b42318'
+        -
+          - label
+          - danger
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

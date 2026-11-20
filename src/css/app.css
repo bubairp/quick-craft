@@ -36,6 +36,7 @@
   --color-glow-pink: #ffc4fe;  /* blurred background blobs */
   --color-glow-blue: #5fd8ff;
   --color-promo: #3c0a7a;      /* promo bar background (Figma 17-1076) */
+  --color-danger: #b42318;     /* form error text (AA on white and the light glow) */
   --color-warning: #ffbf00;    /* comparison "warning" icon (Figma 17-2074) */
   --color-aqua: #85f5ff;       /* comparison card gradient start, used at /10 (Figma 17-2084) */
   --color-orchid: #f49eff;     /* comparison card gradient end, used at /10 */

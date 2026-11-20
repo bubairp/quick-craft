@@ -1,0 +1,68 @@
+{#
+ # Newsletter sign-up. Figma: Blog 18-5576 (listing) / 18-5927 (post).
+ # Content: the `newsletter` Single from _globals (heading, text = note, newsletterForm = Wheel Form).
+ # No JS: a plain POST to Wheel Form (vendor/xpertbot/craft-wheelform). On success it redirects back
+ # here with the `wheelformSuccess` flash; on errors it re-renders the page with `wheelformErrors`
+ # and `values` (available as template variables; passed in by the including template).
+ #}
+{% set newsletter = _globals.get('newsletter') %}
+{% set form = newsletter ? (newsletter.newsletterForm ?? null) : null %}
+{% set errors = wheelformErrors ?? {} %}
+{% set session = craft.app.session %}
+{% set submitted = form and session.hasFlash('wheelformSubmittedForm') and session.getFlash('wheelformSubmittedForm', null, false) == form.id %}
+{% set successMessage = submitted ? session.getFlash('wheelformSuccess') : null %}
+{% if submitted %}{% do session.getFlash('wheelformSubmittedForm') %}{% endif %}
+
+{% if newsletter and (newsletter.heading or form) %}
+    <section id="newsletter" class="glow-bg scroll-mt-28 px-4 py-16 md:px-gutter md:py-25">
+        <div class="mx-auto flex max-w-content flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-center lg:gap-10">
+            {% if newsletter.heading %}
+                <h2 class="text-balance text-4xl font-medium md:text-headline">{{ newsletter.heading }}</h2>
+            {% endif %}
+
+            <div class="flex w-full max-w-162.5 flex-col gap-4">
+                {% if submitted %}
+                    <p class="rounded-xl bg-white p-6 text-lg shadow-card" role="status" tabindex="-1">
+                        <strong class="block text-xl">{{ 'Thanks, you’re on the list!'|t }}</strong>
+                        {% if successMessage %}<span class="text-black/60">{{ successMessage }}</span>{% endif %}
+                    </p>
+                {% elseif form %}
+                    {% set emailField = form.fields|filter(f => f.type == 'email')|first %}
+                    {% set fieldName = emailField ? emailField.name : 'email' %}
+                    {% set fieldErrors = errors[fieldName] ?? [] %}
+                    {% set formErrors = (errors|filter((v, k) => k != fieldName))|values %}
+                    {% set inputId = 'newsletter-email' %}
+                    {% set buttonHtml %}<button type="submit" class="h-12 shrink-0 rounded-full bg-ink px-6 text-base font-bold text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">{{ 'Subscribe'|t }}</button>{% endset %}
+                    {% set form = wheelform.form({
+                        id: form.id,
+                        redirect: craft.app.request.absoluteUrl|split('#')|first ~ '#newsletter',
+                        submitButton: { html: buttonHtml|trim },
+                    }) %}
+
+                    {# The <form> is the pill: input + (honeypot) + button. close() prints the button and </form>. #}
+                    {{ form.open('', { class: 'relative flex flex-col gap-2 rounded-xl bg-white p-2 shadow-card ring-1 ring-black/10 focus-within:ring-2 focus-within:ring-ink sm:flex-row sm:items-center sm:rounded-full' }) }}
+                        <label for="{{ inputId }}" class="sr-only">{{ emailField ? emailField.label : 'Email address'|t }}</label>
+                        <input id="{{ inputId }}" type="email" name="{{ fieldName }}" required autocomplete="email"
+                               value="{{ (values ?? {})[fieldName] ?? '' }}"
+                               placeholder="{{ 'Your email address'|t }}"
+                               {% if fieldErrors|length %}aria-invalid="true" aria-describedby="newsletter-error"{% endif %}
+                               class="h-12 min-w-0 flex-1 rounded-full bg-transparent px-4 text-lg outline-none placeholder:text-black/40">
+                        {# getHoneypot() explicitly: `form.honeypot` would call honeypot() (prints a field / throws) #}
+                        {% if form.getHoneypot() %}{{ form.honeypot('hidden') }}{% endif %}
+                    {{ form.close() }}
+                    {% if fieldErrors|length or formErrors|length %}
+                        <p id="newsletter-error" class="text-base text-danger" role="alert">
+                            {{ (fieldErrors|length ? fieldErrors : formErrors)|flatten|join(' ') }}
+                        </p>
+                    {% endif %}
+                {% elseif currentUser and currentUser.admin %}
+                    <p class="text-base text-black/60">{{ 'Choose a form in the Newsletter settings.'|t }}</p>
+                {% endif %}
+
+                {% if newsletter.text|trim %}
+                    <p class="text-lg text-black/60">{{ newsletter.text }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endif %}
