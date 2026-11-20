@@ -28,3 +28,6 @@
 .DS_Store
 Thumbs.db
 *.log
+
+# Claude Code MCP servers are registered per developer (local scope), see README › Craft MCP setup
+/.mcp.json

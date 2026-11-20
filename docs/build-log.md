@@ -1304,3 +1304,14 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - `ddev exec --raw` drops piped stdin (the server gets nothing); use plain `ddev exec`.
   - Piping JSON from Windows PowerShell 5.1 into a native exe adds a BOM, so the first line fails with "Syntax error". Git Bash (and Claude Code itself) pipe clean bytes.
 - **To use:** restart Claude Code in this project and approve the `craft` server; `/mcp` should show it as connected.
+
+### 2026-11-20: Craft MCP moved to Claude Code's local scope; README setup guide
+- **Rule first:** CLAUDE.md › Craft MCP and skill › Craft MCP. The server is registered per developer in Claude Code's local scope, not in a committed `.mcp.json` (the user's decision): the command is machine-specific and the server runs as admin.
+- **Registered locally** (Windows, from Git Bash in the project folder):
+  `claude mcp add --scope local craft -- wsl -d Ubuntu -- bash -lc "cd ~/my-project/quick-craft && ddev exec php craft mcp/serve --user=admin"`
+  → stored in `C:\Users\<you>\.claude.json` under this project. `claude mcp get craft` → Scope: Local config, **✔ Connected**; the args are stored as 6 separate items (the `bash -lc` command is one argument).
+- **Removed from Git:** `git rm .mcp.json`, and `/.mcp.json` added to `.gitignore`.
+- **README.md created** (there wasn't one): a short intro, quick start, and **Craft MCP setup** with commands for macOS/Linux (DDEV), Windows with WSL, and servers without DDEV (local PHP, SSH, HTTP transport via CP › Settings › MCP + OAuth; the SSH and HTTP ones are marked untested).
+- **Gotchas:**
+  - In Windows PowerShell, `claude` is `claude.ps1`, so PowerShell eats the `--` separators (`error: unknown option '-d'`) and strips the inner quotes for `claude mcp add-json` (`Invalid configuration`). Git Bash passes the arguments unchanged.
+  - Local scope is keyed by the folder Claude Code runs in, so run `claude mcp add` from the project root.

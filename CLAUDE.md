@@ -310,7 +310,8 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - Create a new field only when no base field has the needed settings (settings belong to the field, not the instance).
 
 ### Craft MCP (built into Craft 5.12)
-- **Server:** Craft's own MCP server (`vendor/craftcms/cms/src/mcp/`, no plugin), stdio transport: `php craft mcp/serve --user=admin`. It's registered for Claude Code in **`.mcp.json`** (server `craft`) and runs through `wsl` → `ddev exec`. DDEV must be running.
+- **Server:** Craft's own MCP server (`vendor/craftcms/cms/src/mcp/`, no plugin), stdio transport: `php craft mcp/serve --user=admin`.
+- **Registered per developer in Claude Code's local scope** (`claude mcp add --scope local craft -- …`, stored in `~/.claude.json` for this project), **not in a committed `.mcp.json`** (the user's decision, 2026-11-20): the command depends on each machine (macOS/Linux, Windows + WSL, no DDEV) and runs as admin. `.mcp.json` is gitignored. The setup commands for each platform are in **README.md › Craft MCP setup**. DDEV must be running.
   - Use plain `ddev exec`, **not `ddev exec --raw`**: `--raw` drops piped stdin, so the server receives nothing.
   - The HTTP transport (`/mcp` + OAuth, CP › Settings › MCP) stays **off**.
 - **It acts as `admin` with full rights** (Solo allows one user). So:
