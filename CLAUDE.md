@@ -311,7 +311,9 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 
 ### Craft MCP (built into Craft 5.12)
 - **Server:** Craft's own MCP server (`vendor/craftcms/cms/src/mcp/`, no plugin), stdio transport: `php craft mcp/serve --user=admin`.
-- **Registered per developer in Claude Code's local scope** (`claude mcp add --scope local craft -- …`, stored in `~/.claude.json` for this project), **not in a committed `.mcp.json`** (the user's decision, 2026-11-20): the command depends on each machine (macOS/Linux, Windows + WSL, no DDEV) and runs as admin. `.mcp.json` is gitignored. The setup commands for each platform are in **README.md › Craft MCP setup**. DDEV must be running.
+- **Shared with the team in a portable, committed `.mcp.json`** (the user's decision, 2026-11-20; it replaces the earlier local-only setup): `ddev exec php craft mcp/serve --user=${CRAFT_MCP_USER:-admin}`. It has no paths and no WSL names, so it works wherever Claude Code runs in the project folder next to DDEV (macOS, Linux, or **inside WSL**). Each developer sets `CRAFT_MCP_USER` to their own Craft username. Craft Solo has only one user, so it stays `admin` until the site moves to Team or Pro.
+- **Windows outside WSL:** Claude Code on Windows can't run `ddev` directly. That developer adds a **local-scope override** with the same name (`claude mcp add --scope local craft -- wsl -d <distro> -- bash -lc "cd <path> && ddev exec php craft mcp/serve --user=…"`). Local scope beats project scope. The project owner's machine uses this override.
+- Setup per platform: **README.md › New developer setup / Craft MCP setup**. DDEV must be running.
   - Use plain `ddev exec`, **not `ddev exec --raw`**: `--raw` drops piped stdin, so the server receives nothing.
   - The HTTP transport (`/mcp` + OAuth, CP › Settings › MCP) stays **off**.
 - **It acts as `admin` with full rights** (Solo allows one user). So:

@@ -1315,3 +1315,14 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Gotchas:**
   - In Windows PowerShell, `claude` is `claude.ps1`, so PowerShell eats the `--` separators (`error: unknown option '-d'`) and strips the inner quotes for `claude mcp add-json` (`Invalid configuration`). Git Bash passes the arguments unchanged.
   - Local scope is keyed by the folder Claude Code runs in, so run `claude mcp add` from the project root.
+
+### 2026-11-20: Team setup — portable .mcp.json + "New developer setup" in README
+- **Rule first:** CLAUDE.md › Craft MCP and skill › Craft MCP: a committed, portable `.mcp.json` for the team (the user's decision, replacing the local-only setup), plus a local-scope override for Windows users who run Claude Code outside WSL.
+- **`.mcp.json` (committed):** `ddev exec php craft mcp/serve --user=${CRAFT_MCP_USER:-admin}`, with no paths or WSL names; it runs from the project root wherever Claude Code and DDEV share a shell (macOS, Linux, inside WSL). `/.mcp.json` was removed from `.gitignore`.
+- **Kept:** the owner's local-scope `craft` (Windows → `wsl … ddev exec …`). Checked: on Windows, `claude mcp get craft` still resolves to "Local config", because local beats project scope.
+- **Tested** the shared command inside WSL, from the project root with `CRAFT_MCP_USER` unset (→ admin): initialize OK; `system_status_get` → `{"live": true}`.
+- **README.md:**
+  - **New developer setup:** requirements (DDEV + Docker; Windows = WSL2, project in the WSL filesystem, Claude Code inside WSL) and steps (clone, `cp .env.example.dev .env`, ddev start, composer and npm install, `craft setup/app-id` + `setup/security-key` — both checked in SetupController — import a DB snapshot, `craft up`, dev server). Uploads aren't in Git (copy `web/uploads/images`, then `index-assets/one images`). How to make a snapshot.
+  - **HTTPS:** `mkcert -install` + `ddev restart`; `libnss3-tools` for Chromium/Playwright on Linux/WSL; on Windows + WSL2, also on Windows, sharing the CA as in DDEV's WSL2 guide; `ignoreHTTPSErrors` as a fallback.
+  - **Craft MCP setup:** works automatically from `.mcp.json`; set `CRAFT_MCP_USER` (Craft Solo = one user, so admin for now); the Windows-outside-WSL override (Git Bash, not PowerShell); servers without DDEV (local PHP, SSH and HTTP, the last two marked untested).
+- Not pushed (as asked).
