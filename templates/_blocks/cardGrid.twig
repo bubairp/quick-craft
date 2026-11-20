@@ -75,15 +75,17 @@
    a plain heading + text + buttons call to action (Organizers "Get started for free"). #}
 <section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}"
          class="px-4 py-16 md:px-gutter md:py-25 {{ block.glow and not dark ? 'glow-bg' }}">
-    <div class="mx-auto flex max-w-narrow flex-col items-center gap-10 md:gap-15">
+    {# no cards = the "Get started for free" call to action (partiful.com/org-profiles): a one-line
+       subtitle at 1440 (max-w-200), heading → text 16, text → buttons 36 #}
+    <div class="mx-auto flex max-w-narrow flex-col items-center {{ count ? 'gap-10 md:gap-15' : 'gap-8 md:gap-9' }}">
         {% if block.eyebrow or block.heading or block.text %}
-            <div class="flex flex-col items-center gap-3 text-center" data-reveal>
+            <div class="flex flex-col items-center text-center {{ count ? 'gap-3' : 'gap-4' }}" data-reveal>
                 {% if block.eyebrow %}<p class="text-xl font-medium text-accent">{{ block.eyebrow }}</p>{% endif %}
                 {% if block.heading %}
                     <{{ 'h' ~ level }} class="text-balance text-4xl font-medium md:text-headline">{{ block.heading }}</{{ 'h' ~ level }}>
                 {% endif %}
                 {% if block.text %}
-                    <p class="max-w-article text-balance text-xl md:text-2xl {{ dark ? 'text-line' : 'text-black/60' }}">{{ block.text|nl2br }}</p>
+                    <p class="{{ count ? 'max-w-article' : 'max-w-200' }} text-balance text-xl md:text-2xl {{ dark ? 'text-line' : 'text-black/60' }}">{{ block.text|nl2br }}</p>
                 {% endif %}
             </div>
         {% endif %}

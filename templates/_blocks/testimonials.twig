@@ -3,6 +3,7 @@
  #   carousel: Figma Home 6-2347 — Swiper row of square tiles (reviews + stats), prev/next
  #   quotes:   Figma Organizers 17-591 — 3 centered quotes with avatar image
  #   reviews:  Figma Invitation Maker 17-2211 — grid of review cards
+ #   logoRow:  partiful.com/org-profiles — static row of press logos under a banner (no quotes)
  # Receives: block, headingLevel
  # Fields: testimonialLayout, spacing, eyebrow, heading, text,
  #         testimonials (testimonial: text=quote, heading, personName, personDetail, image, rating;
@@ -50,6 +51,26 @@
             </ul>
         </div>
     </div>
+</section>
+
+{% elseif items|length and layout == 'logoRow' %}
+{# Logo row (the strip under the Organizers banner, partiful.com/org-profiles): a static centred row
+   of press logos, no quotes; wraps on phones. Item: image = logo, personName = outlet (alt / fallback). #}
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-10 md:px-gutter" aria-label="{{ block.heading ?: 'In the press'|t }}">
+    <ul class="mx-auto flex max-w-content flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-12">
+        {% for item in items %}
+            {% set logo = item.image.one() %}
+            {% if logo or item.personName %}
+                <li class="flex items-center">
+                    {% if logo %}
+                        {{ images.singleImg(logo, 200, { sizes: '200px' }, 'h-6 w-auto md:h-8', { alt: item.personName ?: logo.alt }) }}
+                    {% else %}
+                        <span class="text-xl font-bold">{{ item.personName }}</span>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 </section>
 
 {% elseif items|length and layout == 'pressRow' %}

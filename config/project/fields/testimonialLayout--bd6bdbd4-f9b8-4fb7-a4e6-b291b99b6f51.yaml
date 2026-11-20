@@ -61,6 +61,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Logo row (press logos, no quotes)'
+        -
+          - value
+          - logoRow
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

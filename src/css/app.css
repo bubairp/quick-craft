@@ -41,6 +41,13 @@
   --color-warning: #ffbf00;    /* comparison "warning" icon (Figma 17-2074) */
   --color-aqua: #85f5ff;       /* comparison card gradient start, used at /10 (Figma 17-2084) */
   --color-orchid: #f49eff;     /* comparison card gradient end, used at /10 */
+  /* rotating-word gradients (Organizers banner; each word its own pair, partiful.com/org-profiles) */
+  --color-magenta: #ad00a2;   --color-tangerine: #ed8702;
+  --color-teal: #04bda7;      --color-violet: #8302ed;
+  --color-indigo: #4e04bd;    --color-scarlet: #ed022d;
+  --color-leaf: #10bd04;      /* + lime */
+  --color-sky: #00c0fa;       --color-cobalt: #043ed1;
+  --color-forest: #209905;    --color-mint: #04d1b2;
 
   /* Type scale: size / line-height / tracking */
   --text-xs: 0.75rem;
@@ -488,11 +495,39 @@
 
   /* Soft pastel glow behind a section (Figma Careers 6-6862 uses blurred photos; this
      approximates them with token colours) */
-  .glow-bg {
+  /* Soft edges: the gradients sit on a layer masked to fade out at the top and bottom, so two
+     glow sections (or a glow section and the page) never meet in a hard line. */
+  .glow-bg { position: relative; isolation: isolate; }
+  .glow-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background-image:
       radial-gradient(45% 55% at 15% 75%, color-mix(in srgb, var(--color-aqua) 35%, transparent), transparent),
       radial-gradient(40% 50% at 75% 45%, color-mix(in srgb, var(--color-orchid) 25%, transparent), transparent),
       radial-gradient(35% 45% at 50% 0%, color-mix(in srgb, var(--color-glow-blue) 18%, transparent), transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+  }
+
+  /* Rotating words (Organizers banner; partiful.com/org-profiles; src/js/rotating-words.js):
+     the words share one grid cell (the widest sets the width, so the line doesn't jump). The old
+     word slides up and out, the next slides up from below; slight sideways stretch while moving. */
+  .rotating-words { display: inline-grid; justify-items: start; text-align: left; vertical-align: bottom; }
+  .rotating-words__word {
+    grid-area: 1 / 1;
+    padding-bottom: 0.08em;           /* descenders inside the clipped gradient */
+    opacity: 0;
+    transform: translateY(0.9em) scaleX(1.05);
+    transform-origin: left center;
+  }
+  .rotating-words:not([data-ready]) .rotating-words__word:first-of-type,
+  .rotating-words__word.is-active { opacity: 1; transform: none; }
+  .rotating-words__word.is-leaving { opacity: 0; transform: translateY(-0.9em) scaleX(1.05); }
+  .rotating-words__word.is-active,
+  .rotating-words__word.is-leaving {
+    transition: opacity 450ms ease-out, transform 450ms var(--ease-spring);
   }
 
   /* Banner collage (Figma Organizers 17-426): tilted event cards and avatars around the centred

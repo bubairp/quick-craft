@@ -106,15 +106,26 @@
                 {{ images.singleImg(media[1], 256, { lazy: false, sizes: '256px', decorative: true }, 'h-10 w-auto md:h-14') }}
             {% endif %}
             {% if page.heading %}
+                {# filter out empty rows before testing, so an empty table never prints an empty span #}
+                {% set words = (page.rotatingWords ?? [])|map(r => r.word|trim)|filter|values %}
                 <{{ tag }} class="text-balance text-4xl font-medium md:text-headline">
-                    {{ page.heading }}
-                    {# filter out empty rows before testing, so an empty table never prints an empty span #}
-                    {% set words = (page.rotatingWords ?? [])|map(r => r.word|trim)|filter|values %}
                     {% if words|length %}
-                        <span class="block bg-linear-to-r from-success to-lime bg-clip-text pb-1 text-transparent"
-                              x-data="{ words: {{ words|json_encode }}, i: 0 }"
-                              x-init="if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => i = (i + 1) % words.length, 2000)"
-                              x-text="words[i]">{{ words|first }}</span>
+                        {# Rotating words (partiful.com/org-profiles; src/js/rotating-words.js): the heading's
+                           last word stays with the word ("your Book Club"); each word its own gradient.
+                           Screen readers get the first word once; the animated copies are hidden. #}
+                        {% set parts = page.heading|trim|split(' ') %}
+                        {% set gradients = ['from-magenta to-tangerine', 'from-teal to-violet', 'from-indigo to-scarlet', 'from-leaf to-lime', 'from-sky to-cobalt', 'from-forest to-mint'] %}
+                        {{ parts|slice(0, parts|length - 1)|join(' ') }}
+                        <span class="md:whitespace-nowrap">{{ parts|last }}
+                            <span class="sr-only">{{ words|first }}</span>
+                            <span class="rotating-words" data-rotating-words aria-hidden="true">
+                                {%- for word in words -%}
+                                    <span class="rotating-words__word bg-linear-277 {{ gradients[loop.index0 % gradients|length] }} bg-clip-text text-transparent">{{ word }}</span>
+                                {%- endfor -%}
+                            </span>
+                        </span>
+                    {% else %}
+                        {{ page.heading }}
                     {% endif %}
                 </{{ tag }}>
             {% endif %}

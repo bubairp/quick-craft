@@ -1446,3 +1446,25 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - Windows Python string replacements miss on CRLF files; use Edit, or match `\r\n`.
 
 **Before launch:** the real legal text on the 4 legal pages; occasion-specific images and SEO text.
+
+## 2026-11-20 · Organizers as partiful.com/org-profiles: rotating words, logo row, "Get started for free"
+
+**Reference measured with Playwright** (1440):
+- Rotating words: a new word every ~1s. The old word moves up ~60px and fades, the new one comes up from below (~400ms, a slight scaleX stretch). Each word has its own 277° two-colour gradient.
+- A static press-logo row sits right under the banner.
+- The "Get started" glow has no edges; its subtitle is one line.
+
+**Done** (migration `m261120_490000_organizers_reference`, backup `/tmp/before-organizers-reference.sql.gz`)
+- `src/js/rotating-words.js` + `.rotating-words` (app.css):
+  - The words share one inline-grid cell; `is-active` / `is-leaving` with 450ms transitions.
+  - Reduced motion: none. Without JS the first word shows.
+  - Screen readers get the first word once (sr-only); the animated words are `aria-hidden`.
+- New colour tokens for the word gradients (magenta, tangerine, teal, violet, indigo, scarlet, leaf, sky, cobalt, forest, mint); `bg-linear-277`.
+- `banner.twig`: the heading's last word stays with the rotating word (`md:whitespace-nowrap`).
+- testimonials › `logoRow` (new option): a static centred logo row. Organizers gets one as its first block (NYT, WSJ, TIME, The Atlantic, USA Today; reusing Home's press logos).
+- `.glow-bg` → a masked `::before` layer, so glow sections fade out at the top and bottom (site-wide; this removes the seam above "Get started for free").
+- cardGrid textCards without cards: subtitle `max-w-200`, gaps 16 / 36.
+
+**Checked:** the animation frames (old word up + out, new word up + in); one h1; logo alts; 375 has no overflow and the logos wrap. Ten pages incl. `/blocks` → 200 with no overflow or JS errors; glow sections render with soft edges (Careers checked).
+
+**Not copied:** the reference's display font and brand. Copy and images stay Quick Craft's (placeholder logos from the imported design).
