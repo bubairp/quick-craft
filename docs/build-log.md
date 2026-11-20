@@ -1616,3 +1616,7 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Done:** Banner › imageOnly section `pt-28 md:pt-40` → `pt-4 md:pt-5` (the same gap as the sides). The floating header pill sits over the photo.
 **Checked:** image top/left 20px at 1440 and 768, 16px at 375; no overflow.
 **Follow-up (user: a bit less gap):** `pt-2 px-2` (8px) on phones, `md:pt-3 md:px-3` (12px) from md. Checked: 12/12/12px at 1440, 8/8/8px at 375 (top/left/right); no overflow.
+
+## 2026-11-20 · Footer gap = Contact banner gap
+
+**User:** the same gap on the footer. **Done:** `<footer>` `px-4 pb-4 md:px-8 md:pb-8` → `px-2 pb-2 md:px-3 md:pb-3` (site-wide; the wordmark re-fits to the wider panel by itself). **Checked:** left/right/bottom 12px at 1440, 8px at 375; no overflow.
