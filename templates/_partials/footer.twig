@@ -25,8 +25,8 @@
     {{- out|json_encode|raw -}}
 {% endmacro %}
 
-{# the same gap as the Contact banner (8px phones, 12px from md) on the sides and bottom #}
-<footer class="px-2 pb-2 md:px-3 md:pb-3">
+{# the same gap as the Contact banner (12px phones, 16px from md) on the sides and bottom #}
+<footer class="px-3 pb-3 md:px-4 md:pb-4">
     <div class="overflow-hidden rounded-2xl bg-ink px-6 pt-12 pb-3 text-paper md:px-gutter md:pt-16 md:pb-4">
         {# phones: 2 columns, the badges side by side in their own row; sm–lg: 3 columns, the badges
            (stacked) fill the 6th cell; xl: one row, 5 columns + badges. #}

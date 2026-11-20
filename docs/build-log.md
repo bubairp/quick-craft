@@ -1620,3 +1620,4 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 ## 2026-11-20 · Footer gap = Contact banner gap
 
 **User:** the same gap on the footer. **Done:** `<footer>` `px-4 pb-4 md:px-8 md:pb-8` → `px-2 pb-2 md:px-3 md:pb-3` (site-wide; the wordmark re-fits to the wider panel by itself). **Checked:** left/right/bottom 12px at 1440, 8px at 375; no overflow.
+**Follow-up (user: a bit more gap):** banner `px-3 pt-3 md:px-4 md:pt-4`, footer `px-3 pb-3 md:px-4 md:pb-4` → 12px on phones, 16px from md, the same for both. Checked at 1440 / 768 / 375: banner top/left/right and footer left/right/bottom all 16 / 16 / 12px; no overflow.
