@@ -517,6 +517,59 @@
     mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
   }
 
+  /* Link hover line (footer): a 1px line under the text draws in from the left and leaves to the
+     right. Put .link-line on the text span (not the icon); the <a> is the hover/focus target.
+     The current page keeps the line. */
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: 0% 1px;
+    padding-bottom: 2px;
+    transition: background-size 350ms var(--ease-out-soft);
+  }
+  a:hover .link-line,
+  a:focus-visible .link-line,
+  a[aria-current="page"] .link-line {
+    background-position: left bottom;
+    background-size: 100% 1px;
+  }
+
+  /* Footer wordmark (src/js/footer-wordmark.js): fitted to the panel's width (--wordmark-size;
+     fallback the fluid token). Each letter is a box: the outer one rises in from below the edge
+     (clipped by the wordmark), the inner one hops on hover. */
+  .footer-wordmark {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+    user-select: none;
+    font-size: var(--wordmark-size, var(--text-wordmark));
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    padding-bottom: 0.06em;           /* descenders (the q) inside the clip */
+    color: var(--color-white);
+  }
+  .footer-wordmark__char { display: inline-block; }
+  .footer-wordmark__char > span {
+    display: inline-block;
+    transition: transform 400ms var(--ease-spring);
+  }
+  .footer-wordmark__char:hover > span { transform: translateY(-0.1em) rotate(-4deg); }
+  /* before it comes into view (only once JS is running and motion is allowed) */
+  .footer-wordmark[data-animate] .footer-wordmark__char {
+    transform: translateY(110%);
+    transition: transform 900ms var(--ease-spring);
+    transition-delay: calc(var(--i, 0) * 45ms);
+  }
+  .footer-wordmark[data-animate].is-in .footer-wordmark__char { transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link-line, .footer-wordmark__char > span { transition: none; }
+    .footer-wordmark__char:hover > span { transform: none; }
+  }
+
   /* Rotating words (Organizers banner; partiful.com/org-profiles): a vertical Swiper
      (data-carousel="words", src/js/carousels.js) on top of an invisible sizer. The sizer stacks
      every word in one grid cell: the box gets the widest word's width and one line's height, so

@@ -1,15 +1,17 @@
 {#
- # Site footer — Figma 6-2058 (dark rounded panel).
+ # Site footer — Figma 6-2058 (dark rounded panel); behaviour after partiful.com. CLAUDE.md › Footer.
  # Columns: Simple RP Menu menus (heading = menu name) + the "Socials" column from siteSettings.socialLinks.
  # Menu links are rendered from the
  # plugin's resolved items (simplerpmenuItems.getResolvedMenuItems, as in the header) so an
  # item can carry a Tabler icon: Data JSON "icon: brand-instagram" (e.g. the Socials menu).
- # Store links: siteSettings Single (via _globals). Wordmark: siteName.
+ # Store links: siteSettings Single (via _globals). Wordmark: siteName (fitted + animated by
+ # src/js/footer-wordmark.js). Link hover: .link-line (a line drawn in under the text).
  #}
 {# 'socials' = the siteSettings `socialLinks` Matrix (_components/social-links.twig), not a menu #}
 {% set footerMenus = ['footerCompany', 'footerProduct', 'socials', 'footerLegal', 'footerSupport'] %}
 {% set siteSettings = _globals.get('siteSettings') %}
-{% set footerLinkClass = 'inline-flex items-center gap-2.5 text-xl font-light text-paper underline-offset-4 hover:underline' %}
+{% set footerLinkClass = 'group/link inline-flex items-center gap-2.5 rounded-xs text-lg leading-snug font-light text-paper focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper md:text-xl' %}
+{% set headingClass = 'mb-3 text-lg font-bold text-paper md:mb-3.5 md:text-xl' %}
 {% set menuItems = craft.app.plugins.getPlugin('simple-rp-menu').simplerpmenuItems %}
 {% set currentUrl = craft.app.request.absoluteUrl|split('?')|first %}
 
@@ -24,54 +26,59 @@
 {% endmacro %}
 
 <footer class="px-4 pb-4 md:px-8 md:pb-8">
-    <div class="overflow-hidden rounded-2xl bg-ink px-6 pb-4 pt-12 text-paper md:px-gutter md:pt-16">
-        {# 5 columns + store badges: side by side from xl (columns spread to fill, badges never shrink);
-           below xl the badges sit under the columns (they didn't fit next to five 180px columns). #}
-        <div class="flex flex-col gap-10 xl:flex-row xl:items-start xl:justify-between">
-
-            <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5 xl:flex xl:flex-1 xl:justify-between xl:gap-8">
-                {% for handle in footerMenus %}
-                    {% if handle == 'socials' %}
-                        {% set socialHtml %}{% include '_components/social-links.twig' with {
-                            links: siteSettings ? siteSettings.socialLinks.all() : [],
-                            class: 'flex flex-col gap-3.5', linkClass: footerLinkClass,
-                        } only %}{% endset %}
-                        {% if socialHtml|trim|length %}
-                            <nav class="min-w-0" aria-labelledby="footer-socials">
-                                <h2 id="footer-socials" class="mb-3.5 text-xl font-bold text-paper">{{ 'Socials'|t }}</h2>
-                                {{ socialHtml }}
-                            </nav>
-                        {% endif %}
-                    {% endif %}
-                    {% set menu = handle != 'socials' ? craft.simplerpmenu.getMenu(handle) : null %}
-                    {% if menu %}
-                        <nav class="min-w-0" aria-labelledby="footer-{{ handle }}">
-                            <h2 id="footer-{{ handle }}" class="mb-3.5 text-xl font-bold text-paper">{{ menu.name }}</h2>
-                            <ul class="flex flex-col gap-3.5">
-                                {% for item in menuItems.getResolvedMenuItems(menu.id) %}
-                                    {% set url = item.custom_url ?? '' %}
-                                    {% if url and not item.noLink %}
-                                        {% set icon = (_self.data(item)|json_decode).icon ?? null %}
-                                        <li>
-                                            <a href="{{ url }}"
-                                               class="inline-flex items-center gap-2.5 text-xl font-light text-paper underline-offset-4 hover:underline"
-                                               {%- if item.target %} target="{{ item.target }}" rel="noopener"{% endif %}
-                                               {%- if url == currentUrl %} aria-current="page"{% endif %}>
-                                                {% if icon %}{% include '_components/icon.twig' with { name: icon, class: 'size-5' } only %}{% endif %}
-                                                <span>{{ item.name }}</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
+    <div class="overflow-hidden rounded-2xl bg-ink px-6 pt-12 pb-3 text-paper md:px-gutter md:pt-16 md:pb-4">
+        {# phones: 2 columns, the badges side by side in their own row; sm–lg: 3 columns, the badges
+           (stacked) fill the 6th cell; xl: one row, 5 columns + badges. #}
+        <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 xl:flex xl:items-start xl:justify-between xl:gap-8">
+            {% for handle in footerMenus %}
+                {% if handle == 'socials' %}
+                    {% set socialHtml %}{% include '_components/social-links.twig' with {
+                        links: siteSettings ? siteSettings.socialLinks.all() : [],
+                        class: 'flex flex-col gap-3 md:gap-3.5', linkClass: footerLinkClass, textClass: 'link-line',
+                    } only %}{% endset %}
+                    {% if socialHtml|trim|length %}
+                        <nav class="min-w-0" aria-labelledby="footer-socials">
+                            <h2 id="footer-socials" class="{{ headingClass }}">{{ 'Socials'|t }}</h2>
+                            {{ socialHtml }}
                         </nav>
                     {% endif %}
-                {% endfor %}
-            </div>
+                {% endif %}
+                {% set menu = handle != 'socials' ? craft.simplerpmenu.getMenu(handle) : null %}
+                {% if menu %}
+                    <nav class="min-w-0" aria-labelledby="footer-{{ handle }}">
+                        <h2 id="footer-{{ handle }}" class="{{ headingClass }}">{{ menu.name }}</h2>
+                        <ul class="flex flex-col gap-3 md:gap-3.5">
+                            {% for item in menuItems.getResolvedMenuItems(menu.id) %}
+                                {% set url = item.custom_url ?? '' %}
+                                {% if url and not item.noLink %}
+                                    {% set icon = (_self.data(item)|json_decode).icon ?? null %}
+                                    <li>
+                                        <a href="{{ url }}" class="{{ footerLinkClass }}"
+                                           {%- if item.target %} target="{{ item.target }}" rel="noopener"{% endif %}
+                                           {%- if url == currentUrl %} aria-current="page"{% endif %}>
+                                            {% if icon %}{% include '_components/icon.twig' with { name: icon, class: 'size-5 shrink-0' } only %}{% endif %}
+                                            <span class="link-line">{{ item.name }}</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% endfor %}
 
-            {% include '_components/store-links.twig' with { dark: true, direction: 'responsive', class: 'shrink-0' } %}
+            <div class="col-span-2 sm:col-span-1 xl:shrink-0">
+                {% include '_components/store-links.twig' with { dark: true, class: 'sm:flex-col' } %}
+            </div>
         </div>
 
-        <p class="mt-20 select-none whitespace-nowrap text-center text-wordmark font-extrabold leading-none text-white lg:mt-40" aria-hidden="true">{{ siteName|lower }}</p>
+        {# Wordmark: fitted to the panel's width and animated (letters rise in one by one when the
+           footer comes into view; a letter hops on hover) by src/js/footer-wordmark.js. Spaces stay
+           as non-breaking spaces so each letter can be its own box. #}
+        <p class="footer-wordmark mt-16 md:mt-24 lg:mt-40" data-footer-wordmark aria-hidden="true">
+            {%- for char in siteName|lower|split('') -%}
+                <span class="footer-wordmark__char"><span>{{ char == ' ' ? '&nbsp;'|raw : char }}</span></span>
+            {%- endfor -%}
+        </p>
     </div>
 </footer>

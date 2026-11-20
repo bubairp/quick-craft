@@ -8,6 +8,7 @@ import { initGalleryWave } from './js/gallery-wave.js';
 import { initHeroChat } from './js/hero-chat.js';
 import { initCtaSpiral } from './js/cta-spiral.js';
 import { initCtaRows } from './js/cta-rows.js';
+import { initFooterWordmark } from './js/footer-wordmark.js';
 
 /**
  * Header that hides while scrolling down and slides back in when scrolling up
@@ -60,3 +61,4 @@ initGalleryWave();
 initHeroChat();
 initCtaSpiral();
 initCtaRows();
+initFooterWordmark();

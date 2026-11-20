@@ -48,6 +48,10 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - `templates/_components/`: reusable UI pieces (button, card…), included with `{% include %}` and explicit `with {...} only`.
 - `templates/_macros/`: Twig helper macros, **used exactly as in Site7 Engine**. `_macros/images.twig` is the image helper: `{% import "_macros/images" as images %}` at the top of each template that shows images, then `{{ images.singleImg(image, width, options, classes, attr) }}`. Imports don't carry into included templates, so every file imports it itself.
 - `templates/_partials/`: site chrome (header, footer, nav).
+- **Footer** (`_partials/footer.twig`; Figma 6-2058, behaviour after partiful.com; the user's request, 2026-11-20):
+  - **Wordmark** (`siteName`, lowercase): `src/js/footer-wordmark.js` fits it to the panel's full width at every size (`--wordmark-size`; CSS fallback `--text-wordmark`), descenders never clipped. When the footer comes into view the letters **rise from the bottom edge one by one** (45ms stagger, `--ease-spring`); hovering a letter makes it hop. Reduced motion: no animation (still fitted). `aria-hidden`.
+  - **Link hover = `.link-line`**: a 1px line under the text only (not the icon) draws in from the left and leaves to the right (350ms). The current page keeps it; focus shows it plus an outline. Reduced motion: no transition.
+  - **Layout:** phones 2 columns with the store badges side by side in their own row; `sm`–`lg` 3 columns with the badges (stacked) filling the 6th cell; `xl` one row (5 columns + badges). Links/headings `text-lg` below `md`, `text-xl` from `md`.
 - `modules/`: the Craft module (`Module.php` registers the event handlers; `PagePresets.php` copies preset blocks into new pages).
 
 ## Rules

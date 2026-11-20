@@ -1507,3 +1507,32 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Result (same frames):** reference / ours at 51ms: op .63 y−26 / op .63 y−23; 84ms: .27 −46 / .21 −49; 117ms: .07 −57 / .04 −60; done at ~134ms in both.
 
 **Gotcha:** sampling every 100–250ms (as at first) made the reference look like "move first, fade later". Measure animations per frame and compare both sites in the same script before tuning.
+
+## 2026-11-20 · Footer: animated wordmark, hover line, tablet/phone layout
+
+**Before:**
+- The wordmark's "q" descender was clipped and the word didn't fill the panel (58px on phones).
+- Links underlined instantly.
+- Tablet had empty cells (3+2 columns, badges below).
+- Phones were a long stack of two columns plus stacked badges.
+
+**Reference (partiful.com):** the wordmark fills the panel edge to edge; links fade on hover.
+
+**Done**
+- `src/js/footer-wordmark.js`:
+  - **fit**: `--wordmark-size` makes the letters exactly the panel's width (measured at 100px, scaled; ResizeObserver + `document.fonts.ready`).
+  - **animate**: letters rise from below the edge one by one when 40% visible (900ms spring, 45ms stagger via `--i`).
+  - Reduced motion: fitted only.
+- `.footer-wordmark` (app.css): flex, nowrap, `overflow: hidden` + `padding-bottom: 0.06em` (descenders inside the clip). Each letter is an outer box (rise) and an inner span (hover hop: up 0.1em, −4°).
+- `.link-line`: a 1px line under the text span draws in from the left and leaves to the right (350ms `--ease-out-soft`). Kept on `aria-current`; focus = line + outline. `social-links.twig` got a `textClass` prop so the line skips the icon.
+- Layout:
+  - Phones: 2 columns, badges in their own row.
+  - `sm`–`lg`: 3 columns with the badges (`sm:flex-col`) as the 6th cell.
+  - `xl`: one row.
+  - Links/headings `text-lg` below `md`.
+
+**Checked (Playwright 1440 / 768 / 375):**
+- Letters' width = box width (1233 / 561 / 280px); the descender is inside.
+- Before view the letters are translated below; mid-animation they're staggered.
+- The hover line goes 0% → 100% in ~150–350ms; the current page keeps it.
+- No overflow; no console errors. Reduced motion: no `data-animate`, letters in place. Hovering a letter → translateY −27px, −4°.

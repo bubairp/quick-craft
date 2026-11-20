@@ -7,6 +7,7 @@
  #   links      array of `socialLink` entries (siteSettings.socialLinks.all(), eager-loaded in base.twig)
  #   linkClass  classes on each <a>
  #   iconClass  classes on each icon (default 'size-5')
+ #   textClass  classes on the text span (e.g. 'link-line': the footer's hover line under the text only)
  #   class      classes on the <ul>
  #}
 {% set icons = {
@@ -23,7 +24,7 @@
                 <a {{ attr(item.externalLink.attributes|merge({ class: linkClass ?? '', rel: 'noopener' })) }}>
                     {% include '_components/icon.twig' with { name: icons[platform] ?? 'link', class: iconClass ?? 'size-5' } only %}
                     {# getLabel(true): only a label the editor typed; otherwise the platform name (not the URL host) #}
-                    <span>{{ item.externalLink.getLabel(true) ?: item.platform.label }}</span>
+                    <span class="{{ textClass ?? '' }}">{{ item.externalLink.getLabel(true) ?: item.platform.label }}</span>
                 </a>
             </li>
         {% endfor %}
