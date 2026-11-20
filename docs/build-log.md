@@ -1326,3 +1326,11 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - **HTTPS:** `mkcert -install` + `ddev restart`; `libnss3-tools` for Chromium/Playwright on Linux/WSL; on Windows + WSL2, also on Windows, sharing the CA as in DDEV's WSL2 guide; `ignoreHTTPSErrors` as a fallback.
   - **Craft MCP setup:** works automatically from `.mcp.json`; set `CRAFT_MCP_USER` (Craft Solo = one user, so admin for now); the Windows-outside-WSL override (Git Bash, not PowerShell); servers without DDEV (local PHP, SSH and HTTP, the last two marked untested).
 - Not pushed (as asked).
+
+### 2026-11-20: .env check + database block in .env
+- **Checked `.env`** (key names only, values never printed): all 6 keys from `.env.example.dev` are set (CRAFT_APP_ID, CRAFT_ENVIRONMENT, CRAFT_SECURITY_KEY, CRAFT_DEV_MODE, CRAFT_ALLOW_ADMIN_CHANGES, CRAFT_DISALLOW_ROBOTS). Nothing was missing.
+- **Rule first:** CLAUDE.md › Environment variables: `.env` now also lists the database block (the user's decision).
+- **Database block** added to `.env` (local, gitignored) and `.env.example.dev` (committed), with DDEV's default values: `CRAFT_DB_DRIVER=mysql`, `SERVER=db`, `PORT=3306`, `DATABASE=db`, `USER=db`, `PASSWORD=db`, `PRIMARY_SITE_URL=https://quick-craft.ddev.site`. These are DDEV's standard local credentials, not secrets.
+- **Precedence:** `bootstrap.php` uses `Dotenv::createImmutable(...)->safeLoad()`, which never overwrites a variable that's already set, so DDEV's injected values still win inside the container. The `.env` copy is for visibility, and for running without DDEV.
+- **Checked:** `ddev craft env/show CRAFT_DB_SERVER` → "db"; `/`, `/blog` and `/admin/login` → 200.
+- README's `cp .env.example.dev .env` comment updated.

@@ -32,7 +32,8 @@ All tooling runs inside DDEV (Node is not installed on the WSL host). From the W
 Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 
 **Environment variables:**
-- **Locally, DDEV provides the database and site URL** (`.ddev/config.yaml` `type: craftcms` injects `CRAFT_DB_DRIVER/SERVER/PORT/DATABASE/USER/PASSWORD` and `PRIMARY_SITE_URL` into the web container; Craft 5 reads `CRAFT_DB_*` directly, and the site's `baseUrl` is `$PRIMARY_SITE_URL`). So `.env` only holds the app settings (app ID, environment, security key, devMode, admin changes, robots), and there is no `config/db.php`.
+- **Locally, DDEV provides the database and site URL** (`.ddev/config.yaml` `type: craftcms` injects `CRAFT_DB_DRIVER/SERVER/PORT/DATABASE/USER/PASSWORD` and `PRIMARY_SITE_URL` into the web container; Craft 5 reads `CRAFT_DB_*` directly, and the site's `baseUrl` is `$PRIMARY_SITE_URL`). There is no `config/db.php`.
+- **`.env` also lists the database block** (the user's decision, 2026-11-20), with DDEV's default values (`db` server/name/user/password, port 3306, `PRIMARY_SITE_URL`), so the connection is visible in one place. `bootstrap.php` loads `.env` with `Dotenv::createImmutable()->safeLoad()`, which **never overwrites a variable that's already set**: inside DDEV the injected values win, and the `.env` copy only takes effect where nothing injects them (e.g. a server without DDEV). Keep both in sync if `.ddev/config.yaml` changes.
 - **Database tools:** phpMyAdmin https://quick-craft.ddev.site:8037 or `ddev mysql`.
 - **On a server without DDEV** (staging/production), `.env` must also set `CRAFT_DB_*` and `PRIMARY_SITE_URL`. See `.env.example.staging` / `.env.example.production`; `.env.example.dev` explains the DDEV defaults. Never commit `.env` (gitignored) or real values.
 

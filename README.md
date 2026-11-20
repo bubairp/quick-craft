@@ -17,7 +17,7 @@ Project rules and conventions: [`CLAUDE.md`](CLAUDE.md). Build history and how-t
 ```bash
 git clone <repository-url> quick-craft
 cd quick-craft
-cp .env.example.dev .env           # app settings; DDEV provides the database and site URL
+cp .env.example.dev .env           # app settings + the DDEV database defaults (DDEV's injected values win)
 ddev start
 ddev composer install
 ddev npm install
