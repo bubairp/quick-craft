@@ -1410,3 +1410,18 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - A template variable called `images` (ctaBanner, banner) and the macro alias `images` coexist: Twig 3 keeps imported macros apart from context variables.
 - A Twig macro must be at the top level of its file and imported (`_self.x()` without `{% import _self %}` doesn't work in Twig 3).
 - Windows Python writes CRLF; this working copy is CRLF anyway (`core.autocrlf=true`), so diffs stay small.
+
+## 2026-11-20 · Full-site check (Playwright, 375 + 1440)
+
+**Checked**
+- Pages: all 16 sitemap URLs + `/blog` (pages, all categories, unknown category), `/blocks` in every scheme, `/404` `/500` `/503`, `/sitemap.xml`, `/robots.txt`. All 200; one `<h1>` each; no skipped heading levels; no horizontal overflow; no broken images; every `<img>` has alt; no JS/console errors.
+- The phone menu opens (`aria-expanded=true`) and Escape closes it.
+- No new web errors in `storage/logs` (only the expected `__vite_ping` when the Vite dev server isn't running; Craft then uses `web/dist`).
+
+**Found and fixed**
+- Every page returned 500 after the image-macro comparison (`git stash` of templates): Twig reused a stale compiled `banner.twig`. Fix: `ddev craft clear-caches/compiled-templates`. Recorded in the skill gotchas.
+
+**Not bugs (for the user)**
+- `/llms.txt` → 404: by design while the "LLMs Text" Single is empty.
+- An unknown URL locally shows Craft's devMode exception page; with devMode off visitors get `404.twig` (checked at `/404`).
+- 22 menu links go to pages that don't exist yet (Invites ×8, Explore ×7, Create, Help, Terms, Privacy, Cookies, Community Guidelines, Download).
