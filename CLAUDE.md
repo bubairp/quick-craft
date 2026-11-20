@@ -309,6 +309,13 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - Always give the instance a **meaningful handle** (`personName`), never the generic base handle (`plainText`), so templates stay readable.
   - Create a new field only when no base field has the needed settings (settings belong to the field, not the instance).
 
+### SEO, sitemap and favicon (migration `m261120_450000_seo_defaults`)
+- **Ether SEO** renders `<title>`, meta, OG/Twitter and canonical from the entry's `seo` field (`{% hook 'seo' %}` in base.twig). Read `vendor/ether/seo` before changing anything.
+  - Plugin settings (project config): title = `{title} - {{ siteName }}` (the default), a default **description** (editable in CP › SEO › Settings), the default robots.txt (everything disallowed unless `CRAFT_ENVIRONMENT=production`). A default **social image** is set once the brand image exists.
+  - **Templates without an entry** (`blog/index.twig`, the system pages) set their own: `{% set seo = craft.seo.custom('Blog'|t, description) %}` at the top of the child template (outside blocks); `getSeoField()` picks up a context variable named `seo` first. `custom()` adds the " - {{ siteName }}" suffix itself, so pass the bare title (passing `title ~ ' - ' ~ siteName` gave "Blog - Quick Craft - Quick Craft").
+  - **Sitemap** (`/sitemap.xml`): sections Home (daily, 1.0), Pages (weekly, 0.8) and Blog (weekly, 0.6) enabled in the `seo_sitemap` table (`group = sections`, `url` = the section id). Sections without URLs are never added. A new section with URLs gets a row in its migration.
+- **Favicon:** `web/favicon.svg` (the header's "qc" tile: ink rounded square, white "qc") + `web/favicon.ico` (32px, made from the SVG with ImageMagick in DDEV), linked in base.twig. Replace both with the real brand mark when it exists.
+
 ### Content & data
 - **No hard-coded copy.** All text and images come from Craft fields (or `siteName`/the settings Singles). UI microcopy (e.g. "Skip to content", "Read more") must use `|t` for translation.
 - **Always handle empty fields**: wrap optional output in `{% if %}`, skip wrapper elements when content is empty, never emit empty `<img>`, `<a href="">`, or empty headings.

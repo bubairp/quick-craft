@@ -115,7 +115,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 - ☐ (Optional, later) Click a section in Live Preview to edit it
 
 ## 7. Finish
-- ☐ Ether SEO defaults (title suffix, social images), sitemap
-- ◐ 404 page (☑ 404/500/503 system Singles), favicon ☐
-- ☐ Cross-page Playwright pass (375/768/1440), accessibility and empty-field checks
+- ◐ Ether SEO defaults (☑ title, description, sitemap; ☐ social image when the brand image exists)
+- ☑ 404 page (404/500/503 system Singles), favicon (placeholder qc tile)
+- ☑ Cross-page Playwright pass (375/768/1440), accessibility and empty-field checks
 - ☐ Replace placeholder content with real Quick Craft assets and copy (the imported design contains third-party logos, fonts and screenshots)

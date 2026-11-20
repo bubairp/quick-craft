@@ -1267,3 +1267,25 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Every section dark on a black body; showcase images 416×493 at 1440; posters 300px tall, radius 8.
   - Carousel row starts at x = 64 (same as the headings), scrollWidth 2028 > 1425; no page overflow; 0 broken images; no console errors.
   - All pages 200 with no Twig errors.
+
+### 2026-11-20: SEO defaults, sitemap, favicon + full-site accessibility pass
+- **Rule first:** CLAUDE.md › SEO, sitemap and favicon.
+- **Read first** (`vendor/ether/seo`):
+  - Settings: `title` template, `description`, `socialImage`, `robotsTxt`.
+  - The meta template calls `getSeoField()`, which checks a context variable `seo` before `entry.seo`; otherwise it falls back to `craft.seo.custom(siteName)`.
+  - Sitemap rows live in `seo_sitemap` (`group` = sections, `url` = the section id); `/sitemap.xml` → `sitemap_sections_<id>_<page>.xml`.
+- **Migration** `m261120_450000_seo_defaults` (backup: `/tmp/before-seo.sql.gz`):
+  - A default meta description (plugin settings → project config; placeholder copy).
+  - Sitemap rows Home (daily, 1.0), Pages (weekly, 0.8), Blog (weekly, 0.6).
+- **`blog/index.twig`:** `{% set seo = craft.seo.custom('Blog'|t) %}` → "Blog - Quick Craft".
+  - **Gotcha:** `custom()` adds the site-name suffix itself; passing `'Blog - ' ~ siteName` gave "Blog - Quick Craft - Quick Craft".
+- **Favicon:** `web/favicon.svg` (the header's qc tile) + `web/favicon.ico` (32px, `ddev exec "cd web && convert -background none -density 384 favicon.svg -resize 32x32 favicon.ico"`), both linked in base.twig. This also ends the one-off console 404 for /favicon.ico. Placeholder until the real brand mark exists.
+- **Checked:**
+  - `/sitemap.xml` lists the 3 section sitemaps; the Pages one has all landing pages; the Blog one has the 6 posts.
+  - `/robots.txt` = Disallow all (correct outside production).
+  - Every page has a title "{Title} - Quick Craft", a description, a canonical (`/blog?category=…` → canonical `/blog`) and the icon links.
+- **Accessibility / quality pass (Playwright, 1440):** Home, Organizers, Birthday, Invitation Maker, Sell Tickets, Careers, Press, Blog, a blog post, a filtered blog list.
+  - Checks: one h1; no skipped heading levels; no empty headings; every img has `alt`; every visible link and button has a name; every field has a label; no duplicate ids; `<main>` present; every `<nav>` labelled; `lang` set; no console errors. **0 issues on every page.**
+  - The unknown URL shows Craft's devMode error page locally (404.twig renders when devMode is off).
+- **Overflow pass at 375 and 768:** no horizontal scroll on any page (including /404).
+- **Keyboard:** 12 Tabs on Home, Invitation Maker and Blog — every focused element shows a visible focus style; the first stop is "Skip to content".

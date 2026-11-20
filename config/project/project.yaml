@@ -1,4 +1,4 @@
-dateModified: 1795157568
+dateModified: 1795158942
 elementSources:
   craft\elements\Entry:
     -
@@ -220,6 +220,41 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 3.2.0
+    settings:
+      description: 'Free invitations, RSVPs and ticketing for every kind of party. Design it, send it by text, and see who’s coming.'
+      facebookAppId: null
+      metaTemplate: null
+      removeAlternateUrls: false
+      robots: null
+      robotsTxt: "{# Sitemap URL #}\nSitemap: {{ url(seo.sitemapName ~ '.xml') }}\n\n{# Disallows #}\n{% if craft.app.config.env != 'production' %}\n\n{# Disallow access to everything when NOT in production #}\nUser-agent: *\nDisallow: /\n\n{% else %}\n\n{# Disallow access to cpresources/ when live #}\nUser-agent: *\nDisallow: /cpresources/\n\n{% endif %}"
+      sitemapLimit: 1000
+      sitemapName: sitemap
+      socialImage: null
+      title:
+        -
+          __assoc__:
+            -
+              - key
+              - '1'
+            -
+              - template
+              - '{title}'
+            -
+              - locked
+              - false
+        -
+          __assoc__:
+            -
+              - key
+              - '2'
+            -
+              - template
+              - ' - {{ siteName }}'
+            -
+              - locked
+              - true
+      titleSuffix: null
+      twitterHandle: null
   simple-rp-menu:
     edition: standard
     enabled: true

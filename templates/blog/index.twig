@@ -5,6 +5,10 @@
  #}
 {% extends '_layouts/base.twig' %}
 
+{# Not an entry, so Ether SEO gets its own title (getSeoField() reads a context variable `seo` first);
+   the description falls back to the plugin default. #}
+{% set seo = craft.seo.custom('Blog'|t) %}
+
 {% block bodyBg %}bg-white{% endblock %}
 
 {% block content %}
