@@ -1615,3 +1615,4 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **User:** "less top margin/padding; start from the header's top, with a small gap above" (example screenshot: the photo behind the floating header).
 **Done:** Banner › imageOnly section `pt-28 md:pt-40` → `pt-4 md:pt-5` (the same gap as the sides). The floating header pill sits over the photo.
 **Checked:** image top/left 20px at 1440 and 768, 16px at 375; no overflow.
+**Follow-up (user: a bit less gap):** `pt-2 px-2` (8px) on phones, `md:pt-3 md:px-3` (12px) from md. Checked: 12/12/12px at 1440, 8/8/8px at 375 (top/left/right); no overflow.
