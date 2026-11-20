@@ -1609,3 +1609,9 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Gotcha:** a sticky column only sticks when it's the shorter one; the left column (cards + chips) was taller than the form, so the form card is the sticky one.
 
 **Follow-up (user: "the form design doesn't look right, no shadow"):** the form card is now flat (`rounded-2xl bg-surface p-6 md:p-10`, no shadow or ring) with white inputs (`ring-1 ring-black/10`, darker on hover, 2px ink ring on focus, red when invalid). Checked at 1440 / 375: the card has `box-shadow: none`; the focus ring shows on the email field.
+
+## 2026-11-20 · Contact banner starts at the top of the page
+
+**User:** "less top margin/padding; start from the header's top, with a small gap above" (example screenshot: the photo behind the floating header).
+**Done:** Banner › imageOnly section `pt-28 md:pt-40` → `pt-4 md:pt-5` (the same gap as the sides). The floating header pill sits over the photo.
+**Checked:** image top/left 20px at 1440 and 768, 16px at 375; no overflow.

@@ -22,7 +22,7 @@
 {% set sectionClass = [
     'relative overflow-hidden',
     layout == 'fullBleed' ? (media|length ? 'h-140 md:h-186' : 'pt-32 pb-16 md:pt-44 lg:pb-24')
-    : (layout == 'imageOnly' ? 'px-4 pt-28 md:px-5 md:pt-40'
+    : (layout == 'imageOnly' ? 'px-4 pt-4 md:px-5 md:pt-5'
     : (layout == 'simple' ? 'pt-32 pb-12 md:pt-44 md:pb-20' : 'pt-32 pb-16 md:pt-44 lg:pb-24')),
     (layout == 'centered' or (layout == 'split' and not isHome)) and not dark ? 'glow-bg',
 ]|join(' ') %}
