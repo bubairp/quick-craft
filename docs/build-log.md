@@ -1100,3 +1100,25 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Careers: banner 560 / 744 / 744 tall; h1 100px/140 −2px 500 white at 160px from the top (Figma 162.8); image `fetchpriority=high` with alt.
   - Press: h1 48px 500, white band.
   - Both: exactly one h1, no overflow, no console errors. /, /careers, /press, /blocks, /invitation-maker, /birthday-invitations and /404 all return 200 with no Twig errors.
+
+### 2026-11-20: Blog listing (Figma 18-4865)
+- **Rule first:** CLAUDE.md › Blog listing (title, category filter, grid, card, author fallback, pagination), plus the `--text-card` token (26px / 1.2).
+- **Design:** "the Guest List" wordmark (an image), a filter row (Latest / Party 101 / Culture / IMHO; 24px bold, active underlined), then 31 cards in 3 columns (347px, gap 40). Each card: square image, 26px title, 18px black/60 summary, author (40px round avatar + 18px bold name). No pagination in the design.
+- **Decisions:**
+  - The wordmark is the `newsletter` Single's `image` (the content model already calls it the "blog title image"); it goes inside the `<h1>`, with its alt as the heading text.
+  - The filter is server-side (`?category=<slug>`, links + `aria-current`). The Blog categories have no URLs, and `blog/{slug}` belongs to posts, so a query string avoids a route clash.
+  - Pagination is 24 per page (the design's 31 posts would make two pages), shown only when needed.
+  - **Author fallback:** the user's full name, else `siteName`; the user's photo, else the site logo. The only user is `admin` with no name or photo, and the design shows the brand as author. No user was created or changed.
+- **Placeholder content** (replace before launch):
+  - The images were downloaded from Figma as `web/uploads/images/blog-post-1…6` + `blog-title.png` (300×100, soft when shown at 692px), then `ddev craft index-assets/one images`.
+  - **Gotcha:** three Figma "png" assets were really JPEGs; I renamed them to `.jpg` before indexing (check with `file`).
+- **Migration** `m261120_380000_blog_listing` (backup: `/tmp/before-blog-listing.sql.gz`), content only:
+  - Categories Party 101 / Culture / IMHO.
+  - The first 6 posts from Figma (summary in `text`, body = the summary, category, image with the title as alt, author = the first admin, post dates 2 days apart).
+  - The wordmark set on `newsletter.image`.
+- **Templates:** `blog/index.twig` (extends base, `bg-white`) and `_components/blog-card.twig` (the whole card links; the image scales on hover and the title underlines; focus outline).
+- **Checked (Playwright) at 375 / 768 / 1440:**
+  - Exactly one h1 ("The Guest List" from the alt); filter Latest*, Party 101, Culture, IMHO.
+  - 1 / 2 / 3 columns; cards 347 wide at 1440 (Figma 346.7), square images; title 26/31.2 600; filter-to-grid gap 80 (40 on a phone).
+  - `?category=party-101` → 2 posts with Party 101 current; an unknown slug → all 6. 0 broken images, no overflow, no console errors.
+- **Not shown yet:** the author avatar, because the site logo (siteSettings `image`) isn't set; the logo export is still pending in the build plan. Next: the newsletter partial under the grid, then the post page.

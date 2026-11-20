@@ -1,0 +1,73 @@
+{#
+ # Blog listing at /blog. Figma: 18-4865 (title 18-5024, filter 18-5029, grid 18-5044).
+ # Title = the newsletter Single's image (the blog wordmark); category filter via ?category=<slug>;
+ # posts newest first, 24 per page.
+ #}
+{% extends '_layouts/base.twig' %}
+
+{% block bodyBg %}bg-white{% endblock %}
+
+{% block content %}
+    {% set newsletter = _globals.get('newsletter') %}
+    {% set titleImage = newsletter ? (newsletter.image|first ?: null) : null %}
+    {% set categories = craft.entries.section('blogCategories').all() %}
+    {% set slug = craft.app.request.getQueryParam('category') %}
+    {% set current = slug ? categories|filter(c => c.slug == slug)|first : null %}
+
+    {% set postsQuery = craft.entries.section('blog').with(['image', 'author']).orderBy('postDate desc') %}
+    {% if current %}{% do postsQuery.relatedTo({ targetElement: current, field: 'blogCategories' }) %}{% endif %}
+
+    <section class="px-4 pt-32 md:px-gutter md:pt-30">
+        {# Title: the wordmark image (its alt is the heading text), or plain text #}
+        <h1 class="mx-auto flex max-w-text justify-center py-5">
+            {% if titleImage %}
+                {% include '_components/image.twig' with {
+                    image: titleImage, width: 692, sizes: '(min-width: 768px) 692px, 100vw', eager: true,
+                    class: 'h-auto w-full max-w-173',
+                } only %}
+                {% if not titleImage.alt %}<span class="sr-only">{{ 'Blog'|t }}</span>{% endif %}
+            {% else %}
+                <span class="text-4xl font-medium md:text-headline">{{ 'Blog'|t }}</span>
+            {% endif %}
+        </h1>
+    </section>
+
+    <section class="px-4 pt-10 pb-16 md:px-gutter md:pt-20 md:pb-section">
+        <div class="mx-auto flex max-w-text flex-col gap-10 md:gap-20">
+            {% if categories|length %}
+                <nav aria-label="{{ 'Blog categories'|t }}">
+                    <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xl font-bold md:text-2xl">
+                        {% set links = [{ title: 'Latest'|t, url: url('blog'), active: not current }]
+                            |merge(categories|map(c => { title: c.title, url: url('blog', { category: c.slug }), active: current and current.id == c.id })) %}
+                        {% for link in links %}
+                            <li>
+                                <a href="{{ link.url }}"
+                                   class="underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink {{ link.active ? 'underline' }}"
+                                   {% if link.active %}aria-current="page"{% endif %}>{{ link.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
+
+            {% paginate postsQuery.limit(24) as pageInfo, posts %}
+            {% if posts|length %}
+                <ul class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                    {% for post in posts %}
+                        <li>{% include '_components/blog-card.twig' with { post: post, level: 2 } only %}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-center text-xl text-black/60">{{ 'No posts yet.'|t }}</p>
+            {% endif %}
+
+            {% if pageInfo.totalPages > 1 %}
+                <nav aria-label="{{ 'Pagination'|t }}" class="flex items-center justify-center gap-6 text-lg">
+                    {% if pageInfo.prevUrl %}<a href="{{ pageInfo.prevUrl }}" rel="prev" class="font-bold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">{{ 'Previous'|t }}</a>{% endif %}
+                    <span class="text-black/60">{{ 'Page {current} of {total}'|t('site', { current: pageInfo.currentPage, total: pageInfo.totalPages }) }}</span>
+                    {% if pageInfo.nextUrl %}<a href="{{ pageInfo.nextUrl }}" rel="next" class="font-bold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">{{ 'Next'|t }}</a>{% endif %}
+                </nav>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

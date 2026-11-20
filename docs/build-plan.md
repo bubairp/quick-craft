@@ -101,7 +101,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ## 6. Blog (channel `blog`)
 | | Template | Node | Notes |
 |---|---|---|---|
-| ☐ | `blog/index.twig` | 18-4865 (header 18-5024, grid 18-5028) | category filter, 3-col cards, pagination |
+| ☑ | `blog/index.twig` | 18-4865 (header 18-5024, grid 18-5028) | category filter, 3-col cards, pagination |
 | ☐ | `blog/_entry.twig` | 18-5645 (article 18-5804) | featured/latest tags, body, "Next:" link |
 | ☐ | `_partials/newsletter.twig` | 18-5576 / 18-5927 | `newsletter` Single (via `_globals`) + Wheel Form; add its Live Preview target → `blog` |
 

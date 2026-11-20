@@ -1,0 +1,47 @@
+{#
+ # Blog post card. Figma: Blog 18-5045.
+ # Square image, title, summary, author (avatar + name). The whole card links to the post.
+ # Props:
+ #   post   Entry (blogPost), eager-loaded with image + author
+ #   level  heading level for the title (2)
+ # Author fallback: the user's full name → siteName; the user's photo → the site logo.
+ #}
+{% set post = post ?? null %}
+{% if post %}
+    {% set image = post.image|first ?: null %}
+    {% set author = post.author ?? null %}
+    {% set siteSettings = _globals.get('siteSettings') %}
+    {% set authorName = (author.fullName ?? '')|trim ?: siteName %}
+    {% set avatar = (author.photo ?? null) ?: (siteSettings.image|first ?: null) %}
+    {% set tag = 'h' ~ (level ?? 2) %}
+
+    <article class="h-full">
+        <a href="{{ post.url }}" class="group flex h-full flex-col gap-2.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
+            <div class="overflow-hidden bg-surface">
+                {% if image %}
+                    {% include '_components/image.twig' with {
+                        image: image, width: 360, ratio: 1,
+                        sizes: '(min-width: 1024px) 347px, (min-width: 640px) 50vw, 100vw',
+                        decorative: true,
+                        class: 'aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105',
+                    } only %}
+                {% else %}
+                    <div class="aspect-square w-full" aria-hidden="true"></div>
+                {% endif %}
+            </div>
+            <{{ tag }} class="text-card font-semibold text-black group-hover:underline group-hover:underline-offset-4">{{ post.title }}</{{ tag }}>
+            {% if post.text|trim %}
+                <p class="text-lg text-black/60">{{ post.text }}</p>
+            {% endif %}
+            <span class="mt-auto flex items-center gap-2.5 pt-2.5">
+                {% if avatar %}
+                    {% include '_components/image.twig' with {
+                        image: avatar, width: 40, ratio: 1, sizes: '40px', decorative: true,
+                        class: 'size-10 rounded-full object-cover',
+                    } only %}
+                {% endif %}
+                <span class="text-lg font-bold text-black">{{ authorName }}</span>
+            </span>
+        </a>
+    </article>
+{% endif %}
