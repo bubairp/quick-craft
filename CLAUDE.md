@@ -345,6 +345,13 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - **Always handle empty fields**: wrap optional output in `{% if %}`, skip wrapper elements when content is empty, never emit empty `<img>`, `<a href="">`, or empty headings.
 - **Eager-load** relations in queries (`.eagerly()` or `.with([...])`) — no N+1 queries inside loops.
 - **Images**: Craft native transforms with `srcset` + `sizes`, explicit `width`/`height`, `loading="lazy"` (except the above-the-fold hero: `fetchpriority="high"`), and `alt` from the asset's alt field (empty `alt=""` only for decorative images).
+  - **One image helper: `_components/image.twig`** (the user's decision, 2026-11-20: keep our component and add Site7 Engine's `_macros/images.twig` features; not Site7's `alt = title`, `placehold.co` placeholders or Bootstrap classes).
+  - Props: `image`, `width`, `ratio`, `sizes`, `eager`, `class`, `decorative`, plus from Site7:
+    - **`sources`** (art direction): `[{ media: '(max-width: 1023px)', ratio: 3/2, width: 1024 }]` → a `<picture class="contents">` with one `<source>` per entry (own crop, srcset and `width`/`height`). Use it whenever an image's ratio changes by breakpoint, instead of cropping with a CSS `aspect-*` change.
+    - **`quality`** (1–100): transform quality, else Craft's default.
+    - **GIFs and SVGs are served as-is** (a transform would drop a GIF's animation and rasterise an SVG).
+    - **Lazy images get `sizes="auto, …"`**: supporting browsers use the rendered width; others use `sizes`.
+  - Site7's `preloadBg` / `bgImageUrl` / `iconMask` are added only when a design needs a CSS background image or a recoloured SVG icon.
 
 ### Design
 - Design source: Figma file **`WdjEJ9NeK2FTVsJcGF6lby`**. It's an imported reference with **no Figma variables or components**, so read values from the frames and turn them into tokens.

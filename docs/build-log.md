@@ -1372,3 +1372,20 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Before launch:** replace the Wheel Form From email; real contact emails and social handles.
 
 **Commit:** 9d0b87e
+
+## 2026-11-20 · Image helper: Site7 Engine's image macro features in `_components/image.twig`
+
+**Decision (user):** keep our component (the `include … only` rule, alt from the asset's alt field, no external placeholders) and add the useful parts of Site7 Engine's `themes/site7-theme/templates/_macros/images.twig` (read-only reference).
+
+**Done**
+- `sources` (art direction): `[{ media, ratio, width, sizes }]` → `<picture class="contents">` + one `<source>` per entry, each with its own crop, srcset and width/height. `class="contents"` keeps the `<img>` as the layout box.
+- `quality` prop (passed to the transform when set).
+- GIFs (and SVGs) served as-is: before this, a GIF was converted to WebP and lost its animation.
+- Lazy images get `sizes="auto, …"`; eager images keep plain `sizes`.
+- Contact banner (imageOnly) uses `sources`: below `lg` a real 3:2 crop (2048×1365 max) instead of the 1560/484 crop re-cut by a CSS `aspect-*` switch.
+- Not taken from Site7: `alt = image.title`, `placehold.co` placeholders, Bootstrap classes. `preloadBg` / `bgImageUrl` / `iconMask` wait until a design needs them.
+- Rules: CLAUDE.md › Content & data › Images; skill › Images checklist.
+
+**Checked (Playwright):** `/contact` at 375 → `<picture>`, 328×219 from the 3:2 source; at 1440 → 1385×430 wide crop. 11 pages (incl. `/blocks`, 2669 images) → 200; every `<img>` has src and alt, and every lazy one with a srcset has `sizes="auto, …"`; no console errors. (No GIF in the library yet, so the GIF path is checked in code only.)
+
+**Gotcha:** a Twig macro can't be defined inside an `{% if %}` and called with `_self.` (Twig 3 needs a top-level macro + `{% import _self %}`); a `{% for %}` over the sources + the main set was simpler.

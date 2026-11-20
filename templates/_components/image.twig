@@ -1,44 +1,76 @@
 {#
  # Responsive image/video from a Craft asset. Renders nothing for an empty asset.
+ # The one image helper (CLAUDE.md › Images): our component + Site7 Engine's _macros/images.twig features.
  #
  # Props:
- #   image     Asset|null   required
- #   width     int          largest rendered width in CSS px (default 800)
- #   ratio     float|null   width/height crop ratio (e.g. 1, 16/9); null keeps the original ratio
- #   sizes     string       sizes attribute (default '100vw')
- #   eager     bool         above the fold: no lazy loading, fetchpriority=high
- #   class     string       classes for the <img>/<video>
- #   decorative bool        force alt=""
+ #   image      Asset|null   required
+ #   width      int          largest rendered width in CSS px (default 800)
+ #   ratio      float|null   width/height crop ratio (e.g. 1, 16/9); null keeps the original ratio
+ #   sizes      string       sizes attribute (default '100vw'); lazy images get "auto, " in front
+ #   eager      bool         above the fold: no lazy loading, fetchpriority=high
+ #   class      string       classes for the <img>/<video>
+ #   decorative bool         force alt=""
+ #   quality    int|null     transform quality (1–100); null = Craft's default
+ #   sources    array        art direction: [{ media: '(max-width: 1023px)', ratio: 3/2, width: 1024, sizes: '100vw' }]
+ #                           → <picture> with one <source> per entry (first match wins); the <img> is the fallback
  #}
 {% set image = image ?? null %}
 {% if image %}
     {% set width = width ?? 800 %}
-    {% set ratio = ratio ?? null %}
     {% set class = class ?? '' %}
+    {% set eager = eager ?? false %}
+    {% set quality = quality ?? null %}
+    {% set sources = sources ?? [] %}
+    {% set alt = (decorative ?? false) ? '' : (image.alt ?? '') %}
+    {% set loading = eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"' %}
 
     {% if image.kind == 'video' %}
         <video src="{{ image.url }}" class="{{ class }}" autoplay muted loop playsinline preload="metadata"
                {% if image.alt %}aria-label="{{ image.alt }}"{% else %}aria-hidden="true"{% endif %}></video>
+
+    {% elseif image.kind == 'image' and image.extension|lower in ['svg', 'gif'] %}
+        {# Served as-is: a transform would rasterise an SVG (white background) and drop a GIF's animation #}
+        <img src="{{ image.url }}"
+             {% if image.width %}width="{{ image.width }}" height="{{ image.height }}"{% endif %}
+             alt="{{ alt }}" {{ loading|raw }} class="{{ class }}">
+
     {% elseif image.kind == 'image' %}
-        {# Largest file: 2× the rendered width for sharp high-DPI screens, but never wider than the
-           original (Craft would upscale it). #}
-        {% set maxWidth = image.width ? min(width * 2, image.width) : width * 2 %}
-        {% if ratio and image.height %}{% set maxWidth = min(maxWidth, (image.height * ratio)|round) %}{% endif %}
-        {% set transform = ratio
-            ? { width: maxWidth, height: (maxWidth / ratio)|round, mode: 'crop', format: 'webp' }
-            : { width: maxWidth, mode: 'fit', format: 'webp' } %}
-        {# SVGs are served as-is: transforming them rasterises to WebP with a white background #}
-        {% set isSvg = image.extension|lower == 'svg' %}
-        {# Width descriptors (…w), so the browser can use `sizes` to pick a file; density descriptors
-           (0.5x) would make it ignore `sizes`. Steps under 160px are skipped. #}
-        {% set srcWidths = [0.25, 0.5, 0.75, 1]|map(f => (maxWidth * f)|round)|filter(w => w >= 160 or w == maxWidth)|map(w => w ~ 'w') %}
-        {% set srcset = isSvg ? false : image.getSrcset(srcWidths|values, transform) %}
-        <img src="{{ isSvg ? image.url : image.getUrl(transform) }}"
-             {% if srcset %}srcset="{{ srcset }}" sizes="{{ sizes ?? '100vw' }}"{% endif %}
-             width="{{ image.getWidth(transform) }}"
-             height="{{ image.getHeight(transform) }}"
-             alt="{{ (decorative ?? false) ? '' : (image.alt ?? '') }}"
-             {% if eager ?? false %}fetchpriority="high"{% else %}loading="lazy" decoding="async"{% endif %}
-             class="{{ class }}">
+        {# the <source>s first (art direction), the <img> (main crop) last #}
+        {% set sets = sources|map(s => s|merge({ img: false }))|merge([{ width: width, ratio: ratio ?? null, sizes: sizes ?? null, img: true }]) %}
+        {% if sources|length %}<picture class="contents">{% endif %}
+        {% for set in sets %}
+            {#
+             # Craft native transform (WebP). Largest file: 2× the rendered width for high-DPI
+             # screens, never wider than the original (Craft would upscale), and for a crop never
+             # wider than the original's height allows. Width descriptors (…w) so the browser uses
+             # `sizes`; steps under 160px are skipped.
+             #}
+            {% set setRatio = set.ratio ?? null %}
+            {% set setWidth = set.width ?? width %}
+            {% set maxWidth = image.width ? min(setWidth * 2, image.width) : setWidth * 2 %}
+            {% if setRatio and image.height %}{% set maxWidth = min(maxWidth, (image.height * setRatio)|round) %}{% endif %}
+            {% set transform = (setRatio
+                ? { width: maxWidth, height: (maxWidth / setRatio)|round, mode: 'crop', format: 'webp' }
+                : { width: maxWidth, mode: 'fit', format: 'webp' })|merge(quality ? { quality: quality } : {}) %}
+            {% set srcWidths = [0.25, 0.5, 0.75, 1]|map(f => (maxWidth * f)|round)|filter(w => w >= 160 or w == maxWidth)|map(w => w ~ 'w') %}
+            {% set srcset = image.getSrcset(srcWidths|values, transform) %}
+            {# lazy: "auto" lets supporting browsers use the rendered width (from Site7's helper) #}
+            {% set sizesAttr = (eager ? '' : 'auto, ') ~ (set.sizes ?? sizes ?? '100vw') %}
+            {% if not set.img %}
+                {% if srcset %}
+                    <source media="{{ set.media }}" type="image/webp" srcset="{{ srcset }}" sizes="{{ sizesAttr }}"
+                            width="{{ image.getWidth(transform) }}" height="{{ image.getHeight(transform) }}">
+                {% endif %}
+            {% else %}
+                {% set src = image.getUrl(transform) %}
+                {% if src %}
+                    <img src="{{ src }}"
+                         {% if srcset %}srcset="{{ srcset }}" sizes="{{ sizesAttr }}"{% endif %}
+                         width="{{ image.getWidth(transform) }}" height="{{ image.getHeight(transform) }}"
+                         alt="{{ alt }}" {{ loading|raw }} class="{{ class }}">
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% if sources|length %}</picture>{% endif %}
     {% endif %}
 {% endif %}

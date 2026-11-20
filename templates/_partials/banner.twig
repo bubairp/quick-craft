@@ -74,9 +74,11 @@
            (the page outputs the visually hidden h1) #}
         {% if media|length %}
             <div class="w-full">
+                {# art direction: its own 3:2 crop below lg (not the wide crop cut by CSS) #}
                 {% include '_components/image.twig' with {
                     image: media|first, width: 1560, ratio: 1560 / 484, eager: true, sizes: '100vw',
-                    class: 'aspect-3/2 h-auto w-full rounded-md object-cover lg:aspect-1560/484',
+                    sources: [{ media: '(max-width: 1023px)', ratio: 3 / 2, width: 1024 }],
+                    class: 'h-auto w-full rounded-md object-cover',
                 } only %}
             </div>
         {% endif %}
