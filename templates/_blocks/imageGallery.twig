@@ -47,14 +47,27 @@
 
 {% elseif block.heading or images|length %}
 {% set hasHeading = block.eyebrow or block.heading or block.text %}
-<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="overflow-hidden py-16 md:py-section">
+{% set scheme = block.scheme.value ?? 'light' %}
+{% set dark = scheme == 'dark' %}
+{# a marquee with a heading = poster strip (Sell Tickets 17-3649); without = photo strip (Careers 6-6667) #}
+{% set posters = layout == 'marquee' and hasHeading %}
+{% set leftHeading = layout == 'row' or posters %}
+<section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="overflow-hidden py-16 md:py-section">
     {% if hasHeading %}
-        {# row (Invitation Maker 17-1931): heading left in the tiles' width; others centred #}
-        <div class="mx-auto flex flex-col gap-10 px-4 md:px-gutter {{ layout == 'row' ? 'max-w-narrow items-start lg:px-0' : 'max-w-site items-center' }}">
-            {% include '_components/section-heading.twig' with {
-                eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level,
-                align: layout == 'row' ? 'left' : 'center', plain: true,
-            } only %}
+        {# row (Invitation Maker 17-1931) and poster marquee: heading left; others centred #}
+        <div class="mx-auto flex flex-col gap-10 px-4 md:px-gutter {{ layout == 'row' ? 'max-w-narrow items-start lg:px-0' : (posters ? 'max-w-site items-start' : 'max-w-site items-center') }}">
+            {% if posters %}
+                <div class="flex flex-col gap-3" data-reveal>
+                    {% if block.eyebrow %}<p class="text-xl font-medium text-accent">{{ block.eyebrow }}</p>{% endif %}
+                    {% if block.heading %}<{{ 'h' ~ level }} class="text-balance text-4xl font-bold md:text-6xl">{{ block.heading }}</{{ 'h' ~ level }}>{% endif %}
+                    {% if block.text %}<p class="text-xl md:text-title {{ dark ? 'text-white/80' : 'text-black/60' }}">{{ block.text|nl2br }}</p>{% endif %}
+                </div>
+            {% else %}
+                {% include '_components/section-heading.twig' with {
+                    eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level, dark: dark,
+                    align: leftHeading ? 'left' : 'center', plain: true,
+                } only %}
+            {% endif %}
         </div>
     {% endif %}
 
@@ -64,19 +77,21 @@
                Two passes so the -50% loop is seamless; the copy is hidden from screen readers. #}
             {# Each half of the track (the loop moves it by -50%) must be wider than the widest screen,
                so the photos repeat until a half is at least 2400px; only the first set is read out. #}
-            {% set tileWidths = images|map(i => i.height ? (220 * i.width / i.height)|round : 220) %}
-            {% set setWidth = tileWidths|reduce((sum, w) => sum + w + 10, 0) %}
+            {% set tileHeight = posters ? 300 : 220 %}
+            {% set gap = posters ? 24 : 10 %}
+            {% set tileWidths = images|map(i => i.height ? (tileHeight * i.width / i.height)|round : tileHeight) %}
+            {% set setWidth = tileWidths|reduce((sum, w) => sum + w + gap, 0) %}
             {% set copies = max(1, (2400 / max(setWidth, 1))|round(0, 'ceil')) %}
-            <div class="{{ hasHeading ? 'mt-10' }} overflow-hidden">
-                <ul class="gallery-marquee__track gap-2.5" aria-label="{{ block.heading ?: 'Gallery'|t }}">
+            <div class="{{ hasHeading ? 'mt-10 md:mt-14' }} overflow-hidden">
+                <ul class="gallery-marquee__track {{ posters ? 'gap-4 md:gap-6' : 'gap-2.5' }}" aria-label="{{ block.heading ?: 'Gallery'|t }}">
                     {% for pass in 1..(copies * 2) %}
                         {% for image in images %}
                             {% set tileWidth = tileWidths[loop.index0] %}
-                            <li class="h-40 flex-none md:h-55" {% if pass > 1 %}aria-hidden="true"{% endif %}>
+                            <li class="flex-none {{ posters ? 'h-55 md:h-75' : 'h-40 md:h-55' }}" {% if pass > 1 %}aria-hidden="true"{% endif %}>
                                 {% include '_components/image.twig' with {
                                     image: image, width: tileWidth, sizes: tileWidth ~ 'px',
                                     decorative: pass > 1,
-                                    class: 'h-full w-auto rounded-photo object-cover',
+                                    class: 'h-full w-auto object-cover ' ~ (posters ? 'rounded-md' : 'rounded-photo'),
                                 } only %}
                             </li>
                         {% endfor %}

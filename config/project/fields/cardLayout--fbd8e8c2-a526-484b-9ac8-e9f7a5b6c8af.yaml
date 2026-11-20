@@ -72,6 +72,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Showcase (big image cards)'
+        -
+          - value
+          - showcase
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

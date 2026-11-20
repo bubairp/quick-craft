@@ -73,13 +73,13 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ### Sell Tickets (17-2557), dark page
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | banner (Banner tab) | split, dark, video | 17-2716 |
+| ☑ | banner (Banner tab) | split, dark (image) | 17-2716 |
 | — | logo strip | | 17-2735 **skipped** |
-| ☐ | `cardGrid` | grid, dark | 17-2788 |
-| ☐ | `imageGallery` | marquee | 17-3649 |
-| ☐ | `cardGrid` | bento, dark | 17-3995 |
-| ☐ | `cardGrid` | carousel, dark | 17-4296 |
-| ☐ | `ctaBanner` | dark | 17-2992 |
+| ☑ | `cardGrid` | showcase, dark | 17-2788 |
+| ☑ | `imageGallery` | marquee (posters), dark | 17-3649 |
+| ☑ | `cardGrid` | bento, dark | 17-3995 |
+| ☑ | `cardGrid` | carousel (scroll-snap), dark | 17-4296 |
+| ☑ | `ctaBanner` | simple + image, dark | 17-2992 |
 
 ## 4. Careers (6-6167), Single `careers` + Jobs channel
 | | Block | Layout | Node |

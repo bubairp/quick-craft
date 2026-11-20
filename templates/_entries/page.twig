@@ -8,7 +8,7 @@
 {% extends '_layouts/base.twig' %}
 
 {# Page tab: pageBackground. Light sections have no background of their own, so they show this. #}
-{% block bodyBg %}{{ (entry.pageBackground.value ?? 'paper') == 'surface' ? 'bg-surface' : 'bg-paper' }}{% endblock %}
+{% block bodyBg %}{{ { surface: 'bg-surface', dark: 'bg-black text-white' }[entry.pageBackground.value ?? 'paper'] ?? 'bg-paper' }}{% endblock %}
 
 {% block content %}
     {% if entry.heading or entry.images.exists() %}

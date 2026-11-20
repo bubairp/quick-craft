@@ -144,6 +144,23 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 1afd5b95-7bb4-4303-a773-66fabce3b25b # Colour scheme
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 0ad52214-c1bb-4a82-a5a2-9483339a0451
+            userCondition: null
+            warning: null
+            width: 100
         name: Content
         uid: 81d00f9f-14e3-4e9e-8e2c-cf03123e8952
         userCondition: null

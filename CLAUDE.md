@@ -169,6 +169,15 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - **Image text cards** (Organizers 20px, Birthday 16, here 18): one size for all, `text-lg`.
     - **testimonials › reviews** (17-2211): `bg-surface` section; eyebrow + plain heading + text left-aligned in `max-w-narrow`; 3 white cards (`rounded-md shadow-card p-4`): title (`heading`, bold) + stars on the left, `personDetail` (date) and `personName` stacked right (`text-xs text-black/40`), the quote below (`text-sm`).
     - Rich text (17-2385) and FAQ, comparison: built earlier; the rich text gets its Figma copy.
+  - **Sell Tickets page (Figma 17-2557, a dark page; migration `m261120_440000_sell_tickets`)**:
+    - `pageBackground` gets **`dark`** (black body, so gaps and the area around the footer are black). Every block on the page uses scheme `dark`.
+    - **Banner › split, dark** (17-2716): sentence-case white heading, text `text-line`, light button, the ticket image (Figma's video poster) on the right.
+    - **Left-header card layouts** (cardGrid `showcase` (new option "Showcase (big image cards)"), `carousel`, `bento`): heading **left** (`text-4xl md:text-6xl font-bold`, Figma 56) + optional `text` (`text-xl md:text-title`, 80% opacity) with the buttons on the right, in `max-w-site`.
+      - **showcase** (17-2788): 3 columns from `lg`, gap 24; card = image `rounded-lg` ratio 450/532 + title `text-3xl font-bold` + text `text-xl` (80% opacity).
+      - **carousel** (17-4296): the same cards, 300px wide (image ratio 300/236), in a horizontal **scroll-snap row** (`.scroll-row`, no JS; focusable with an `aria-label`) that runs to the right edge.
+      - **bento** (17-3995): 2 columns from `lg`; the **first card spans two rows**; panels `rounded-lg bg-linear-to-b from-white/10 to-white/15` (black/5 → black/10 on light), title `text-2xl font-bold`, text `text-xl` (65%), the card image under the text (the first one full width, the others centred, at their own ratio).
+    - **imageGallery** gets `scheme` (light / white / soft / dark: the heading and captions follow it). **Marquee with a heading** (17-3649: posters) uses tiles `h-55 md:h-75`, gap 24, `rounded-md`, and a left-aligned heading; the headingless Careers photo strip keeps 220 / 10 / `rounded-photo`.
+    - **ctaBanner › simple with an image** (17-2992 "See you at the door."): heading `md:text-banner` bold, the first `images` asset centred below it (`max-w-128`, `shadow-glow`).
   - **imageGallery › marquee** (Figma Careers 6-6667 photo strip, Sell Tickets 17-3649 posters; migration `m261120_350000_gallery_marquee`):
     - A row that scrolls on its own (`.gallery-marquee__track`, paused under reduced motion). Tiles are a **fixed height** (160px phone, 220px from `md`) at **each image's own ratio** (never cropped by the template), gap 10, `rounded-photo` (10px token).
     - For a uniform strip, editors crop the photos in Craft's image editor. Only the first pass is read by screen readers; the copy is `aria-hidden` with empty alt.

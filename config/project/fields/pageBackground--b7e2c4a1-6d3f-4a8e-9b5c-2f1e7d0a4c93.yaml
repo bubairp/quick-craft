@@ -28,6 +28,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Dark (black)'
+        -
+          - value
+          - dark
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

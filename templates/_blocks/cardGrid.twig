@@ -22,7 +22,54 @@
     : 'sm:grid-cols-2 lg:grid-cols-4')) %}
 {% set buttons = block.buttons.eagerly().all() %}
 
-{% if textCards and (block.heading or count or buttons|length) %}
+{% if layout in ['showcase', 'carousel', 'bento'] and (block.heading or count) %}
+{# Left-header layouts (Sell Tickets): showcase 17-2788 (big image cards), carousel 17-4296 (scroll-snap
+   row of the same cards), bento 17-3995 (panels, the first spans two rows) #}
+{% set muted = dark ? 'text-white/80' : 'text-black/60' %}
+<section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="flex flex-col gap-10 py-16 md:gap-14 md:py-25 {{ layout == 'carousel' ? 'overflow-hidden' }}">
+    {% if block.eyebrow or block.heading or block.text or buttons|length %}
+        <div class="mx-auto flex w-full max-w-site flex-col gap-6 px-4 md:flex-row md:items-center md:justify-between md:px-gutter" data-reveal>
+            <div class="flex flex-col gap-3">
+                {% if block.eyebrow %}<p class="text-xl font-medium text-accent">{{ block.eyebrow }}</p>{% endif %}
+                {% if block.heading %}<{{ 'h' ~ level }} class="text-balance text-4xl font-bold md:text-6xl">{{ block.heading }}</{{ 'h' ~ level }}>{% endif %}
+                {% if block.text %}<p class="text-xl md:text-title {{ muted }}">{{ block.text|nl2br }}</p>{% endif %}
+            </div>
+            {% include '_components/buttons.twig' with {
+                buttons: buttons, dark: dark, shape: 'rounded', class: 'flex shrink-0 flex-wrap gap-3',
+                variants: { primary: dark ? 'light' : 'dark', secondary: dark ? 'outlineLight' : 'light' },
+            } only %}
+        </div>
+    {% endif %}
+
+    {% if count and layout == 'carousel' %}
+        {# runs to the right edge; starts at the content's left edge #}
+        <ul class="scroll-row flex gap-5" tabindex="0" aria-label="{{ block.heading ?: 'Features'|t }}">
+            {% for card in cards %}
+                <li class="w-64 shrink-0 snap-start md:w-75">
+                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: 'showcase', ratio: 300 / 236, revealIndex: loop.index0 } only %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% elseif count %}
+        <div class="mx-auto w-full max-w-site px-4 md:px-gutter">
+            {% if layout == 'bento' %}
+                <div class="grid gap-6 lg:grid-cols-2 lg:grid-rows-2">
+                    {% for card in cards %}
+                        {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: 'panel', wide: loop.first, class: loop.first ? 'lg:row-span-2', revealIndex: loop.index0 } only %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                    {% for card in cards %}
+                        {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: 'showcase', ratio: 450 / 532, revealIndex: loop.index0 } only %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</section>
+
+{% elseif textCards and (block.heading or count or buttons|length) %}
 {# Text cards (Careers 6-6770 "Our Values"; with images: Organizers 17-728) and photo cards
    (Organizers 17-782): sentence-case heading group, cards, buttons, optional glow. With no cards it's
    a plain heading + text + buttons call to action (Organizers "Get started for free"). #}

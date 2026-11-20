@@ -1241,3 +1241,29 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Order: banner → gallery row → cards → comparison → reviews → rich text → FAQ → CTA.
   - Tiles 147 (152 on a phone) with radius 20; no overflow; 0 broken images; no console errors. All pages 200 with no Twig errors.
 - **Fixed while checking:** row captions at 24px wrapped ("Kids’ Birthday" on two lines) → 20px.
+
+### 2026-11-20: Sell Tickets page (Figma 17-2557, dark)
+- **Rule first:** CLAUDE.md › Sell Tickets page:
+  - `pageBackground` dark; left-header cardGrid layouts (`showcase` new; `carousel` and `bento` implemented for the first time).
+  - imageGallery `scheme` + poster marquee; ctaBanner simple with an image.
+- **Design and build:**
+  - **Banner (17-2716):** a dark split; "Where Events Grow", text, white "Get started"; the ticket image (Figma's video poster) on the right.
+  - **"Easy AF ticketing" (17-2788):** cardGrid `showcase`. Heading left 56 bold + button right; 3 cards (image ratio 450/532, `rounded-lg`; title 28 bold; text 20 at 80%).
+  - **"Built for events that spread" (17-3649):** imageGallery marquee with a heading = poster strip. Left heading, tiles 300 tall, gap 24, `rounded-md`. The headingless Careers strip keeps 220 / 10 / `rounded-photo` (checked: Careers still renders `rounded-photo`).
+  - **"Don’t process payments, fill the room" (17-3995):** cardGrid `bento`. Translucent panels; the first spans two rows with its collage full width; "Word of mouth" / "Search" have centred images. The panel images are Figma renders of those groups (`get_screenshot`), since the design builds them from live UI.
+  - **"We’ve got you covered" (17-4296):** cardGrid `carousel`. The same showcase cards at 300px (image ratio 300/236) in `.scroll-row`, a CSS scroll-snap row, no JS, no scrollbar, focusable with an `aria-label`. It starts at the content's left edge (padding = max(gutter, (100% − site width) / 2 + gutter)) and runs to the screen edge.
+  - **"See you at the door." (17-2992):** ctaBanner simple + an image → heading `md:text-banner` bold, the ticket roll below (`max-w-128 shadow-glow`). Figma's blue "door" and the image's glow halo aren't reproduced (plain text field / one shadow token).
+- **Templates and CSS:**
+  - `_entries/page.twig`: the body background map (+ `dark` → `bg-black text-white`).
+  - `cardGrid.twig`: a left-header branch for showcase / carousel / bento.
+  - `card.twig`: `showcase` and `panel` variants.
+  - `imageGallery.twig`: `data-scheme`; poster marquee; a left heading for posters.
+  - `ctaBanner.twig`: simple + image. `app.css`: `.scroll-row`.
+- **Migration** `m261120_440000_sell_tickets` (backup: `/tmp/before-sell-tickets.sql.gz`):
+  - Options pageBackground `dark` and cardLayout `showcase`; `scheme` added to imageGallery.
+  - The page (banner + 5 blocks).
+  - 29 placeholder images (`st-*`).
+- **Checked (Playwright) at 375 / 1440:**
+  - Every section dark on a black body; showcase images 416×493 at 1440; posters 300px tall, radius 8.
+  - Carousel row starts at x = 64 (same as the headings), scrollWidth 2028 > 1425; no page overflow; 0 broken images; no console errors.
+  - All pages 200 with no Twig errors.
