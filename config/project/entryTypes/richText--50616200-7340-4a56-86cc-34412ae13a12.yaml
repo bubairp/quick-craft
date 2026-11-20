@@ -13,6 +13,23 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
+            fieldUid: df19c3c5-f530-47ba-9001-2f396e6fc78c # Text layout
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: cb876c94-0fb7-4e4a-95fa-16b683855a76
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
             fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
             handle: heading
             instructions: null

@@ -1,0 +1,35 @@
+columnSuffix: null
+handle: textLayout
+instructions: 'Small: the muted SEO text under a page. Article: readable body text, e.g. legal pages.'
+name: 'Text layout'
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Small (SEO text, divider below)'
+        -
+          - value
+          - small
+        -
+          - default
+          - true
+    -
+      __assoc__:
+        -
+          - label
+          - 'Article (readable text, e.g. legal pages)'
+        -
+          - value
+          - article
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

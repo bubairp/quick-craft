@@ -114,6 +114,10 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 | ☑ | `textMedia` × 4 | uncropped (`cropImage` off) | 76:769… |
 | ☑ | `ctaBanner` | simple + `imageAbove` | 76:832 |
 
+## 6c. Pages without a Figma design (2026-11-20)
+- ☑ Legal pages ×4 (placeholder body), occasion pages ×8 (from Birthday + preset), Download; Create/Help re-pointed; Explore removed from the menus
+- ☐ Real legal text; occasion images and SEO text
+
 ## 6b. Shopify-style page builder (agreed 2026-11-19, in this order)
 - ☑ Colour schemes (`scheme`: light / white / soft / dark) + spacing presets (`spacing`: default / noTop / noBottom / none)
 - ☑ Page tabs (Page · Banner · Content · SEO) + fixed banner (added 2026-11-20, as in Site7 Engine)

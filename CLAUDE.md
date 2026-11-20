@@ -131,6 +131,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - **richText** (Figma 17-1343, the SEO text under a page; migration `m261120_280000_rich_text`): optional `heading`, `body` (Rich text (full)), `spacing`. Small muted text (`text-xs`, black/40) in `max-w-text`, with a divider below.
     - CKEditor output is styled by the `.rich-text` component class in app.css (headings like small subheads, 20px before a heading, 8px between a heading and its text, links in ink). Content can't carry utility classes, so prose styling always goes through `.rich-text`.
     - Headings inside the body start at h2 (no block heading) or h3 (with one).
+    - **`textLayout`** (new Dropdown, migration `m261120_480000_more_pages`): `small` (default, the SEO style above) / `article` "Article (readable text, e.g. legal pages)": a centred `max-w-article` column, `.rich-text .rich-text--article` (the blog post body style), no divider, heading `text-2xl font-bold`.
   - **comparison** (Figma 17-2074, Invitation Maker; migration `m261120_290000_comparison`): `heading`, `text` (subtitle), `image` (our column's logo; falls back to the site logo, then the site name), `comparisonUs` / `comparisonThem` (Table: label + status yes / warning / no), `themLabel` (the other column's heading), `body` (closing note, italic).
     - Status icons are Tabler filled: circle-check `text-success`, alert-triangle `text-warning`, circle-x `text-muted`. The status is also given as text for screen readers.
     - Our column is a card (`bg-linear-to-b from-aqua/10 to-orchid/10`, `rounded-xl`, `shadow-glow`); the columns stack on phones.
@@ -191,6 +192,13 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - **testimonials › pressRow** (new `testimonialLayout` option "Press quotes (scrolling row)", About 76:472): a self-scrolling row (`.gallery-marquee__track`, paused under reduced motion) of items: logo (`image`, `h-5` auto) over the quote (`text`, `text-2xl text-ink/40`, in quotes), gap 80, the set repeated so the loop never shows a gap; copies `aria-hidden`.
     - **textMedia** gets `cropImage` (lightswitchOn instance, "Crop image to fit", default on). Off = the image keeps its own ratio, uncropped (About's polaroid collages, transparent PNGs, `max-w-120`).
     - **ctaBanner › simple** gets `imageAbove` (lightswitchOff instance, "Small image above the heading"): the first image as a small decorative sticker (`h-13 w-auto`) above a normal plain heading (About 76:832 "PARTY!"), instead of the big image below.
+  - **Pages without a Figma design (the user's decisions, 2026-11-20; migration `m261120_480000_more_pages`).** The menus linked to 22 URLs that had no page:
+    - **Legal pages** Terms & Conditions (`/terms`), Privacy Policy (`/privacy`), Cookie Policy (`/cookies`), Community Guidelines (`/community-guidelines`): Banner › simple (the title) + a richText block with `textLayout: article`. The body is a clearly marked **placeholder; the user pastes the real legal text** (never invent legal text).
+    - **Occasion pages** (Invites menu: Dinners, Housewarmings, Holidays, Game Day, Friendsgiving, Weddings, Bach Parties, New Year's Eve → `/dinner-invitations`, `/housewarming-invitations`, `/holiday-invitations`, `/game-day-invitations`, `/friendsgiving-invitations`, `/wedding-invitations`, `/bach-party-invitations`, `/new-years-eve-invitations`): copies of the Birthday Invitations layout. Its generic blocks (gallery grid, cards "Get your party started", "Get the app" CTA) are also saved as the page preset **"Occasion invitations"** for future occasion pages. Each page has its own banner heading, text and SEO; the Birthday-only promo bar and SEO text are left out, and the images stay the Birthday ones until replaced.
+    - **Download** (`/download`): Banner › simple ("Get the Quick Craft app") + ctaBanner › simple with text and the store badges.
+    - **Create → Invitation Maker, Help Center → Contact** (menu items link to those entries).
+    - **Explore is removed from the menus** (header mega menu, Products › Explore Events, footer) until an events feature exists.
+    - Menu items link to these pages by entry ID, not by URL.
   - **imageGallery › marquee** (Figma Careers 6-6667 photo strip, Sell Tickets 17-3649 posters; migration `m261120_350000_gallery_marquee`):
     - A row that scrolls on its own (`.gallery-marquee__track`, paused under reduced motion). Tiles are a **fixed height** (160px phone, 220px from `md`) at **each image's own ratio** (never cropped by the template), gap 10, `rounded-photo` (10px token).
     - For a uniform strip, editors crop the photos in Craft's image editor. Only the first pass is read by screen readers; the copy is `aria-hidden` with empty alt.
@@ -306,7 +314,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - Shows every pageBuilder block in use on the site, grouped by type: one example per layout × scheme, with the page it comes from. Also every page Banner, and the block types that have no template or no example yet.
   - `?scheme=light|white|soft|dark` re-renders every scheme-aware block in that scheme, in memory only (`setFieldValue`, never saved).
   - **Check it after any template or CSS change** (as Site7's `/blocks`). New block types appear automatically.
-- **Option fields:** `scheme`, `spacing` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`).
+- **Option fields:** `scheme`, `spacing` and one layout dropdown per block (`heroLayout`, `cardLayout`, `featureLayout`, `galleryLayout`, `testimonialLayout`, `mediaPosition`, `textLayout`).
 - **Section options (Shopify-style), migration `m261119_230000_scheme_and_spacing`:**
   - **`scheme`** (Colour scheme): `light` (page background, none of its own), `white`, `soft` (surface grey), `dark`.
     - The block puts `data-scheme="{{ scheme }}"` on its `<section>`. The colours are defined once in `src/css/app.css` (`[data-scheme]`, components layer), so a block's own utility can still override them (featureRows' dark is `bg-ink`).

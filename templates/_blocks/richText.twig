@@ -1,21 +1,33 @@
 {#
- # Rich text block. Figma: Birthday Invitations 17-1343 (the SEO text under a page; also 17-2385).
- # Small muted text in a 1120px column, a 1px divider 60px below. The body is CKEditor HTML,
- # styled by the .rich-text component class (src/css/app.css).
+ # Rich text block. The body is CKEditor HTML, styled by the .rich-text component class (src/css/app.css).
+ # textLayout:
+ #   small (default) — Figma Birthday Invitations 17-1343 (the SEO text under a page; also 17-2385):
+ #                     small muted text in a 1120px column, a 1px divider 60px below.
+ #   article         — readable text in the blog-post column (max-w-article, .rich-text--article),
+ #                     e.g. the legal pages; no divider.
  # Receives: block, headingLevel
- # Fields: heading (optional), body (Rich text (full): headings h2–h4), spacing
+ # Fields: textLayout, heading (optional), body (Rich text (full): headings h2–h4), spacing
  #}
 {% set heading = block.heading|trim %}
 {% set body = block.body ?? null %}
 {% if heading or (body and body|length) %}
     {% set tag = 'h' ~ (headingLevel ?? 2) %}
-    <section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-10 md:px-10">
-        <div class="mx-auto flex max-w-text flex-col gap-15">
-            <div class="flex flex-col gap-2">
-                {% if heading %}<{{ tag }} class="text-xs text-black/40">{{ heading }}</{{ tag }}>{% endif %}
-                {% if body and body|length %}<div class="rich-text">{{ body }}</div>{% endif %}
+    {% if (block.textLayout.value ?? 'small') == 'article' %}
+        <section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-10 md:px-10 md:pb-25">
+            <div class="mx-auto flex max-w-article flex-col gap-5">
+                {% if heading %}<{{ tag }} class="text-2xl font-bold">{{ heading }}</{{ tag }}>{% endif %}
+                {% if body and body|length %}<div class="rich-text rich-text--article">{{ body }}</div>{% endif %}
             </div>
-            <hr class="border-black/30">
-        </div>
-    </section>
+        </section>
+    {% else %}
+        <section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-10 md:px-10">
+            <div class="mx-auto flex max-w-text flex-col gap-15">
+                <div class="flex flex-col gap-2">
+                    {% if heading %}<{{ tag }} class="text-xs text-black/40">{{ heading }}</{{ tag }}>{% endif %}
+                    {% if body and body|length %}<div class="rich-text">{{ body }}</div>{% endif %}
+                </div>
+                <hr class="border-black/30">
+            </div>
+        </section>
+    {% endif %}
 {% endif %}

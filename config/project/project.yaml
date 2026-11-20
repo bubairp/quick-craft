@@ -1,4 +1,4 @@
-dateModified: 1795169295
+dateModified: 1795174991
 elementSources:
   craft\elements\Entry:
     -
@@ -193,6 +193,7 @@ meta:
     d870d553-037a-4aad-adec-e3c518642b9b: 'Public Schema' # Public Schema
     d9818d83-29ba-4787-9db3-e6de4d353e2e: 'Image gallery' # Image gallery
     da765e73-af37-4700-82d8-4ad3b68b2e1a: 'Page preset' # Page preset
+    df19c3c5-f530-47ba-9001-2f396e6fc78c: 'Text layout' # Text layout
     e4dbf038-0b21-4638-b6b0-d750cc7e4718: 'Media position' # Media position
     e7d05140-eed9-42bc-a423-92dc136c77e4: 'FAQ item' # FAQ item
     e66dbff2-22f8-44fe-b827-173790a3268a: 'Page presets' # Page presets

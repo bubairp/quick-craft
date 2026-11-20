@@ -1425,3 +1425,24 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - `/llms.txt` → 404: by design while the "LLMs Text" Single is empty.
 - An unknown URL locally shows Craft's devMode exception page; with devMode off visitors get `404.twig` (checked at `/404`).
 - 22 menu links go to pages that don't exist yet (Invites ×8, Explore ×7, Create, Help, Terms, Privacy, Cookies, Community Guidelines, Download).
+
+## 2026-11-20 · Pages without a Figma design: legal, 8 occasion pages, Download; Explore removed
+
+**Why:** the full-site check found 22 menu links to pages that didn't exist. Figma has no frames for any of them (only the 12 built pages), so the user chose: simple legal pages with a placeholder body, copies of the Birthday layout for the occasions, and re-pointing or removing the rest.
+
+**Done** (migration `m261120_480000_more_pages`, backup `/tmp/before-more-pages.sql.gz`)
+- `textLayout` Dropdown (small / article) on richText; `_blocks/richText.twig` gets the article layout (`max-w-article`, `.rich-text--article`, no divider).
+- Legal pages `/terms`, `/privacy`, `/cookies`, `/community-guidelines`: Banner simple + richText article with a **placeholder** body (the user pastes the real text).
+- Page preset **"Occasion invitations"** (Birthday's gallery, cards and CTA blocks; card heading "Get your party started").
+- 8 occasion pages duplicated from Birthday (`Elements::duplicateElement`, nested blocks included). Each gets its own title, slug, banner heading/text and SEO; the Birthday-only promo bar and SEO text are deleted; the block order is renumbered.
+- `/download`: Banner simple + ctaBanner simple (text + store badges).
+- Menus: every item links by entry ID; Create → Invitation Maker, Help Center → Contact; the Explore mega menu, "Explore Events" (Products, footer) and the /explore items removed.
+
+**Checked (Playwright 1440 + 375):** all 14 pages 200, one h1, no overflow, no console errors; 23 internal links, none broken; the header shows Invites / Products / For Organizers / Company; `/blocks` 200.
+
+**Gotchas**
+- Yii's `Migration::update()` / `delete()` return nothing (they echo), so don't use them for counts.
+- `Elements::duplicateElement()` on a page copies its nested Matrix blocks too; the PagePresets module skips it (`duplicateOf` is set).
+- Windows Python string replacements miss on CRLF files; use Edit, or match `\r\n`.
+
+**Before launch:** the real legal text on the 4 legal pages; occasion-specific images and SEO text.
