@@ -40,12 +40,12 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 ### Organizers (17-267)
 | | Block | Layout | Node |
 |---|---|---|---|
-| ☐ | banner (Banner tab) | centered + rotatingWords | 17-426 |
+| ☑ | banner (Banner tab) | centered + rotatingWords + collage | 17-426 |
 | — | logo strip | | 17-530 **skipped** |
-| ☐ | `testimonials` | quotes | 17-576 / 17-591 |
-| ☐ | `featureRows` | alternating | 17-640 |
-| ☐ | `cardGrid` | grid | 17-716 |
-| ☐ | `cardGrid` + `ctaBanner` | grid (community) | 17-771 |
+| ☑ | `testimonials` | quotes | 17-576 / 17-591 |
+| ☑ | `featureRows` | alternating | 17-640 |
+| ☑ | `cardGrid` | textCards (with images) | 17-716 |
+| ☑ | `cardGrid` ×2 | photoCards + textCards CTA | 17-771 |
 
 ### Birthday Invitations (17-890)
 | | Block | Layout | Node |

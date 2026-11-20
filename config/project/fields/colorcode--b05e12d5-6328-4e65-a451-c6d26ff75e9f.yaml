@@ -239,6 +239,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - color
+          - '#9ed104'
+        -
+          - label
+          - lime
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

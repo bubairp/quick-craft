@@ -1164,3 +1164,27 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Body p 18/25.2 black/60, h2 36 bold, h3 24 bold; gaps h2→h3 40, before list 32, before figure 32; disc bullets; links black and underlined.
   - "Next: Parti Recap…"; the oldest post (Hot Literati) has no Next link. No overflow, no console errors; all pages 200 with no Twig errors.
 - **Known gap:** images inside the CKEditor body are output at their original size (no transform, srcset or lazy loading). Option for later: set a default image transform on the `richTextFull` field, or post-process `<img>` in the template.
+
+### 2026-11-20: Organizers page (Figma 17-267)
+- **Rule first:** CLAUDE.md › Organizers page (banner collage, quotes, alternating rows, text cards with images, photo cards, "Get started" CTA, `plain` section heading). I also restored the `imageGallery › marquee` heading line that my textCards edit had swallowed earlier.
+- **Design:**
+  - **Banner (17-426):** "Quick Craft for Organizers" / "The best way to organize your *Writers Group*" (rotating, green gradient) / text / "Try it out", with 15 tilted event cards and avatars around it.
+  - **Quotes (17-591):** a photo + club logo per quote. **Feature rows (17-640):** 4 rows, text 500 / image 660. **"Take the stress out of planning" (17-716):** 3 image cards + a button. **"Join thousands…" (17-782):** 3 photo cards. **"Get started for free":** 2 buttons.
+- **Templates and CSS:**
+  - `section-heading.twig` gets `plain: true` (sentence case, 48 medium; Home keeps uppercase).
+  - `banner.twig` centered: the eyebrow / heading / text sizes from Figma; the rotating word in `from-success to-lime` gradient text; `glow-bg`. The old square image grid is replaced by `.banner-collage` (15 Figma slots in %, from `xl`; avatars cropped round; images decorative).
+  - `testimonials.twig`: a dedicated quotes branch (photo `-rotate-10` round + logo `rotate-10` `rounded-lg`, overlapping; quote 24 semibold; name · detail 20 black/60).
+  - `featureRows.twig` alternating: a 12-column grid (5/7), gap 40, rows 100 apart; title 36 bold; text 24 black/60 with blank-line paragraphs; image ratio 660/422; `glow`.
+  - `card.twig`: the `text` variant shows the image on top (4:3; text 20px); a new `photo` variant (text over a bottom gradient, the whole card can link).
+  - `cardGrid.twig`: `photoCards` shares the textCards branch; a textCards block with no cards (heading + text + buttons) now renders.
+- **Migration** `m261120_410000_organizers` (backup: `/tmp/before-organizers.sql.gz`):
+  - cardLayout + `photoCards`; testimonial + `logo` (an image instance); featureRows + `glow`; palette + `lime`.
+  - The page banner and 5 blocks with the Figma copy and 31 placeholder images (`org-*`, downloaded from Figma, JPEGs saved as `.jpg`).
+  - **Tested both orders:** after the first run, `ddev import-db` from the backup → `ddev craft up` (project config first, then the migration) → the same content, and `project-config/diff` shows no changes.
+- **Checked (Playwright) at 375 / 768 / 1440:**
+  - One h1, then h2 sections and h3 cards; collage shown at 1440 (15 items) and hidden below `xl`; no overflow; 0 broken images; no console errors.
+  - Quote 24/600 (20 on a phone); row 389px tall at 1440; photo card 323×266 (Figma 340×280; the 1000px content width with gap 16).
+  - Careers / Home / Blog / Press / `/blocks` (+ dark) all 200 with no Twig errors.
+- **Fixed while checking:** "Join thousands" and "Get started" had no gap between them (`noBottom` + `noTop`); the photo cards keep their default padding now.
+- **Note:** full-page screenshots show `data-reveal` sections as blank (they appear on scroll), so check sections one by one after scrolling them into view.
+- **Placeholders:** all club names, quotes and photos come from the imported design; buttons → https://example.com/app.

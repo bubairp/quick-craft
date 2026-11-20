@@ -76,6 +76,23 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a # Lightswitch (default off)
+            handle: glow
+            instructions: 'Alternating layout, light schemes.'
+            label: 'Soft glow background'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 9b20c4c9-0557-4a09-aad7-2e979c05d986
+            userCondition: null
+            warning: null
+            width: 100
         name: Content
         uid: e28251e4-4e73-4b39-b26b-5211a9a6d327
         userCondition: null

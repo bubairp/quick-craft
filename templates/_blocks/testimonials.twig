@@ -9,7 +9,7 @@
  #                       stat: heading=value, text=label, image=background)
  #}
 {% set layout = block.testimonialLayout.value ?? 'carousel' %}
-{% set items = block.testimonials.eagerly().with(['image']).all() %}
+{% set items = block.testimonials.eagerly().with(['image', 'logo']).all() %}
 {% set level = headingLevel ?? 2 %}
 {% set itemTag = 'h' ~ (level + 1) %}
 
@@ -49,6 +49,43 @@
             </ul>
         </div>
     </div>
+</section>
+
+{% elseif items|length and layout == 'quotes' %}
+{# Quotes (Figma Organizers 17-576 / 17-591): plain heading; per item a round photo overlapped by a
+   tilted club logo, the quote and "name · detail". #}
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="glow-bg px-4 py-16 md:px-10 md:py-25">
+    {% include '_components/section-heading.twig' with {
+        eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level, plain: true,
+    } only %}
+    <ul class="mx-auto mt-12 grid max-w-text gap-10 md:mt-15 md:grid-cols-3 md:gap-4">
+        {% for item in items %}
+            {% set photo = item.image.one() %}
+            {% set logo = (item.logo ?? null) ? item.logo.one() : null %}
+            <li>
+                <figure class="flex h-full flex-col items-center gap-4 p-2 text-center" data-reveal data-reveal-index="{{ loop.index0 }}">
+                    {% if photo or logo %}
+                        <div class="flex items-center justify-center" aria-hidden="true">
+                            {% if photo %}
+                                {% include '_components/image.twig' with { image: photo, width: 115, ratio: 1, sizes: '115px', decorative: true, class: 'relative z-10 size-29 -rotate-10 rounded-full object-cover' } only %}
+                            {% endif %}
+                            {% if logo %}
+                                {% include '_components/image.twig' with { image: logo, width: 115, ratio: 1, sizes: '115px', decorative: true, class: 'size-29 rotate-10 rounded-lg object-cover ' ~ (photo ? '-ml-5') } only %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    <div class="flex flex-col gap-0.5">
+                        {% if item.text %}
+                            <blockquote class="text-balance text-xl font-semibold text-black md:text-2xl">“{{ item.text }}”</blockquote>
+                        {% endif %}
+                        {% if item.personName or item.personDetail %}
+                            <figcaption class="text-lg text-black/60 md:text-xl">{{ [item.personName, item.personDetail]|filter|join(' · ') }}</figcaption>
+                        {% endif %}
+                    </div>
+                </figure>
+            </li>
+        {% endfor %}
+    </ul>
 </section>
 
 {% elseif items|length %}

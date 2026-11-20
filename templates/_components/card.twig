@@ -4,7 +4,8 @@
  #   card     Entry (type 'card')
  #   variant  'feature' (default, Home 6-1320: centered, big title)
  #            'compact' (Home 6-1719: square tile, inline caption + link)
- #            'text'    (Careers 6-6770: white card, emoji + title + text, no image)
+ #            'text'    (Careers 6-6770: white card, emoji + title + text; image on top if set)
+ #            'photo'   (Organizers 17-782: text over the image; the whole card links)
  #   level    heading level (3)
  #   dark     bool
  #   soft     bool: the section uses the "soft" (grey) scheme, so the empty media panel is white
@@ -16,19 +17,55 @@
 {% set link = card.primaryButton ?? null %}
 
 {% if (variant ?? 'feature') == 'text' %}
-{# 'text' (Careers 6-6770): white card, emoji + title + text, no image #}
-<article class="flex h-full flex-col gap-1 rounded-lg p-7.5 {{ dark ? 'bg-white/10 text-white' : 'bg-white shadow-card' }}" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
-    {% if card.emoji %}<span class="text-headline" aria-hidden="true">{{ card.emoji }}</span>{% endif %}
-    {% if card.heading %}
-        <{{ tag }} class="text-2xl font-semibold">{{ card.heading }}</{{ tag }}>
+{# 'text' (Careers 6-6770): white card, emoji + title + text; with an image (Organizers 17-728) the
+   image sits on top, 4:3, and the text is 20px #}
+{% set image = card.image.one() %}
+<article class="flex h-full flex-col overflow-hidden rounded-lg {{ dark ? 'bg-white/10 text-white' : 'bg-white shadow-card' }}" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
+    {% if image %}
+        {% include '_components/image.twig' with {
+            image: image, width: 320, ratio: 4 / 3, sizes: '(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw',
+            class: 'aspect-4/3 h-auto w-full object-cover',
+        } only %}
     {% endif %}
-    {% if card.text %}
-        <p class="text-base {{ dark ? 'text-line' : 'text-black/60' }}">{{ card.text|nl2br }}</p>
+    <div class="flex flex-1 flex-col gap-1 p-7.5">
+        {% if card.emoji %}<span class="text-headline" aria-hidden="true">{{ card.emoji }}</span>{% endif %}
+        {% if card.heading %}
+            <{{ tag }} class="text-2xl font-semibold">{{ card.heading }}</{{ tag }}>
+        {% endif %}
+        {% if card.text %}
+            <p class="{{ image ? 'text-xl' : 'text-base' }} {{ dark ? 'text-line' : 'text-black/60' }}">{{ card.text|nl2br }}</p>
+        {% endif %}
+        {% if link and link.url %}
+            <a {{ attr(link.attributes|merge({ class: 'mt-2 self-start text-base font-medium underline underline-offset-4 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current' })) }}>{{ link.label ?: link.url }}</a>
+        {% endif %}
+    </div>
+</article>
+
+{% elseif (variant ?? 'feature') == 'photo' %}
+{# 'photo' (Organizers 17-782): the image fills the card, title + text over a bottom gradient;
+   the whole card links when primaryButton is set #}
+{% set image = card.image.one() %}
+{% set inner %}
+    {% if image %}
+        {% include '_components/image.twig' with {
+            image: image, width: 340, ratio: 340 / 280, sizes: '(min-width: 768px) 340px, 100vw',
+            class: 'absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105',
+        } only %}
     {% endif %}
+    <span class="relative mt-auto flex flex-col gap-1 bg-linear-to-b from-transparent to-black/70 p-6 pt-12">
+        {% if card.heading %}<{{ tag }} class="text-title font-medium text-white">{{ card.heading }}</{{ tag }}>{% endif %}
+        {% if card.text %}<span class="text-xl text-white/80">{{ card.text }}</span>{% endif %}
+    </span>
+{% endset %}
+{% set cardClass = 'group relative flex aspect-340/280 flex-col overflow-hidden rounded-lg bg-night' %}
+<article data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
     {% if link and link.url %}
-        <a {{ attr(link.attributes|merge({ class: 'mt-2 self-start text-base font-medium underline underline-offset-4 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current' })) }}>{{ link.label ?: link.url }}</a>
+        <a {{ attr(link.attributes|merge({ class: cardClass ~ ' focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink' })) }}>{{ inner }}</a>
+    {% else %}
+        <div class="{{ cardClass }}">{{ inner }}</div>
     {% endif %}
 </article>
+
 {% else %}
 {% set compact = (variant ?? 'feature') == 'compact' %}
 {% set image = card.image.one() ?? null %}

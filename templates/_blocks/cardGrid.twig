@@ -2,13 +2,15 @@
  # Card grid block.
  #   grid (default): Figma Home 6-1320 — centered heading, big cards, button below
  #   compact:        Figma Home 6-1719 — heading left + buttons right, small square tiles
- #   textCards:      Figma Careers 6-6770 — centred heading, white emoji cards (no images)
+ #   textCards:      Figma Careers 6-6770 — centred heading, white emoji cards (image on top if set, Organizers 17-728)
+ #   photoCards:     Figma Organizers 17-782 — text over full-bleed photos
  # Receives: block, headingLevel
  # Fields: cardLayout, scheme, spacing, glow (textCards only), eyebrow, heading, text, cards, buttons (common Matrix)
  #}
 {% set layout = block.cardLayout.value ?? 'grid' %}
 {% set compact = layout == 'compact' %}
-{% set textCards = layout == 'textCards' %}
+{% set photoCards = layout == 'photoCards' %}
+{% set textCards = layout == 'textCards' or photoCards %}
 {% set scheme = block.scheme.value ?? 'light' %}
 {% set dark = scheme == 'dark' %}
 {% set cards = block.cards.eagerly().with(['image']).all() %}
@@ -20,8 +22,10 @@
     : 'sm:grid-cols-2 lg:grid-cols-4')) %}
 {% set buttons = block.buttons.eagerly().all() %}
 
-{% if textCards and (block.heading or count) %}
-{# Text cards (Careers 6-6770 "Our Values"): sentence-case heading, white emoji cards, optional glow #}
+{% if textCards and (block.heading or count or buttons|length) %}
+{# Text cards (Careers 6-6770 "Our Values"; with images: Organizers 17-728) and photo cards
+   (Organizers 17-782): sentence-case heading group, cards, buttons, optional glow. With no cards it's
+   a plain heading + text + buttons call to action (Organizers "Get started for free"). #}
 <section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}"
          class="px-4 py-16 md:px-gutter md:py-25 {{ block.glow and not dark ? 'glow-bg' }}">
     <div class="mx-auto flex max-w-narrow flex-col items-center gap-10 md:gap-15">
@@ -32,14 +36,15 @@
                     <{{ 'h' ~ level }} class="text-balance text-4xl font-medium md:text-headline">{{ block.heading }}</{{ 'h' ~ level }}>
                 {% endif %}
                 {% if block.text %}
-                    <p class="max-w-article text-balance text-lg {{ dark ? 'text-line' : 'text-black/60' }}">{{ block.text|nl2br }}</p>
+                    <p class="max-w-article text-balance text-xl md:text-2xl {{ dark ? 'text-line' : 'text-black/60' }}">{{ block.text|nl2br }}</p>
                 {% endif %}
             </div>
         {% endif %}
         {% if count %}
-            <div class="grid w-full grid-cols-1 gap-2.5 sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-3">
+            {% set withImages = cards|filter(c => c.image|length)|length > 0 %}
+            <div class="grid w-full grid-cols-1 {{ photoCards ? 'gap-4 md:grid-cols-3' : (withImages ? 'gap-5' : 'gap-2.5') ~ ' sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-3' }}">
                 {% for card in cards %}
-                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: 'text', revealIndex: loop.index0 } only %}
+                    {% include '_components/card.twig' with { card: card, level: level + 1, dark: dark, variant: photoCards ? 'photo' : 'text', revealIndex: loop.index0 } only %}
                 {% endfor %}
             </div>
         {% endif %}

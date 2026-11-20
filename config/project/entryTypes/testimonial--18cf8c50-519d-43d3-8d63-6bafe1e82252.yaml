@@ -110,6 +110,23 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 14091199-6132-4c42-922f-b1b61358f694 # Image
+            handle: logo
+            instructions: 'Quotes layout: a club or brand logo shown tilted next to the round photo.'
+            label: 'Logo (beside the photo)'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: a3b2108d-722b-4f3c-9c8d-bc049f57c1b0
+            userCondition: null
+            warning: null
+            width: 100
         name: Content
         uid: d48ea20e-1ce3-4929-8a00-bdcf9223ffb5
         userCondition: null

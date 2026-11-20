@@ -1,6 +1,7 @@
 {#
  # Section heading group: eyebrow, display heading, subtitle.
- # Props: eyebrow, heading, text, level (2), align ('center'|'left'), dark (bool), class
+ # Props: eyebrow, heading, text, level (2), align ('center'|'left'), dark (bool), class,
+ #        plain (bool): sentence-case landing-page heading (48 medium) instead of Home's uppercase display
  #}
 {% set align = align ?? 'center' %}
 {% set dark = dark ?? false %}
@@ -11,10 +12,10 @@
         {% endif %}
         {% if heading ?? null %}
             {% set tag = 'h' ~ (level ?? 2) %}
-            <{{ tag }} class="text-balance text-4xl uppercase md:text-5xl">{{ heading }}</{{ tag }}>
+            <{{ tag }} class="text-balance text-4xl {{ (plain ?? false) ? 'font-medium md:text-headline' : 'uppercase md:text-5xl' }}">{{ heading }}</{{ tag }}>
         {% endif %}
         {% if text ?? null %}
-            <p class="text-balance text-lg font-light {{ dark ? 'text-line' : 'text-muted' }}">{{ text|nl2br }}</p>
+            <p class="text-balance {{ (plain ?? false) ? 'text-xl md:text-2xl' : 'text-lg font-light' }} {{ dark ? 'text-line' : ((plain ?? false) ? 'text-black/60' : 'text-muted') }}">{{ text|nl2br }}</p>
         {% endif %}
     </div>
 {% endif %}

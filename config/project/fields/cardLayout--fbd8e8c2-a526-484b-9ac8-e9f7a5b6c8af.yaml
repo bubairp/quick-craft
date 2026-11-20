@@ -61,6 +61,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Photo cards (text over the image)'
+        -
+          - value
+          - photoCards
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

@@ -36,7 +36,8 @@
   --color-glow-pink: #ffc4fe;  /* blurred background blobs */
   --color-glow-blue: #5fd8ff;
   --color-promo: #3c0a7a;      /* promo bar background (Figma 17-1076) */
-  --color-danger: #b42318;     /* form error text (AA on white and the light glow) */
+  --color-lime: #9ed104;       /* rotating-word gradient end (Organizers 17-457, from success) */
+  --color-danger: #b42318;    /* form error text (AA on white and the light glow) */
   --color-warning: #ffbf00;    /* comparison "warning" icon (Figma 17-2074) */
   --color-aqua: #85f5ff;       /* comparison card gradient start, used at /10 (Figma 17-2084) */
   --color-orchid: #f49eff;     /* comparison card gradient end, used at /10 */
@@ -492,6 +493,31 @@
       radial-gradient(45% 55% at 15% 75%, color-mix(in srgb, var(--color-aqua) 35%, transparent), transparent),
       radial-gradient(40% 50% at 75% 45%, color-mix(in srgb, var(--color-orchid) 25%, transparent), transparent),
       radial-gradient(35% 45% at 50% 0%, color-mix(in srgb, var(--color-glow-blue) 18%, transparent), transparent);
+  }
+
+  /* Banner collage (Figma Organizers 17-426): tilted event cards and avatars around the centred
+     text, from xl. Slots = Figma positions in % of the 1600×713 banner (left/top) and % of its
+     width; images keep their ratio (avatar slots are cropped round). Extra images are hidden. */
+  .banner-collage { position: absolute; inset: 0; pointer-events: none; }
+  .banner-collage > * { position: absolute; transform: rotate(var(--r)); left: var(--x); top: var(--y); width: var(--w); }
+  .banner-collage > :nth-child(1)  { --x: -3%;    --y: 20.8%; --w: 18%;   --r: 13deg; }
+  .banner-collage > :nth-child(2)  { --x: -2.6%;  --y: 30.7%; --w: 13%;   --r: -12deg; }
+  .banner-collage > :nth-child(3)  { --x: -3.2%;  --y: 59.5%; --w: 14%;   --r: 12deg; }
+  .banner-collage > :nth-child(4)  { --x: 8%;     --y: 65%;   --w: 8%;    --r: -7deg;  z-index: 2; }
+  .banner-collage > :nth-child(5)  { --x: 11.3%;  --y: 70.8%; --w: 13%;   --r: 19deg; }
+  .banner-collage > :nth-child(6)  { --x: 0.2%;   --y: 85%;   --w: 17%;   --r: -12deg; z-index: 1; }
+  .banner-collage > :nth-child(7)  { --x: 23.2%;  --y: 86.7%; --w: 14.1%; --r: 8deg; }
+  .banner-collage > :nth-child(8)  { --x: 11.8%;  --y: 56.4%; --w: 4%;    --r: 11deg;  z-index: 2; }
+  .banner-collage > :nth-child(9)  { --x: 85.4%;  --y: 27.8%; --w: 15%;   --r: -15deg; }
+  .banner-collage > :nth-child(10) { --x: 92.9%;  --y: 38.7%; --w: 10.3%; --r: 10deg; }
+  .banner-collage > :nth-child(11) { --x: 82.4%;  --y: 47.3%; --w: 10%;   --r: 13deg; }
+  .banner-collage > :nth-child(12) { --x: 83.8%;  --y: 61.6%; --w: 16%;   --r: -14deg; }
+  .banner-collage > :nth-child(13) { --x: 71.5%;  --y: 85.1%; --w: 14.1%; --r: -12deg; }
+  .banner-collage > :nth-child(14) { --x: 80%;    --y: 74.9%; --w: 3.8%;  --r: 11deg;  z-index: 2; }
+  .banner-collage > :nth-child(15) { --x: 92%;    --y: 64.2%; --w: 5.4%;  --r: 11deg;  z-index: 2; }
+  .banner-collage > :nth-child(n+16) { display: none; }
+  .banner-collage > :is(:nth-child(4), :nth-child(8), :nth-child(14), :nth-child(15)) img {
+    aspect-ratio: 1; object-fit: cover; border-radius: 9999px;
   }
 
   /* FAQ answer open/close: rows 0fr → 1fr animates to the content's height (no JS measuring) */

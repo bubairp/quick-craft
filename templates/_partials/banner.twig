@@ -20,6 +20,7 @@
     'relative overflow-hidden',
     layout == 'fullBleed' ? (media|length ? 'h-140 md:h-186' : 'pt-32 pb-16 md:pt-44 lg:pb-24')
     : (layout == 'simple' ? 'pt-32 pb-12 md:pt-44 md:pb-20' : 'pt-32 pb-16 md:pt-44 lg:pb-24'),
+    layout == 'centered' and not dark ? 'glow-bg',
 ]|join(' ') %}
 
 {% macro buttons(buttons, dark) %}
@@ -82,16 +83,28 @@
         </div>
 
     {% else %}
-        {# centered + simple #}
-        <div class="mx-auto flex max-w-content flex-col items-center gap-6 px-4 text-center md:px-gutter">
-            {% if page.eyebrow %}<p class="text-2xl font-medium">{{ page.eyebrow }}</p>{% endif %}
+        {# centered (Figma Organizers 17-426: images = a tilted collage around the text, from xl) + simple #}
+        {% if layout == 'centered' and media|length %}
+            <div class="banner-collage hidden xl:block" aria-hidden="true">
+                {% for image in media|slice(0, 15) %}
+                    <div>
+                        {% include '_components/image.twig' with {
+                            image: image, width: 300, sizes: '20vw', decorative: true,
+                            class: 'h-auto w-full rounded-lg shadow-card',
+                        } only %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="relative mx-auto flex max-w-content flex-col items-center gap-6 px-4 text-center md:px-gutter {{ layout == 'centered' and media|length ? 'xl:min-h-110 xl:max-w-200 xl:justify-center' }}">
+            {% if page.eyebrow %}<p class="text-xl font-medium {{ dark ? 'text-line' : 'text-black/60' }} md:text-2xl">{{ page.eyebrow }}</p>{% endif %}
             {% if page.heading %}
-                <{{ tag }} class="text-balance text-4xl font-medium {{ layout == 'simple' ? 'md:text-headline' : 'md:text-6xl' }}">
+                <{{ tag }} class="text-balance text-4xl font-medium md:text-headline">
                     {{ page.heading }}
                     {# filter out empty rows before testing, so an empty table never prints an empty span #}
                     {% set words = (page.rotatingWords ?? [])|map(r => r.word|trim)|filter|values %}
                     {% if words|length %}
-                        <span class="block text-accent"
+                        <span class="block bg-linear-to-r from-success to-lime bg-clip-text pb-1 text-transparent"
                               x-data="{ words: {{ words|json_encode }}, i: 0 }"
                               x-init="if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => i = (i + 1) % words.length, 2000)"
                               x-text="words[i]">{{ words|first }}</span>
@@ -100,13 +113,6 @@
             {% endif %}
             {% if page.text and layout != 'simple' %}<p class="max-w-xl text-xl text-black/60 md:text-2xl">{{ page.text|nl2br }}</p>{% endif %}
             {% if hasButtons %}{{ _self.buttons(buttons, dark) }}{% endif %}
-            {% if media|length and layout != 'simple' %}
-                <div class="mt-6 grid w-full grid-cols-2 gap-4 md:grid-cols-4">
-                    {% for image in media %}
-                        {% include '_components/image.twig' with { image: image, width: 260, ratio: 1, sizes: '(min-width: 768px) 25vw, 50vw', class: 'aspect-square w-full rounded-lg object-cover' } only %}
-                    {% endfor %}
-                </div>
-            {% endif %}
         </div>
     {% endif %}
 </section>
