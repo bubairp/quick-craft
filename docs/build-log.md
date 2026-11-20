@@ -1048,3 +1048,20 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Sizes:** number 28 / 56 / 70 px and headline 20 / 28 / 36 px (phone / md / lg). Figma's number is 72px: the nearest token `text-display` (70) is used, with no new token for 2px.
 - **Checked (Playwright) at 375 / 768 / 1440:** row 120px at 1440 (Figma 120); headline 36px, tracking −1.44px; meta 18px black/60; row gap 36; one h1; links `_blank`; no overflow; no console errors; hover and focus work.
 - **Fixed while checking:** at 768 the 36px headline wrapped to three lines, so the sizes now step up at md and then lg.
+
+### 2026-11-20: imageGallery › marquee: the Careers photo strip (Figma 6-6667)
+- **Rule first:** CLAUDE.md › pageBuilder blocks › imageGallery › marquee, the spacing list, and the new `--radius-photo` token (10px).
+- **Design:** Figma's strip is one row of 5 photos repeated, 220px tall, gap 10, radius 10. Sell Tickets (17-3649) uses the same marquee with portrait posters. So the marquee now shows **fixed-height tiles at each image's own ratio** (the old version cropped every image to a 224px square). Editors crop photos in Craft's image editor for a uniform strip.
+- **Placeholder photos** (replace before launch): 5 images downloaded from Figma as `web/uploads/images/careers-strip-1…5.png`.
+  - The two portrait originals were cropped to Figma's tile ratios with ImageMagick inside DDEV (`ddev exec "convert … -gravity center -crop 683x484+0+0 +repage …"`).
+  - Then registered with `ddev craft index-assets/one images`.
+  - Gotcha: Figma MCP asset URLs need the `.png` suffix to download (without it, curl returns HTTP 4xx, exit 22).
+- **Migration** `m261120_350000_gallery_marquee` (backup: `/tmp/before-gallery-marquee.sql.gz`):
+  - imageGallery gets `spacing` ("Not used by the Fan layout").
+  - The photos get alt text; the strip goes on Careers **right after the first textMedia**, with spacing `noTop`.
+  - To insert a nested entry mid-list, the migration shifts `elements_owners.sortOrder` (+1 from that position) for the page's blocks, then saves the new block at the freed position.
+- **Template** `_blocks/imageGallery.twig`:
+  - `data-spacing` on the non-fan `<section>`; the heading wrapper (and its `mt-10` gap) only renders when there's an eyebrow, heading or text.
+  - Marquee tiles: `h-40 md:h-55`, `w-auto`, `rounded-photo`, `gap-2.5`; transform width = 220 × the image's ratio, `sizes` = that px.
+  - Each half of the track (the CSS loop moves it by −50%) must be wider than any screen, so the set repeats until a half is ≥ 2400px. Only the first set is read out; the copies are `aria-hidden` with empty alt.
+- **Checked (Playwright) at 375 / 768 / 1440 (+ 2560):** tiles 160px tall on phones and 220px from md (310×220 / 331 / 321 / 331 / 293 at 1440); radius 10; gap 10; 0 broken; alt only on the first set; half-track 2403px at 375 and 3269px at 2560 (no gap in the loop); no overflow; no console errors. `/blocks` returns 200 and shows the marquee.

@@ -124,6 +124,10 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - The whole card is the link (`externalLink`, opens in a new tab when set there). Without a link it's a plain card with no arrow.
     - With no jobs: the heading and a `|t` "No open roles right now." message.
   - **image** (Figma Careers 6-7092; migration `m261120_330000_image_block`): `image` (one asset, shown edge to edge at its own ratio, never cropped), `text` (optional caption under it, `text-sm text-black/60`). `<figure>` + `<figcaption>`; `alt` from the asset; lazy-loaded with `sizes="100vw"`. No scheme or spacing (no padding of its own).
+  - **imageGallery › marquee** (Figma Careers 6-6667 photo strip, Sell Tickets 17-3649 posters; migration `m261120_350000_gallery_marquee`):
+    - A row that scrolls on its own (`.gallery-marquee__track`, paused under reduced motion). Tiles are a **fixed height** (160px phone, 220px from `md`) at **each image's own ratio** (never cropped by the template), gap 10, `rounded-photo` (10px token).
+    - For a uniform strip, editors crop the photos in Craft's image editor. Only the first pass is read by screen readers; the copy is `aria-hidden` with empty alt.
+    - Without a heading, the strip has no top margin of its own. imageGallery has `spacing` (except the fan layout, whose padding isn't on the `<section>`); the Careers strip uses `noTop` under textMedia, as in Figma (6-6646 is one 100px-padded section).
   - **pressList** (Figma Press 18-6161; migration `m261120_340000_press_list`): `heading` (optional; the Press page's banner already has the h1), `spacing`.
     - **The list comes from the Press mentions channel**, newest first (`postDate desc`). Each row: a big muted number (01, 02…, `text-3xl md:text-6xl lg:text-display` (70px; Figma 72), black/20, `tabular-nums`), the headline (entry title, `text-xl md:text-3xl lg:text-4xl` medium; row 120px at 1440 as in Figma), and the meta `text-lg text-black/60` = publication — date (`F j, Y`), then Tabler `arrow-up-right`.
     - Rows are an `<ol>` (the number is decorative, `aria-hidden`). The whole row is the link (`externalLink`, its own new-tab setting); hover = `bg-surface`, `rounded-xl`. A mention without a link is a plain row with no arrow.
@@ -243,7 +247,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - Used by hero, cardGrid, featureRows, ctaBanner.
   - **`spacing`**: `default`, `noTop`, `noBottom`, `none`.
     - It means the same thing in every block: it removes the section's own top and/or bottom padding (`[data-spacing]`, unlayered CSS so it beats the `py-*` utilities).
-    - Only add it to blocks whose padding sits on the `<section>` (cardGrid, cityList, testimonials, ctaBanner). Hero (fixed-header clearance) and featureRows (padding on inner wrappers) don't have it.
+    - Only add it to blocks whose padding sits on the `<section>` (cardGrid, cityList, testimonials, ctaBanner, textMedia, jobList, faq, richText, pressList, imageGallery except fan). Hero (fixed-header clearance) and featureRows (padding on inner wrappers) don't have it.
   - **New blocks:** add `scheme` only if the template supports every scheme, and `spacing` only if the padding sits on the `<section>`. Never add free colour or padding values.
 - Field handles must avoid `craft\base\Field::RESERVED_HANDLES`. For example, `icon` is reserved, which is why the field is called `emoji`.
 - **Adding a field to a section or block:**

@@ -114,6 +114,7 @@
   --radius-lg: 0.75rem;        /* 12 logo tile, larger cards */
   --radius-xl: 1.25rem;        /* 20 */
   --radius-2xl: 1rem;          /* 16 footer panel */
+  --radius-photo: 0.625rem;    /* 10 marquee photos (Careers 6-6667) */
 
   /* Shadows */
   --shadow-card:

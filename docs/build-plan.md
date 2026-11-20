@@ -86,7 +86,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 |---|---|---|---|
 | ☐ | banner (Banner tab) | fullBleed | 6-6336 |
 | — | quote marquee | | 6-6349 **skipped** |
-| ☑ | `textMedia` (+ `imageGallery` row ☐) | right | 6-6646 |
+| ☑ | `textMedia` + `imageGallery` (marquee strip) | right | 6-6646 |
 | ☐ | `cardGrid` | grid (emoji cards) | 6-6770 |
 | ☑ | `textMedia` | left | 6-6862 |
 | ☑ | `jobList` | grouped by department | 6-6899 |

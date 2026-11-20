@@ -3,7 +3,8 @@
  # site, see src/js/gallery-wave.js). Also grid (17-1088), row (17-1931), marquee (17-3649).
  # Receives: block, headingLevel
  # Fields: galleryLayout, eyebrow, heading, text, images, buttons (common Matrix)
- # Captions use each asset's title (grid/row layouts only).
+ # Captions use each asset's title (grid/row layouts only). spacing applies to every layout but fan.
+ # Marquee: fixed-height tiles at each image's own ratio (Careers 6-6667, Sell Tickets 17-3649).
  #}
 {% set layout = block.galleryLayout.value ?? 'grid' %}
 {% set images = block.images.eagerly().all() %}
@@ -45,22 +46,37 @@
 </section>
 
 {% elseif block.heading or images|length %}
-<section class="overflow-hidden py-16 md:py-section">
-    <div class="mx-auto flex max-w-site flex-col items-center gap-10 px-4 md:px-gutter">
-        {% include '_components/section-heading.twig' with {
-            eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level,
-            align: 'center',
-        } only %}
-    </div>
+{% set hasHeading = block.eyebrow or block.heading or block.text %}
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="overflow-hidden py-16 md:py-section">
+    {% if hasHeading %}
+        <div class="mx-auto flex max-w-site flex-col items-center gap-10 px-4 md:px-gutter">
+            {% include '_components/section-heading.twig' with {
+                eyebrow: block.eyebrow, heading: block.heading, text: block.text, level: level,
+                align: 'center',
+            } only %}
+        </div>
+    {% endif %}
 
     {% if images|length %}
         {% if layout == 'marquee' %}
-            <div class="mt-10 overflow-hidden">
-                <ul class="gallery-marquee__track gap-4" aria-label="{{ block.heading ?: 'Gallery'|t }}">
-                    {% for pass in 1..2 %}
+            {# Fixed-height tiles at each image's own ratio (Careers 6-6667: 220px, gap 10, radius 10).
+               Two passes so the -50% loop is seamless; the copy is hidden from screen readers. #}
+            {# Each half of the track (the loop moves it by -50%) must be wider than the widest screen,
+               so the photos repeat until a half is at least 2400px; only the first set is read out. #}
+            {% set tileWidths = images|map(i => i.height ? (220 * i.width / i.height)|round : 220) %}
+            {% set setWidth = tileWidths|reduce((sum, w) => sum + w + 10, 0) %}
+            {% set copies = max(1, (2400 / max(setWidth, 1))|round(0, 'ceil')) %}
+            <div class="{{ hasHeading ? 'mt-10' }} overflow-hidden">
+                <ul class="gallery-marquee__track gap-2.5" aria-label="{{ block.heading ?: 'Gallery'|t }}">
+                    {% for pass in 1..(copies * 2) %}
                         {% for image in images %}
-                            <li class="w-56 flex-none" {% if pass == 2 %}aria-hidden="true"{% endif %}>
-                                {% include '_components/image.twig' with { image: image, width: 224, ratio: 1, sizes: '224px', decorative: pass == 2, class: 'aspect-square w-full rounded-md object-cover' } only %}
+                            {% set tileWidth = tileWidths[loop.index0] %}
+                            <li class="h-40 flex-none md:h-55" {% if pass > 1 %}aria-hidden="true"{% endif %}>
+                                {% include '_components/image.twig' with {
+                                    image: image, width: tileWidth, sizes: tileWidth ~ 'px',
+                                    decorative: pass > 1,
+                                    class: 'h-full w-auto rounded-photo object-cover',
+                                } only %}
                             </li>
                         {% endfor %}
                     {% endfor %}
@@ -88,6 +104,6 @@
         {% endif %}
     {% endif %}
 
-    {% include '_components/buttons.twig' with { buttons: buttons, variants: buttonVariants, shape: 'rounded', class: 'mt-10 flex flex-wrap justify-center gap-3 px-4' } only %}
+    {% include '_components/buttons.twig' with { buttons: buttons, variants: buttonVariants, shape: 'rounded', class: (hasHeading or images|length ? 'mt-10 ' : '') ~ 'flex flex-wrap justify-center gap-3 px-4' } only %}
 </section>
 {% endif %}
