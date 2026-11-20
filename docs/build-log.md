@@ -1389,3 +1389,24 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 **Checked (Playwright):** `/contact` at 375 → `<picture>`, 328×219 from the 3:2 source; at 1440 → 1385×430 wide crop. 11 pages (incl. `/blocks`, 2669 images) → 200; every `<img>` has src and alt, and every lazy one with a srcset has `sizes="auto, …"`; no console errors. (No GIF in the library yet, so the GIF path is checked in code only.)
 
 **Gotcha:** a Twig macro can't be defined inside an `{% if %}` and called with `_self.` (Twig 3 needs a top-level macro + `{% import _self %}`); a `{% for %}` over the sources + the main set was simpler.
+
+## 2026-11-20 · Image helper as a Site7-style macro: `images.singleImg()`
+
+**Decision (user):** use the image helper the way Site7 Engine does: `{% import "_macros/images" as images %}` + `images.singleImg(image, size, options, classes, attr)` (Site7 calls `singleImg` 59 times and `responsiveImg` never).
+
+**Done**
+- New `templates/_macros/images.twig` › `singleImg(image, size = 800, options = {}, classes = '', attr = {})`, with the same logic as the old component:
+  - WebP transforms, width-descriptor srcset, 2× cap at the original, `sizes="auto, …"` for lazy images, SVG/GIF as the original file, video.
+  - Options: Site7's `ratio`, `lazy`, `quality`/`jpegQuality`, `pictureClasses`, plus ours `sizes`, `decorative`, `sources`.
+  - `attr`: extra `<img>` attributes; an `alt` there overrides the asset's alt.
+- `_components/image.twig` removed. All 38 calls in 14 templates converted (a script: hash props → positional args; `eager: x` → `lazy: not (x)`), each file importing the macro itself.
+- Rules: CLAUDE.md (Front-end layout › `_macros/`, Content & data › Images, incl. what an SVG does), skill (skeleton, components, Images checklist).
+
+**Checked**
+- Old (HEAD, component) vs new (macro) HTML for 12 pages (`/`, careers, press, blog, a post, organizers, birthday, invitation maker, sell tickets, about, contact, `/blocks`): all 200, and all 2,515 `<img>/<source>/<video>/<picture>` tags identical.
+- A throwaway template: `attr` alt + `data-*` applied, `lazy: false` → fetchpriority=high, an SVG keeps its own size (ratio ignored), and a null asset prints nothing.
+
+**Gotchas**
+- A template variable called `images` (ctaBanner, banner) and the macro alias `images` coexist: Twig 3 keeps imported macros apart from context variables.
+- A Twig macro must be at the top level of its file and imported (`_self.x()` without `{% import _self %}` doesn't work in Twig 3).
+- Windows Python writes CRLF; this working copy is CRLF anyway (`core.autocrlf=true`), so diffs stay small.

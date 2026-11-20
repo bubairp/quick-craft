@@ -45,7 +45,8 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - `config/vite.php`: `useDevServer` in dev with `checkDevServer`. When the dev server isn't running, Craft falls back to the `web/dist` build.
 - `templates/_layouts/base.twig`: the base layout, with `{% hook 'seo' %}` (Ether SEO renders `<title>`, meta, OG and canonical, so don't add your own `<title>`), Inter, and `craft.vite.script('src/main.js', false)`.
 - `templates/_blocks/`: one file per pageBuilder block.
-- `templates/_components/`: reusable UI pieces (button, image, card…), included with `{% include %}` and explicit `with {...} only`.
+- `templates/_components/`: reusable UI pieces (button, card…), included with `{% include %}` and explicit `with {...} only`.
+- `templates/_macros/`: Twig helper macros, **used exactly as in Site7 Engine**. `_macros/images.twig` is the image helper: `{% import "_macros/images" as images %}` at the top of each template that shows images, then `{{ images.singleImg(image, width, options, classes, attr) }}`. Imports don't carry into included templates, so every file imports it itself.
 - `templates/_partials/`: site chrome (header, footer, nav).
 - `modules/`: the Craft module (`Module.php` registers the event handlers; `PagePresets.php` copies preset blocks into new pages).
 
@@ -345,10 +346,18 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - **Always handle empty fields**: wrap optional output in `{% if %}`, skip wrapper elements when content is empty, never emit empty `<img>`, `<a href="">`, or empty headings.
 - **Eager-load** relations in queries (`.eagerly()` or `.with([...])`) — no N+1 queries inside loops.
 - **Images**: Craft native transforms with `srcset` + `sizes`, explicit `width`/`height`, `loading="lazy"` (except the above-the-fold hero: `fetchpriority="high"`), and `alt` from the asset's alt field (empty `alt=""` only for decorative images).
-  - **One image helper: `_components/image.twig`** (the user's decision, 2026-11-20: keep our component and add Site7 Engine's `_macros/images.twig` features; not Site7's `alt = title`, `placehold.co` placeholders or Bootstrap classes).
-  - Props: `image`, `width`, `ratio`, `sizes`, `eager`, `class`, `decorative`, plus from Site7:
-    - **`sources`** (art direction): `[{ media: '(max-width: 1023px)', ratio: 3/2, width: 1024 }]` → a `<picture class="contents">` with one `<source>` per entry (own crop, srcset and `width`/`height`). Use it whenever an image's ratio changes by breakpoint, instead of cropping with a CSS `aspect-*` change.
-    - **`quality`** (1–100): transform quality, else Craft's default.
+  - **One image helper: `images.singleImg()` in `_macros/images.twig`, called the way Site7 Engine calls it** (the user's decisions, 2026-11-20). There is no `_components/image.twig` any more. Not taken from Site7: `alt = title`, `placehold.co` placeholders, Bootstrap classes.
+    ```twig
+    {% import "_macros/images" as images %}
+    {{ images.singleImg(block.image.one(), 640, { ratio: 1.5, sizes: '(min-width: 1024px) 640px, 100vw' }, 'w-full rounded-lg') }}
+    {{ images.singleImg(logo, 160, {}, 'h-6 w-auto', { alt: item.title }) }}
+    ```
+    - `singleImg(image, size = 800, options = {}, classes = '', attr = {})`: `size` = the largest rendered width in CSS px; `classes` go on the `<img>`; `attr` = extra `<img>` attributes (an `alt` here overrides the asset's alt).
+    - `options` (Site7's keys): `ratio` (crop; none = the original ratio), `lazy` (default true; `false` = above the fold, `fetchpriority=high`), `quality` (or Site7's `jpegQuality`), `pictureClasses` (classes on the `<picture>`, when there is one). Ours: `sizes` (default `100vw`), `decorative` (alt=""), `sources` (art direction, below).
+    - Site7's `responsiveImg` isn't used (Site7 never calls it); art direction is `options.sources`. `bgImageUrl` / `preloadBg` / `iconMask` are added only when a design needs them.
+  - **SVG (and GIF) are served as the original file:** no transform, no srcset, no crop (`ratio`/`sources` are ignored; use CSS `object-fit` for the box). `width`/`height` come from the SVG's own size; `alt`, lazy/eager work as usual. Inside an `<img>` the SVG's scripts and links don't run and CSS can't recolour it (use `iconMask` for that, when needed). Craft sanitises uploaded SVGs (`sanitizeSvgUploads`, on by default). Use SVG for logos, icons and illustrations, never photos.
+  - What it does, beyond Site7's helper:
+    - **`options.sources`** (art direction): `[{ media: '(max-width: 1023px)', ratio: 3/2, width: 1024 }]` → a `<picture class="contents">` with one `<source>` per entry (own crop, srcset and `width`/`height`). Use it whenever an image's ratio changes by breakpoint, instead of cropping with a CSS `aspect-*` change.
     - **GIFs and SVGs are served as-is** (a transform would drop a GIF's animation and rasterise an SVG).
     - **Lazy images get `sizes="auto, …"`**: supporting browsers use the rendered width; others use `sizes`.
   - Site7's `preloadBg` / `bgImageUrl` / `iconMask` are added only when a design needs a CSS background image or a recoloured SVG icon.

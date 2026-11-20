@@ -7,6 +7,7 @@
  # Fields (Banner tab): heroLayout, scheme, eyebrow, heading, rotatingWords, text, buttons (common Matrix), images,
  #         chatMessages (split layout: animated chat over images[0], see _components/hero-chat.twig)
  #}
+{% import "_macros/images" as images %}
 {% set layout = page.heroLayout.value ?? 'split' %}
 {% set scheme = page.scheme.value ?? 'light' %}
 {% set dark = scheme == 'dark' %}
@@ -58,13 +59,7 @@
                 {% include '_components/hero-chat.twig' with { messages: chat, images: media, dark: dark } only %}
             {% elseif media|length %}
                 <div class="flex justify-center">
-                    {% include '_components/image.twig' with {
-                        image: media|first,
-                        width: 580,
-                        sizes: '(min-width: 1024px) 580px, 100vw',
-                        eager: true,
-                        class: 'h-auto w-full max-w-145 rounded-xl object-cover',
-                    } only %}
+                    {{ images.singleImg(media|first, 580, { lazy: false, sizes: '(min-width: 1024px) 580px, 100vw' }, 'h-auto w-full max-w-145 rounded-xl object-cover') }}
                 </div>
             {% endif %}
         </div>
@@ -75,11 +70,7 @@
         {% if media|length %}
             <div class="w-full">
                 {# art direction: its own 3:2 crop below lg (not the wide crop cut by CSS) #}
-                {% include '_components/image.twig' with {
-                    image: media|first, width: 1560, ratio: 1560 / 484, eager: true, sizes: '100vw',
-                    sources: [{ media: '(max-width: 1023px)', ratio: 3 / 2, width: 1024 }],
-                    class: 'h-auto w-full rounded-md object-cover',
-                } only %}
+                {{ images.singleImg(media|first, 1560, { lazy: false, ratio: 1560 / 484, sizes: '100vw', sources: [{ media: '(max-width: 1023px)', ratio: 3 / 2, width: 1024 }] }, 'h-auto w-full rounded-md object-cover') }}
             </div>
         {% endif %}
         {% if page.heading %}<{{ tag }} class="sr-only">{{ page.heading }}</{{ tag }}>{% endif %}
@@ -88,10 +79,7 @@
         {# Figma Careers 6-6336: photo edge to edge (745px), white text near the top so the people
            in the photo stay visible. The gradient is only there for contrast. #}
         {% if media|length %}
-            {% include '_components/image.twig' with {
-                image: media|first, width: 1600, sizes: '100vw', eager: true,
-                class: 'absolute inset-0 size-full object-cover',
-            } only %}
+            {{ images.singleImg(media|first, 1600, { lazy: false, sizes: '100vw' }, 'absolute inset-0 size-full object-cover') }}
             <div class="absolute inset-x-0 top-0 h-2/3 bg-linear-to-b from-black/40 to-transparent" aria-hidden="true"></div>
         {% endif %}
         <div class="relative mx-auto flex max-w-content flex-col items-center gap-2 px-4 text-center md:gap-0 md:px-gutter {{ media|length ? 'pt-32 text-white md:pt-40' }}">
@@ -106,10 +94,7 @@
             <div class="banner-collage hidden xl:block" aria-hidden="true">
                 {% for image in media|slice(0, 15) %}
                     <div>
-                        {% include '_components/image.twig' with {
-                            image: image, width: 300, sizes: '20vw', decorative: true,
-                            class: 'h-auto w-full rounded-lg shadow-card',
-                        } only %}
+                        {{ images.singleImg(image, 300, { sizes: '20vw', decorative: true }, 'h-auto w-full rounded-lg shadow-card') }}
                     </div>
                 {% endfor %}
             </div>
@@ -118,10 +103,7 @@
             {% if page.eyebrow %}<p class="text-xl font-medium {{ dark ? 'text-line' : 'text-black/60' }} md:text-2xl">{{ page.eyebrow }}</p>{% endif %}
             {# simple + images (About 76:458): images[1] = a small emblem above the heading #}
             {% if layout == 'simple' and media|length > 1 %}
-                {% include '_components/image.twig' with {
-                    image: media[1], width: 256, sizes: '256px', decorative: true, eager: true,
-                    class: 'h-10 w-auto md:h-14',
-                } only %}
+                {{ images.singleImg(media[1], 256, { lazy: false, sizes: '256px', decorative: true }, 'h-10 w-auto md:h-14') }}
             {% endif %}
             {% if page.heading %}
                 <{{ tag }} class="text-balance text-4xl font-medium md:text-headline">
@@ -140,11 +122,7 @@
             {% if hasButtons %}{{ _self.buttons(buttons, dark) }}{% endif %}
             {# simple + images (About 76:458): images[0] = the big photo under the heading, 960×600 #}
             {% if layout == 'simple' and media|length %}
-                {% include '_components/image.twig' with {
-                    image: media|first, width: 960, ratio: 960 / 600, eager: true,
-                    sizes: '(min-width: 1024px) 960px, 100vw',
-                    class: 'mt-8 h-auto w-full max-w-240 rounded-xl object-cover md:mt-14',
-                } only %}
+                {{ images.singleImg(media|first, 960, { lazy: false, ratio: 960 / 600, sizes: '(min-width: 1024px) 960px, 100vw' }, 'mt-8 h-auto w-full max-w-240 rounded-xl object-cover md:mt-14') }}
             {% endif %}
         </div>
     {% endif %}

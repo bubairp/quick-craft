@@ -3,6 +3,7 @@
  # Tags (Featured + categories) · title (h1) · summary · hero image · body · "Next:" link · newsletter.
  # Fields (blogPost): title, image, text (summary), blogCategories, featured, body, seo
  #}
+{% import "_macros/images" as images %}
 {% extends '_layouts/base.twig' %}
 
 {% block bodyBg %}bg-white{% endblock %}
@@ -30,11 +31,7 @@
             </header>
 
             {% if image %}
-                {% include '_components/image.twig' with {
-                    image: image, width: 700, ratio: 700 / 311, eager: true,
-                    sizes: '(min-width: 768px) 700px, 100vw',
-                    class: 'h-auto w-full object-cover',
-                } only %}
+                {{ images.singleImg(image, 700, { lazy: false, ratio: 700 / 311, sizes: '(min-width: 768px) 700px, 100vw' }, 'h-auto w-full object-cover') }}
             {% endif %}
 
             {% if entry.body|length %}

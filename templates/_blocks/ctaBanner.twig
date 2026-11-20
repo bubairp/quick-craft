@@ -10,6 +10,7 @@
  # Receives: block, headingLevel
  # Fields: scheme, spacing, ctaLayout, heading, text, primaryButton (= heading link), buttons (common Matrix), images, showAppBadges
  #}
+{% import "_macros/images" as images %}
 {% set scheme = block.scheme.value ?? 'light' %}
 {% set dark = scheme == 'dark' %}
 {% set images = block.images.eagerly().all() %}
@@ -24,10 +25,7 @@
         {% if images|length and (block.imageAbove ?? false) %}
             {# a small sticker above a normal heading (About 76:832 "PARTY!") #}
             <div class="flex flex-col items-center gap-10">
-                {% include '_components/image.twig' with {
-                    image: images|first, width: 172, sizes: '172px', decorative: true,
-                    class: 'h-13 w-auto',
-                } only %}
+                {{ images.singleImg(images|first, 172, { sizes: '172px', decorative: true }, 'h-13 w-auto') }}
                 {% include '_components/section-heading.twig' with { heading: block.heading, text: block.text, level: level, dark: dark, plain: true } only %}
             </div>
         {% elseif images|length %}
@@ -36,10 +34,7 @@
                 {% if block.heading %}<{{ tag }} class="text-balance text-5xl font-bold md:text-banner">{{ block.heading }}</{{ tag }}>{% endif %}
                 {% if block.text %}<p class="text-xl md:text-2xl {{ dark ? 'text-line' : 'text-black/60' }}">{{ block.text|nl2br }}</p>{% endif %}
             </div>
-            {% include '_components/image.twig' with {
-                image: images|first, width: 512, sizes: '(min-width: 768px) 512px, 90vw',
-                class: 'h-auto w-full max-w-128 rounded-lg shadow-glow',
-            } only %}
+            {{ images.singleImg(images|first, 512, { sizes: '(min-width: 768px) 512px, 90vw' }, 'h-auto w-full max-w-128 rounded-lg shadow-glow') }}
         {% else %}
             {% include '_components/section-heading.twig' with { heading: block.heading, text: block.text, level: level, dark: dark, plain: true } only %}
         {% endif %}
@@ -82,7 +77,7 @@
                         {% for k in 0..(perRow - 1) %}
                             {% set image = images[(r * 5 + k * 3) % images|length] %}
                             <div class="cta-rows__item">
-                                {% include '_components/image.twig' with { image: image, width: 120, ratio: 1, sizes: '120px', decorative: true, class: 'aspect-square size-full object-cover' } only %}
+                                {{ images.singleImg(image, 120, { ratio: 1, sizes: '120px', decorative: true }, 'aspect-square size-full object-cover') }}
                             </div>
                         {% endfor %}
                     {% endfor %}
@@ -98,7 +93,7 @@
             {% for i in 0..239 %}
                 {% set image = images[i % images|length] %}
                 <li class="cta-spiral__item">
-                    {% include '_components/image.twig' with { image: image, width: 140, ratio: 1, sizes: '140px', decorative: true, class: 'aspect-square w-full object-cover' } only %}
+                    {{ images.singleImg(image, 140, { ratio: 1, sizes: '140px', decorative: true }, 'aspect-square w-full object-cover') }}
                 </li>
             {% endfor %}
         </ul>

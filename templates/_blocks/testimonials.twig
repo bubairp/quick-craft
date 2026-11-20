@@ -8,6 +8,7 @@
  #         testimonials (testimonial: text=quote, heading, personName, personDetail, image, rating;
  #                       stat: heading=value, text=label, image=background)
  #}
+{% import "_macros/images" as images %}
 {% set layout = block.testimonialLayout.value ?? 'carousel' %}
 {% set items = block.testimonials.eagerly().with(['image', 'logo']).all() %}
 {% set level = headingLevel ?? 2 %}
@@ -37,7 +38,7 @@
                             {% endif %}
                             <span class="press-slide__logo absolute inset-x-0 top-26 flex justify-center">
                                 {% if logo %}
-                                    {% include '_components/image.twig' with { image: logo, width: 240, sizes: '240px', decorative: true, class: 'h-10 w-60 object-contain' } only %}
+                                    {{ images.singleImg(logo, 240, { sizes: '240px', decorative: true }, 'h-10 w-60 object-contain') }}
                                 {% elseif item.personName %}
                                     <span class="flex h-10 items-center text-xl font-bold">{{ item.personName }}</span>
                                 {% endif %}
@@ -66,7 +67,7 @@
                 {% set logo = item.image.one() %}
                 <li class="flex w-max max-w-md flex-none flex-col items-center gap-3 text-center" {% if pass > 1 %}aria-hidden="true"{% endif %}>
                     {% if logo %}
-                        {% include '_components/image.twig' with { image: logo, width: 240, sizes: '240px', decorative: pass > 1, class: 'h-5 w-auto md:h-6' } only %}
+                        {{ images.singleImg(logo, 240, { sizes: '240px', decorative: pass > 1 }, 'h-5 w-auto md:h-6') }}
                     {% elseif item.personName %}
                         <span class="text-lg font-bold">{{ item.personName }}</span>
                     {% endif %}
@@ -95,10 +96,10 @@
                     {% if photo or logo %}
                         <div class="flex items-center justify-center" aria-hidden="true">
                             {% if photo %}
-                                {% include '_components/image.twig' with { image: photo, width: 115, ratio: 1, sizes: '115px', decorative: true, class: 'relative z-10 size-29 -rotate-10 rounded-full object-cover' } only %}
+                                {{ images.singleImg(photo, 115, { ratio: 1, sizes: '115px', decorative: true }, 'relative z-10 size-29 -rotate-10 rounded-full object-cover') }}
                             {% endif %}
                             {% if logo %}
-                                {% include '_components/image.twig' with { image: logo, width: 115, ratio: 1, sizes: '115px', decorative: true, class: 'size-29 rotate-10 rounded-lg object-cover ' ~ (photo ? '-ml-5') } only %}
+                                {{ images.singleImg(logo, 115, { ratio: 1, sizes: '115px', decorative: true }, 'size-29 rotate-10 rounded-lg object-cover ' ~ (photo ? '-ml-5')) }}
                             {% endif %}
                         </div>
                     {% endif %}
@@ -140,7 +141,7 @@
                     {% set image = item.image.one() %}
                     <li class="swiper-slide relative flex! aspect-square w-72! overflow-hidden rounded-md md:w-85! {{ item.type.handle == 'stat' and not image ? 'bg-ink' : 'bg-surface' }}" {% if pass > 1 %}aria-hidden="true"{% endif %}>
                         {% if image %}
-                            {% include '_components/image.twig' with { image: image, width: 340, ratio: 1, sizes: '340px', decorative: pass > 1, class: 'absolute inset-0 size-full object-cover' } only %}
+                            {{ images.singleImg(image, 340, { ratio: 1, sizes: '340px', decorative: pass > 1 }, 'absolute inset-0 size-full object-cover') }}
                         {% endif %}
 
                         {% if item.type.handle == 'stat' %}

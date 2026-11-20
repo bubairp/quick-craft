@@ -6,6 +6,7 @@
  #   level  heading level for the title (2)
  # Author fallback: the user's full name → siteName; the user's photo → the site logo.
  #}
+{% import "_macros/images" as images %}
 {% set post = post ?? null %}
 {% if post %}
     {% set image = post.image|first ?: null %}
@@ -19,12 +20,7 @@
         <a href="{{ post.url }}" class="group flex h-full flex-col gap-2.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
             <div class="overflow-hidden bg-surface">
                 {% if image %}
-                    {% include '_components/image.twig' with {
-                        image: image, width: 360, ratio: 1,
-                        sizes: '(min-width: 1024px) 347px, (min-width: 640px) 50vw, 100vw',
-                        decorative: true,
-                        class: 'aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105',
-                    } only %}
+                    {{ images.singleImg(image, 360, { ratio: 1, sizes: '(min-width: 1024px) 347px, (min-width: 640px) 50vw, 100vw', decorative: true }, 'aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105') }}
                 {% else %}
                     <div class="aspect-square w-full" aria-hidden="true"></div>
                 {% endif %}
@@ -35,10 +31,7 @@
             {% endif %}
             <span class="mt-auto flex items-center gap-2.5 pt-2.5">
                 {% if avatar %}
-                    {% include '_components/image.twig' with {
-                        image: avatar, width: 40, ratio: 1, sizes: '40px', decorative: true,
-                        class: 'size-10 rounded-full object-cover',
-                    } only %}
+                    {{ images.singleImg(avatar, 40, { ratio: 1, sizes: '40px', decorative: true }, 'size-10 rounded-full object-cover') }}
                 {% endif %}
                 <span class="text-lg font-bold text-black">{{ authorName }}</span>
             </span>

@@ -4,13 +4,11 @@
  # Receives: block, headingLevel (not used)
  # Fields: image, text (caption)
  #}
+{% import "_macros/images" as images %}
 {% set image = block.image.eagerly().one() %}
 {% if image %}
     <figure>
-        {% include '_components/image.twig' with {
-            image: image, width: 1600, sizes: '100vw',
-            class: 'h-auto w-full',
-        } only %}
+        {{ images.singleImg(image, 1600, { sizes: '100vw' }, 'h-auto w-full') }}
         {% if block.text|trim %}
             <figcaption class="px-4 pt-3 text-center text-sm text-black/60 md:px-gutter">{{ block.text }}</figcaption>
         {% endif %}

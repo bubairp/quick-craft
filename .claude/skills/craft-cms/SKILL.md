@@ -47,7 +47,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
    - Run `ddev craft up`, then commit the migration together with `config/project/`.
 4. **Template** `templates/_blocks/{entryTypeHandle}.twig`:
    - It receives `block` and `headingLevel` (always 2: the page banner holds the `<h1>`). Use `<h{{ headingLevel }}>` for the block's main heading and `headingLevel + 1` inside it. A block with a form also receives `wheelformErrors` / `values` (passed by `_entries/page.twig`).
-   - Put shared pieces in `templates/_components/` and include them with `with {...} only`. The existing components are: `image`, `button`/`buttons`, `section-heading` (`plain: true` = sentence-case landing-page heading), `card`, `blog-card`, `icon` (Tabler), `social-links`, `contact-details`, `store-links`, `stars`, `wheel-form`.
+   - Put shared pieces in `templates/_components/` and include them with `with {...} only`. The existing components are: `button`/`buttons`, `section-heading` (`plain: true` = sentence-case landing-page heading), `card`, `blog-card`, `icon` (Tabler), `social-links`, `contact-details`, `store-links`, `stars`, `wheel-form`. Images use `images.singleImg()` from `_macros/images.twig`, as in Site7 Engine.
    - **A form in a block** = a `newsletterForm` instance (Wheel Form field) + `_components/wheel-form.twig` (`form`, `anchor`, `errors: wheelformErrors`, `values: values`, `dark`). Wrap it in an element with `id="<anchor>"`. The form needs a `submit_message`, and sending email needs the plugin's From email.
    - CKEditor output always goes in `.rich-text` (+ `--base` / `--lead` / `--article`), never Tailwind's `prose`.
 5. **Verify.** Run `ddev npm run dev` and add test content in the control panel. Then use Playwright at **375, 768 and 1440 px**:
@@ -60,6 +60,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 ## Block template skeleton
 
 ```twig
+{% import "_macros/images" as images %}
 {# _blocks/example.twig — receives: block, headingLevel
  # Fields: scheme, spacing, heading, body, image #}
 {% set image = block.image.eagerly().one() %}
@@ -74,7 +75,7 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
     {% if heading %}<{{ tag }} class="text-4xl font-medium md:text-headline">{{ heading }}</{{ tag }}>{% endif %}
     {% if hasBody %}<div class="rich-text rich-text--base">{{ block.body }}</div>{% endif %}
     {% if image %}
-      {% include '_components/image.twig' with { image: image, width: 1200, sizes: '(min-width: 1280px) 1200px, 100vw', class: 'h-auto w-full rounded-lg' } only %}
+      {{ images.singleImg(image, 1200, { sizes: '(min-width: 1280px) 1200px, 100vw' }, 'h-auto w-full rounded-lg') }}
     {% endif %}
   </div>
 </section>
@@ -91,8 +92,8 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 
 **Images**
 - [ ] Use Craft native transforms.
-- [ ] Render images through `_components/image.twig`. It builds `srcset` with **width descriptors** (`…w`) plus a matching `sizes`. Never use density descriptors (`0.5x`) together with `sizes`: browsers then ignore `sizes` (a real bug until 2026-11-20).
-- [ ] The ratio changes by breakpoint? Pass `sources: [{ media, ratio, width }]` (art direction), not a CSS `aspect-*` switch on one crop.
+- [ ] Render images with `images.singleImg(image, width, options, classes, attr)` as in Site7 Engine (`{% import "_macros/images" as images %}` at the top of the file; an included template imports it again). Options: `ratio`, `lazy`, `sizes`, `decorative`, `quality`, `sources`, `pictureClasses`. It builds `srcset` with **width descriptors** (`…w`) plus a matching `sizes`. Never use density descriptors (`0.5x`) together with `sizes`: browsers then ignore `sizes` (a real bug until 2026-11-20).
+- [ ] The ratio changes by breakpoint? Pass `options.sources: [{ media, ratio, width }]` (art direction), not a CSS `aspect-*` switch on one crop.
 - [ ] GIFs and SVGs are never transformed (the component serves them as-is); lazy images get `sizes="auto, …"` from the component.
 - [ ] Never request a transform wider than the original (Craft upscales by default): the component caps the largest width at the asset's own width.
 - [ ] Set `width` and `height` from the transformed image.

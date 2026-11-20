@@ -8,6 +8,7 @@
  # Fields: heading, text, spacing, cards (card: heading = city, primaryButton = link,
  #         images = event tiles; tile text = asset title + asset "Subtitle" field)
  #}
+{% import "_macros/images" as images %}
 {% set cities = block.cards.eagerly().with(['images']).all() %}
 {% set level = headingLevel ?? 2 %}
 
@@ -37,7 +38,7 @@
                                 <li class="city-tile relative size-32.5 flex-none">
                                     <span class="city-tile__card absolute inset-x-0 top-0 rounded-md bg-white shadow-tile"></span>
                                     <span class="city-tile__media relative block size-32.5 overflow-hidden rounded-xs bg-black/4">
-                                        {% include '_components/image.twig' with { image: image, width: 130, ratio: 1, sizes: '130px', decorative: true, class: 'size-full object-cover' } only %}
+                                        {{ images.singleImg(image, 130, { ratio: 1, sizes: '130px', decorative: true }, 'size-full object-cover') }}
                                     </span>
                                     {% if image.title or image.text %}
                                         <span class="city-tile__text absolute inset-x-2 top-33 flex flex-col">

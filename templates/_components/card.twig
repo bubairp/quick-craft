@@ -14,6 +14,7 @@
  #   sizes    sizes attribute for the image
  #   revealIndex  position in its grid, for the staggered reveal-on-scroll (0, 1, 2 …)
  #}
+{% import "_macros/images" as images %}
 {% set dark = dark ?? false %}
 {% set tag = 'h' ~ (level ?? 3) %}
 {% set link = card.primaryButton ?? null %}
@@ -24,10 +25,7 @@
 {% set image = card.image.one() %}
 <article class="flex h-full flex-col overflow-hidden rounded-lg {{ dark ? 'bg-white/10 text-white' : 'bg-white shadow-card' }}" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
     {% if image %}
-        {% include '_components/image.twig' with {
-            image: image, width: 320, ratio: 4 / 3, sizes: '(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw',
-            class: 'aspect-4/3 h-auto w-full object-cover',
-        } only %}
+        {{ images.singleImg(image, 320, { ratio: 4 / 3, sizes: '(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw' }, 'aspect-4/3 h-auto w-full object-cover') }}
     {% endif %}
     <div class="flex flex-1 flex-col gap-1 p-7.5">
         {% if card.emoji %}<span class="text-headline" aria-hidden="true">{{ card.emoji }}</span>{% endif %}
@@ -51,10 +49,7 @@
 {% set image = card.image.one() %}
 <article class="flex flex-col gap-6" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
     {% if image %}
-        {% include '_components/image.twig' with {
-            image: image, width: 460, ratio: ratio ?? 1, sizes: '(min-width: 1024px) 460px, (min-width: 640px) 50vw, 100vw',
-            class: 'h-auto w-full rounded-lg object-cover',
-        } only %}
+        {{ images.singleImg(image, 460, { ratio: ratio ?? 1, sizes: '(min-width: 1024px) 460px, (min-width: 640px) 50vw, 100vw' }, 'h-auto w-full rounded-lg object-cover') }}
     {% endif %}
     <div class="flex flex-col gap-2">
         {% if card.heading %}<{{ tag }} class="text-2xl font-bold md:text-3xl">{{ card.heading }}</{{ tag }}>{% endif %}
@@ -76,10 +71,7 @@
     </div>
     {% if image %}
         <div class="mt-auto flex justify-center {{ (wide ?? false) ? '' : 'px-6' }}">
-            {% include '_components/image.twig' with {
-                image: image, width: (wide ?? false) ? 690 : 430, sizes: (wide ?? false) ? '(min-width: 1024px) 690px, 100vw' : '430px',
-                class: (wide ?? false) ? 'h-auto w-full' : 'h-auto w-full max-w-108',
-            } only %}
+            {{ images.singleImg(image, (wide ?? false) ? 690 : 430, { sizes: (wide ?? false) ? '(min-width: 1024px) 690px, 100vw' : '430px' }, (wide ?? false) ? 'h-auto w-full' : 'h-auto w-full max-w-108') }}
         </div>
     {% endif %}
 </article>
@@ -90,10 +82,7 @@
 {% set image = card.image.one() %}
 {% set inner %}
     {% if image %}
-        {% include '_components/image.twig' with {
-            image: image, width: 340, ratio: 340 / 280, sizes: '(min-width: 768px) 340px, 100vw',
-            class: 'absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105',
-        } only %}
+        {{ images.singleImg(image, 340, { ratio: 340 / 280, sizes: '(min-width: 768px) 340px, 100vw' }, 'absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105') }}
     {% endif %}
     <span class="relative mt-auto flex flex-col gap-1 bg-linear-to-b from-transparent to-black/70 p-6 pt-12">
         {% if card.heading %}<{{ tag }} class="text-title font-medium text-white">{{ card.heading }}</{{ tag }}>{% endif %}
@@ -117,11 +106,7 @@
 <article class="group flex flex-col {{ compact ? 'gap-4' : 'gap-6 md:gap-8' }}" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
     <div class="overflow-hidden rounded-md {{ dark ? 'bg-night' : (compact ? 'bg-line' : ((soft ?? false) ? 'bg-white' : 'bg-surface')) }}">
         {% if image %}
-            {% include '_components/image.twig' with {
-                image: image, width: compact ? 360 : 480, ratio: compact ? 347 / 339 : 472 / 502,
-                sizes: sizes ?? (compact ? '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw' : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'),
-                class: aspect ~ ' h-auto w-full object-cover',
-            } only %}
+            {{ images.singleImg(image, compact ? 360 : 480, { ratio: compact ? 347 / 339 : 472 / 502, sizes: sizes ?? (compact ? '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw' : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw') }, aspect ~ ' h-auto w-full object-cover') }}
         {% else %}
             <div class="{{ aspect }} w-full" aria-hidden="true"></div>
         {% endif %}

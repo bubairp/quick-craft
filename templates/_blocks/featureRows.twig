@@ -9,6 +9,7 @@
  # Fields: featureLayout, scheme, glow (light schemes), heading, cards (card: heading, text, image, primaryButton)
  # No spacing option: the padding sits on inner wrappers (heading, slider, rows), not the section.
  #}
+{% import "_macros/images" as images %}
 {% set layout = block.featureLayout.value ?? 'alternating' %}
 {% set scheme = block.scheme.value ?? 'light' %}
 {% set dark = scheme == 'dark' %}
@@ -54,11 +55,7 @@
                                 {% set image = row.image.one() %}
                                 {% if image %}
                                     <div data-slide-media="{{ loop.index0 }}" class="absolute inset-0 will-change-transform">
-                                        {% include '_components/image.twig' with {
-                                            image: image, width: 342, sizes: '342px',
-                                            eager: loop.first, decorative: not loop.first,
-                                            class: 'size-full object-contain',
-                                        } only %}
+                                        {{ images.singleImg(image, 342, { lazy: not (loop.first), sizes: '342px', decorative: not loop.first }, 'size-full object-contain') }}
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -77,10 +74,7 @@
                                 {% set image = row.image.one() %}
                                 <article class="swiper-slide flex! w-80! flex-col gap-6 md:w-96!">
                                     {% if image %}
-                                        {% include '_components/image.twig' with {
-                                            image: image, width: 342, sizes: '(min-width: 768px) 384px, 320px',
-                                            class: 'h-auto w-full max-w-xs self-center',
-                                        } only %}
+                                        {{ images.singleImg(image, 342, { sizes: '(min-width: 768px) 384px, 320px' }, 'h-auto w-full max-w-xs self-center') }}
                                     {% endif %}
                                     {% if row.heading %}
                                         <{{ tag }} class="text-balance text-3xl uppercase md:text-4xl">{{ row.heading }}</{{ tag }}>
@@ -116,10 +110,7 @@
                     </div>
                     {% if image %}
                         <div class="overflow-hidden rounded-lg lg:col-span-7 {{ flip ? 'lg:order-1' }}">
-                            {% include '_components/image.twig' with {
-                                image: image, width: 660, ratio: 660 / 422, sizes: '(min-width: 1024px) 660px, 100vw',
-                                class: 'h-auto w-full object-cover',
-                            } only %}
+                            {{ images.singleImg(image, 660, { ratio: 660 / 422, sizes: '(min-width: 1024px) 660px, 100vw' }, 'h-auto w-full object-cover') }}
                         </div>
                     {% endif %}
                 </article>

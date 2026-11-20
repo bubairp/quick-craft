@@ -7,6 +7,7 @@
  # Animation: src/js/hero-chat.js (messages appear one by one, stack slides up, loops).
  # Reduced motion / no JS: a static conversation.
  #}
+{% import "_macros/images" as images %}
 {% set photo = images[0] ?? null %}
 {% set inviteArt = images[1] ?? null %}
 {% set avatars = {} %}
@@ -18,10 +19,7 @@
 <div class="relative mx-auto aspect-hero-chat w-full max-w-lg" data-hero-chat>
     {% if photo %}
         <div class="absolute inset-y-0 left-1/2 w-4/5 -translate-x-1/2 overflow-hidden rounded-2xl bg-white/5">
-            {% include '_components/image.twig' with {
-                image: photo, width: 420, ratio: 420 / 565, sizes: '420px', eager: true,
-                class: 'size-full object-cover',
-            } only %}
+            {{ images.singleImg(photo, 420, { lazy: false, ratio: 420 / 565, sizes: '420px' }, 'size-full object-cover') }}
         </div>
     {% endif %}
 
@@ -32,7 +30,7 @@
                 {% set avatar = avatars[row.sender] ?? null %}
                 <li class="flex items-end gap-3.5 transition duration-500 ease-out-soft {{ right ? 'flex-row-reverse' : '' }}" data-chat-msg>
                     {% if avatar %}
-                        {% include '_components/image.twig' with { image: avatar, width: 56, ratio: 1, sizes: '56px', decorative: true, class: 'size-14 flex-none rounded-full object-cover' } only %}
+                        {{ images.singleImg(avatar, 56, { ratio: 1, sizes: '56px', decorative: true }, 'size-14 flex-none rounded-full object-cover') }}
                     {% else %}
                         <span class="size-14 flex-none" aria-hidden="true"></span>
                     {% endif %}
@@ -41,7 +39,7 @@
                         <div class="w-48 overflow-hidden rounded-xl bg-white shadow-card">
                             {% if inviteArt %}
                                 <div class="bg-linear-to-br from-glow-pink to-glow-blue">
-                                    {% include '_components/image.twig' with { image: inviteArt, width: 192, ratio: 191 / 116, sizes: '192px', class: 'h-29 w-full object-contain' } only %}
+                                    {{ images.singleImg(inviteArt, 192, { ratio: 191 / 116, sizes: '192px' }, 'h-29 w-full object-contain') }}
                                 </div>
                             {% endif %}
                             <div class="flex items-center gap-1.5 bg-surface px-2 py-2.5">

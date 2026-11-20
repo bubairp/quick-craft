@@ -3,6 +3,7 @@
  # Title = the newsletter Single's image (the blog wordmark); category filter via ?category=<slug>;
  # posts newest first, 24 per page.
  #}
+{% import "_macros/images" as images %}
 {% extends '_layouts/base.twig' %}
 
 {# Not an entry, so Ether SEO gets its own title (getSeoField() reads a context variable `seo` first);
@@ -25,10 +26,7 @@
         {# Title: the wordmark image (its alt is the heading text), or plain text #}
         <h1 class="mx-auto flex max-w-text justify-center py-5">
             {% if titleImage %}
-                {% include '_components/image.twig' with {
-                    image: titleImage, width: 692, sizes: '(min-width: 768px) 692px, 100vw', eager: true,
-                    class: 'h-auto w-full max-w-173',
-                } only %}
+                {{ images.singleImg(titleImage, 692, { lazy: false, sizes: '(min-width: 768px) 692px, 100vw' }, 'h-auto w-full max-w-173') }}
                 {% if not titleImage.alt %}<span class="sr-only">{{ 'Blog'|t }}</span>{% endif %}
             {% else %}
                 <span class="text-4xl font-medium md:text-headline">{{ 'Blog'|t }}</span>

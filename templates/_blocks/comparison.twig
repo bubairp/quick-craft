@@ -7,6 +7,7 @@
  #         name), comparisonUs, themLabel, comparisonThem (Table: label + status yes|warning|no),
  #         body (closing note)
  #}
+{% import "_macros/images" as images %}
 {% set us = (block.comparisonUs ?? [])|filter(r => r.label|trim) %}
 {% set them = (block.comparisonThem ?? [])|filter(r => r.label|trim) %}
 {% if us|length or them|length %}
@@ -45,7 +46,7 @@
                     <div class="flex flex-col gap-6 rounded-xl bg-linear-to-b from-aqua/10 to-orchid/10 p-4 shadow-glow">
                         <div class="flex h-10.5 items-center justify-center">
                             {% if logo %}
-                                {% include '_components/image.twig' with { image: logo, width: 160, sizes: '160px', class: 'h-6.5 w-auto' } only %}
+                                {{ images.singleImg(logo, 160, { sizes: '160px' }, 'h-6.5 w-auto') }}
                             {% else %}
                                 <span class="text-2xl font-bold">{{ siteName }}</span>
                             {% endif %}
