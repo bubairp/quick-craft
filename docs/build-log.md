@@ -1370,3 +1370,5 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - Playwright `:nth-of-type` counts siblings of the same tag; index `querySelectorAll` instead.
 
 **Before launch:** replace the Wheel Form From email; real contact emails and social handles.
+
+**Commit:** 9d0b87e
