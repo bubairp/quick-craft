@@ -96,7 +96,7 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 | | Block | Layout | Node |
 |---|---|---|---|
 | ☐ | banner (Banner tab) | simple | 18-6155 |
-| ☐ | `pressList` | numbered | 18-6161 |
+| ☑ | `pressList` | numbered | 18-6161 |
 
 ## 6. Blog (channel `blog`)
 | | Template | Node | Notes |

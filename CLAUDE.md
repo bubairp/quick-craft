@@ -124,6 +124,10 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - The whole card is the link (`externalLink`, opens in a new tab when set there). Without a link it's a plain card with no arrow.
     - With no jobs: the heading and a `|t` "No open roles right now." message.
   - **image** (Figma Careers 6-7092; migration `m261120_330000_image_block`): `image` (one asset, shown edge to edge at its own ratio, never cropped), `text` (optional caption under it, `text-sm text-black/60`). `<figure>` + `<figcaption>`; `alt` from the asset; lazy-loaded with `sizes="100vw"`. No scheme or spacing (no padding of its own).
+  - **pressList** (Figma Press 18-6161; migration `m261120_340000_press_list`): `heading` (optional; the Press page's banner already has the h1), `spacing`.
+    - **The list comes from the Press mentions channel**, newest first (`postDate desc`). Each row: a big muted number (01, 02…, `text-3xl md:text-6xl lg:text-display` (70px; Figma 72), black/20, `tabular-nums`), the headline (entry title, `text-xl md:text-3xl lg:text-4xl` medium; row 120px at 1440 as in Figma), and the meta `text-lg text-black/60` = publication — date (`F j, Y`), then Tabler `arrow-up-right`.
+    - Rows are an `<ol>` (the number is decorative, `aria-hidden`). The whole row is the link (`externalLink`, its own new-tab setting); hover = `bg-surface`, `rounded-xl`. A mention without a link is a plain row with no arrow.
+    - With no mentions: the heading (if any) and a `|t` "No press mentions yet." message.
 - **Nested Matrix fields:**
   - `cards`: `card` (image, emoji, heading, text, primaryButton = the card's text link)
   - `testimonials`: `testimonial` (text = quote, heading, personName, personDetail, image, rating) and `stat`

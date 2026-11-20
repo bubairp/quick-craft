@@ -1,0 +1,54 @@
+{#
+ # Press list block. Figma: Press 18-6161 (numbered list of press mentions).
+ # Mentions from the Press mentions channel, newest first. Each row: a big muted number, the
+ # headline, "Publication — date", and an arrow. The whole row links to the article (externalLink).
+ # Receives: block, headingLevel
+ # Fields: heading, spacing
+ #}
+{% set mentions = craft.entries.section('pressMentions').orderBy('postDate desc').all() %}
+{% set level = headingLevel ?? 2 %}
+{% set tag = 'h' ~ level %}
+{# without a block heading the headlines are the section's top level #}
+{% set itemTag = 'h' ~ (block.heading ? level + 1 : level) %}
+
+{% if block.heading or mentions|length %}
+    <section data-spacing="{{ block.spacing.value ?? 'default' }}" class="bg-white px-4 py-16 md:px-5 md:py-20">
+        <div class="mx-auto flex max-w-site flex-col gap-10">
+            {% if block.heading %}
+                <{{ tag }} class="text-balance text-center text-4xl font-medium md:text-headline">{{ block.heading }}</{{ tag }}>
+            {% endif %}
+
+            {% if mentions|length %}
+                <ol class="flex flex-col gap-2 md:gap-6 lg:gap-9">
+                    {% for mention in mentions %}
+                        {% set link = mention.externalLink ?? null %}
+                        {% set meta = [
+                            mention.publication|trim ?: null,
+                            mention.postDate ? mention.postDate|date('F j, Y') : null,
+                        ]|filter %}
+                        {% set inner %}
+                            <span aria-hidden="true" class="w-9 shrink-0 text-3xl font-medium tabular-nums text-black/20 md:w-18 md:text-6xl lg:w-25 lg:text-display">{{ '%02d'|format(loop.index) }}</span>
+                            <span class="flex min-w-0 flex-1 flex-col gap-1 px-1">
+                                <{{ itemTag }} class="text-xl font-medium text-black md:text-3xl lg:text-4xl">{{ mention.title }}</{{ itemTag }}>
+                                {% if meta|length %}<span class="text-base text-black/60 md:text-lg">{{ meta|join(' — ') }}</span>{% endif %}
+                            </span>
+                            {% if link and link.url %}
+                                {% include '_components/icon.twig' with { name: 'arrow-up-right', class: 'size-6 shrink-0 text-black transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5' } only %}
+                            {% endif %}
+                        {% endset %}
+                        {% set rowClass = 'flex items-center gap-4 rounded-xl px-2 py-4 md:gap-6 md:px-4 md:py-6' %}
+                        <li>
+                            {% if link and link.url %}
+                                <a {{ attr(link.attributes|merge({ class: 'group ' ~ rowClass ~ ' transition-colors duration-200 hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink' })) }}>{{ inner }}</a>
+                            {% else %}
+                                <div class="{{ rowClass }}">{{ inner }}</div>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p class="text-center text-xl text-black/60">{{ 'No press mentions yet.'|t }}</p>
+            {% endif %}
+        </div>
+    </section>
+{% endif %}

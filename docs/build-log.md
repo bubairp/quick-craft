@@ -1034,3 +1034,17 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Checked:**
   - /, /careers, /invitation-maker, /birthday-invitations, /cta-options-demo, /blocks, /404 all return 200 with 0 density descriptors and 0 Twig errors.
   - Home: 369 images, 0 broken, no console errors, no overflow; the city tiles and gallery look as before.
+
+### 2026-11-20: Block: pressList (Figma Press 18-6161)
+- **Rule first:** CLAUDE.md › pageBuilder blocks › pressList (list from the Press mentions channel, newest first; number, headline, publication — date, arrow; whole row links).
+- **Migration** `m261120_340000_press_list` (backup: `/tmp/before-press-list.sql.gz`):
+  - pressList gets `spacing`. `heading` stays optional: the Press page banner holds the h1, and Figma shows no heading above the list.
+  - Test data: the 20 mentions from the Figma frame (only when the channel is empty), with post dates from the design, and a pressList block on Press.
+  - **Placeholders:** the headlines and publications come from the imported reference design; links → https://example.com/press. Replace them with real coverage before launch.
+- **Template** `_blocks/pressList.twig`:
+  - `<ol>` of rows; the number (`%02d` of `loop.index`) is `aria-hidden`; headlines are h2 (h3 under a block heading).
+  - The whole row is the link (the field sets the new tab); hover `bg-surface`, `rounded-xl`; focus outline; the arrow nudges on hover. A row without a link has no arrow.
+  - Empty state: `|t` "No press mentions yet."
+- **Sizes:** number 28 / 56 / 70 px and headline 20 / 28 / 36 px (phone / md / lg). Figma's number is 72px: the nearest token `text-display` (70) is used, with no new token for 2px.
+- **Checked (Playwright) at 375 / 768 / 1440:** row 120px at 1440 (Figma 120); headline 36px, tracking −1.44px; meta 18px black/60; row gap 36; one h1; links `_blank`; no overflow; no console errors; hover and focus work.
+- **Fixed while checking:** at 768 the 36px headline wrapped to three lines, so the sizes now step up at md and then lg.
