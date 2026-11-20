@@ -1536,3 +1536,36 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - Before view the letters are translated below; mid-animation they're staggered.
 - The hover line goes 0% → 100% in ~150–350ms; the current page keeps it.
 - No overflow; no console errors. Reduced motion: no `data-animate`, letters in place. Hovering a letter → translateY −27px, −4°.
+
+## 2026-11-20 · Mobile main menu: new design + expand/collapse animation
+
+**Before:**
+- A translucent panel (the page showed through), only an opacity fade, and the height jumped.
+- Sections appeared with no motion; ☰/✕ just swapped.
+- The page scrolled behind the menu, and parent pages (e.g. Invites → Invitation Maker) couldn't be reached on mobile.
+
+**Done** (`_partials/header.twig`, app.css, `siteHeader` in main.js)
+- **Opening:**
+  - The pill turns solid (`max-lg:bg-paper`).
+  - `.site-nav-mobile` grows by `grid-template-rows` 0fr → 1fr (500ms, both ways), and `inert` while closed.
+  - Items slide up one after another (`.site-nav-mobile__item`, 45ms stagger).
+- **Scrim:** `.site-nav-scrim` (black/40 + blur); a tap closes.
+- **Header:** the header no longer has `translate-y-0` while visible: any transform made it the containing block of the fixed scrim.
+- **Menu button:** `.menu-icon`, two lines morphing into ✕ (spring).
+- **Sections:** one open at a time; `.mobile-acc` expands by height, and its content fades/slides in. Each contains:
+  - an "Explore {item}" link (the parent's own page);
+  - links with their icon in a soft tile (one column on phones, two from `sm`; two columns broke "Housewarmings");
+  - the featured item as a compact card.
+- **Behaviour** (`$watch('open')`):
+  - Opening locks the page (html overflow + `lenis.stop()`) and focuses the first item.
+  - Closing unlocks it and folds the sections (`mobile-menu-closed` event).
+  - Esc closes and refocuses the menu button.
+  - Growing past `lg` closes the menu.
+- **No app store badges in the mobile menu** (the user's decision).
+
+**Checked (Playwright 375 + 768):**
+- The panel grows 0 → 414px with the items fading in staggered; a section expands 0 → 472px, and switching sections closes the other.
+- The scrim, Esc and the button all close it, and the scroll lock is released. Re-opening has every section folded.
+- Desktop: the mega menu still opens; the scrim/mobile panel are `display: none`. No console errors.
+
+**Gotcha:** `bg-ink/5` (static) + `bg-ink` (bound) on the same element: the light one won, so the white chevron vanished. Bind the full state with `!` (or swap whole class sets).

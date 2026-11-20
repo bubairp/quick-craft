@@ -358,11 +358,93 @@
   .site-nav-pill.is-open .site-nav-panel {
     grid-template-rows: 1fr;
   }
+  /* ── Mobile menu (below lg; header.twig) ─────────────────────────────────────────────
+     The panel grows by height (0fr → 1fr, so it animates closed too); items slide up one after
+     another; a scrim covers the page. */
   .site-nav-mobile {
-    max-height: calc(100dvh - var(--spacing) * 28);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 500ms var(--ease-out-soft);
   }
+  .site-nav-mobile > div { min-height: 0; overflow: hidden; }
+  .site-nav-mobile.is-open { grid-template-rows: 1fr; }
+  .site-nav-mobile__scroll { max-height: calc(100dvh - var(--spacing) * 28); }
+
+  .site-nav-mobile__item {
+    opacity: 0;
+    transform: translateY(calc(var(--spacing) * 3));
+    transition: opacity 200ms ease-out, transform 200ms ease-out;
+  }
+  .site-nav-mobile.is-open .site-nav-mobile__item {
+    opacity: 1;
+    transform: none;
+    transition: opacity 450ms var(--ease-out-soft), transform 600ms var(--ease-spring);
+  }
+  .site-nav-mobile.is-open .site-nav-mobile__item:nth-child(1) { transition-delay: 120ms; }
+  .site-nav-mobile.is-open .site-nav-mobile__item:nth-child(2) { transition-delay: 165ms; }
+  .site-nav-mobile.is-open .site-nav-mobile__item:nth-child(3) { transition-delay: 210ms; }
+  .site-nav-mobile.is-open .site-nav-mobile__item:nth-child(4) { transition-delay: 255ms; }
+  .site-nav-mobile.is-open .site-nav-mobile__item:nth-child(5) { transition-delay: 300ms; }
+  .site-nav-mobile.is-open .site-nav-mobile__item:nth-child(6) { transition-delay: 345ms; }
+  .site-nav-mobile.is-open .site-nav-mobile__item:nth-child(7) { transition-delay: 390ms; }
+  .site-nav-mobile.is-open .site-nav-mobile__item:nth-child(n + 8) { transition-delay: 435ms; }
+  /* the buttons + store badges under the list come in last */
+  .site-nav-mobile.is-open .site-nav-mobile__scroll > .site-nav-mobile__item { transition-delay: 380ms; }
+  /* a section link's icon sits in a soft tile */
+  .mobile-menu-link > svg {
+    box-sizing: content-box;
+    flex-shrink: 0;
+    padding: calc(var(--spacing) * 2);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+
+  .site-nav-scrim {
+    position: fixed;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-black) 40%, transparent);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 350ms ease-out;
+  }
+  .site-nav-scrim.is-open { opacity: 1; pointer-events: auto; }
+
+  /* accordion section: expands by height */
+  .mobile-acc {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 400ms var(--ease-out-soft);
+  }
+  .mobile-acc > div { min-height: 0; overflow: hidden; }
+  .mobile-acc > div > * { opacity: 0; transform: translateY(calc(var(--spacing) * -2)); transition: opacity 200ms, transform 300ms var(--ease-out-soft); }
+  .mobile-acc.is-open { grid-template-rows: 1fr; }
+  .mobile-acc.is-open > div > * { opacity: 1; transform: none; transition-delay: 80ms; }
+
+  /* menu button: two lines morph into ✕ */
+  .menu-icon {
+    position: relative;
+    display: block;
+    width: calc(var(--spacing) * 4.5);
+    height: calc(var(--spacing) * 3);
+  }
+  .menu-icon > span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: calc(var(--spacing) * 0.5);
+    border-radius: 9999px;
+    background: currentColor;
+    transition: top 300ms var(--ease-out-soft), transform 400ms var(--ease-spring);
+  }
+  .menu-icon > span:first-child { top: 0; }
+  .menu-icon > span:last-child { top: calc(100% - var(--spacing) * 0.5); }
+  .menu-icon.is-open > span:first-child { top: calc(50% - var(--spacing) * 0.25); transform: rotate(45deg); }
+  .menu-icon.is-open > span:last-child { top: calc(50% - var(--spacing) * 0.25); transform: rotate(-45deg); }
+
   @media (prefers-reduced-motion: reduce) {
-    .site-nav-pill, .site-nav-panel { transition: none; }
+    .site-nav-pill, .site-nav-panel, .site-nav-mobile, .site-nav-mobile__item, .site-nav-scrim,
+    .mobile-acc, .mobile-acc > div > *, .menu-icon > span { transition: none !important; }
   }
 
   /* Reveal on scroll: elements with data-reveal fade up when they enter the viewport.

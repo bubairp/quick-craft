@@ -48,6 +48,13 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - `templates/_components/`: reusable UI pieces (button, card…), included with `{% include %}` and explicit `with {...} only`.
 - `templates/_macros/`: Twig helper macros, **used exactly as in Site7 Engine**. `_macros/images.twig` is the image helper: `{% import "_macros/images" as images %}` at the top of each template that shows images, then `{{ images.singleImg(image, width, options, classes, attr) }}`. Imports don't carry into included templates, so every file imports it itself.
 - `templates/_partials/`: site chrome (header, footer, nav).
+- **Mobile menu** (`_partials/header.twig`, below `lg`; the user's request, 2026-11-20):
+  - **Open:** the pill turns solid (`bg-paper`) and its panel grows by height (`.site-nav-mobile`: `grid-template-rows` 0fr → 1fr, 500ms `--ease-out-soft`, so it animates closed too). The items slide up one after another (`.site-nav-mobile__item`, 45ms stagger). A **scrim** (`.site-nav-scrim`, black/40 + blur) covers the page; tapping it closes. The page doesn't scroll behind (html `overflow: hidden` + Lenis stopped).
+  - **Menu button:** two lines morph into ✕ (`.menu-icon`); `aria-expanded`, label "Open menu" / "Close menu".
+  - **Accordions** (one open at a time): `text-2xl` items, a chevron in a round tile; the section expands by height (`.mobile-acc`, 0fr → 1fr). Inside: "Explore {item}" (the parent's own link), the column links with their icon in a soft tile (2 columns), and the featured item as a compact card.
+  - **Bottom:** the remaining header buttons (full width). **No app store badges in the mobile menu** (the user's decision, 2026-11-20).
+  - **Accessibility:** a closed menu or section is `inert`; opening focuses the first item; Esc closes and returns focus to the menu button. Reduced motion: no transitions.
+  - The header only gets a `translate` class while it's hidden, because a transform would make it the containing block for the fixed scrim.
 - **Footer** (`_partials/footer.twig`; Figma 6-2058, behaviour after partiful.com; the user's request, 2026-11-20):
   - **Wordmark** (`siteName`, lowercase): `src/js/footer-wordmark.js` fits it to the panel's full width at every size (`--wordmark-size`; CSS fallback `--text-wordmark`), descenders never clipped. When the footer comes into view the letters **rise from the bottom edge one by one** (45ms stagger, `--ease-spring`); hovering a letter makes it hop. Reduced motion: no animation (still fitted). `aria-hidden`.
   - **Link hover = `.link-line`**: a 1px line under the text only (not the icon) draws in from the left and leaves to the right (350ms). The current page keeps it; focus shows it plus an outline. Reduced motion: no transition.

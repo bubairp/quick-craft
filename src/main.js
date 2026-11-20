@@ -21,6 +21,20 @@ Alpine.data('siteHeader', () => ({
   lastY: 0,
   closeTimer: 0,
   init() {
+    // mobile menu: lock the page behind it (Lenis too), focus the first item on open,
+    // and fold every section away on close
+    this.$watch('open', (isOpen) => {
+      document.documentElement.style.overflow = isOpen ? 'hidden' : '';
+      if (isOpen) {
+        window.lenis?.stop();
+        this.$nextTick(() => document.querySelector('#mobile-menu a, #mobile-menu button')?.focus({ preventScroll: true }));
+      } else {
+        window.lenis?.start();
+        window.dispatchEvent(new CustomEvent('mobile-menu-closed'));
+      }
+    });
+    // the menu is mobile-only: close it when the window grows past lg
+    window.matchMedia('(min-width: 64rem)').addEventListener('change', (e) => { if (e.matches) this.open = false; });
     this.lastY = window.scrollY;
     window.addEventListener('scroll', () => {
       const y = window.scrollY;

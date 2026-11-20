@@ -48,14 +48,18 @@
     {%- endif -%}
 {% endmacro %}
 
+{# The translate class is only set while hidden: a transform would make the header the containing
+   block of the fixed scrim (then it would only cover the header). #}
 <header class="fixed inset-x-0 top-0 z-50 px-4 pt-4 transition-transform duration-300 ease-out md:px-gutter md:pt-8"
         x-data="siteHeader"
-        :class="hidden ? '-translate-y-full' : 'translate-y-0'"
+        :class="hidden && '-translate-y-full'"
         @focusin="hidden = false"
         @focusout="if (!$el.contains($event.relatedTarget)) menu = null"
-        @keydown.escape.window="open = false; menu = null">
+        @keydown.escape.window="if (open) { open = false; $refs.menuToggle?.focus() } menu = null">
+    {# mobile: dims and blurs the page behind the open menu; a tap closes it #}
+    <div class="site-nav-scrim lg:hidden" :class="open && 'is-open'" @click="open = false" aria-hidden="true"></div>
     <div class="site-nav-pill relative mx-auto border border-paper/30 bg-paper/80 shadow-nav backdrop-blur-xl max-lg:rounded-xl"
-         :class="menu !== null && 'is-open'"
+         :class="{ 'is-open': menu !== null, 'max-lg:bg-paper': open }"
          @mouseleave="closeMenu()">
 
         {# ── Bar ─────────────────────────────────────────────────────────── #}
@@ -96,14 +100,15 @@
             <div class="flex min-w-0 items-center gap-2 lg:hidden">
                 {% include '_components/buttons.twig' with { buttons: buttons|slice(0, 1), variants: buttonVariants, size: 'sm' } only %}
                 {% if navItems|length or buttons|length > 1 %}
-                    <button type="button"
-                            class="flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-paper text-ink transition-colors duration-200 hover:bg-surface"
+                    <button type="button" x-ref="menuToggle"
+                            class="flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-paper text-ink transition-colors duration-200 hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                            :class="open && 'bg-surface'"
                             aria-controls="mobile-menu"
                             aria-expanded="false" :aria-expanded="open.toString()"
                             @click="toggle()">
                         <span class="sr-only" x-text="open ? '{{ 'Close menu'|t|e('js') }}' : '{{ 'Open menu'|t|e('js') }}'">{{ 'Open menu'|t }}</span>
-                        <span x-show="!open">{% include '_components/icon.twig' with { name: 'menu-2', class: 'size-5' } only %}</span>
-                        <span x-show="open" x-cloak>{% include '_components/icon.twig' with { name: 'x', class: 'size-5' } only %}</span>
+                        {# two lines that morph into ✕ (.menu-icon) #}
+                        <span class="menu-icon" :class="open && 'is-open'" aria-hidden="true"><span></span><span></span></span>
                     </button>
                 {% endif %}
             </div>
@@ -168,47 +173,92 @@
         </div>
 
         {# ── Mobile panel ─────────────────────────────────────────────────── #}
-        <div id="mobile-menu"
-             class="site-nav-mobile overflow-y-auto border-t border-line px-4 pb-4 pt-2 lg:hidden"
-             data-lenis-prevent
-             x-show="open" x-cloak x-transition.opacity
-             @click.outside="open = false">
-            {% if navItems|length %}
-                <nav aria-label="{{ 'Main navigation'|t }}" x-data="{ section: null }">
-                    <ul class="flex flex-col">
-                        {% for item in navItems %}
-                            {% set kids = item.children ?? [] %}
-                            <li class="border-b border-line last:border-b-0">
-                                {% if kids|length %}
-                                    <button type="button" class="flex w-full items-center justify-between py-3 text-lg font-medium text-ink"
-                                            aria-controls="mobile-section-{{ loop.index0 }}"
-                                            aria-expanded="false" :aria-expanded="(section === {{ loop.index0 }}).toString()"
-                                            @click="section = section === {{ loop.index0 }} ? null : {{ loop.index0 }}">
-                                        {{ item.name }}
-                                        <span class="transition-transform" :class="section === {{ loop.index0 }} && 'rotate-180'">{% include '_components/icon.twig' with { name: 'chevron-down', class: 'size-4' } only %}</span>
-                                    </button>
-                                    <div id="mobile-section-{{ loop.index0 }}" x-show="section === {{ loop.index0 }}" x-cloak x-transition.opacity.duration.200ms class="pb-3">
-                                        {% for col in kids|filter(k => 'menu-featured' not in (k.class ?? '')) %}
-                                            <p class="mt-2 text-xs font-medium text-subtle uppercase">{{ col.name }}</p>
-                                            <ul class="mt-1 grid grid-cols-2 gap-x-4">
-                                                {% for link in col.children ?? [] %}
-                                                    <li>{{ _self.link(link, 'flex items-center gap-2 py-2 text-base text-ink') }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ _self.link(item, 'block py-3 text-lg font-medium text-ink') }}
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </nav>
-            {% endif %}
-            {% include '_components/buttons.twig' with {
-                buttons: buttons|slice(1), variants: { primary: 'light', secondary: 'light' },
-                itemClass: 'w-full', class: 'mt-3 flex flex-col gap-2',
-            } only %}
+        {# Grows by height (.site-nav-mobile 0fr → 1fr) and animates closed too; inert while closed.
+           Items slide up one after another (.site-nav-mobile__item); sections expand by height
+           (.mobile-acc). CLAUDE.md › Mobile menu. #}
+        <div id="mobile-menu" class="site-nav-mobile lg:hidden" :class="open && 'is-open'" inert :inert="!open">
+            <div>
+                <div class="site-nav-mobile__scroll overflow-y-auto overscroll-contain border-t border-line px-4 pb-5 pt-1" data-lenis-prevent>
+                    {% if navItems|length %}
+                        <nav aria-label="{{ 'Main navigation'|t }}" x-data="{ section: null }" @mobile-menu-closed.window="section = null">
+                            <ul class="flex flex-col">
+                                {% for item in navItems %}
+                                    {% set kids = item.children ?? [] %}
+                                    {% set i = loop.index0 %}
+                                    <li class="site-nav-mobile__item border-b border-line last:border-b-0">
+                                        {% if kids|length %}
+                                            <button type="button"
+                                                    class="flex w-full items-center justify-between gap-4 rounded-sm py-4 text-left text-2xl font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                                                    aria-controls="mobile-section-{{ i }}"
+                                                    aria-expanded="false" :aria-expanded="(section === {{ i }}).toString()"
+                                                    @click="section = section === {{ i }} ? null : {{ i }}">
+                                                {{ item.name }}
+                                                <span class="grid size-8 shrink-0 place-items-center rounded-full bg-ink/5 transition-[transform,background-color,color] duration-300"
+                                                      :class="section === {{ i }} ? 'rotate-180 bg-ink! text-paper' : ''" aria-hidden="true">
+                                                    {% include '_components/icon.twig' with { name: 'chevron-down', class: 'size-4' } only %}
+                                                </span>
+                                            </button>
+                                            <div id="mobile-section-{{ i }}" class="mobile-acc" :class="section === {{ i }} && 'is-open'" inert :inert="section !== {{ i }}">
+                                                <div>
+                                                    <div class="flex flex-col gap-4 pb-5">
+                                                        {# the parent item's own page (unreachable otherwise on mobile) #}
+                                                        {% if (item.custom_url ?? '') and not item.noLink %}
+                                                            <a href="{{ item.custom_url }}" class="group inline-flex items-center gap-2 self-start rounded-sm text-base font-semibold text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
+                                                                {{ 'Explore {item}'|t(params={ item: item.name|lower }) }}
+                                                                {% include '_components/icon.twig' with { name: 'arrow-right', class: 'size-4 transition-transform group-hover:translate-x-0.5' } only %}
+                                                            </a>
+                                                        {% endif %}
+                                                        {% for col in kids|filter(k => 'menu-featured' not in (k.class ?? '')) %}
+                                                            {% set links = col.children ?? [] %}
+                                                            <div>
+                                                                <p class="mb-2 text-xs font-medium tracking-wide text-subtle uppercase">{{ col.name }}</p>
+                                                                {% if links|length %}
+                                                                    {# one column on phones (two were too narrow: "Housewarmings" broke), two from sm #}
+                                                                    <ul class="grid gap-1 sm:grid-cols-2">
+                                                                        {% for link in links %}
+                                                                            <li>{{ _self.link(link, 'mobile-menu-link flex min-h-11 items-center gap-2.5 rounded-md p-1.5 text-base font-medium text-ink transition-colors hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-ink') }}</li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                {% else %}
+                                                                    {{ _self.link(col, 'text-base font-medium text-ink underline-offset-4 hover:underline') }}
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endfor %}
+                                                        {# the featured item as a compact card #}
+                                                        {% set featured = kids|filter(k => 'menu-featured' in (k.class ?? ''))|first %}
+                                                        {% if featured and (featured.custom_url ?? '') %}
+                                                            {% set fdata = _self.data(featured)|json_decode %}
+                                                            <a href="{{ featured.custom_url }}" class="flex items-center gap-4 rounded-lg bg-surface p-3 focus-visible:outline-2 focus-visible:outline-ink">
+                                                                {% if fdata.image ?? false %}<img src="{{ fdata.image }}" alt="" width="56" height="56" loading="lazy" class="size-14 shrink-0 object-contain">{% endif %}
+                                                                <span class="flex min-w-0 flex-col">
+                                                                    {% if fdata.label ?? false %}<span class="text-xs font-medium tracking-wide text-subtle uppercase">{{ fdata.label }}</span>{% endif %}
+                                                                    <span class="text-lg font-medium text-ink">{{ featured.name }}</span>
+                                                                    {% if featured.customShortContent %}<span class="text-sm text-subtle">{{ featured.customShortContent }}</span>{% endif %}
+                                                                </span>
+                                                            </a>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            {{ _self.link(item, 'block rounded-sm py-4 text-2xl font-medium text-ink focus-visible:outline-2 focus-visible:outline-ink') }}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                    {# the header buttons that don't fit beside the menu button (no store badges here: the user's decision) #}
+                    {% if buttons|length > 1 %}
+                        <div class="site-nav-mobile__item mt-5">
+                            {% include '_components/buttons.twig' with {
+                                buttons: buttons|slice(1), variants: { primary: 'dark', secondary: 'light' },
+                                itemClass: 'w-full justify-center', class: 'flex flex-col gap-2',
+                            } only %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 </header>
