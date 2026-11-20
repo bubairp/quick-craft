@@ -128,6 +128,14 @@ settings:
         -
           - group
           - Reusable
+    -
+      __assoc__:
+        -
+          - uid
+          - 4e211045-dc02-4a3e-83cd-14bcc297ed54 # Contact details
+        -
+          - group
+          - Text
   includeTableView: false
   maxEntries: null
   minEntries: null

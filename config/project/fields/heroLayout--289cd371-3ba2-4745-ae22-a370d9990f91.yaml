@@ -50,6 +50,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Image only (inset photo)'
+        -
+          - value
+          - imageOnly
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

@@ -4,7 +4,7 @@
  # Side by side from lg, stacked below.
  # Receives: block, headingLevel
  # Fields: mediaPosition (right|left), heading, headingAbove, body (lead text), images (first shown),
- #         glow, spacing
+ #         glow, cropImage (default on; off = own ratio, About's polaroids), spacing
  #}
 {% set image = block.images.eagerly().one() %}
 {% set body = block.body ?? null %}
@@ -22,14 +22,25 @@
             {% endif %}
             <div class="flex flex-col gap-10 lg:flex-row lg:items-center">
                 {% if image %}
-                    <div class="lg:flex-none {{ mediaLeft ? 'lg:order-first lg:w-115' : 'lg:order-last lg:w-134' }}">
-                        {# cropped to the design's frame: 536×351 (right) / 460×402 (left) #}
-                        {% include '_components/image.twig' with {
-                            image: image, width: 536, ratio: mediaLeft ? 460 / 402 : 536 / 351,
-                            sizes: '(min-width: 1024px) 536px, 100vw',
-                            class: 'h-auto w-full rounded-lg object-cover',
-                        } only %}
-                    </div>
+                    {% set crop = block.cropImage ?? true %}
+                    {% if crop %}
+                        <div class="lg:flex-none {{ mediaLeft ? 'lg:order-first lg:w-115' : 'lg:order-last lg:w-134' }}">
+                            {# cropped to the design's frame: 536×351 (right) / 460×402 (left) #}
+                            {% include '_components/image.twig' with {
+                                image: image, width: 536, ratio: mediaLeft ? 460 / 402 : 536 / 351,
+                                sizes: '(min-width: 1024px) 536px, 100vw',
+                                class: 'h-auto w-full rounded-lg object-cover',
+                            } only %}
+                        </div>
+                    {% else %}
+                        {# own ratio, never cropped (About 76:769: polaroid collages, transparent PNGs, 480 wide) #}
+                        <div class="flex justify-center lg:w-120 lg:flex-none {{ mediaLeft ? 'lg:order-first' : 'lg:order-last' }}">
+                            {% include '_components/image.twig' with {
+                                image: image, width: 480, sizes: '(min-width: 1024px) 480px, 100vw',
+                                class: 'h-auto w-full max-w-120',
+                            } only %}
+                        </div>
+                    {% endif %}
                 {% endif %}
                 {% if (block.heading and not above) or hasBody %}
                     <div class="flex flex-1 flex-col gap-5">

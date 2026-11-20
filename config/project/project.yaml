@@ -1,4 +1,4 @@
-dateModified: 1795158942
+dateModified: 1795169295
 elementSources:
   craft\elements\Entry:
     -
@@ -116,6 +116,7 @@ meta:
     03f1d9c2-255c-41ed-818a-e2cb06131584: 'Contact detail' # Contact detail
     3f6d2a8e-5b1c-4e7a-9c2d-8a4b6e1f0c37: Spacing # Spacing
     4b43103e-a137-4e60-8356-f1cbcb85cb30: Stat # Stat
+    4e211045-dc02-4a3e-83cd-14bcc297ed54: 'Contact details' # Contact details
     5c240c8c-77a4-4623-9bcb-acbe6852884a: 'Link (with label)' # Link (with label)
     6c77e508-9522-461f-a2e5-40a716e5302e: Image # Image
     6e289974-25fc-41ca-8426-66c8ce5dadfa: 'Blog category' # Blog category
@@ -267,6 +268,17 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 2.0.0
+    settings:
+      cp_label: null
+      disabled_fields: null
+      from_email: admin@quick-craft.ddev.site
+      from_name: 'Quick Craft'
+      recaptcha_min_score: 0.5
+      recaptcha_public: null
+      recaptcha_secret: null
+      recaptcha_version: 2
+      success_message: 'Thanks! Your message has been sent.'
+      volume_id: null
 system:
   edition: solo
   live: true

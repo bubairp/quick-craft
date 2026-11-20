@@ -13,6 +13,23 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: label
+            instructions: 'What it’s for, e.g. “Partnerships”. Shown above the detail on the contact page.'
+            label: Label
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 2591cfde-f9ec-470b-9710-773be3b61786
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
             fieldUid: f2ca311d-42ef-44f5-83c8-d3adf7938d60 # Type
             handle: null
             instructions: null

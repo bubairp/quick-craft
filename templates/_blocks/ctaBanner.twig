@@ -21,7 +21,16 @@
 {# Simple (Figma Birthday 17-1368): plain centred heading + text, buttons and store badges; no images #}
 <section data-scheme="{{ scheme }}" data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-16 md:px-10 md:py-25 {{ (block.glow ?? false) and not dark ? 'glow-bg' }}">
     <div class="mx-auto flex max-w-content flex-col items-center gap-10 text-center md:gap-15">
-        {% if images|length %}
+        {% if images|length and (block.imageAbove ?? false) %}
+            {# a small sticker above a normal heading (About 76:832 "PARTY!") #}
+            <div class="flex flex-col items-center gap-10">
+                {% include '_components/image.twig' with {
+                    image: images|first, width: 172, sizes: '172px', decorative: true,
+                    class: 'h-13 w-auto',
+                } only %}
+                {% include '_components/section-heading.twig' with { heading: block.heading, text: block.text, level: level, dark: dark, plain: true } only %}
+            </div>
+        {% elseif images|length %}
             {# with an image (Sell Tickets 17-2992 "See you at the door."): a big bold heading, the image below #}
             <div class="flex flex-col items-center gap-3">
                 {% if block.heading %}<{{ tag }} class="text-balance text-5xl font-bold md:text-banner">{{ block.heading }}</{{ tag }}>{% endif %}

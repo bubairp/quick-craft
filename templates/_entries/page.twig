@@ -18,10 +18,13 @@
         <h1 class="sr-only">{{ entry.title }}</h1>
     {% endif %}
 
+    {# wheelformErrors / values are set by Wheel Form when a form on this page fails validation (contactInfo) #}
     {% for block in entry.pageBuilder.eagerly().all() %}
         {% include '_blocks/' ~ block.type.handle ~ '.twig' ignore missing with {
             block: block,
             headingLevel: 2,
+            wheelformErrors: wheelformErrors ?? {},
+            values: values ?? {},
         } only %}
     {% endfor %}
 {% endblock %}

@@ -105,6 +105,15 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 | ☑ | `blog/_entry.twig` | 18-5645 (article 18-5804) | featured/latest tags, body, "Next:" link |
 | ☑ | `_partials/newsletter.twig` | 18-5576 / 18-5927 | `newsletter` Single (via `_globals`) + Wheel Form; add its Live Preview target → `blog` |
 
+## 6a. Contact (76:2) + About (76:299), entries in `pages`
+| | Block | Layout | Node |
+|---|---|---|---|
+| ☑ | banner | imageOnly (Contact) / simple + photo + emblem (About) | 76:165 / 76:458 |
+| ☑ | `contactInfo` + contact form (Wheel Form via `_components/wheel-form.twig`) | heading 3 / lists 9 | 76:166 |
+| ☑ | `testimonials` | pressRow | 76:472 |
+| ☑ | `textMedia` × 4 | uncropped (`cropImage` off) | 76:769… |
+| ☑ | `ctaBanner` | simple + `imageAbove` | 76:832 |
+
 ## 6b. Shopify-style page builder (agreed 2026-11-19, in this order)
 - ☑ Colour schemes (`scheme`: light / white / soft / dark) + spacing presets (`spacing`: default / noTop / noBottom / none)
 - ☑ Page tabs (Page · Banner · Content · SEO) + fixed banner (added 2026-11-20, as in Site7 Engine)
@@ -118,4 +127,5 @@ All Home blocks were checked from rendered HTML only (structure, headings, empty
 - ◐ Ether SEO defaults (☑ title, description, sitemap; ☐ social image when the brand image exists)
 - ☑ 404 page (404/500/503 system Singles), favicon (placeholder qc tile)
 - ☑ Cross-page Playwright pass (375/768/1440), accessibility and empty-field checks
+- ☐ Wheel Form plugin From email: replace the placeholder (system email) with the real address
 - ☐ Replace placeholder content with real Quick Craft assets and copy (the imported design contains third-party logos, fonts and screenshots)

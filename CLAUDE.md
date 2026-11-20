@@ -117,14 +117,15 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
     - **Errors:** Wheel Form re-renders the page with `wheelformErrors` / `values` → the message under the input, linked with `aria-describedby`, and the email kept.
   - Markup: a visible-to-screen-readers `<label>` + email input (`autocomplete="email"`, required) and a dark submit button in one pill (`rounded-full`, stacked on phones). Honeypot via `form.honeypot()` when the form has one. Button and messages use `|t`.
   - The `newsletter` Single has the Live Preview target **Blog** (`/blog`).
-  - **Every Wheel Form needs a success message:** the form's own `submit_message` option, or the plugin's "Success Message" setting. Without one, a successful (non-AJAX) submit throws `setNotice(): … null given` (500). Migrations that create a form set `submit_message`. The plugin settings (From email, Success Message) are still unset; the user fills them in before launch.
+  - **Every Wheel Form needs a success message:** the form's own `submit_message` option, or the plugin's "Success Message" setting. Without one, a successful (non-AJAX) submit throws `setNotice(): … null given` (500). Migrations that create a form set `submit_message`.
+  - **Wheel Form plugin settings** (migration `m261120_470000_wheelform_settings`): From email = Craft's system email (`admin@quick-craft.ddev.site`), From name "Quick Craft", Success Message "Thanks! Your message has been sent.". **Placeholders: the user replaces the From email before launch** (CP › Wheel Form › Settings). Without a valid From email, a form that sends email (the Contact Form) throws "Plugin settings need to be configured." (500) on a successful submit. Locally DDEV's Mailpit catches the mail.
   - Without a chosen form: admins see "Choose a form in the Newsletter settings."|t; visitors see only the heading and note.
 - **Everything is an entry (as in Site7 Engine):** no global sets and no category groups. Migration `m261119_220000_entrify_globals_categories` converted them, keeping element IDs and content. Don't add global sets or category groups; use a Single (settings) or a Structure (taxonomies) instead.
 - **Live Preview of settings:** `siteSettings` has a preview target, Home (`/`). Editing it in the CP shows header, footer and store-link changes live on Home. Each new settings Single gets a preview target pointing at a page that shows it. Testing procedure: skill › Live Preview.
 - **Settings Singles in templates:** `templates/_layouts/base.twig` loads `siteSettings` and `newsletter` **once per request** into Craft's front-end `_globals` collection. Read them anywhere, including `only` includes, with `{% set siteSettings = _globals.get('siteSettings') %}`. Never query these sections again in a partial or block. For a new settings Single, add it to that same block in base.twig.
 - **Volume:** `images` (`web/uploads/images`, gitignored). Alt text uses the native alt field.
 - **pageBuilder blocks** (each one is `_blocks/{handle}.twig`, receives `block` and `headingLevel`):
-  - cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList
+  - cardGrid, featureRows, imageGallery, cityList, testimonials, textMedia, comparison, richText, faq, ctaBanner, promoBar, image, jobList, pressList, contactInfo
   - **promoBar** (Figma 17-1076; migration `m261120_270000_promo_bar`): `emoji` (shown on both sides), `text`, `primaryButton` (when set, the whole bar is the link). Full-width, 36px tall, `bg-promo` + `text-surface`; no scheme or spacing (it's a thin strip).
   - **richText** (Figma 17-1343, the SEO text under a page; migration `m261120_280000_rich_text`): optional `heading`, `body` (Rich text (full)), `spacing`. Small muted text (`text-xs`, black/40) in `max-w-text`, with a divider below.
     - CKEditor output is styled by the `.rich-text` component class in app.css (headings like small subheads, 20px before a heading, 8px between a heading and its text, links in ink). Content can't carry utility classes, so prose styling always goes through `.rich-text`.
@@ -179,6 +180,16 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
       - **bento** (17-3995): 2 columns from `lg`; the **first card spans two rows**; panels `rounded-lg bg-linear-to-b from-white/10 to-white/15` (black/5 → black/10 on light), title `text-2xl font-bold`, text `text-xl` (65%), the card image under the text (the first one full width, the others centred, at their own ratio).
     - **imageGallery** gets `scheme` (light / white / soft / dark: the heading and captions follow it). **Marquee with a heading** (17-3649: posters) uses tiles `h-55 md:h-75`, gap 24, `rounded-md`, and a left-aligned heading; the headingless Careers photo strip keeps 220 / 10 / `rounded-photo`.
     - **ctaBanner › simple with an image** (17-2992 "See you at the door."): heading `md:text-banner` bold, the first `images` asset centred below it (`max-w-128`, `shadow-glow`).
+  - **Contact page (Figma 76:2) + About page (Figma 76:299); migration `m261120_460000_contact_about`**. Both are entries in `pages` (`/contact`, `/about`); the footer menu items "About" / "Contact" link to them by entry ID.
+    - **Banner › imageOnly** (new `heroLayout` option "Image only (inset photo)", Contact 76:165): the first image, inset `px-5`, `rounded-md`, ratio 1560/484 from `lg` (3:2 below), eager; no visible heading, so the page's h1 is the visually hidden entry title.
+    - **Banner › simple with images** (About 76:458): `images[0]` = the big photo under the heading (`max-w-240`, `rounded-xl`, ratio 960/600); `images[1]` (optional) = a small emblem above the heading (`h-10 md:h-14`, decorative).
+    - **contactInfo block** (new pageBuilder entry type "Contact details", group Text, icon `address-book`, blue; Contact 76:166): `heading` + `text` (left), `contactHeading` ("Have a question?") with **siteSettings `contactDetails`** (each: new `label` instance, e.g. "Partnerships", over the linked detail), `socialHeading` ("Find us on") with **siteSettings `socialLinks`** (platform name over the new `handle` instance, e.g. "@quickcraft", linked), then `formHeading` + `contactForm` (a Wheel Form; an instance of the `newsletterForm` field type) under the two lists, and `spacing`.
+      - The lists always come from Site settings (one source; never typed into the block). Column titles `text-2xl font-bold`; labels `text-lg font-bold`; values `text-base text-black/60`, underlined on hover.
+      - Layout from `lg`: 12 columns, the heading 3, the lists 9 (two columns), the form under the lists in the same 9 columns.
+    - **Contact form** = **`_components/wheel-form.twig`**, a generic Wheel Form renderer for any form: a visible label + input per field (`text`, `email`, `number`, `telephone` → inputs; `textarea`; `select`; `checkbox`/`radio` groups as fieldsets), `required`, `autocomplete` for name/email/phone, inline errors (`aria-invalid` + `aria-describedby`, values kept), a hidden honeypot, our `|t` submit button, and the success message (`role="status"`: the form's own `submit_message`, else "Thanks for your message!"|t; never both). The same no-JS flow as the newsletter: POST, `redirect` = the page + `#<anchor>`, flashes for success, `wheelformErrors`/`values` on error. The Wheel Form "Contact Form" fields are name (text), email (email), message (**textarea**), all labelled, in that order, with a honeypot.
+    - **testimonials › pressRow** (new `testimonialLayout` option "Press quotes (scrolling row)", About 76:472): a self-scrolling row (`.gallery-marquee__track`, paused under reduced motion) of items: logo (`image`, `h-5` auto) over the quote (`text`, `text-2xl text-ink/40`, in quotes), gap 80, the set repeated so the loop never shows a gap; copies `aria-hidden`.
+    - **textMedia** gets `cropImage` (lightswitchOn instance, "Crop image to fit", default on). Off = the image keeps its own ratio, uncropped (About's polaroid collages, transparent PNGs, `max-w-120`).
+    - **ctaBanner › simple** gets `imageAbove` (lightswitchOff instance, "Small image above the heading"): the first image as a small decorative sticker (`h-13 w-auto`) above a normal plain heading (About 76:832 "PARTY!"), instead of the big image below.
   - **imageGallery › marquee** (Figma Careers 6-6667 photo strip, Sell Tickets 17-3649 posters; migration `m261120_350000_gallery_marquee`):
     - A row that scrolls on its own (`.gallery-marquee__track`, paused under reduced motion). Tiles are a **fixed height** (160px phone, 220px from `md`) at **each image's own ratio** (never cropped by the template), gap 10, `rounded-photo` (10px token).
     - For a uniform strip, editors crop the photos in Craft's image editor. Only the first pass is read by screen readers; the copy is `aria-hidden` with empty alt.
@@ -211,8 +222,8 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
       - Only the button component's variants are offered (`_components/button.twig`); never free colours.
     - Render with `{% include '_components/buttons.twig' with { buttons: …, variants: { primary: '…', secondary: '…' }, dark: <bool>, shape, size, class } only %}`. The block passes its primary/secondary map; `dark`/`light` are resolved by the component.
     - **A single inline link stays a Link field:** a card's link (`primaryButton`), a city's link, ctaBanner's heading link (`primaryButton`, labelled "Heading link"), promoBar.
-  - **`socialLinks`** on siteSettings (entry type `socialLink`: `platform` dropdown → the Tabler icon is chosen by the template, `externalLink`). Rendered by `_components/social-links.twig` (the footer's "Socials" column).
-  - **`contactDetails`** on siteSettings (entry type `contactDetail`: `contactType` email / phone / whatsapp / address, `detail`). Rendered by `_components/contact-details.twig` (makes mailto:, tel: and wa.me links). Used by the contact page and anywhere the design shows contact info.
+  - **`socialLinks`** on siteSettings (entry type `socialLink`: `platform` dropdown → the Tabler icon is chosen by the template, `externalLink`, `handle` = the shown text, e.g. "@quickcraft"). Rendered by `_components/social-links.twig` (the footer's "Socials" column).
+  - **`contactDetails`** on siteSettings (entry type `contactDetail`: `contactType` email / phone / whatsapp / address, `detail`, `label` = what it's for, e.g. "Partnerships"). Rendered by `_components/contact-details.twig` (makes mailto:, tel: and wa.me links). Used by the contact page and anywhere the design shows contact info.
   - **Next, with their pages:** `person` (Careers), `logo` and `download` (Press kit).
 - **Base field library: create once, reuse everywhere** (the user's rule, 2026-11-20; migration `m261120_130000_base_field_library`).
   - **The fields:** generic fields, each added to sections and blocks many times, every time with its own **handle and label** (a Craft 5 field-instance override).
@@ -264,7 +275,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   | Colour | Kind | Entry types (icon) |
   |---|---|---|
   | fuchsia | call to action | ctaBanner (bullhorn), promoBar (rectangle-ad) |
-  | blue | text content | richText (paragraph), faq (circle-question), textMedia (columns-3), comparison (scale-balanced) |
+  | blue | text content | richText (paragraph), faq (circle-question), textMedia (columns-3), comparison (scale-balanced), contactInfo (address-book) |
   | emerald | cards and lists | cardGrid (grid-2), featureRows (list), cityList (city), jobList (briefcase), pressList (newspaper) |
   | amber | media | imageGallery (images), image (image) |
   | violet | social proof | testimonials (quote-left) |
@@ -283,7 +294,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
   - **Current layout (2026-11-20):** Pages (All entries, Home, Pages, Reusable sections, Page presets) · Blog (Blog, Blog categories) · Careers (Jobs, Departments) · Press (Press mentions) · Site Setup (Site settings, Newsletter, Google Structured Data, LLMs Text, Page not found / error / maintenance).
 - **Page builder "Add block" menu groups** (Craft 5.9+, same migration). The groups match the colours above:
   - **Call to action:** ctaBanner, promoBar
-  - **Text:** richText, faq, textMedia, comparison
+  - **Text:** richText, faq, textMedia, comparison, contactInfo
   - **Cards & lists:** cardGrid, featureRows, cityList, jobList, pressList
   - **Media:** imageGallery, image
   - **Social proof:** testimonials

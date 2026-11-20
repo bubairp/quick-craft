@@ -42,6 +42,23 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: handle
+            instructions: 'e.g. “@quickcraft”. Shown on the contact page; falls back to the link.'
+            label: 'Shown text'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 44242a8a-66c5-4214-99a7-d8425747f64e
+            userCondition: null
+            warning: null
+            width: 100
         name: Content
         uid: d94cd9df-5179-4211-ab01-d27e91e855b4
         userCondition: null

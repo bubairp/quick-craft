@@ -50,6 +50,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Press quotes (scrolling row)'
+        -
+          - value
+          - pressRow
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none

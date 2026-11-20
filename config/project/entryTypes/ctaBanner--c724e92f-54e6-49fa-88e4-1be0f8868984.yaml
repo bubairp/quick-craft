@@ -178,6 +178,23 @@ fieldLayouts:
             userCondition: null
             warning: null
             width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 1f16e9a9-dffc-4d2a-b75c-7d2cab9b635a # Lightswitch (default off)
+            handle: imageAbove
+            instructions: 'Simple layout: the first image as a small sticker above the heading, instead of a big image below.'
+            label: 'Small image above the heading'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: f0d8549d-be79-4194-bfc1-54edc98e8adb
+            userCondition: null
+            warning: null
+            width: 100
         name: Content
         uid: 13294167-c2ce-4b33-aed9-b0ac8b617e6e
         userCondition: null

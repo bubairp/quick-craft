@@ -21,7 +21,8 @@
 {% set sectionClass = [
     'relative overflow-hidden',
     layout == 'fullBleed' ? (media|length ? 'h-140 md:h-186' : 'pt-32 pb-16 md:pt-44 lg:pb-24')
-    : (layout == 'simple' ? 'pt-32 pb-12 md:pt-44 md:pb-20' : 'pt-32 pb-16 md:pt-44 lg:pb-24'),
+    : (layout == 'imageOnly' ? 'px-4 pt-28 md:px-5 md:pt-40'
+    : (layout == 'simple' ? 'pt-32 pb-12 md:pt-44 md:pb-20' : 'pt-32 pb-16 md:pt-44 lg:pb-24')),
     (layout == 'centered' or (layout == 'split' and not isHome)) and not dark ? 'glow-bg',
 ]|join(' ') %}
 
@@ -68,6 +69,19 @@
             {% endif %}
         </div>
 
+    {% elseif layout == 'imageOnly' %}
+        {# Contact 76:165: the photo inset 20px, radius 8, 1560/484 from lg; no visible heading
+           (the page outputs the visually hidden h1) #}
+        {% if media|length %}
+            <div class="w-full">
+                {% include '_components/image.twig' with {
+                    image: media|first, width: 1560, ratio: 1560 / 484, eager: true, sizes: '100vw',
+                    class: 'aspect-3/2 h-auto w-full rounded-md object-cover lg:aspect-1560/484',
+                } only %}
+            </div>
+        {% endif %}
+        {% if page.heading %}<{{ tag }} class="sr-only">{{ page.heading }}</{{ tag }}>{% endif %}
+
     {% elseif layout == 'fullBleed' %}
         {# Figma Careers 6-6336: photo edge to edge (745px), white text near the top so the people
            in the photo stay visible. The gradient is only there for contrast. #}
@@ -100,6 +114,13 @@
         {% endif %}
         <div class="relative mx-auto flex max-w-content flex-col items-center gap-6 px-4 text-center md:px-gutter {{ layout == 'centered' and media|length ? 'xl:min-h-110 xl:max-w-200 xl:justify-center' }}">
             {% if page.eyebrow %}<p class="text-xl font-medium {{ dark ? 'text-line' : 'text-black/60' }} md:text-2xl">{{ page.eyebrow }}</p>{% endif %}
+            {# simple + images (About 76:458): images[1] = a small emblem above the heading #}
+            {% if layout == 'simple' and media|length > 1 %}
+                {% include '_components/image.twig' with {
+                    image: media[1], width: 256, sizes: '256px', decorative: true, eager: true,
+                    class: 'h-10 w-auto md:h-14',
+                } only %}
+            {% endif %}
             {% if page.heading %}
                 <{{ tag }} class="text-balance text-4xl font-medium md:text-headline">
                     {{ page.heading }}
@@ -115,6 +136,14 @@
             {% endif %}
             {% if page.text and layout != 'simple' %}<p class="max-w-xl text-xl text-black/60 md:text-2xl">{{ page.text|nl2br }}</p>{% endif %}
             {% if hasButtons %}{{ _self.buttons(buttons, dark) }}{% endif %}
+            {# simple + images (About 76:458): images[0] = the big photo under the heading, 960×600 #}
+            {% if layout == 'simple' and media|length %}
+                {% include '_components/image.twig' with {
+                    image: media|first, width: 960, ratio: 960 / 600, eager: true,
+                    sizes: '(min-width: 1024px) 960px, 100vw',
+                    class: 'mt-8 h-auto w-full max-w-240 rounded-xl object-cover md:mt-14',
+                } only %}
+            {% endif %}
         </div>
     {% endif %}
 </section>

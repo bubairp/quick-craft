@@ -171,7 +171,9 @@ Every page entry type (`home`, `page`) uses four tabs, as in Site7 Engine. Only 
 - Craft `svg()` returns `''` for a missing file (and logs a warning), so always guard the output.
 - The radius scale is reset to the project tokens (`xs sm md lg xl 2xl photo`), so Tailwind's own `rounded-3xl` etc. silently don't exist. The same goes for colours (`text-red-700` produces nothing; use a token such as `text-danger`).
 - Don't name a token after a Tailwind static utility: `--container-prose` lost to the built-in `max-w-prose` (65ch), so the blog column was 654px instead of 700. It's `--container-article` now. Check a new token's utility in the built CSS.
-- Wheel Form: in Twig, `form.honeypot` calls `honeypot()` (prints a field or throws); use `form.getHoneypot()` to test for one. A form without `submit_message` (and no plugin Success Message) gives a 500 on a successful submit.
+- Wheel Form: in Twig, `form.honeypot` calls `honeypot()` (prints a field or throws); use `form.getHoneypot()` to test for one. A form without `submit_message` (and no plugin Success Message) gives a 500 on a successful submit. A form with "send email" on also needs the plugin's From email, or a successful submit throws "Plugin settings need to be configured." (500); check `storage/logs/web-*.log`.
+- Twig: no `{# #}` comments inside a hash literal (`include … with { … }`): it fails with a misleading "Unclosed block" error. Put the comment above the tag.
+- Playwright: `main section:nth-of-type(2)` counts siblings of the same tag, not matches; use `document.querySelectorAll('main section')[1]`.
 - Figma MCP asset URLs only download with the extension appended (`…/asset/<id>.png`). Figma often shows photos cropped (`object-cover`); check the original size before using one as a placeholder.
 - A CSS marquee (`translateX(-50%)` loop) needs each half of the track wider than the widest screen; repeat the set and `aria-hidden` the copies. Playwright can't `scrollIntoViewIfNeeded` a moving track; scroll with `evaluate` instead.
 

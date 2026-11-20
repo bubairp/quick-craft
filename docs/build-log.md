@@ -1334,3 +1334,39 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - **Precedence:** `bootstrap.php` uses `Dotenv::createImmutable(...)->safeLoad()`, which never overwrites a variable that's already set, so DDEV's injected values still win inside the container. The `.env` copy is for visibility, and for running without DDEV.
 - **Checked:** `ddev craft env/show CRAFT_DB_SERVER` → "db"; `/`, `/blog` and `/admin/login` → 200.
 - README's `cp .env.example.dev .env` comment updated.
+
+## 2026-11-20 · Contact + About pages, contact form (Figma 76:2, 76:299)
+
+**Done**
+- Read both frames in Figma and checked the content in Craft via the Craft MCP (read-only): there were no About/Contact entries, siteSettings had 5 social links without handles and empty contactDetails, and the Home press logos already existed.
+- Migration `m261120_460000_contact_about` (backup `/tmp/before-contact-about.sql.gz`):
+  - New instances: `contactDetail.label`, `socialLink.handle`, `textMedia.cropImage` (lightswitchOn), `ctaBanner.imageAbove` (lightswitchOff).
+  - New options: `heroLayout` imageOnly, `testimonialLayout` pressRow.
+  - New block `contactInfo` (Text group, blue, address-book): heading, text, contactHeading, socialHeading, formHeading, contactForm (a `newsletterForm` instance), spacing.
+  - Wheel Form "Contact Form": name / email / message (textarea), labelled and required, honeypot, `submit_message`.
+  - Content: siteSettings contact details and handles; the Contact and About entries in `pages`; the footer menu items About/Contact now link by entry ID.
+- Migration `m261120_470000_wheelform_settings` (backup `/tmp/before-wheelform-settings.sql.gz`): Wheel Form plugin settings get placeholders (From = Craft's system email, Success Message).
+- Templates:
+  - `_components/wheel-form.twig`: a generic renderer for any Wheel Form.
+  - `_blocks/contactInfo.twig`.
+  - `banner.twig`: imageOnly layout; simple layout with photo + emblem.
+  - `testimonials.twig`: pressRow.
+  - `textMedia.twig`: uncropped images.
+  - `ctaBanner.twig`: sticker above the heading.
+  - `_entries/page.twig`: passes `wheelformErrors` / `values` to blocks.
+
+**Checked (Playwright, 1440 / 375)**
+- One h1 per page (Contact: visually hidden entry title; About: banner heading); h2/h3 order is correct; no horizontal overflow.
+- Contact: the three contact details and five socials come from Site settings, and the form has Name / Email / Message.
+  - Error path: an invalid email gets an inline error with `aria-invalid`, and the other values are kept.
+  - Success path: 200, the redirect goes to `#contact-form`, and the `role="status"` message shows.
+- About: the press row scrolls, the four polaroid rows are uncropped, and the CTA shows the sticker and the Careers button.
+- `/`, `/careers`, `/press`, `/blog`, `/organizers`, `/sell-tickets`, `/blocks` → 200; no console errors.
+
+**Gotchas**
+- A Twig comment inside an `include … with { }` hash gives "Unclosed block". Put it above the tag.
+- The contact form sends email, so it needs the plugin's From email; without one, a successful submit returns a 500 ("Plugin settings need to be configured.", found in `storage/logs/web-*.log`).
+- The success box showed our heading and the form's message together ("Thanks… Thanks!"). It now shows the form's message, falling back to `|t` text.
+- Playwright `:nth-of-type` counts siblings of the same tag; index `querySelectorAll` instead.
+
+**Before launch:** replace the Wheel Form From email; real contact emails and social handles.

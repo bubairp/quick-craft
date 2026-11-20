@@ -1,0 +1,145 @@
+allowLineBreaksInTitles: false
+color: blue
+description: null
+fieldLayouts:
+  3346f1c5-056b-4133-a176-507f7a851a28:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: heading
+            instructions: null
+            label: Heading
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: a1395a7e-a80c-4dce-b333-bb3abae46019
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: text
+            instructions: null
+            label: Text
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: cbc22f66-aab3-4954-8ac2-a9804ffa9535
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: contactHeading
+            instructions: 'Above the contact details from Site settings, e.g. “Have a question?”.'
+            label: 'Contact list heading'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 32ebb5dc-70a9-470f-96a0-1bb8a1ff7449
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: socialHeading
+            instructions: 'Above the social links from Site settings, e.g. “Find us on”.'
+            label: 'Social list heading'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 26019d58-be12-4b93-811b-ddf414a850a6
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: cbc81cae-5356-4e94-a54e-e20f8c3cf62a # Plain text
+            handle: formHeading
+            instructions: null
+            label: 'Form heading'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 5b18a18a-abef-4cd3-9dca-355d0b9e974f
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5760d1f6-e54e-4545-831d-3b138cb0b946 # Newsletter form
+            handle: contactForm
+            instructions: 'A Wheel Form. Leave empty for no form.'
+            label: 'Contact form'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: fef46ca9-aa97-4310-b693-3429d290aca9
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 3f6d2a8e-5b1c-4e7a-9c2d-8a4b6e1f0c37 # Spacing
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 0d59dfa1-8e4f-451e-8126-25479e52fcc5
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: c5becd95-3261-48fe-aa1d-33dbe1b9dad5
+        userCondition: null
+    thumbFieldKey: null
+handle: contactInfo
+hasTitleField: false
+icon: address-book
+name: 'Contact details'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{heading}'

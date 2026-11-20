@@ -1,0 +1,82 @@
+{#
+ # Contact details block. Figma: Contact 76:166 (+ the contact form, which Figma doesn't show).
+ # Left: heading + text. Right: "Have a question?" (siteSettings contactDetails: label over the linked
+ # detail) and "Find us on" (siteSettings socialLinks: platform over the handle), then the Wheel Form.
+ # The lists always come from Site settings (via _globals), never from the block.
+ # Receives: block, headingLevel, wheelformErrors, values (from the page, for the form's error state)
+ # Fields: heading, text, contactHeading, socialHeading, formHeading, contactForm, spacing
+ #}
+{% set siteSettings = _globals.get('siteSettings') %}
+{% set details = siteSettings ? siteSettings.contactDetails.all()|filter(d => d.detail|trim|length) : [] %}
+{% set socials = siteSettings ? siteSettings.socialLinks.all()|filter(s => s.externalLink.url ?? false) : [] %}
+{% set form = block.contactForm ?? null %}
+{% set level = headingLevel ?? 2 %}
+{% set tag = 'h' ~ level %}
+{% set subTag = 'h' ~ (block.heading ? level + 1 : level) %}
+{% set platformNames = { instagram: 'Instagram', x: 'X (Twitter)', tiktok: 'TikTok', linkedin: 'LinkedIn', facebook: 'Facebook', youtube: 'YouTube', threads: 'Threads', pinterest: 'Pinterest', substack: 'Substack' } %}
+{% set valueClass = 'text-base text-black/60 underline-offset-4 hover:text-ink hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink' %}
+
+{% if block.heading or details|length or socials|length or form %}
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="px-4 py-12 md:px-gutter md:py-16">
+    <div class="mx-auto grid max-w-content gap-10 lg:grid-cols-12 lg:gap-x-10">
+        {% if block.heading or block.text %}
+            <div class="flex flex-col gap-2.5 lg:col-span-3">
+                {% if block.heading %}<{{ tag }} class="text-4xl font-bold">{{ block.heading }}</{{ tag }}>{% endif %}
+                {% if block.text %}<p class="text-xl text-black/60 md:text-2xl">{{ block.text }}</p>{% endif %}
+            </div>
+        {% endif %}
+
+        <div class="grid gap-10 sm:grid-cols-2 lg:col-span-9 {{ not (block.heading or block.text) ? 'lg:col-start-4' }}">
+            {% if details|length %}
+                <div class="flex flex-col gap-6">
+                    {% if block.contactHeading %}<{{ subTag }} class="text-2xl font-bold">{{ block.contactHeading }}</{{ subTag }}>{% endif %}
+                    <ul class="flex flex-col gap-5">
+                        {% for item in details %}
+                            {% set type = item.contactType.value ?? 'email' %}
+                            {% set value = item.detail|trim %}
+                            {% set digits = value|replace('/[^0-9+]/', '') %}
+                            {% set href = { email: 'mailto:' ~ value, phone: 'tel:' ~ digits, whatsapp: 'https://wa.me/' ~ digits|replace({ '+': '' }) }[type] ?? null %}
+                            <li class="flex flex-col gap-2.5">
+                                <span class="text-lg font-bold">{{ item.label ?: item.contactType.label }}</span>
+                                {% if href %}
+                                    <a href="{{ href }}" class="self-start {{ valueClass }}" {% if type == 'whatsapp' %}target="_blank" rel="noopener"{% endif %}>{{ value }}</a>
+                                {% else %}
+                                    <address class="text-base not-italic text-black/60">{{ value|nl2br }}</address>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if socials|length %}
+                <div class="flex flex-col gap-6">
+                    {% if block.socialHeading %}<{{ subTag }} class="text-2xl font-bold">{{ block.socialHeading }}</{{ subTag }}>{% endif %}
+                    <ul class="flex flex-col gap-5">
+                        {% for item in socials %}
+                            {% set platform = item.platform.value ?? 'other' %}
+                            {% set name = platformNames[platform] ?? item.platform.label %}
+                            <li class="flex flex-col gap-2.5">
+                                <span class="text-lg font-bold">{{ name }}</span>
+                                <a {{ attr(item.externalLink.attributes|merge({ class: 'self-start ' ~ valueClass, 'aria-label': name ~ ': ' ~ ((item.handle ?? '')|trim ?: item.externalLink.url) })) }}>{{ (item.handle ?? '')|trim ?: item.externalLink.url|replace('/^https?:\\/\\/(www\\.)?/', '') }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if form or (currentUser and currentUser.admin) %}
+                <div id="contact-form" class="flex scroll-mt-28 flex-col gap-6 sm:col-span-2">
+                    {% if block.formHeading %}<{{ subTag }} class="text-2xl font-bold">{{ block.formHeading }}</{{ subTag }}>{% endif %}
+                    <div class="max-w-162.5">
+                        {% include '_components/wheel-form.twig' with {
+                            form: form, anchor: 'contact-form',
+                            errors: wheelformErrors ?? {}, values: values ?? {},
+                        } only %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}

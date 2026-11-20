@@ -51,6 +51,34 @@
     </div>
 </section>
 
+{% elseif items|length and layout == 'pressRow' %}
+{# Press quotes, self-scrolling (About 76:472): logo over a muted quote, 80px apart. The set repeats so
+   each half of the track is wider than the widest screen (the CSS loop moves it by -50%); only the
+   first set is read out. Item: image = logo, text = quote, personName = outlet (logo alt fallback). #}
+{% set copies = max(1, (2400 / max(items|length * 420, 1))|round(0, 'ceil')) %}
+<section data-spacing="{{ block.spacing.value ?? 'default' }}" class="overflow-hidden px-0 py-10 md:py-15" aria-label="{{ block.heading ?: 'In the press'|t }}">
+    {% if block.heading %}
+        {% include '_components/section-heading.twig' with { heading: block.heading, text: block.text, level: level, plain: true, class: 'mb-10 px-4' } only %}
+    {% endif %}
+    <ul class="gallery-marquee__track items-start gap-20">
+        {% for pass in 1..(copies * 2) %}
+            {% for item in items %}
+                {% set logo = item.image.one() %}
+                <li class="flex w-max max-w-md flex-none flex-col items-center gap-3 text-center" {% if pass > 1 %}aria-hidden="true"{% endif %}>
+                    {% if logo %}
+                        {% include '_components/image.twig' with { image: logo, width: 240, sizes: '240px', decorative: pass > 1, class: 'h-5 w-auto md:h-6' } only %}
+                    {% elseif item.personName %}
+                        <span class="text-lg font-bold">{{ item.personName }}</span>
+                    {% endif %}
+                    {% if item.text %}
+                        <p class="text-balance text-xl text-ink/40 md:text-2xl">“{{ item.text }}”</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+</section>
+
 {% elseif items|length and layout == 'quotes' %}
 {# Quotes (Figma Organizers 17-576 / 17-591): plain heading; per item a round photo overlapped by a
    tilted club logo, the quote and "name · detail". #}
