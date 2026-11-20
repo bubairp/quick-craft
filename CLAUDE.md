@@ -58,7 +58,7 @@ Site: https://quick-craft.ddev.site · CP: https://quick-craft.ddev.site/admin
 - **Footer** (`_partials/footer.twig`; Figma 6-2058, behaviour after partiful.com; the user's request, 2026-11-20):
   - **Wordmark** (`siteName`, lowercase): `src/js/footer-wordmark.js` fits it to the panel's full width at every size (`--wordmark-size`; CSS fallback `--text-wordmark`), descenders never clipped. When the footer comes into view the letters **rise from the bottom edge one by one** (45ms stagger, `--ease-spring`); hovering a letter makes it hop. Reduced motion: no animation (still fitted). `aria-hidden`.
   - **Link hover = `.link-line`**: a 1px line under the text only (not the icon) draws in from the left and leaves to the right (350ms). The current page keeps it; focus shows it plus an outline. Reduced motion: no transition.
-  - **Gap around the panel** = the Contact banner's: 12px on phones, 16px from `md` (`px-3 pb-3 md:px-4 md:pb-4`; the user's decision, 2026-11-20).
+  - **Gap around the panel** = the Contact banner's, on every side incl. the top: 12px on phones, 16px from `md` (`p-3 md:p-4`; the user's decision, 2026-11-20).
   - **Layout:** phones 2 columns with the store badges side by side in their own row; `sm`–`lg` 3 columns with the badges (stacked) filling the 6th cell; `xl` one row (5 columns + badges). Links/headings `text-lg` below `md`, `text-xl` from `md`.
 - `modules/`: the Craft module (`Module.php` registers the event handlers; `PagePresets.php` copies preset blocks into new pages).
 
