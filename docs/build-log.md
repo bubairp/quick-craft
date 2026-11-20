@@ -1065,3 +1065,19 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
   - Marquee tiles: `h-40 md:h-55`, `w-auto`, `rounded-photo`, `gap-2.5`; transform width = 220 × the image's ratio, `sizes` = that px.
   - Each half of the track (the CSS loop moves it by −50%) must be wider than any screen, so the set repeats until a half is ≥ 2400px. Only the first set is read out; the copies are `aria-hidden` with empty alt.
 - **Checked (Playwright) at 375 / 768 / 1440 (+ 2560):** tiles 160px tall on phones and 220px from md (310×220 / 331 / 321 / 331 / 293 at 1440); radius 10; gap 10; 0 broken; alt only on the first set; half-track 2403px at 375 and 3269px at 2560 (no gap in the loop); no overflow; no console errors. `/blocks` returns 200 and shows the marquee.
+
+### 2026-11-20: cardGrid › textCards: Careers "Our Values" (Figma 6-6770)
+- **Rule first:** CLAUDE.md › pageBuilder blocks › cardGrid › textCards.
+- **Design:** a centred 48px heading, 6 white cards (320 wide, p-30, r12, the existing `shadow-card` matches Figma exactly), each with emoji 48, title 22 semibold and text 16 black/60, 3 per row, gap 10; blurred photo blobs behind (approximated with `.glow-bg`).
+- **Migration** `m261120_360000_card_grid_text_cards` (backup: `/tmp/before-text-cards.sql.gz`):
+  - cardLayout gets the option `textCards` "Text cards (emoji, no image)".
+  - cardGrid gets `glow` (lightswitchOff instance; "Text cards layout only").
+  - "Our Values" with the 6 cards from Figma goes on Careers right after the photo strip (the same `elements_owners.sortOrder` shift as the marquee migration).
+- **Templates:**
+  - `_components/card.twig`: new variant `text` (emoji, title, text, an optional underlined link; no image panel). The image query and aspect only run for the other variants.
+  - `_blocks/cardGrid.twig`: a `textCards` branch with a sentence-case heading group (eyebrow / heading / text, `gap-3`), the grid `sm:grid-cols-2 lg:grid-cols-3` in `max-w-narrow`, buttons below; scheme + spacing as before, glow only on light schemes.
+- **Checked (Playwright) at 375 / 768 / 1440 + `/blocks?scheme=dark`:** heading 36 → 48; heading-to-cards gap 60 (40 on a phone); cards 327 wide at 1440 (Figma 320: `max-w-narrow` is 1000 vs 980), all 239 tall (Figma 236); pad 30; r12; emoji 48; text 16 black/60; no overflow; no console errors; all pages 200 with no Twig errors.
+- **Fixed while checking:**
+  - Content was vertically centred, so the titles sat at different heights. It's now top-aligned, and the titles line up.
+  - Equal-height rows only from `sm` (on a phone they added empty space to the shorter cards).
+- **Known difference:** the title is 24px (`text-2xl`) vs Figma 22; there's no 22px token.

@@ -4,6 +4,7 @@
  #   card     Entry (type 'card')
  #   variant  'feature' (default, Home 6-1320: centered, big title)
  #            'compact' (Home 6-1719: square tile, inline caption + link)
+ #            'text'    (Careers 6-6770: white card, emoji + title + text, no image)
  #   level    heading level (3)
  #   dark     bool
  #   soft     bool: the section uses the "soft" (grey) scheme, so the empty media panel is white
@@ -11,10 +12,26 @@
  #   revealIndex  position in its grid, for the staggered reveal-on-scroll (0, 1, 2 …)
  #}
 {% set dark = dark ?? false %}
-{% set compact = (variant ?? 'feature') == 'compact' %}
-{% set image = card.image.one() ?? null %}
 {% set tag = 'h' ~ (level ?? 3) %}
 {% set link = card.primaryButton ?? null %}
+
+{% if (variant ?? 'feature') == 'text' %}
+{# 'text' (Careers 6-6770): white card, emoji + title + text, no image #}
+<article class="flex h-full flex-col gap-1 rounded-lg p-7.5 {{ dark ? 'bg-white/10 text-white' : 'bg-white shadow-card' }}" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
+    {% if card.emoji %}<span class="text-headline" aria-hidden="true">{{ card.emoji }}</span>{% endif %}
+    {% if card.heading %}
+        <{{ tag }} class="text-2xl font-semibold">{{ card.heading }}</{{ tag }}>
+    {% endif %}
+    {% if card.text %}
+        <p class="text-base {{ dark ? 'text-line' : 'text-black/60' }}">{{ card.text|nl2br }}</p>
+    {% endif %}
+    {% if link and link.url %}
+        <a {{ attr(link.attributes|merge({ class: 'mt-2 self-start text-base font-medium underline underline-offset-4 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current' })) }}>{{ link.label ?: link.url }}</a>
+    {% endif %}
+</article>
+{% else %}
+{% set compact = (variant ?? 'feature') == 'compact' %}
+{% set image = card.image.one() ?? null %}
 {% set aspect = compact ? 'aspect-tile' : 'aspect-card' %}
 
 <article class="group flex flex-col {{ compact ? 'gap-4' : 'gap-6 md:gap-8' }}" data-reveal data-reveal-index="{{ revealIndex ?? 0 }}">
@@ -54,3 +71,4 @@
         </div>
     {% endif %}
 </article>
+{% endif %}

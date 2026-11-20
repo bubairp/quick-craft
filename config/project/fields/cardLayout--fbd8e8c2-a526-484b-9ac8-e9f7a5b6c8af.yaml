@@ -50,6 +50,17 @@ settings:
         -
           - default
           - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Text cards (emoji, no image)'
+        -
+          - value
+          - textCards
+        -
+          - default
+          - false
 tip: null
 translationKeyFormat: null
 translationMethod: none
