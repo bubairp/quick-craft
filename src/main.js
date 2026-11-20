@@ -64,6 +64,42 @@ Alpine.data('siteHeader', () => ({
   },
 }));
 
+/**
+ * Mobile menu sections (templates/_partials/header.twig): one open at a time. While the sections
+ * animate (.mobile-acc, ~400ms), the scroll area eases the opened section's header to its top, so
+ * a section closing above can't push it out of view and one near the bottom doesn't open below
+ * the fold. Reduced motion: it jumps there.
+ */
+Alpine.data('mobileNav', () => ({
+  section: null,
+  toggle(i, button) {
+    const opening = this.section !== i;
+    this.section = opening ? i : null;
+    if (!opening) return;
+
+    const scroller = button.closest('.site-nav-mobile__scroll');
+    if (!scroller) return;
+    // where the header will be once the layout settles (offsetTop is relative to the scroller,
+    // which is position: relative); never past the end of the list
+    const goal = () => Math.max(0, Math.min(
+      button.offsetTop - 4,
+      scroller.scrollHeight - scroller.clientHeight,
+    ));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      requestAnimationFrame(() => { scroller.scrollTop = goal(); });
+      return;
+    }
+    const start = performance.now();
+    const step = (now) => {
+      // ease towards the (moving) goal each frame; land exactly on it at the end
+      scroller.scrollTop += (goal() - scroller.scrollTop) * 0.22;
+      if (now - start < 600) requestAnimationFrame(step);
+      else scroller.scrollTop = goal();
+    };
+    requestAnimationFrame(step);
+  },
+}));
+
 window.Alpine = Alpine;
 Alpine.start();
 

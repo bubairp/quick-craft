@@ -178,9 +178,10 @@
            (.mobile-acc). CLAUDE.md › Mobile menu. #}
         <div id="mobile-menu" class="site-nav-mobile lg:hidden" :class="open && 'is-open'" inert :inert="!open">
             <div>
-                <div class="site-nav-mobile__scroll overflow-y-auto overscroll-contain border-t border-line px-4 pb-5 pt-1" data-lenis-prevent>
+                {# relative: the section headers' offsetTop is measured against this scroll area (mobileNav) #}
+                <div class="site-nav-mobile__scroll relative overflow-y-auto overscroll-contain border-t border-line px-4 pb-5 pt-1" data-lenis-prevent>
                     {% if navItems|length %}
-                        <nav aria-label="{{ 'Main navigation'|t }}" x-data="{ section: null }" @mobile-menu-closed.window="section = null">
+                        <nav aria-label="{{ 'Main navigation'|t }}" x-data="mobileNav" @mobile-menu-closed.window="section = null">
                             <ul class="flex flex-col">
                                 {% for item in navItems %}
                                     {% set kids = item.children ?? [] %}
@@ -191,7 +192,7 @@
                                                     class="flex w-full items-center justify-between gap-4 rounded-sm py-4 text-left text-2xl font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
                                                     aria-controls="mobile-section-{{ i }}"
                                                     aria-expanded="false" :aria-expanded="(section === {{ i }}).toString()"
-                                                    @click="section = section === {{ i }} ? null : {{ i }}">
+                                                    @click="toggle({{ i }}, $el)">
                                                 {{ item.name }}
                                                 <span class="grid size-8 shrink-0 place-items-center rounded-full bg-ink/5 transition-[transform,background-color,color] duration-300"
                                                       :class="section === {{ i }} ? 'rotate-180 bg-ink! text-paper' : ''" aria-hidden="true">

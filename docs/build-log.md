@@ -1569,3 +1569,13 @@ Measured on partiful.com (Claude in Chrome with real hovers and drags; Playwrigh
 - Desktop: the mega menu still opens; the scrim/mobile panel are `display: none`. No console errors.
 
 **Gotcha:** `bg-ink/5` (static) + `bg-ink` (bound) on the same element: the light one won, so the white chevron vanished. Bind the full state with `!` (or swap whole class sets).
+
+## 2026-11-20 · Mobile menu: sections open in the right place
+
+**Bug (user):** expand/collapse didn't land in the right position. Measured at 375:
+- Opening Products after Invites left the Products header 10px cut off at the top (the section above collapsed; the scroll position didn't follow).
+- Opening Company opened its links 466px below the visible area.
+
+**Fix:** Alpine `mobileNav` (main.js) replaces the inline `section` toggle. While the sections animate, a rAF loop (~600ms) eases the scroll area towards the clicked header's offsetTop (re-read every frame, so it follows the collapsing section above; clamped to the scroll range) and lands on it exactly. The scroll area is `relative` so offsetTop is measured against it. Reduced motion: it jumps there. Closing a section doesn't scroll.
+
+**Checked:** the header ends 5px from the top of the panel after opening Products (after Invites) and Company. Per frame while Company opens: 626 → 292 → 60 → 32 → 18 → 10 → 7 → 5 (smooth, no jump). Closing the open section leaves the position unchanged. No console errors.
